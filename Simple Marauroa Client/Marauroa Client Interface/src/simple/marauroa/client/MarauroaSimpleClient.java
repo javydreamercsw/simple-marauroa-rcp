@@ -14,6 +14,7 @@ import marauroa.client.LoginFailedException;
 import marauroa.client.TimeoutException;
 import marauroa.common.game.CharacterResult;
 import marauroa.common.game.RPAction;
+import marauroa.common.game.RPEvent;
 import marauroa.common.game.RPObject;
 import marauroa.common.net.InvalidVersionException;
 import marauroa.common.net.message.MessageS2CPerception;
@@ -34,7 +35,11 @@ import simple.client.conf.ExtensionXMLLoader;
 import simple.client.soundreview.SoundMaster;
 import simple.marauroa.application.core.EventBus;
 import simple.marauroa.client.components.common.MCITool;
-import simple.server.core.event.api.IRPEvent;
+import simple.server.core.event.MonitorEvent;
+import simple.server.core.event.PrivateTextEvent;
+import simple.server.core.event.ZoneEvent;
+import simple.server.core.event.SimpleRPEvent;
+import simple.server.core.event.TextEvent;
 
 /**
  *
@@ -151,25 +156,16 @@ public class MarauroaSimpleClient extends SimpleClient implements
     protected void onPerception(MessageS2CPerception message) {
         try {
             super.onPerception(message);
-            //TODO: Uncomment
-//            if (logger.isLoggable(Level.FINE)) {
+            if (logger.isLoggable(Level.FINE)) {
                 logger.log(Level.INFO, "Received perception {0}", message.getPerceptionTimestamp());
                 int i = message.getPerceptionTimestamp();
 
-                RPAction action = new RPAction();
-                action.put("type", "chat");
-                action.put("text", "Hi!");
-                send(action);
+                sendMessage("Hi");
                 if (i % 50 == 0) {
-                    action.put("type", "chat");
-                    action.put("text", "Hi!");
-                    send(action);
-                } else if (i % 50 == 20) {
-                    action.put("type", "chat");
-                    action.put("text", "How are you?");
-                    send(action);
+                    sendMessage("Hi");
+                } else if (i % 100 == 0) {
+                    sendMessage("How are you?");
                 }
-                //TODO: Uncomment
                 if (logger.isLoggable(Level.FINEST)) {
                     logger.log(Level.INFO, "<World contents ------------------------------------->");
                     int j = 0;
@@ -179,7 +175,7 @@ public class MarauroaSimpleClient extends SimpleClient implements
                     }
                     logger.log(Level.INFO, "</World contents ------------------------------------->");
                 }
-//            }
+            }
         } catch (Exception ex) {
             Exceptions.printStackTrace(ex);
         }
@@ -471,9 +467,29 @@ public class MarauroaSimpleClient extends SimpleClient implements
     }
 
     @Override
-    public void processEvent(IRPEvent event) {
-        logger.log(Level.INFO, "Received event: {0}", event);
+    public void processEvent(RPEvent event) {
+        logger.log(Level.INFO, "Received event: {0} from server", event);
         //Publish the event to the bus so all listeners can react to it
-        EventBus.getDefault().add(event);
+        //TODO: Remove hack while the interfaces are not part of Marauroa 
+        if (event.getName().equals(TextEvent.getRPClassName())) {
+            TextEvent textEvent = new TextEvent();
+            textEvent.fill(event);
+            EventBus.getDefault().publish(textEvent);
+        } else if (event.getName().equals(PrivateTextEvent.getRPClassName())) {
+            PrivateTextEvent privateTextEvent = new PrivateTextEvent();
+            privateTextEvent.fill(event);
+            EventBus.getDefault().publish(privateTextEvent);
+        } else if (event.getName().equals(ZoneEvent.getRPClassName())) {
+            ZoneEvent zoneEvent = new ZoneEvent();
+            zoneEvent.fill(event);
+            EventBus.getDefault().publish(zoneEvent);
+        } else if (event.getName().equals(MonitorEvent.getRPClassName())) {
+            MonitorEvent monitorEvent = new MonitorEvent();
+            monitorEvent.fill(event);
+            EventBus.getDefault().publish(monitorEvent);
+        } else {
+            //Non special events. If Interfaces are moved to Marauroa only this line will be needed
+            EventBus.getDefault().publish(new SimpleRPEvent(event));
+        }
     }
 }

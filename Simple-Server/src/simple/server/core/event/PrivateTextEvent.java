@@ -11,14 +11,13 @@ import simple.common.NotificationType;
 import marauroa.common.game.Definition.DefinitionClass;
 import marauroa.common.game.Definition.Type;
 import marauroa.common.game.RPClass;
-import marauroa.common.game.RPEvent;
 
 /**
  * A text message.
  *
  * @author hendrik
  */
-public class PrivateTextEvent extends RPEvent implements IChatEvent {
+public class PrivateTextEvent extends SimpleRPEvent implements IChatEvent {
 
     public static final String RPCLASS_NAME = "private_text";
     public static final String TEXT_TYPE = "texttype";

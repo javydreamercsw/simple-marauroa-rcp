@@ -18,12 +18,12 @@ import simple.server.core.entity.RPEntityInterface;
  */
 public interface ClientObjectInterface extends RPEntityInterface, Serializable {
 
-    String DEFAULT_ENTRY_ZONE = "Arena Entrance";
+    String DEFAULT_ENTRY_ZONE = "Default Zone";
     /**
      * This is the assigned key for encryption purposes on the client
      */
     String KEY = "#key";
-    String RESET_ENTRY_ZONE = "Arena Entrance";
+    String RESET_ENTRY_ZONE = "Default Zone";
 
     /**
      * Add a player ignore entry.

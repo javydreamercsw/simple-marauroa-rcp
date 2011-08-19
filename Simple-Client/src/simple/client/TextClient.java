@@ -32,6 +32,7 @@ public class TextClient extends Thread {
     private Map<RPObject.ID, RPObject> world_objects;
     private marauroa.client.ClientFramework clientManager;
     private PerceptionHandler handler;
+    private static final Logger logger = Logger.getLogger(TextClient.class.getSimpleName());
 
     public TextClient(String h, String u, String p, String c, String P,
             boolean t, String name, String verison) throws SocketException {
@@ -63,8 +64,7 @@ public class TextClient extends Thread {
             @Override
             public void onException(Exception exception,
                     MessageS2CPerception perception) {
-                Logger.getLogger(TextClient.class.getSimpleName()).log(
-                        Level.SEVERE, port, exception);
+                logger.log(Level.SEVERE, port, exception);
             }
 
             @Override
@@ -92,20 +92,20 @@ public class TextClient extends Thread {
                 }
                 RPObject object = world_objects.get(id);
                 if (object != null) {
-                    int eventCounter = 0;
                     //Get the list zones event results
-                    List<RPEvent> events = object.events();
-                    while (events.size() > eventCounter) {
+                    for (RPEvent event : object.events()) {
                         try {
-                            System.out.println("Processing: " + events.get(eventCounter));
-                            if (events.get(eventCounter).getName().equals(TextEvent.getRPClassName())) {
-                                System.out.println("<" + events.get(eventCounter).get("from") + ">" + events.get(eventCounter).get("text"));
+                            logger.log(Level.INFO, "Processing: {0}, {1}", 
+                                    new Object[]{event, event.getName()});
+                            if (event.getName().equals(TextEvent.getRPClassName())) {
+                                logger.log(Level.INFO, "<{0}>{1}", 
+                                        new Object[]{event.get("from"), event.get("text")});
                             } else {
-                                Logger.getLogger(TextClient.class.getSimpleName()).log(Level.WARNING, "Received the following event but didn\'t know how to handle it: {0}", events.get(eventCounter));
+                                logger.log(Level.WARNING, "Received the following event but didn\'t "
+                                        + "know how to handle it: {0}", new Object[]{event});
                             }
-                            eventCounter++;
                         } catch (Exception e) {
-                            Logger.getLogger(TextClient.class.getSimpleName()).log(Level.SEVERE, null, e);
+                            logger.log(Level.SEVERE, null, e);
                             break;
                         }
                     }
@@ -266,16 +266,16 @@ public class TextClient extends Thread {
                 System.out.println("Logging as: " + username + " with pass: " + password);
                 clientManager.login(username, password);
             } catch (LoginFailedException ex) {
-                Logger.getLogger(TextClient.class.getSimpleName()).log(Level.SEVERE, null, ex);
+                logger.log(Level.SEVERE, null, ex);
                 System.exit(1);
             } catch (TimeoutException ex) {
-                Logger.getLogger(TextClient.class.getSimpleName()).log(Level.SEVERE, null, ex);
+                logger.log(Level.SEVERE, null, ex);
                 System.exit(1);
             } catch (InvalidVersionException ex) {
-                Logger.getLogger(TextClient.class.getSimpleName()).log(Level.SEVERE, null, ex);
+                logger.log(Level.SEVERE, null, ex);
                 System.exit(1);
             } catch (BannedAddressException ex) {
-                Logger.getLogger(TextClient.class.getSimpleName()).log(Level.SEVERE, null, ex);
+                logger.log(Level.SEVERE, null, ex);
                 System.exit(1);
             }
         }

@@ -20,7 +20,7 @@ import simple.server.core.entity.item.Item;
 import simple.server.core.entity.item.StackableItem;
 import simple.server.core.entity.slot.PlayerSlot;
 import simple.server.core.event.PrivateTextEvent;
-import simple.server.core.event.RoomEvent;
+import simple.server.core.event.ZoneEvent;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -633,7 +633,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
          * player.addRPEvent("<Event RPClassName>", Definition.VOLATILE);
          */
         player.addRPEvent(PrivateTextEvent.getRPClassName(), Definition.PRIVATE);
-        player.addRPEvent(RoomEvent.getRPClassName(), Definition.VOLATILE);
+        player.addRPEvent(ZoneEvent.getRPClassName(), Definition.VOLATILE);
 
         player.addAttribute("outfit", Type.INT);
         player.addAttribute("outfit_org", Type.INT);
@@ -933,7 +933,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
 
         RPSlot slot = object.getSlot(name);
 
-        if (slot.size() == 0) {
+        if (slot.isEmpty()) {
             return null;
         }
 
