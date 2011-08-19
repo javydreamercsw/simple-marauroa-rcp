@@ -98,8 +98,7 @@
         <delete dir="${dist}/marauroa-simple-server-${version}-release"/>
     </target>
 
-    <target name="release" depends="dist_binary, dist_source, package-for-store,dist" description="Creates all the packages needed for a Simple-Server release"/>
-    <target name="dist"/>
+    <target name="release" depends="dist_binary, dist_source, package-for-store" description="Creates all the packages needed for a Simple-Server release"/>
     <target name="sign_jars" depends="-do-init, clean, compile" unless="exclude.signing">
         <signjar alias="${keystore.alias}" keystore="keystore.ks" storepass="${keystore.password}">
             <fileset dir="${dist}">

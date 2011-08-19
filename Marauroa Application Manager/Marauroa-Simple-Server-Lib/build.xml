@@ -16,6 +16,7 @@
                 <math result="length.dist" operand1="1" operation="+" operand2="${length.dist}" datatype="int"/>
                 <length string="${server-lib.dist.jar}" property="length.dist.jar" />
                 <substring text="${server-lib.dist.jar}" start="${length.dist}" end="${length.dist.jar}" property="server-lib.dist.jar" />
+                <ant antfile="../../Simple-Server/build.xml" target="clean" inheritall="false" />
                 <ant antfile="../../Simple-Server/build.xml" target="jar" inheritall="false" />
                 <copy file="../../Simple-Server/dist/${server-lib.dist.jar}" tofile="release/modules/ext/${server-lib.dist.jar}"/>
                 <!--Ignore the marauroa ad log4j jars, use the ones in the Marauroa library instead-->
