@@ -1,0 +1,5 @@
+syntax: glob
+netbeans/*
+*/dist/*
+*/build/*
+*/private/*
