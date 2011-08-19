@@ -11,7 +11,6 @@ import marauroa.common.game.RPObject;
 import marauroa.common.game.RPObject.ID;
 import marauroa.common.net.message.MessageS2CPerception;
 import simple.client.event.listener.RPEventNotifier;
-import simple.server.core.event.api.IRPEvent;
 
 /**
  *
@@ -39,7 +38,7 @@ public class SimplePerceptionHandler extends PerceptionHandler implements IPerce
 
     @Override
     public boolean onAdded(RPObject object) {
-        logger.log(Level.INFO, "onAdded: {0}", object);
+        logger.log(Level.FINE, "onAdded: {0}", object);
         rpobjDispatcher.dispatchAdded(object, isUser(object));
         return false;
     }
@@ -51,7 +50,7 @@ public class SimplePerceptionHandler extends PerceptionHandler implements IPerce
 
     @Override
     public boolean onDeleted(RPObject object) {
-        logger.log(Level.INFO, "onDeleted: {0}", object);
+        logger.log(Level.FINE, "onDeleted: {0}", object);
         rpobjDispatcher.dispatchRemoved(object, isUser(object));
         return false;
     }
@@ -64,21 +63,21 @@ public class SimplePerceptionHandler extends PerceptionHandler implements IPerce
 
     @Override
     public boolean onModifiedAdded(RPObject object, RPObject changes) {
-        logger.log(Level.INFO, "onModifiedAdded: {0}:{1}", new Object[]{object, changes});
+        logger.log(Level.FINE, "onModifiedAdded: {0}:{1}", new Object[]{object, changes});
         rpobjDispatcher.dispatchModifyAdded(object, changes, false);
         return false;
     }
 
     @Override
     public boolean onModifiedDeleted(RPObject object, RPObject changes) {
-        logger.log(Level.INFO, "onModifiedDeleted: {0}:{1}", new Object[]{object, changes});
+        logger.log(Level.FINE, "onModifiedDeleted: {0}:{1}", new Object[]{object, changes});
         rpobjDispatcher.dispatchModifyRemoved(object, changes, false);
         return false;
     }
 
     @Override
     public boolean onMyRPObject(RPObject added, RPObject deleted) {
-        logger.info("onMyRPObject");
+        logger.fine("onMyRPObject");
         RPObject.ID id = null;
         if (added != null) {
             id = added.getID();
@@ -88,7 +87,7 @@ public class SimplePerceptionHandler extends PerceptionHandler implements IPerce
         }
         if (id == null) {
             // Unchanged.
-            logger.info("Unchanged, returning");
+            logger.fine("Unchanged, returning");
             return true;
         }
         RPObject object = world_objects.get(id);
@@ -99,7 +98,7 @@ public class SimplePerceptionHandler extends PerceptionHandler implements IPerce
             for (RPEvent event : events) {
                 try {
                     //Allow client to handle it
-                    client.processEvent((IRPEvent) event);
+                    client.processEvent(event);
                 } catch (Exception e) {
                     logger.log(Level.SEVERE, null, e);
                     break;

@@ -3,3 +3,5 @@ netbeans/*
 */dist/*
 */build/*
 */private/*
+*.db
+*server_stats.xml

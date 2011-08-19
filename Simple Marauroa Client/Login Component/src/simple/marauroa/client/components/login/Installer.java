@@ -3,39 +3,32 @@ package simple.marauroa.client.components.login;
 import com.dreamer.outputhandler.InputMonitor;
 import com.dreamer.outputhandler.OutputHandler;
 import java.io.File;
-import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import marauroa.common.Log4J;
-import marauroa.common.game.RPEvent;
 import org.jivesoftware.smack.util.ReaderListener;
 import org.openide.DialogDisplayer;
 import org.openide.LifecycleManager;
 import org.openide.NotifyDescriptor;
 import org.openide.modules.ModuleInstall;
-import org.openide.util.Lookup;
-import org.openide.util.LookupEvent;
-import org.openide.util.LookupListener;
 import org.openide.util.NbBundle;
-import org.openide.util.Utilities;
 import org.openide.windows.WindowManager;
 import simple.client.action.update.ClientGameConfiguration;
 import simple.marauroa.application.core.EventBus;
 import simple.marauroa.application.core.EventBusListener;
 import simple.marauroa.application.core.MarauroaApplicationRepository;
 import simple.marauroa.client.components.common.MCITool;
-import simple.server.core.event.api.IChatEvent;
 import simple.server.core.event.PrivateTextEvent;
 import simple.server.core.event.TextEvent;
+import simple.server.core.event.api.IChatEvent;
 
 /**
  * Manages a module's life cycle. Remember that an installer is optional and
  * often not needed at all.
  */
 public class Installer extends ModuleInstall implements ReaderListener,
-        EventBusListener<IChatEvent>, LookupListener {
+        EventBusListener<IChatEvent> {
 
-    private Lookup.Result result = null;
     private final String chat = "Chat";
     private final String priv = "Private-";
     private static final Logger logger = Logger.getLogger(Installer.class.getName());
@@ -45,8 +38,6 @@ public class Installer extends ModuleInstall implements ReaderListener,
 
     @Override
     public void restored() {
-        result = EventBus.getDefault().getCentralLookup().lookupResult(IChatEvent.class);
-        result.addLookupListener(this);
         //Subscribe for chat events
         EventBus.getDefault().subscribe(IChatEvent.class, this);
         WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
@@ -91,6 +82,13 @@ public class Installer extends ModuleInstall implements ReaderListener,
     }
 
     @Override
+    public void close() {
+        super.close();
+        //Unsubscribe
+        EventBus.getDefault().unsubscribe(IChatEvent.class, this);
+    }
+
+    @Override
     public void read(String read) {
         //It will be typed here when it gets to the client on the next perception.
         MCITool.getClient().sendMessage(read);
@@ -98,25 +96,19 @@ public class Installer extends ModuleInstall implements ReaderListener,
 
     @Override
     public void notify(IChatEvent event) {
-        System.err.println("EventBus listener");
-//        logger.log(Level.INFO, "Got notified of event: {0}", event);
-//        if (event instanceof TextEvent) {
-//            TextEvent textEvent = (TextEvent) event;
-//            if (!textEvent.get("from").equals(MCITool.getClient().getAccountUsername())) {
-//                OutputHandler.output(chat, "<" + textEvent.get("from")
-//                        + ">" + textEvent.get("text"));
-//            }
-//        } else if (event instanceof PrivateTextEvent) {
-//            PrivateTextEvent pTextEvent = (PrivateTextEvent) event;
-//            if (!pTextEvent.get("from").equals(MCITool.getClient().getAccountUsername())) {
-//                OutputHandler.output(priv + pTextEvent.get("from"), "<"
-//                        + pTextEvent.get("from") + ">" + pTextEvent.get("text"));
-//            }
-//        } else {
-//            RPEvent e = (RPEvent) event;
-//            Logger.getLogger(Installer.class.getSimpleName()).log(Level.SEVERE,
-//                    "Unhandled event: {0}", e);
-//        }
+        if (event != null) {
+            logger.log(Level.INFO, "Got notified of event: {0}", event);
+            if (event.getName().equals(TextEvent.getRPClassName())) {
+                TextEvent textEvent = (TextEvent) event;
+                OutputHandler.output(chat, "<"
+                        + (textEvent.get("from") == null ? "System" : textEvent.get("from"))
+                        + "> " + textEvent.get("text"));
+            } else if (event.getName().equals(PrivateTextEvent.getRPClassName())) {
+                PrivateTextEvent pTextEvent = (PrivateTextEvent) event;
+                OutputHandler.output(priv + pTextEvent.get("from"), "<"
+                        + (pTextEvent.get("from") == null ? "System" : pTextEvent.get("from")) + "> " + pTextEvent.get("text"));
+            }
+        }
     }
 
     /**
@@ -163,33 +155,5 @@ public class Installer extends ModuleInstall implements ReaderListener,
      */
     public String getVersionNumber() {
         return versionNumber;
-    }
-
-    @Override
-    public void resultChanged(LookupEvent ev) {
-        Lookup.Result r = (Lookup.Result) ev.getSource();
-        Collection c = r.allInstances();
-        System.err.println("Lookup listener");
-//        if (!c.isEmpty()) {
-//            IChatEvent event = (IChatEvent) c.iterator().next();
-//            logger.log(Level.INFO, "Got notified of event: {0}", event);
-//            if (event instanceof TextEvent) {
-//                TextEvent textEvent = (TextEvent) event;
-//                if (!textEvent.get("from").equals(MCITool.getClient().getAccountUsername())) {
-//                    OutputHandler.output(chat, "<" + textEvent.get("from")
-//                            + ">" + textEvent.get("text"));
-//                }
-//            } else if (event instanceof PrivateTextEvent) {
-//                PrivateTextEvent pTextEvent = (PrivateTextEvent) event;
-//                if (!pTextEvent.get("from").equals(MCITool.getClient().getAccountUsername())) {
-//                    OutputHandler.output(priv + pTextEvent.get("from"), "<"
-//                            + pTextEvent.get("from") + ">" + pTextEvent.get("text"));
-//                }
-//            } else {
-//                RPEvent e = (RPEvent) event;
-//                Logger.getLogger(Installer.class.getSimpleName()).log(Level.SEVERE,
-//                        "Unhandled event: {0}", e);
-//            }
-//        }
     }
 }

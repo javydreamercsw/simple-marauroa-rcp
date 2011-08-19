@@ -13,6 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import marauroa.client.ClientFramework;
 import marauroa.common.game.RPAction;
+import marauroa.common.game.RPEvent;
 import marauroa.common.game.RPObject;
 import marauroa.common.net.message.MessageS2CPerception;
 import marauroa.common.net.message.TransferContent;
@@ -23,7 +24,6 @@ import simple.client.gui.GameObjects;
 import simple.client.sound.SoundSystem;
 import simple.server.core.event.PrivateTextEvent;
 import simple.server.core.event.TextEvent;
-import simple.server.core.event.api.IRPEvent;
 
 /**
  *
@@ -194,7 +194,7 @@ public class SimpleClient extends ClientFramework {
             handler.apply(message, world_objects);
         } catch (java.lang.Exception e) {
             // Something weird happened while applying perception
-            e.printStackTrace();
+            logger.log(Level.SEVERE, message.toString(), e);
         }
     }
 
@@ -255,16 +255,16 @@ public class SimpleClient extends ClientFramework {
     public static void setConfPath(String cP) {
         if (!extLoaded) {
             confPath = cP;
-            Logger.getLogger(SimpleClient.class.getSimpleName()).log(Level.INFO, "Loading extensions from: {0}", confPath);
+            logger.log(Level.INFO, "Loading extensions from: {0}", confPath);
             if (extensionLoader == null) {
                 extensionLoader = new ExtensionXMLLoader();
                 try {
                     extensionLoader.load(new URI(getConfPath()));
                     extLoaded = true;
                 } catch (SAXException ex) {
-                    Logger.getLogger(SimpleClient.class.getSimpleName()).log(Level.SEVERE, null, ex);
+                    logger.log(Level.SEVERE, null, ex);
                 } catch (URISyntaxException ex) {
-                    Logger.getLogger(SimpleClient.class.getSimpleName()).log(Level.SEVERE, null, ex);
+                    logger.log(Level.SEVERE, null, ex);
                 }
             }
         }
@@ -292,22 +292,18 @@ public class SimpleClient extends ClientFramework {
      * 
      * @param event Event to process
      */
-    public void processEvent(IRPEvent event) {
-        Logger.getLogger(SimplePerceptionHandler.class.getSimpleName()).log(
-                Level.INFO, "Processing: {0}", event);
+    public void processEvent(RPEvent event) {
+        logger.log(Level.INFO, "Processing: {0}", event);
         if (event.getName().equals(TextEvent.getRPClassName())) {
-            Logger.getLogger(SimplePerceptionHandler.class.getSimpleName()).log(
-                    Level.INFO, "<{0}>{1}", new Object[]{
+            logger.log(Level.INFO, "<{0}> {1}", new Object[]{
                         event.get("from"),
                         event.get("text")});
         } else if (event.getName().equals(PrivateTextEvent.getRPClassName())) {
-            Logger.getLogger(SimplePerceptionHandler.class.getSimpleName()).log(
-                    Level.INFO, "<{0}>{1}", new Object[]{
+            logger.log(Level.INFO, "<{0}> {1}", new Object[]{
                         event.get("from"),
                         event.get("text")});
         } else {
-            Logger.getLogger(SimplePerceptionHandler.class.getSimpleName()).log(
-                    Level.WARNING, "Received the following event but didn\'t "
+            logger.log(Level.WARNING, "Received the following event but didn\'t "
                     + "know how to handle it: {0}", event);
         }
     }

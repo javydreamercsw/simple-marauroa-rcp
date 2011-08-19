@@ -29,6 +29,7 @@ public class TutorialNotifier {
         String key = type.name().toLowerCase();
         if (player.getKeyedSlot("!tutorial", key) == null) {
             player.setKeyedSlot("!tutorial", key, "1");
+            player.notifyWorldAboutChanges();
             // we must delay this for 1 turn for technical reasons (like zone
             // change)
             // but we delay it for 5 seconds so that the player has some time to

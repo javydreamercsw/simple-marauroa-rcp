@@ -6,17 +6,17 @@ import marauroa.common.game.Definition.DefinitionClass;
 import marauroa.common.game.Definition.Type;
 import marauroa.common.game.RPAction;
 import marauroa.common.game.RPClass;
-import marauroa.common.game.RPEvent;
 
 /**
  *
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
-public class RoomEvent extends RPEvent implements IZoneEvent {
+public class ZoneEvent extends SimpleRPEvent implements IZoneEvent {
 
-    public static final String RPCLASS_NAME = "Room_Event";
-    private static final String FIELD = "field", ACTION = "action", DESC = "description";
-    public static final int ADD = 1, UPDATE = 2, REMOVE = 3, LISTZONES = 4, LISTPLAYERS = 5, NEEDPASS = 6;
+    private static final String FIELD = "field", RPCLASS_NAME = "Zone_Event", 
+            ACTION = "action", DESC = "description";
+    public static final int ADD = 1, UPDATE = 2, REMOVE = 3, LISTZONES = 4, 
+            LISTPLAYERS = 5, NEEDPASS = 6;
 
     /**
      * Creates the rpclass.
@@ -26,10 +26,6 @@ public class RoomEvent extends RPEvent implements IZoneEvent {
         rpclass.add(DefinitionClass.ATTRIBUTE, FIELD, Type.STRING);
         rpclass.add(DefinitionClass.ATTRIBUTE, DESC, Type.LONG_STRING);
         rpclass.add(DefinitionClass.ATTRIBUTE, ACTION, Type.INT);
-    }
-
-    public static String getRPClassName() {
-        return RPCLASS_NAME;
     }
 
     /**
@@ -46,7 +42,7 @@ public class RoomEvent extends RPEvent implements IZoneEvent {
         return ACTION;
     }
 
-    public RoomEvent() {
+    public ZoneEvent() {
         super(RPCLASS_NAME);
     }
 
@@ -57,7 +53,7 @@ public class RoomEvent extends RPEvent implements IZoneEvent {
      * with the password
      * @param action Only works with NEEDPASS
      */
-    public RoomEvent(RPAction a, int action) {
+    public ZoneEvent(RPAction a, int action) {
         super(RPCLASS_NAME);
         if (action == NEEDPASS) {
             fill(a);
@@ -71,7 +67,7 @@ public class RoomEvent extends RPEvent implements IZoneEvent {
      * @param zone room added/deleted from server
      * @param action either add or remove
      */
-    public RoomEvent(SimpleRPZone zone, int action) {
+    public ZoneEvent(SimpleRPZone zone, int action) {
         super(RPCLASS_NAME);
         put(FIELD, zone.getName());
         //Don't add the description if deleting the room...
@@ -88,9 +84,13 @@ public class RoomEvent extends RPEvent implements IZoneEvent {
      * @param s string to be sent
      * @param action either add or remove
      */
-    public RoomEvent(String s, int action) {
+    public ZoneEvent(String s, int action) {
         super(RPCLASS_NAME);
         put(FIELD, s);
         put(ACTION, action);
+    }
+
+    public static String getRPClassName() {
+        return RPCLASS_NAME;
     }
 }
