@@ -93,6 +93,7 @@
                 <package>simple.server.core.entity.item</package>
                 <package>simple.server.core.entity.slot</package>
                 <package>simple.server.core.event</package>
+                <package>simple.server.core.event.api</package>
                 <package>simple.server.core.rule</package>
                 <package>simple.server.core.rule.defaultruleset</package>
                 <package>simple.server.core.tool</package>

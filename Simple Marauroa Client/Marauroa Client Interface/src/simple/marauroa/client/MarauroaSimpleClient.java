@@ -1,6 +1,5 @@
 package simple.marauroa.client;
 
-import marauroa.common.game.RPEvent;
 import simple.marauroa.client.components.api.IClientFramework;
 import java.net.URI;
 import java.net.URISyntaxException;
