@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+OpenIDE-Module: simple.marauroa.client.components.login
+OpenIDE-Module-Install: simple/marauroa/client/components/login/Installer.class
+OpenIDE-Module-Localizing-Bundle: simple/marauroa/client/components/login/Bundle.properties
+OpenIDE-Module-Requires: org.openide.windows.IOProvider
+OpenIDE-Module-Specification-Version: 1.0
+

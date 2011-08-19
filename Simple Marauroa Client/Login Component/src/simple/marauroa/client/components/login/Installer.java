@@ -1,0 +1,195 @@
+package simple.marauroa.client.components.login;
+
+import com.dreamer.outputhandler.InputMonitor;
+import com.dreamer.outputhandler.OutputHandler;
+import java.io.File;
+import java.util.Collection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import marauroa.common.Log4J;
+import marauroa.common.game.RPEvent;
+import org.jivesoftware.smack.util.ReaderListener;
+import org.openide.DialogDisplayer;
+import org.openide.LifecycleManager;
+import org.openide.NotifyDescriptor;
+import org.openide.modules.ModuleInstall;
+import org.openide.util.Lookup;
+import org.openide.util.LookupEvent;
+import org.openide.util.LookupListener;
+import org.openide.util.NbBundle;
+import org.openide.util.Utilities;
+import org.openide.windows.WindowManager;
+import simple.client.action.update.ClientGameConfiguration;
+import simple.marauroa.application.core.EventBus;
+import simple.marauroa.application.core.EventBusListener;
+import simple.marauroa.application.core.MarauroaApplicationRepository;
+import simple.marauroa.client.components.common.MCITool;
+import simple.server.core.event.api.IChatEvent;
+import simple.server.core.event.PrivateTextEvent;
+import simple.server.core.event.TextEvent;
+
+/**
+ * Manages a module's life cycle. Remember that an installer is optional and
+ * often not needed at all.
+ */
+public class Installer extends ModuleInstall implements ReaderListener,
+        EventBusListener<IChatEvent>, LookupListener {
+
+    private Lookup.Result result = null;
+    private final String chat = "Chat";
+    private final String priv = "Private-";
+    private static final Logger logger = Logger.getLogger(Installer.class.getName());
+    private String gameName;
+    private String versionNumber;
+    private String APPLICATION_FOLDER;
+
+    @Override
+    public void restored() {
+        result = EventBus.getDefault().getCentralLookup().lookupResult(IChatEvent.class);
+        result.addLookupListener(this);
+        //Subscribe for chat events
+        EventBus.getDefault().subscribe(IChatEvent.class, this);
+        WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    //Initialize Client Configuration
+                    ClientGameConfiguration.setRelativeTo(LoginManager.class);
+                    gameName = ClientGameConfiguration.get("GAME_NAME");
+                    versionNumber = ClientGameConfiguration.get("GAME_VERSION");
+                    /** We set the main game folder to the game name */
+                    APPLICATION_FOLDER = System.getProperty("user.home")
+                            + System.getProperty("file.separator")
+                            + "." + getGameName() + System.getProperty("file.separator");
+                    startLogSystem();
+                    MarauroaApplicationRepository.get();
+                    //Check for valid profiles
+                    MCITool.getLoginManager().checkProfiles();
+                    //Show login screen
+                    MCITool.getLoginManager().displayLoginManager();
+                    MCITool.getLoginManager().waitUntilDone();
+                    //Start the chat window after successful login
+                    OutputHandler.output(chat, NbBundle.getMessage(
+                            LoginManager.class,
+                            "welcome.message"));
+                    OutputHandler.setInputEnabled(chat, true);
+                    //Create a monitor for the tab. This enables input in the tab as well.
+                    InputMonitor monitor = OutputHandler.createMonitor(chat, 1000);
+                    //Add a listener to be notified.
+                    monitor.addListener(Installer.this);
+                } catch (Exception e) {
+                    DialogDisplayer.getDefault().notify(
+                            new NotifyDescriptor.Message(NbBundle.getMessage(
+                            LoginManager.class,
+                            "error.startup") + e,
+                            NotifyDescriptor.ERROR_MESSAGE));
+                    LifecycleManager.getDefault().exit();
+                }
+            }
+        });
+    }
+
+    @Override
+    public void read(String read) {
+        //It will be typed here when it gets to the client on the next perception.
+        MCITool.getClient().sendMessage(read);
+    }
+
+    @Override
+    public void notify(IChatEvent event) {
+        System.err.println("EventBus listener");
+//        logger.log(Level.INFO, "Got notified of event: {0}", event);
+//        if (event instanceof TextEvent) {
+//            TextEvent textEvent = (TextEvent) event;
+//            if (!textEvent.get("from").equals(MCITool.getClient().getAccountUsername())) {
+//                OutputHandler.output(chat, "<" + textEvent.get("from")
+//                        + ">" + textEvent.get("text"));
+//            }
+//        } else if (event instanceof PrivateTextEvent) {
+//            PrivateTextEvent pTextEvent = (PrivateTextEvent) event;
+//            if (!pTextEvent.get("from").equals(MCITool.getClient().getAccountUsername())) {
+//                OutputHandler.output(priv + pTextEvent.get("from"), "<"
+//                        + pTextEvent.get("from") + ">" + pTextEvent.get("text"));
+//            }
+//        } else {
+//            RPEvent e = (RPEvent) event;
+//            Logger.getLogger(Installer.class.getSimpleName()).log(Level.SEVERE,
+//                    "Unhandled event: {0}", e);
+//        }
+    }
+
+    /**
+     * Starts the LogSystem.
+     */
+    private void startLogSystem() {
+        //Create log folder
+        File log = new File(APPLICATION_FOLDER + "log");
+        if (!log.exists()) {
+            logger.log(Level.INFO, "Creating log folder at:{0}log", APPLICATION_FOLDER);
+            log.mkdirs();
+        }
+        Log4J.init("simple/marauroa/client/components/login/log4j.properties");
+        logger.log(Level.INFO, "Setting base at: {0}", APPLICATION_FOLDER);
+        logger.log(Level.INFO, "{0} {1}", new Object[]{getGameName(),
+                    getVersionNumber()});
+        String patchLevel = System.getProperty("sun.os.patch.level");
+        if ((patchLevel == null) || (patchLevel.equals("unknown"))) {
+            patchLevel = "";
+        }
+        logger.log(Level.INFO, "OS: {0} {1} {2} {3}", new Object[]{
+                    System.getProperty("os.name"), patchLevel,
+                    System.getProperty("os.version"),
+                    System.getProperty("os.arch")});
+        logger.log(Level.INFO, "Java-Runtime: {0} {1} from {2}", new Object[]{
+                    System.getProperty("java.runtime.name"),
+                    System.getProperty("java.runtime.version"),
+                    System.getProperty("java.home")});
+        logger.log(Level.INFO, "Java-VM: {0} {1} {2}", new Object[]{
+                    System.getProperty("java.vm.vendor"),
+                    System.getProperty("java.vm.name"),
+                    System.getProperty("java.vm.version")});
+    }
+
+    /**
+     * @return the gameName
+     */
+    public String getGameName() {
+        return gameName;
+    }
+
+    /**
+     * @return the versionNumber
+     */
+    public String getVersionNumber() {
+        return versionNumber;
+    }
+
+    @Override
+    public void resultChanged(LookupEvent ev) {
+        Lookup.Result r = (Lookup.Result) ev.getSource();
+        Collection c = r.allInstances();
+        System.err.println("Lookup listener");
+//        if (!c.isEmpty()) {
+//            IChatEvent event = (IChatEvent) c.iterator().next();
+//            logger.log(Level.INFO, "Got notified of event: {0}", event);
+//            if (event instanceof TextEvent) {
+//                TextEvent textEvent = (TextEvent) event;
+//                if (!textEvent.get("from").equals(MCITool.getClient().getAccountUsername())) {
+//                    OutputHandler.output(chat, "<" + textEvent.get("from")
+//                            + ">" + textEvent.get("text"));
+//                }
+//            } else if (event instanceof PrivateTextEvent) {
+//                PrivateTextEvent pTextEvent = (PrivateTextEvent) event;
+//                if (!pTextEvent.get("from").equals(MCITool.getClient().getAccountUsername())) {
+//                    OutputHandler.output(priv + pTextEvent.get("from"), "<"
+//                            + pTextEvent.get("from") + ">" + pTextEvent.get("text"));
+//                }
+//            } else {
+//                RPEvent e = (RPEvent) event;
+//                Logger.getLogger(Installer.class.getSimpleName()).log(Level.SEVERE,
+//                        "Unhandled event: {0}", e);
+//            }
+//        }
+    }
+}
