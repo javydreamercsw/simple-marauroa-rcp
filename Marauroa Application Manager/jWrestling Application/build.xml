@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- You may freely edit this file. See harness/README in the NetBeans platform -->
+<!-- for some information on what you could do (e.g. targets to override). -->
+<!-- If you delete this file and reopen the project it will be recreated. -->
+<project name="games.jwrestling.application" default="netbeans" basedir=".">
+    <description>Builds, tests, and runs the project games.jwrestling.application.</description>
+    <import file="nbproject/build-impl.xml"/>
+    <import file="${suite.dir}/build.xml"/>
+    
+    <target name="init" depends="init-netbeans, init-hudson, harness.init">
+        <if>
+            <available file="../../../jWrestling Project/jWrestling/build.xml" type="file" />
+            <then>
+                <property file="../../../jWrestling Project/jWrestling/nbproject/project.properties" prefix="jwrestling-lib"/>
+                <length string="${jwrestling-lib.dist.dir}" property="length.dist" />
+                <math result="length.dist" operand1="1" operation="+" operand2="${length.dist}" datatype="int"/>
+                <length string="${jwrestling-lib.dist.jar}" property="length.dist.jar" />
+                <substring text="${jwrestling-lib.dist.jar}" start="${length.dist}" end="${length.dist.jar}" property="jwrestling-lib.dist.jar"/>
+                <ant antfile="../../../jWrestling Project/jWrestlingClient/build.xml" target="clean" inheritall="false" />
+                <ant antfile="../../../jWrestling Project/jWrestlingClient/build.xml" target="jar" inheritall="false" />
+                <copy file="../../../jWrestling Project/jWrestling/dist/${jwrestling-lib.dist.jar}" tofile="release/modules/ext/jWrestling/${jwrestling-lib.dist.jar}"/>
+                <!--Ignore the marauroa ad log4j jars, use the ones in the Marauroa library instead-->
+                <copy todir="release/modules/ext/jWrestling">
+                    <fileset dir="../../../jWrestling Project/jWrestling/dist/lib" excludes="*marauroa*.jar, log4j*.jar, mysql*.jar, h2*.jar"/>
+                </copy>
+                <!--Copy the server.ini file to use as default-->
+                <copy file="../../../jWrestling Project/jWrestling/server.ini" tofile="src/games/jwrestling/application/default.ini"/>
+            </then>
+        </if>
+    </target>
+</project>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- You may freely edit this file. See harness/README in the NetBeans platform -->
+<!-- for some information on what you could do (e.g. targets to override). -->
+<!-- If you delete this file and reopen the project it will be recreated. -->
+<project name="simple.server.lib" default="netbeans" basedir=".">
+    <description>Builds, tests, and runs the project simple.server.lib.</description>
+    <import file="nbproject/build-impl.xml"/>
+    <import file="${suite.dir}/build.xml"/>
+    
+    <target name="init" depends="init-netbeans, init-hudson, harness.init">
+        <if>
+            <available file="../../Simple-Server/build.xml" type="file" />
+            <then>
+                <property file="../../Simple-Server/nbproject/project.properties" prefix="server-lib"/>
+                <length string="${server-lib.dist.dir}" property="length.dist" />
+                <math result="length.dist" operand1="1" operation="+" operand2="${length.dist}" datatype="int"/>
+                <length string="${server-lib.dist.jar}" property="length.dist.jar" />
+                <substring text="${server-lib.dist.jar}" start="${length.dist}" end="${length.dist.jar}" property="server-lib.dist.jar" />
+                <ant antfile="../../Simple-Server/build.xml" target="jar" inheritall="false" />
+                <copy file="../../Simple-Server/dist/${server-lib.dist.jar}" tofile="release/modules/ext/${server-lib.dist.jar}"/>
+                <!--Ignore the marauroa ad log4j jars, use the ones in the Marauroa library instead-->
+                <copy todir="release/modules/ext/">
+                    <fileset dir="../../Simple-Server/dist/lib" excludes="marauroa*.jar, log4j*.jar, mysql*.jar"/>
+                </copy>
+                <!--Copy the Netbeans supported MySQL library as well-->
+                <copy file="${libs.MySQLDriver.classpath}" tofile="release/modules/ext/lib/mysql-connector-java.jar"/>
+            </then>
+        </if>
+    </target>
+</project>

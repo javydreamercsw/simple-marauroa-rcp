@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+OpenIDE-Module: simple.marauroa.application.monitor
+OpenIDE-Module-Install: simple/marauroa/application/monitor/Installer.class
+OpenIDE-Module-Localizing-Bundle: simple/marauroa/application/monitor/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+

@@ -1,0 +1,12 @@
+<shortcuts>
+    <skipIfNotSupported/>
+    <programGroup location="applications" defaultName="$APP_NAME"/>
+    <shortcut name="Marauroa Server Manager" type="Application" 
+    encoding="UTF-8" description="$APP_NAME" 
+    target="$INSTALL_PATH/bin/$APP-NAME.exe" applications="no" 
+    programGroup="yes" desktop="yes"/>
+    <shortcut name="Uninstall $APP_NAME" type="Application" 
+    encoding="UTF-8" description="$APP_NAME Uninstaller" 
+    target="$INSTALL_PATH/Uninstaller/uninstaller.jar" 
+    programGroup="yes"/>
+</shortcuts>

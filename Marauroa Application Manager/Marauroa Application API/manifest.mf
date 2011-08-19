@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+AutoUpdate-Show-In-Client: true
+OpenIDE-Module: simple.marauroa.application.api
+OpenIDE-Module-Localizing-Bundle: simple/marauroa/application/api/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+
