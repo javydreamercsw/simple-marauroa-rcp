@@ -100,7 +100,11 @@ public final class RPEventNotifier {
                         if (logger.isDebugEnabled()) {
                             logger.debug(eventListener);
                         }
-                        eventListener.onRPEventReceived(event);
+                        try {
+                            eventListener.onRPEventReceived(event);
+                        } catch (Exception ex) {
+                            logger.fatal(null, ex);
+                        }
                     } catch (RuntimeException e) {
                         logger.error(e, e);
                     }

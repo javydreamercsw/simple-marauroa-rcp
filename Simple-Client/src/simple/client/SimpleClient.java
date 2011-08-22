@@ -83,12 +83,12 @@ public class SimpleClient extends ClientFramework {
         handler = new SimplePerceptionHandler(dispatch, rpobjDispatcher, world_objects, this);
         //**************************
     }
-    
+
     /**
      * Register RPEvent listeners. this is meant to be overwritten by the client.
      * Defaults to listen to chat only.
      */
-    protected static void registerListeners(){
+    protected void registerListeners() {
         ChatListener cl = new ChatListener();
         userContext.registerRPEventListener(new TextEvent(), cl);
         userContext.registerRPEventListener(new PrivateTextEvent(), cl);
@@ -132,6 +132,10 @@ public class SimpleClient extends ClientFramework {
 
     public RPObject getPlayerRPC() {
         return player;
+    }
+
+    public void setPlayerRPC(RPObject object) {
+        player = object;
     }
 
     public void sendMessage(String text) {

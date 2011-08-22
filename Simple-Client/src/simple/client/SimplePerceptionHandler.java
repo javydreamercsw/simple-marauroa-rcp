@@ -93,7 +93,7 @@ public class SimplePerceptionHandler extends PerceptionHandler implements IPerce
         RPObject object = world_objects.get(id);
         if (object != null) {
             //Get the list zones event results
-            for (Entry<RPEvent, Boolean> entry : 
+            for (Entry<RPEvent, Boolean> entry :
                     RPEventNotifier.get().logic(object.events()).entrySet()) {
                 try {
                     /*
@@ -104,7 +104,7 @@ public class SimplePerceptionHandler extends PerceptionHandler implements IPerce
                     if (!entry.getValue()) {
                         client.processEvent(entry.getKey());
                         logger.log(Level.WARNING, "Sending event: {0}"
-                                +" to client. Consider "
+                                + " to client. Consider "
                                 + "registering a listener for "
                                 + "this event instead.", entry.getKey());
                     }
@@ -113,6 +113,7 @@ public class SimplePerceptionHandler extends PerceptionHandler implements IPerce
                     break;
                 }
             }
+            client.setPlayerRPC(object);
         }
         return true;
     }
