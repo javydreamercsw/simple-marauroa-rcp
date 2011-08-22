@@ -4,6 +4,7 @@ import com.dreamer.outputhandler.InputMonitor;
 import com.dreamer.outputhandler.OutputHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import marauroa.common.game.RPEvent;
 import org.jivesoftware.smack.util.ReaderListener;
 import org.openide.util.lookup.ServiceProvider;
 import simple.client.EventLine;
@@ -12,7 +13,6 @@ import simple.marauroa.client.components.api.IChatComponent;
 import simple.marauroa.client.components.common.MCITool;
 import simple.server.core.event.PrivateTextEvent;
 import simple.server.core.event.TextEvent;
-import simple.server.core.event.api.IChatEvent;
 
 /**
  * 
@@ -99,7 +99,7 @@ public class ChatManager implements IChatComponent, ReaderListener {
     }
 
     @Override
-    public void notify(IChatEvent event) {
+    public void onRPEventReceived(RPEvent event) {
         if (event != null) {
             logger.log(Level.INFO, "Got notified of event: {0}", event);
             if (event.getName().equals(TextEvent.getRPClassName())) {
