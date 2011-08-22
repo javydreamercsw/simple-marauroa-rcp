@@ -19,7 +19,7 @@ import org.openide.util.Utilities;
 import org.openide.util.lookup.ServiceProvider;
 import simple.client.HeaderLessEventLine;
 import simple.common.NotificationType;
-import simple.marauroa.client.components.api.IMarauroaUserListComponent;
+import simple.marauroa.client.components.api.IUserListComponent;
 import simple.marauroa.client.components.common.SortedListModel;
 import simple.marauroa.client.components.common.MCITool;
 
@@ -36,9 +36,9 @@ persistenceType = TopComponent.PERSISTENCE_ALWAYS)
 @ActionReference(path = "Menu/Window" /*, position = 333 */)
 @TopComponent.OpenActionRegistration(displayName = "#CTL_UserListAction",
 preferredID = "UserListTopComponent")
-@ServiceProvider(service = IMarauroaUserListComponent.class)
+@ServiceProvider(service = IUserListComponent.class)
 public final class UserListTopComponent extends TopComponent
-        implements IMarauroaUserListComponent, LookupListener {
+        implements IUserListComponent, LookupListener {
 
     private Lookup.Result result = null;
 
