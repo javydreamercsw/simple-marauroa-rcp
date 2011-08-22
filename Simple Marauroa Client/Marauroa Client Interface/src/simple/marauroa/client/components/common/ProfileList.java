@@ -47,8 +47,8 @@ public class ProfileList {
         profiles.remove(profile);
         profiles.add(profile);
     }
-    
-    public boolean isEmpty(){
+
+    public boolean isEmpty() {
         return profiles.isEmpty();
     }
 
@@ -115,41 +115,6 @@ public class ProfileList {
             }
         } finally {
             ps.flush();
-        }
-    }
-
-    //
-    //
-    /**
-     *
-     * @param args
-     * @throws java.lang.Exception
-     */
-    public static void main(String[] args) throws Exception {
-        ProfileList list;
-        InputStream in;
-
-        if (args.length != 1) {
-            System.err.println("Usage: java " + ProfileList.class.getName() + " <user.dat>");
-
-            System.exit(1);
-        }
-
-        list = new ProfileList();
-
-        in = new java.io.FileInputStream(args[0]);
-
-        try {
-            list.load(in);
-
-        } finally {
-            in.close();
-        }
-
-        Iterator<Profile> iter = list.iterator();
-
-        while (iter.hasNext()) {
-            System.out.println(iter.next());
         }
     }
 }

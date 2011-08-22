@@ -57,7 +57,6 @@ public class MarauroaSimpleClient extends SimpleClient implements
 
     private boolean loginDone = false, profileReady = false;
     private List<String> quotes = new ArrayList<String>();
-    private ClientObject player;
     private static ExtensionXMLLoader extensionLoader;
     private static String confPath;
     private static boolean extLoaded = false;
@@ -104,9 +103,9 @@ public class MarauroaSimpleClient extends SimpleClient implements
     protected void registerListeners() {
         if (MCITool.getChatManager() != null) {
             //Register the chat component
-            userContext.registerRPEventListener(new TextEvent(), 
+            userContext.registerRPEventListener(new TextEvent(),
                     MCITool.getChatManager());
-            userContext.registerRPEventListener(new PrivateTextEvent(), 
+            userContext.registerRPEventListener(new PrivateTextEvent(),
                     MCITool.getChatManager());
         }
     }
@@ -300,11 +299,6 @@ public class MarauroaSimpleClient extends SimpleClient implements
     private void exit() {
         MCITool.getClient().setLoginDone(true);
         LifecycleManager.getDefault().exit();
-    }
-
-    @Override
-    public ClientObject getPlayerRPC() {
-        return player;
     }
 
     String popQuote() {
@@ -508,6 +502,6 @@ public class MarauroaSimpleClient extends SimpleClient implements
     @Override
     public void sendPrivateText(String mess, NotificationType type) {
         MCITool.getClient().getPlayerRPC().addEvent(new PrivateTextEvent(type, mess));
-        MCITool.getClient().getPlayerRPC().notifyWorldAboutChanges();
+        ((ClientObject) MCITool.getClient().getPlayerRPC()).notifyWorldAboutChanges();
     }
 }
