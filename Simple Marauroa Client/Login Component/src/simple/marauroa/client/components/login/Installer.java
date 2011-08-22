@@ -55,10 +55,6 @@ public class Installer extends ModuleInstall {
                                 LoginManager.class,
                                 "welcome.message"), NotificationType.NORMAL);
                     }
-                    if (MCITool.getUserListManager() != null) {
-                        //Add myself to the user list
-                        MCITool.getUserListManager().addPlayer(MCITool.getClient().getPlayerRPC());
-                    }
                 } catch (Exception e) {
                     DialogDisplayer.getDefault().notify(
                             new NotifyDescriptor.Message(NbBundle.getMessage(
