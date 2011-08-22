@@ -21,5 +21,5 @@ public interface RPEventListener {
      * @param event
      *            event received
      */
-    void onRPEventReceived(RPEvent event);
+    void onRPEventReceived(RPEvent event) throws Exception;
 }

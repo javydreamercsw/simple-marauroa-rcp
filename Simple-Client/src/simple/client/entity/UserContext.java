@@ -49,7 +49,7 @@ public class UserContext implements RPObjectChangeListener {
      */
     protected RPEventNotifier eventNotifier;
     /**
-     * The admin level.
+     * The administrator level.
      */
     protected int adminlevel;
     /**
@@ -82,20 +82,22 @@ public class UserContext implements RPObjectChangeListener {
     }
 
     /**
-     *
-     * @param event
-     * @param listener
+     * Register an RPEvent listener
+     * @param event     event to listen for
+     * @param listener  listener
      */
     public void registerRPEventListener(RPEvent event, RPEventListener listener) {
-        logger.debug("Adding event: " + event.getName() + " to the listener list");
+        logger.debug("Adding event: " + event.getName()
+                + " to the listener list with listener: " 
+                + listener.getClass().getSimpleName());
         eventNotifier.notifyAtEvent(event, listener);
     }
 
     /**
-     * Fire admin level change event to all registered listeners.
+     * Fire administrative level change event to all registered listeners.
      *
      * @param adminLevel
-     *            The new admin level.
+     *            The new administrative level.
      */
     protected void fireAdminLevelChanged(int adminLevel) {
         // TODO: Impl
@@ -112,9 +114,9 @@ public class UserContext implements RPObjectChangeListener {
     }
 
     /**
-     * Get the admin level.
+     * Get the administrator level.
      *
-     * @return The admin level.
+     * @return The administrator level.
      */
     public int getAdminLevel() {
         return adminlevel;
@@ -396,6 +398,4 @@ public class UserContext implements RPObjectChangeListener {
             image_url = null;
         }
     }
-    
-    
 }
