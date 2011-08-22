@@ -5,8 +5,9 @@ import marauroa.client.BannedAddressException;
 import marauroa.client.LoginFailedException;
 import marauroa.client.TimeoutException;
 import marauroa.common.game.AccountResult;
-import marauroa.common.game.RPObject;
 import marauroa.common.net.InvalidVersionException;
+import simple.common.NotificationType;
+import simple.server.core.entity.clientobject.ClientObject;
 
 /**
  *
@@ -26,9 +27,9 @@ public interface IClientFramework extends Runnable{
     String[] getAvailableCharacters();
 
     /*
-     * Get the RPObject representing the player on the server
+     * Get the ClientObject representing the player on the server
      */
-    RPObject getPlayerRPC();
+    ClientObject getPlayerRPC();
 
     void sendMessage(String text);
 
@@ -128,4 +129,11 @@ public interface IClientFramework extends Runnable{
      */
     public void provideCredentials(String host, String username, String password,
             String character, final String port);
+
+    /**
+     * Send private text
+     * @param mess  Message to send
+     * @param type  Notification type
+     */
+    public void sendPrivateText(String mess, NotificationType type);
 }

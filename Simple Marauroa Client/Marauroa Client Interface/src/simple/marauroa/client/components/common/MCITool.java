@@ -32,15 +32,35 @@ public class MCITool {
         }
     }
 
+    /**
+     * Get client implementation
+     * @return client implementation
+     */
     public static IClientFramework getClient() {
         return Lookup.getDefault().lookup(IClientFramework.class);
     }
-    
-    public static ILoginManager getLoginManager(){
+
+    /**
+     * Get chat implementation
+     * @return chat implementation
+     */
+    public static IChatComponent getChatManager() {
+        return Lookup.getDefault().lookup(IChatComponent.class);
+    }
+
+    /**
+     * Get login implementation
+     * @return login implementation
+     */
+    public static ILoginManager getLoginManager() {
         return Lookup.getDefault().lookup(ILoginManager.class);
     }
-    
-    public static ICAManager getCAManager(){
+
+    /**
+     * Get create account implementation
+     * @return account implementation
+     */
+    public static ICAManager getCAManager() {
         return Lookup.getDefault().lookup(ICAManager.class);
     }
 }
