@@ -6,6 +6,7 @@ import simple.marauroa.client.components.api.ICAManager;
 import simple.marauroa.client.components.api.IChatComponent;
 import simple.marauroa.client.components.api.IClientFramework;
 import simple.marauroa.client.components.api.ILoginManager;
+import simple.marauroa.client.components.api.IUserListComponent;
 
 /**
  *
@@ -62,5 +63,9 @@ public class MCITool {
      */
     public static ICAManager getCAManager() {
         return Lookup.getDefault().lookup(ICAManager.class);
+    }
+    
+    public static IUserListComponent getUserListManager(){
+        return Lookup.getDefault().lookup(IUserListComponent.class);
     }
 }
