@@ -76,7 +76,7 @@ public final class RPEventNotifier {
      *
      * @param events
      *            list of RPEvents received
-     * @return Unproccessed RPEvents. Events without listeners registered.
+     * @return Unprocessed RPEvents. Events without listeners registered.
      */
     public HashMap<RPEvent, Boolean> logic(List<RPEvent> events) {
         HashMap<RPEvent, Boolean> result = new HashMap<RPEvent, Boolean>();
