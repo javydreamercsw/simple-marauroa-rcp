@@ -9,7 +9,7 @@ import simple.marauroa.client.components.common.SortedListModel;
  *
  * @author user=Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
-public interface IMarauroaUserListComponent {
+public interface IUserListComponent {
     /**
      * Add a player to the user list
      * @param p Player to add
