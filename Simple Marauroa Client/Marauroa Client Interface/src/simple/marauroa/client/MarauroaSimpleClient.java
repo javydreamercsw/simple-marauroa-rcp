@@ -100,6 +100,17 @@ public class MarauroaSimpleClient extends SimpleClient implements
         startSwingLookAndFeel();
     }
 
+    @Override
+    protected void registerListeners() {
+        if (MCITool.getChatManager() != null) {
+            //Register the chat component
+            userContext.registerRPEventListener(new TextEvent(), 
+                    MCITool.getChatManager());
+            userContext.registerRPEventListener(new PrivateTextEvent(), 
+                    MCITool.getChatManager());
+        }
+    }
+
     /**
      * @return the world_objects
      */
@@ -121,7 +132,6 @@ public class MarauroaSimpleClient extends SimpleClient implements
 
     @Override
     protected void onAvailableCharacterDetails(Map<String, RPObject> characters) {
-
         // if there are no characters, create one with the specified name automatically
         if (characters.isEmpty()) {
             try {
