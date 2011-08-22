@@ -1,7 +1,7 @@
 package simple.client;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import marauroa.client.net.IPerceptionListener;
@@ -22,7 +22,7 @@ public class SimplePerceptionHandler extends PerceptionHandler implements IPerce
     private RPObjectChangeDispatcher rpobjDispatcher;
     private Map<RPObject.ID, RPObject> world_objects;
     private SimpleClient client;
-    private static final Logger logger= Logger.getLogger(SimplePerceptionHandler.class.getSimpleName());
+    private static final Logger logger = Logger.getLogger(SimplePerceptionHandler.class.getSimpleName());
 
     public SimplePerceptionHandler(PerceptionDispatcher dispatch,
             RPObjectChangeDispatcher rpobjDispatcher,
@@ -93,12 +93,21 @@ public class SimplePerceptionHandler extends PerceptionHandler implements IPerce
         RPObject object = world_objects.get(id);
         if (object != null) {
             //Get the list zones event results
-            List<RPEvent> events = object.events();
-            RPEventNotifier.get().logic(events);
-            for (RPEvent event : events) {
+            for (Entry<RPEvent, Boolean> entry : 
+                    RPEventNotifier.get().logic(object.events()).entrySet()) {
                 try {
-                    //Allow client to handle it
-                    client.processEvent(event);
+                    /*
+                     * Allow client to handle the unhandled events.
+                     * This shouldn't happen. Client should register 
+                     * listeners to all events it's expecting.
+                     */
+                    if (!entry.getValue()) {
+                        client.processEvent(entry.getKey());
+                        logger.log(Level.WARNING, "Sending event: {0}"
+                                +" to client. Consider "
+                                + "registering a listener for "
+                                + "this event instead.", entry.getKey());
+                    }
                 } catch (Exception e) {
                     logger.log(Level.SEVERE, null, e);
                     break;
