@@ -1,5 +1,6 @@
 package simple.marauroa.client;
 
+import simple.common.NotificationType;
 import simple.marauroa.client.components.api.IClientFramework;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -35,6 +36,7 @@ import simple.client.conf.ExtensionXMLLoader;
 import simple.client.soundreview.SoundMaster;
 import simple.marauroa.application.core.EventBus;
 import simple.marauroa.client.components.common.MCITool;
+import simple.server.core.entity.clientobject.ClientObject;
 import simple.server.core.event.MonitorEvent;
 import simple.server.core.event.PrivateTextEvent;
 import simple.server.core.event.ZoneEvent;
@@ -55,7 +57,7 @@ public class MarauroaSimpleClient extends SimpleClient implements
 
     private boolean loginDone = false, profileReady = false;
     private List<String> quotes = new ArrayList<String>();
-    private RPObject player;
+    private ClientObject player;
     private static ExtensionXMLLoader extensionLoader;
     private static String confPath;
     private static boolean extLoaded = false;
@@ -291,7 +293,7 @@ public class MarauroaSimpleClient extends SimpleClient implements
     }
 
     @Override
-    public RPObject getPlayerRPC() {
+    public ClientObject getPlayerRPC() {
         return player;
     }
 
@@ -491,5 +493,11 @@ public class MarauroaSimpleClient extends SimpleClient implements
             //Non special events. If Interfaces are moved to Marauroa only this line will be needed
             EventBus.getDefault().publish(new SimpleRPEvent(event));
         }
+    }
+
+    @Override
+    public void sendPrivateText(String mess, NotificationType type) {
+        MCITool.getClient().getPlayerRPC().addEvent(new PrivateTextEvent(type, mess));
+        MCITool.getClient().getPlayerRPC().notifyWorldAboutChanges();
     }
 }

@@ -1,21 +1,19 @@
 package simple.marauroa.client.components.api;
 
-import java.awt.Color;
-import java.awt.event.KeyEvent;
-import javax.swing.JScrollPane;
-import javax.swing.JTextPane;
-import javax.swing.text.Style;
+import org.jivesoftware.smack.util.ReaderListener;
 import simple.client.EventLine;
 import simple.common.NotificationType;
+import simple.marauroa.application.core.EventBusListener;
+import simple.server.core.event.api.IChatEvent;
 
 /**
  *
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
-public interface IChatComponent {
+public interface IChatComponent extends EventBusListener<IChatEvent>,ReaderListener {
 
     /**
-     * The implemented method.
+     * Add line to the output window.
      *
      * @param header
      * a string with the header name
@@ -26,58 +24,42 @@ public interface IChatComponent {
      */
     void addLine(String header, String line, NotificationType type);
 
+    /**
+     * 
+     * @param line
+     * Event line to output
+     */
     void addLine(final EventLine line);
 
     /**
      * Add a line of text
      * @param header
+     * Header of the message
      * @param line
+     * String to output
      */
     void addLine(String header, String line);
 
     /**
      * Add a line of text
      * @param line
+     * String to output
      * @param type
+     * Type of notification
+     * @param from
+     * The sender of the message
      */
     void addLine(String line, NotificationType type);
 
-    JScrollPane getChatScrollPane();
+    /**
+     * Get the normal window name
+     * @return normal window name
+     */
+    String getNormalOutputName();
 
     /**
-     * @param desiredColor
-     * the color with which the text must be colored
-     * @return the colored style
+     * Get private window name
+     * @return private window name
      */
-    Style getColor(Color desiredColor);
-
-    /**
-     * Get the current TextPane
-     * @return JTextPane
-     */
-    JTextPane getCurrentTextPane();
-
-    /**
-     * React to key presses
-     * @param e
-     */
-    void onKeyPressed(KeyEvent e);
-
-    /**
-     * React to key release
-     * @param e
-     */
-    void onKeyReleased(KeyEvent e);
-
-    /**
-     * Request game quit
-     */
-    void requestQuit();
-
-    /**
-     * This is used to switch where the messages will be written to
-     * @param tp
-     */
-    void setCurrentTextPane(JTextPane tp);
-    
+    String getPrivateOutputname();
 }

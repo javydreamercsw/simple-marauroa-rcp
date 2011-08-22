@@ -1,12 +1,9 @@
 package simple.marauroa.client.components.login;
 
-import com.dreamer.outputhandler.InputMonitor;
-import com.dreamer.outputhandler.OutputHandler;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import marauroa.common.Log4J;
-import org.jivesoftware.smack.util.ReaderListener;
 import org.openide.DialogDisplayer;
 import org.openide.LifecycleManager;
 import org.openide.NotifyDescriptor;
@@ -14,23 +11,16 @@ import org.openide.modules.ModuleInstall;
 import org.openide.util.NbBundle;
 import org.openide.windows.WindowManager;
 import simple.client.action.update.ClientGameConfiguration;
-import simple.marauroa.application.core.EventBus;
-import simple.marauroa.application.core.EventBusListener;
+import simple.common.NotificationType;
 import simple.marauroa.application.core.MarauroaApplicationRepository;
 import simple.marauroa.client.components.common.MCITool;
-import simple.server.core.event.PrivateTextEvent;
-import simple.server.core.event.TextEvent;
-import simple.server.core.event.api.IChatEvent;
 
 /**
  * Manages a module's life cycle. Remember that an installer is optional and
  * often not needed at all.
  */
-public class Installer extends ModuleInstall implements ReaderListener,
-        EventBusListener<IChatEvent> {
+public class Installer extends ModuleInstall {
 
-    private final String chat = "Chat";
-    private final String priv = "Private-";
     private static final Logger logger = Logger.getLogger(Installer.class.getName());
     private String gameName;
     private String versionNumber;
@@ -38,8 +28,6 @@ public class Installer extends ModuleInstall implements ReaderListener,
 
     @Override
     public void restored() {
-        //Subscribe for chat events
-        EventBus.getDefault().subscribe(IChatEvent.class, this);
         WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
 
             @Override
@@ -61,14 +49,9 @@ public class Installer extends ModuleInstall implements ReaderListener,
                     MCITool.getLoginManager().displayLoginManager();
                     MCITool.getLoginManager().waitUntilDone();
                     //Start the chat window after successful login
-                    OutputHandler.output(chat, NbBundle.getMessage(
+                    MCITool.getChatManager().addLine("System", NbBundle.getMessage(
                             LoginManager.class,
-                            "welcome.message"));
-                    OutputHandler.setInputEnabled(chat, true);
-                    //Create a monitor for the tab. This enables input in the tab as well.
-                    InputMonitor monitor = OutputHandler.createMonitor(chat, 1000);
-                    //Add a listener to be notified.
-                    monitor.addListener(Installer.this);
+                            "welcome.message"), NotificationType.NORMAL);
                 } catch (Exception e) {
                     DialogDisplayer.getDefault().notify(
                             new NotifyDescriptor.Message(NbBundle.getMessage(
@@ -79,36 +62,6 @@ public class Installer extends ModuleInstall implements ReaderListener,
                 }
             }
         });
-    }
-
-    @Override
-    public void close() {
-        super.close();
-        //Unsubscribe
-        EventBus.getDefault().unsubscribe(IChatEvent.class, this);
-    }
-
-    @Override
-    public void read(String read) {
-        //It will be typed here when it gets to the client on the next perception.
-        MCITool.getClient().sendMessage(read);
-    }
-
-    @Override
-    public void notify(IChatEvent event) {
-        if (event != null) {
-            logger.log(Level.INFO, "Got notified of event: {0}", event);
-            if (event.getName().equals(TextEvent.getRPClassName())) {
-                TextEvent textEvent = (TextEvent) event;
-                OutputHandler.output(chat, "<"
-                        + (textEvent.get("from") == null ? "System" : textEvent.get("from"))
-                        + "> " + textEvent.get("text"));
-            } else if (event.getName().equals(PrivateTextEvent.getRPClassName())) {
-                PrivateTextEvent pTextEvent = (PrivateTextEvent) event;
-                OutputHandler.output(priv + pTextEvent.get("from"), "<"
-                        + (pTextEvent.get("from") == null ? "System" : pTextEvent.get("from")) + "> " + pTextEvent.get("text"));
-            }
-        }
     }
 
     /**
