@@ -73,9 +73,7 @@ public class SimpleClient extends ClientFramework {
         TextEvent.generateRPClass();
         PrivateTextEvent.generateRPClass();
         //Register listeners for normal chat and private messages
-        ChatListener cl = new ChatListener();
-        userContext.registerRPEventListener(new TextEvent(), cl);
-        userContext.registerRPEventListener(new PrivateTextEvent(), cl);
+        registerListeners();
         //**************************
         rpobjDispatcher = new RPObjectChangeDispatcher(gameObjects, getUserContext());
         PerceptionToObject pto = new PerceptionToObject();
@@ -84,6 +82,16 @@ public class SimpleClient extends ClientFramework {
         world_objects = new HashMap<RPObject.ID, RPObject>();
         handler = new SimplePerceptionHandler(dispatch, rpobjDispatcher, world_objects, this);
         //**************************
+    }
+    
+    /**
+     * Register RPEvent listeners. this is meant to be overwritten by the client.
+     * Defaults to listen to chat only.
+     */
+    protected static void registerListeners(){
+        ChatListener cl = new ChatListener();
+        userContext.registerRPEventListener(new TextEvent(), cl);
+        userContext.registerRPEventListener(new PrivateTextEvent(), cl);
     }
 
     /**
