@@ -8,6 +8,7 @@ import org.openide.DialogDisplayer;
 import org.openide.LifecycleManager;
 import org.openide.NotifyDescriptor;
 import org.openide.modules.ModuleInstall;
+import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 import org.openide.windows.WindowManager;
 import simple.client.action.update.ClientGameConfiguration;
@@ -49,15 +50,22 @@ public class Installer extends ModuleInstall {
                     MCITool.getLoginManager().displayLoginManager();
                     MCITool.getLoginManager().waitUntilDone();
                     //Start the chat window after successful login
-                    MCITool.getChatManager().addLine("System", NbBundle.getMessage(
-                            LoginManager.class,
-                            "welcome.message"), NotificationType.NORMAL);
+                    if (MCITool.getChatManager() != null) {
+                        MCITool.getChatManager().addLine("System", NbBundle.getMessage(
+                                LoginManager.class,
+                                "welcome.message"), NotificationType.NORMAL);
+                    }
+                    if (MCITool.getUserListManager() != null) {
+                        //Add myself to the user list
+                        MCITool.getUserListManager().addPlayer(MCITool.getClient().getPlayerRPC());
+                    }
                 } catch (Exception e) {
                     DialogDisplayer.getDefault().notify(
                             new NotifyDescriptor.Message(NbBundle.getMessage(
                             LoginManager.class,
-                            "error.startup") + e,
+                            "error.startup")    ,
                             NotifyDescriptor.ERROR_MESSAGE));
+                    Exceptions.printStackTrace(e);
                     LifecycleManager.getDefault().exit();
                 }
             }
