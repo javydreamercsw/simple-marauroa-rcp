@@ -6,6 +6,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import marauroa.common.game.RPEvent;
 import org.jivesoftware.smack.util.ReaderListener;
+import org.openide.util.Exceptions;
 import org.openide.util.lookup.ServiceProvider;
 import simple.client.EventLine;
 import simple.common.NotificationType;
@@ -15,7 +16,7 @@ import simple.server.core.event.PrivateTextEvent;
 import simple.server.core.event.TextEvent;
 
 /**
- * 
+ * Manages the chat aspect of an application.
  * @author Javier A. Ortiz Bultrón <javier.ortiz.78@gmail.com>
  */
 @ServiceProvider(service = IChatComponent.class)
@@ -77,7 +78,7 @@ public class ChatManager implements IChatComponent, ReaderListener {
      * @param type
      */
     protected void insertText(String text, NotificationType type) {
-        OutputHandler.output(isPrivate(type) 
+        OutputHandler.output(isPrivate(type)
                 && !text.startsWith("<System>") ? getPrivateOutputname()
                 : getNormalOutputName(), text, type.getColor());
     }
@@ -99,20 +100,27 @@ public class ChatManager implements IChatComponent, ReaderListener {
     }
 
     @Override
-    public void onRPEventReceived(RPEvent event) {
-        if (event != null) {
-            logger.log(Level.INFO, "Got notified of event: {0}", event);
-            if (event.getName().equals(TextEvent.getRPClassName())) {
-                TextEvent textEvent = (TextEvent) event;
-                MCITool.getChatManager().addLine(
-                        (textEvent.get("from") == null ? "System" : textEvent.get("from")),
-                        textEvent.get("text"), NotificationType.NORMAL);
-            } else if (event.getName().equals(PrivateTextEvent.getRPClassName())) {
-                PrivateTextEvent pTextEvent = (PrivateTextEvent) event;
-                MCITool.getChatManager().addLine(
-                        (pTextEvent.get("from") == null ? "System" : pTextEvent.get("from")),
-                        pTextEvent.get("text"), NotificationType.PRIVMSG);
+    public void onRPEventReceived(RPEvent event) throws Exception {
+        try {
+            if (event != null) {
+                logger.log(Level.INFO, "Got notified of event: {0}", event);
+                if (event.getName().equals(TextEvent.getRPClassName())) {
+                    TextEvent textEvent = new TextEvent();
+                    textEvent.fill(event);
+                    MCITool.getChatManager().addLine(
+                            (textEvent.get("from") == null ? "System" : textEvent.get("from")),
+                            textEvent.get("text"), NotificationType.NORMAL);
+                } else if (event.getName().equals(PrivateTextEvent.getRPClassName())) {
+                    PrivateTextEvent pTextEvent = new PrivateTextEvent();
+                    pTextEvent.fill(event);
+                    MCITool.getChatManager().addLine(
+                            (pTextEvent.get("from") == null ? "System" : pTextEvent.get("from")),
+                            pTextEvent.get("text"), NotificationType.PRIVMSG);
+                }
             }
+        } catch (Exception e) {
+            Exceptions.printStackTrace(e);
+            logger.log(Level.SEVERE, null, e);
         }
     }
 }
