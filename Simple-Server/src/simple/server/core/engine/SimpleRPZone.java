@@ -324,9 +324,10 @@ public class SimpleRPZone extends MarauroaRPZone {
                 }
             }
         } catch (Exception e) {
+            logger.error(null, e);
         }
-        if (msg != null) {
-            player.sendPrivateText(msg);
+        if (msg != null && !msg.isEmpty()) {
+            player.sendText(msg);
         }
     }
 
