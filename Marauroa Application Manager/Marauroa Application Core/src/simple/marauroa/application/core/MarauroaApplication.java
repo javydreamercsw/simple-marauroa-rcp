@@ -73,6 +73,7 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
             new EnumMap<ConfigurationElement, Properties>(ConfigurationElement.class);
     //Populate the ini file
     private Properties props = new Properties(), custom = new Properties();
+    private static final Logger logger = Logger.getLogger(MarauroaApplication.class.getSimpleName());
     /*
      * A map of zones and its contents
      */
@@ -112,8 +113,7 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
     public Properties loadINIConfiguration() {
         Properties config = new Properties();
         for (Entry entry : configuration.entrySet()) {
-            Logger.getLogger(MarauroaApplication.class.getSimpleName()).log(
-                    Level.INFO, "{0}: {1}", new Object[]{entry.getKey(),
+            logger.log(Level.FINE, "{0}: {1}", new Object[]{entry.getKey(),
                         entry.getValue() == null ? "" : entry.getValue().toString()});
             config.put(entry.getKey(), entry.getValue());
         }
@@ -130,7 +130,7 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
                 out.close();
             }
         } catch (IOException ex) {
-            Logger.getLogger(MarauroaApplication.class.getName()).log(Level.SEVERE, null, ex);
+            logger.log(Level.SEVERE, null, ex);
             return null;
         }
         return config;
@@ -174,9 +174,11 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
         try {
             process.execute();
         } catch (ExecutionException ex) {
+            logger.log(Level.SEVERE, null, ex);
             Exceptions.printStackTrace(ex);
             return false;
         } catch (InterruptedException ex) {
+            logger.log(Level.SEVERE, null, ex);
             Exceptions.printStackTrace(ex);
             return false;
         }
@@ -209,9 +211,11 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
             config.store(out, "---No Comment---");
             out.close();
         } catch (FileNotFoundException ex) {
+            logger.log(Level.SEVERE, null, ex);
             Exceptions.printStackTrace(ex);
             return false;
         } catch (IOException ex) {
+            logger.log(Level.SEVERE, null, ex);
             Exceptions.printStackTrace(ex);
             return false;
         } finally {
@@ -220,6 +224,7 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
                 configuration = config;
                 return true;
             } catch (IOException ex) {
+                logger.log(Level.SEVERE, null, ex);
                 Exceptions.printStackTrace(ex);
                 return false;
             }
@@ -237,9 +242,11 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
             in = new FileInputStream(iniFile);
             configuration.load(in);
         } catch (FileNotFoundException ex) {
+            logger.log(Level.SEVERE, null, ex);
             Exceptions.printStackTrace(ex);
             return false;
         } catch (IOException ex) {
+            logger.log(Level.SEVERE, null, ex);
             Exceptions.printStackTrace(ex);
             return false;
         } finally {
@@ -247,6 +254,7 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
                 in.close();
                 return true;
             } catch (IOException ex) {
+                logger.log(Level.SEVERE, null, ex);
                 Exceptions.printStackTrace(ex);
                 return false;
             }
@@ -275,7 +283,7 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
         loadINIFile();
         //For now just check if there's something in the TCP port
         try {
-            running = available(Integer.valueOf(configuration.getProperty(ConfigurationElement.TCP_PORT.getName())));
+            running = !available(Integer.valueOf(configuration.getProperty(ConfigurationElement.TCP_PORT.getName())));
         } catch (NumberFormatException e) {
             running = false;
         }
@@ -295,6 +303,7 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
             ds.setReuseAddress(true);
             return true;
         } catch (IOException e) {
+            logger.log(Level.SEVERE, null, e);
         } finally {
             if (ds != null) {
                 ds.close();
@@ -304,6 +313,7 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
                     ss.close();
                 } catch (IOException e) {
                     /* should not be thrown */
+                    logger.log(Level.SEVERE, null, e);
                 }
             }
         }
@@ -396,7 +406,7 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
                     deleteAppDirectory();
                 } else {
                     //At this point everything is fine, register in manager
-                    Logger.getLogger(MarauroaApplication.class.getSimpleName()).log(Level.INFO,
+                    logger.log(Level.INFO,
                             "Created application directory at: {0}", getAppDirPath());
                 }
             }
@@ -569,9 +579,9 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
             writer.newLine();
             for (Entry e : custom.entrySet()) {
                 writer.write(e.getKey().toString() + " = " + e.getValue().toString());
-                    writer.newLine();
-                    writer.newLine();
-                }
+                writer.newLine();
+                writer.newLine();
+            }
             writer.write("#Enabled extensions");
             writer.newLine();
             writer.write(getProperty(ConfigurationElement.SERVER_EXTENSION));
@@ -595,7 +605,7 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
         //Only write if not already defined
         String property = ce.getName() + "=" + props.getProperty(ce.getName(),
                 ce.getValue() == null ? "" : ce.getValue().toString());
-        System.out.println(property);
+        logger.fine(property);
         return property;
     }
 
@@ -812,6 +822,7 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
                 try {
                     shutdown();
                 } catch (Exception ex) {
+                    logger.log(Level.SEVERE, null, ex);
                     Exceptions.printStackTrace(ex);
                 }
             }
@@ -828,6 +839,7 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
             try {
                 updateLibs();
             } catch (IOException ex) {
+                logger.log(Level.SEVERE, null, ex);
                 Exceptions.printStackTrace(ex);
             }
             //Recreate script in case update lib added/removed libraries
@@ -846,6 +858,7 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
                     + "log");
             log.mkdirs();
         } catch (IOException ex) {
+            logger.log(Level.SEVERE, null, ex);
             Exceptions.printStackTrace(ex);
         }
     }

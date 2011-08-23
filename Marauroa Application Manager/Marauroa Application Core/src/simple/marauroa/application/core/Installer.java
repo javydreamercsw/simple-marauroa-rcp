@@ -20,12 +20,14 @@ public class Installer extends ModuleInstall {
             @Override
             public void run() {
                 for (IMarauroaApplication app : EventBus.getDefault().lookupAll(IMarauroaApplication.class)) {
-                    try {
-                        Logger.getLogger(Installer.class.getName()).log(Level.WARNING,
-                                "Shutting down {0} in emergency mode since the JVM is closing!", app.getName());
-                        app.shutdown();
-                    } catch (Exception ex) {
-                        Exceptions.printStackTrace(ex);
+                    if (app.isRunning()) {
+                        try {
+                            Logger.getLogger(Installer.class.getName()).log(Level.WARNING,
+                                    "Shutting down {0} in emergency mode since the JVM is closing!", app.getName());
+                            app.shutdown();
+                        } catch (Exception ex) {
+                            Exceptions.printStackTrace(ex);
+                        }
                     }
                 }
             }
