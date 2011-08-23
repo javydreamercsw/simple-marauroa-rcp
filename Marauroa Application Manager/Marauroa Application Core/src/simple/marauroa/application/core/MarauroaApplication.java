@@ -285,7 +285,8 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
         try {
             running = !available(Integer.valueOf(configuration.getProperty(ConfigurationElement.TCP_PORT.getName())));
         } catch (NumberFormatException e) {
-            running = false;
+            //Try to close it just in case.
+            running = true;
         }
     }
 
