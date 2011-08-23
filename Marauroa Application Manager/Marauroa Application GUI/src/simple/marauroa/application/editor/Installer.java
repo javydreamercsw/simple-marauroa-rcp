@@ -23,7 +23,7 @@ import org.openide.windows.WindowManager;
  * Manages a module's lifecycle. Remember that an installer is optional and
  * often not needed at all.
  */
-public class Installer extends ModuleInstall implements ActionListener{
+public class Installer extends ModuleInstall implements ActionListener {
 
     private MenuItem showItem = new MenuItem("Show");
     private MenuItem hideItem = new MenuItem("Hide");
