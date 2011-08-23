@@ -14,8 +14,6 @@
 
     <target name="-post-jar">
         <antcall target="update_bat"/>
-        <copy file="${dist.jar}" tofile="${dist}/marauroa-simple-server-${version}.jar"/>
-        <copy file="${dist.jar}" tofile="../SimpleRCPCLient/marauroa-simple/release/modules/ext/marauroa-simple-server.jar"/>
     </target>
 
     <target name="update_bat">

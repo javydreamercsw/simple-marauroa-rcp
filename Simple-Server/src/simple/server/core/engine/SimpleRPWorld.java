@@ -181,6 +181,7 @@ public class SimpleRPWorld extends RPWorld {
                     logger.debug(it.next().getName());
                 }
             }
+            logger.info("Done!");
             //Make sure the system account exists. This will be the owner of NPC's
             if (!DAORegister.get().get(AccountDAO.class).hasPlayer(
                     Configuration.getConfiguration().get("system_account_name"))) {
@@ -204,7 +205,7 @@ public class SimpleRPWorld extends RPWorld {
                 entry.getValue().updateDatabase();
             }
         } catch (Exception e) {
-            logger.error("Error on Init the server.", e);
+            logger.error("Error initializing the server!", e);
         }
     }
 
@@ -213,7 +214,9 @@ public class SimpleRPWorld extends RPWorld {
         Iterator i = iterator();
         while (i.hasNext()) {
             SimpleRPZone sZone = (SimpleRPZone) i.next();
-            rooms.append(sZone.getName()).append(sZone.getDescription().isEmpty() ? "" : ": " + sZone.getDescription());
+            rooms.append(sZone.getName()).append(
+                    sZone.getDescription().isEmpty() ? "" : ": " 
+                    + sZone.getDescription());
             if (i.hasNext()) {
                 rooms.append("#");
             }
@@ -238,7 +241,8 @@ public class SimpleRPWorld extends RPWorld {
     @Override
     public void onFinish() {
         super.onFinish();
-        SimpleSingletonRepository.get().get(SimpleRPRuleProcessor.class).addGameEvent("server system", "shutdown");
+        SimpleSingletonRepository.get().get(
+                SimpleRPRuleProcessor.class).addGameEvent("server system", "shutdown");
     }
 
     public IRPZone getRPZone(String zone) {
