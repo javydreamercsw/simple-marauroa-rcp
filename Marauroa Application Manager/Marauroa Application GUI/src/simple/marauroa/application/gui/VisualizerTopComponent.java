@@ -40,7 +40,7 @@ public final class VisualizerTopComponent extends TopComponent
     private static VisualizerTopComponent instance;
     private final JComponent myView;
     private IMarauroaApplication lastSelected = null;
-    private ApplicationScene scene;
+    private final ApplicationScene scene;
 
     @Messages({"CTL_VisualizerTopComponent=Visualizer Window",
         "HINT_VisualizerTopComponent=This is a Visualizer window"})
