@@ -1,8 +1,3 @@
-/*
- * $Rev$
- * $LastChangedDate$
- * $LastChangedBy$
- */
 package simple.server.core.entity.clientobject;
 
 import java.io.IOException;

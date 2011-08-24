@@ -1,8 +1,3 @@
-/*
- * $Rev$
- * $LastChangedDate$
- * $LastChangedBy$
- */
 package simple.server.core.action;
 
 public class WellKnownActionConstant {

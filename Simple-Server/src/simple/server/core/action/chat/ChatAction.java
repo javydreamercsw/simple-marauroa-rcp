@@ -20,6 +20,7 @@ public class ChatAction {
     private static final String _SUPPORT = "support";
     public static final String _TELL = "tell";
     public static final String _CHAT = "chat";
+    public static final String _PRIVATE_CHAT = "private-chat";
     private static final String _ANSWER = "answer";
 
     /**
@@ -30,6 +31,7 @@ public class ChatAction {
         CommandCenter.register(_CHAT, new PublicChatAction());
         CommandCenter.register(_TELL, new TellAction());
         CommandCenter.register(_SUPPORT, new AskForSupportAction());
+        CommandCenter.register(_PRIVATE_CHAT, new PrivateChatAction());
     }
 
     public void onAction(final ClientObjectInterface player, final RPAction action) {
