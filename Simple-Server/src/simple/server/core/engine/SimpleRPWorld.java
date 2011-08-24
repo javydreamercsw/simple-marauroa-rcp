@@ -7,6 +7,7 @@ import simple.server.core.event.PrivateTextEvent;
 import simple.server.core.event.TextEvent;
 import java.util.Iterator;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map.Entry;
 import marauroa.common.Configuration;
 import marauroa.common.Log4J;
@@ -23,6 +24,7 @@ import marauroa.server.game.db.DAORegister;
 import marauroa.server.game.extension.MarauroaServerExtension;
 import marauroa.server.game.rp.RPWorld;
 import simple.common.game.ClientObjectInterface;
+import simple.server.core.entity.clientobject.ClientObject;
 import simple.server.core.entity.clientobject.GagManager;
 
 public class SimpleRPWorld extends RPWorld {
@@ -153,13 +155,13 @@ public class SimpleRPWorld extends RPWorld {
             try {
                 config = Configuration.getConfiguration();
                 String[] extensionsToLoad = config.get("server_extension").split(",");
-                if(extensionsToLoad.length>0){
+                if (extensionsToLoad.length > 0) {
                     logger.info("Loading extensions: ");
                 }
                 for (String extension : extensionsToLoad) {
                     try {
                         if (extension.length() > 0) {
-                            MarauroaServerExtension extensionClass = 
+                            MarauroaServerExtension extensionClass =
                                     MarauroaServerExtension.getInstance(config.get(extension));
                             extensionClass.init();
                             logger.info(extensionClass.getClass());
@@ -215,7 +217,7 @@ public class SimpleRPWorld extends RPWorld {
         while (i.hasNext()) {
             SimpleRPZone sZone = (SimpleRPZone) i.next();
             rooms.append(sZone.getName()).append(
-                    sZone.getDescription().isEmpty() ? "" : ": " 
+                    sZone.getDescription().isEmpty() ? "" : ": "
                     + sZone.getDescription());
             if (i.hasNext()) {
                 rooms.append("#");
@@ -261,6 +263,36 @@ public class SimpleRPWorld extends RPWorld {
         return (SimpleRPZone) getRPZone(new IRPZone.ID(id));
     }
 
+    public List<SimpleRPZone> getZones() {
+        ArrayList<SimpleRPZone> availableZones = new ArrayList<SimpleRPZone>();
+
+        Iterator zoneList = iterator();
+        while (zoneList.hasNext()) {
+            availableZones.add((SimpleRPZone) zoneList.next());
+        }
+        return availableZones;
+    }
+
+    public boolean applyPrivateEvent(String target, RPEvent event) {
+        return applyPrivateEvent(target, event, 0);
+    }
+
+    public boolean applyPrivateEvent(String target, RPEvent event, int delay) {
+        for (SimpleRPZone z : getZones()) {
+            //Only if zone is not empty
+            if (!z.getPlayers().isEmpty() && z.getPlayer(target) != null) {
+                logger.debug("Sending private event:" + event
+                        + " to: " + target + " currently in zone: " + z);
+                ClientObject targetCO = ((ClientObject) z.getPlayer(target));
+                targetCO.addEvent(event);
+                targetCO.notifyWorldAboutChanges();
+                return true;
+            }
+        }
+        logger.debug("Unable to find player:" + target + "!");
+        return false;
+    }
+
     public boolean applyPublicEvent(SimpleRPZone zone, RPEvent event) {
         return applyPublicEvent(zone, event, 0);
     }
@@ -270,10 +302,7 @@ public class SimpleRPWorld extends RPWorld {
         if (zone != null) {
             availableZones.add(zone);
         } else {
-            Iterator zoneList = iterator();
-            while (zoneList.hasNext()) {
-                availableZones.add((SimpleRPZone) zoneList.next());
-            }
+            availableZones.addAll(getZones());
         }
         for (SimpleRPZone z : availableZones) {
             //Only if zone is not empty
