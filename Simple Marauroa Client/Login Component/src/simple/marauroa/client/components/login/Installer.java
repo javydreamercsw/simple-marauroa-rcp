@@ -3,7 +3,10 @@ package simple.marauroa.client.components.login;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import marauroa.client.BannedAddressException;
+import marauroa.client.TimeoutException;
 import marauroa.common.Log4J;
+import marauroa.common.net.InvalidVersionException;
 import org.openide.DialogDisplayer;
 import org.openide.LifecycleManager;
 import org.openide.NotifyDescriptor;
@@ -112,5 +115,18 @@ public class Installer extends ModuleInstall {
      */
     public String getVersionNumber() {
         return versionNumber;
+    }
+
+    @Override
+    public void close() {
+        try {
+            MCITool.getClient().logout();
+        } catch (BannedAddressException ex) {
+            Exceptions.printStackTrace(ex);
+        } catch (TimeoutException ex) {
+            Exceptions.printStackTrace(ex);
+        } catch (InvalidVersionException ex) {
+            Exceptions.printStackTrace(ex);
+        }
     }
 }
