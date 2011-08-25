@@ -29,26 +29,26 @@ public class ChatManager implements IChatComponent, ReaderListener {
 
     @Override
     public void addLine(String header, String line, NotificationType type) {
+        String tabName = "";
         if (isPrivate(type) && !"System".equals(header)) {
             sender = header;
             if (!OutputHandler.has(getPrivateOutputname())) {
-                OutputHandler.output(getPrivateOutputname(), "");
-                OutputHandler.setInputEnabled(getPrivateOutputname(), true);
-                //Create a monitor for the tab. This enables input in the tab as well.
-                InputMonitor monitor = OutputHandler.createMonitor(getPrivateOutputname(), 1000);
-                //Add a listener to be notified.
-                monitor.addListener(new PrivateChatMonitor());
+                tabName = getPrivateOutputname();
             }
         } else {
             sender = "";
             if (!OutputHandler.has(getNormalOutputName())) {
-                OutputHandler.output(getNormalOutputName(), "");
-                OutputHandler.setInputEnabled(getNormalOutputName(), true);
-                //Create a monitor for the tab. This enables input in the tab as well.
-                InputMonitor monitor = OutputHandler.createMonitor(getNormalOutputName(), 1000);
-                //Add a listener to be notified.
-                monitor.addListener(ChatManager.this);
+                tabName = getNormalOutputName();
             }
+        }
+        if (!tabName.isEmpty()) {
+            OutputHandler.output(tabName, "");
+            OutputHandler.setInputEnabled(tabName, true);
+            //Create a monitor for the tab. This enables input in the tab as well.
+            InputMonitor monitor = OutputHandler.createMonitor(tabName, 1000);
+            //Add a listener to be notified.
+            monitor.addListener(tabName.equals(getPrivateOutputname()) ? 
+                    new PrivateChatMonitor(tabName) : this);
         }
         insertText((header == null ? "" : "<" + header + "> ") + line, type);
     }
@@ -96,7 +96,7 @@ public class ChatManager implements IChatComponent, ReaderListener {
     @Override
     public void read(String read) {
         //It will be typed here when it gets to the client on the next perception.
-        MCITool.getClient().sendMessage(read);
+        MCITool.getClient().sendMessage(read.replaceAll("\n", ""));
     }
 
     @Override
@@ -107,14 +107,12 @@ public class ChatManager implements IChatComponent, ReaderListener {
                 if (event.getName().equals(TextEvent.getRPClassName())) {
                     TextEvent textEvent = new TextEvent();
                     textEvent.fill(event);
-                    MCITool.getChatManager().addLine(
-                            (textEvent.get("from") == null ? "System" : textEvent.get("from")),
+                    addLine((textEvent.get("from") == null ? "System" : textEvent.get("from")),
                             textEvent.get("text"), NotificationType.NORMAL);
                 } else if (event.getName().equals(PrivateTextEvent.getRPClassName())) {
                     PrivateTextEvent pTextEvent = new PrivateTextEvent();
                     pTextEvent.fill(event);
-                    MCITool.getChatManager().addLine(
-                            (pTextEvent.get("from") == null ? "System" : pTextEvent.get("from")),
+                    addLine((pTextEvent.get("from") == null ? "System" : pTextEvent.get("from")),
                             pTextEvent.get("text"), NotificationType.PRIVMSG);
                 }
             }
