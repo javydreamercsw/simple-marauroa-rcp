@@ -54,10 +54,8 @@ public final class RPEventNotifier {
      *            the object to notify
      */
     public void notifyAtEvent(RPEvent event, RPEventListener eventListener) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("Notify when " + event.getClass().getSimpleName() +
-                    "(" + event.getName() + ")" + " is detected to " + eventListener);
-        }
+        logger.debug("Notify when " + event.getClass().getSimpleName()
+                + "(" + event.getName() + ")" + " is detected to " + eventListener);
 
         synchronized (sync) {
             // Do we have other listeners for this event?
@@ -87,9 +85,9 @@ public final class RPEventNotifier {
                 StringBuilder os = new StringBuilder();
                 os.append("event: ").append(event.getName()).append(", ");
                 os.append("event contents: ").append(event).append(", ");
-                os.append("registered: ").append(register.size()).append(", ");
-                os.append("set: ").append(set != null ? set.size() : 0);
-                logger.debug(os);
+                os.append("registered listeners: ").append(set.size());
+                logger.info(os);
+                System.out.println(os.toString());
             }
 
             if (set != null) {

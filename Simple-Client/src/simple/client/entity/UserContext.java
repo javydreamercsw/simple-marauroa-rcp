@@ -68,7 +68,7 @@ public class UserContext implements RPObjectChangeListener {
 
     /**
      * Constructor.
-     * @param client CLient using this usercontext
+     * @param client Client using this user context
      */
     public UserContext(SimpleClient client) {
         this.client = client;
