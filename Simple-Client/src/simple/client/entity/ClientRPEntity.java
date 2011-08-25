@@ -401,7 +401,6 @@ public abstract class ClientRPEntity extends ClientEntity {
         return poisoned;
     }
 
-    // TODO: this is just an ugly workaround to avoid cyclic dependencies with
     // Creature
     /**
      *
@@ -847,7 +846,6 @@ public abstract class ClientRPEntity extends ClientEntity {
 
                 hp = newHP;
 
-                // TODO: Remove has() check hack
                 if (object.has("hp") && (change != 0)) {
                     onHPChange(change);
                 }

@@ -176,7 +176,7 @@ public class SoundCycle extends Thread implements Cloneable {
             // if object bound sound cycle
             if (entityRef != null) {
                 o = entityRef;
-                if (o != null) { // FIXME: Will always return true because is checked previously, could be origin for sound dont stop bug
+                if (o != null) {
                     logger.debug("- start cyclic sound for entity: " + o.getType());
                     dataline = ((SoundObject) o).playSound(token, volBot,
                             volTop, chance);

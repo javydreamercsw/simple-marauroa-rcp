@@ -2,6 +2,7 @@ package simple.marauroa.client.components.chat;
 
 import com.dreamer.outputhandler.InputMonitor;
 import com.dreamer.outputhandler.OutputHandler;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import marauroa.common.game.RPEvent;
@@ -13,6 +14,7 @@ import simple.common.NotificationType;
 import simple.marauroa.client.components.api.IChatComponent;
 import simple.marauroa.client.components.common.MCITool;
 import simple.server.core.event.PrivateTextEvent;
+import simple.server.core.event.SimpleRPEvent;
 import simple.server.core.event.TextEvent;
 
 /**
@@ -26,6 +28,8 @@ public class ChatManager implements IChatComponent, ReaderListener {
     private final String priv = "Private-";
     private String sender = "";
     private static final Logger logger = Logger.getLogger(ChatManager.class.getName());
+    private ArrayList<String> processedIdList = new ArrayList<String>();
+    private int bufferSize = 10;
 
     @Override
     public void addLine(String header, String line, NotificationType type) {
@@ -47,8 +51,8 @@ public class ChatManager implements IChatComponent, ReaderListener {
             //Create a monitor for the tab. This enables input in the tab as well.
             InputMonitor monitor = OutputHandler.createMonitor(tabName, 1000);
             //Add a listener to be notified.
-            monitor.addListener(tabName.equals(getPrivateOutputname()) ? 
-                    new PrivateChatMonitor(tabName) : this);
+            monitor.addListener(tabName.equals(getPrivateOutputname())
+                    ? new PrivateChatMonitor(tabName) : this);
         }
         insertText((header == null ? "" : "<" + header + "> ") + line, type);
     }
@@ -102,7 +106,14 @@ public class ChatManager implements IChatComponent, ReaderListener {
     @Override
     public void onRPEventReceived(RPEvent event) throws Exception {
         try {
-            if (event != null) {
+            //TODO: Remove hack when issue is fixed
+            if (event != null
+                    && !processedIdList.contains(event.get(SimpleRPEvent.EVENT_ID))) {
+                processedIdList.add(event.get(SimpleRPEvent.EVENT_ID));
+                //Keep the list in a manageable size
+                while (processedIdList.size() > bufferSize) {
+                    processedIdList.remove(0);
+                }
                 logger.log(Level.INFO, "Got notified of event: {0}", event);
                 if (event.getName().equals(TextEvent.getRPClassName())) {
                     TextEvent textEvent = new TextEvent();
@@ -115,6 +126,9 @@ public class ChatManager implements IChatComponent, ReaderListener {
                     addLine((pTextEvent.get("from") == null ? "System" : pTextEvent.get("from")),
                             pTextEvent.get("text"), NotificationType.PRIVMSG);
                 }
+            } else if (event != null) {
+                logger.log(Level.WARNING,
+                        "Ignored duplicated event notice: {0}", event);
             }
         } catch (Exception e) {
             Exceptions.printStackTrace(e);

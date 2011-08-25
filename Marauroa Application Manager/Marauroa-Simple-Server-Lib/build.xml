@@ -24,7 +24,7 @@
                     <fileset dir="../../Simple-Server/dist/lib" excludes="marauroa*.jar, log4j*.jar, mysql*.jar"/>
                 </copy>
                 <!--Copy the Netbeans supported MySQL library as well-->
-                <copy file="${libs.MySQLDriver.classpath}" tofile="release/modules/ext/lib/mysql-connector-java.jar"/>
+                <copy file="${libs.MySQLDriver.classpath}" tofile="release/modules/ext/mysql-connector-java.jar"/>
             </then>
         </if>
     </target>

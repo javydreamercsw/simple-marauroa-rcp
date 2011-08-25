@@ -5,6 +5,9 @@
  */
 package simple.server.core.event;
 
+import marauroa.common.game.Definition.DefinitionClass;
+import marauroa.common.game.Definition.Type;
+import marauroa.common.game.RPClass;
 import simple.server.core.event.api.IMonitorEvent;
 
 /**
@@ -31,8 +34,20 @@ public class MonitorEvent extends SimpleRPEvent implements IMonitorEvent {
     public MonitorEvent() {
         super(RPCLASS_NAME);
     }
-    
+
     public static String getRPClassName() {
         return RPCLASS_NAME;
+    }
+
+    /**
+     * Creates the rpclass.
+     */
+    public static void generateRPClass() {
+        if (!RPClass.hasRPClass(RPCLASS_NAME)) {
+            RPClass rpclass = new RPClass(RPCLASS_NAME);
+            rpclass.add(DefinitionClass.ATTRIBUTE, ACTION, Type.INT);
+            rpclass.add(DefinitionClass.ATTRIBUTE, OBJECT, Type.LONG_STRING);
+            addCommonAttributes(rpclass);
+        }
     }
 }

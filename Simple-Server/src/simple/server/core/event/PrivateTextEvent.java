@@ -34,6 +34,7 @@ public class PrivateTextEvent extends SimpleRPEvent implements IChatEvent {
             rpclass.add(DefinitionClass.ATTRIBUTE, CHANNEL, Type.STRING);
             rpclass.add(DefinitionClass.ATTRIBUTE, TARGET, Type.STRING);
             rpclass.add(DefinitionClass.ATTRIBUTE, TEXT, Type.LONG_STRING);
+            addCommonAttributes(rpclass);
         }
     }
 

@@ -31,8 +31,6 @@ import simple.marauroa.application.api.IApplicationMonitor;
 import simple.marauroa.application.api.IMarauroaApplication;
 import simple.marauroa.application.core.MonitorService;
 import simple.server.core.event.MonitorEvent;
-import simple.server.core.event.PrivateTextEvent;
-import simple.server.core.event.TextEvent;
 import simple.server.extension.MonitorExtension;
 
 /**
@@ -45,22 +43,20 @@ public final class MonitorClient extends SimpleClient implements
     private String host;
     private String password;
     private String character;
-    private String port, gameName, version;
+    private String port, clientGameName, version;
     private marauroa.client.ClientFramework clientManager;
     private SimplePerceptionHandler handler;
     private IMarauroaApplication application;
     private boolean running = false;
     private String client_name;
     private ConnectionThread thread = null;
-    public static final String LOG4J_PROPERTIES = "log4j.properties";
 
     public MonitorClient(IMarauroaApplication app) {
         super(LOG4J_PROPERTIES);
         setApplication(app);
         state = ClientState.CHAT;
         rpobjDispatcher = new RPObjectChangeDispatcher(gameObjects, getUserContext());
-        RPEventNotifier.get().notifyAtEvent(new PrivateTextEvent(), this);
-        RPEventNotifier.get().notifyAtEvent(new TextEvent(), this);
+        RPEventNotifier.get().notifyAtEvent(new MonitorEvent(), MonitorClient.this);
         PerceptionToObject pto = new PerceptionToObject();
         pto.setObjectFactory(new ObjectFactory());
         dispatch.register(pto);
@@ -74,14 +70,14 @@ public final class MonitorClient extends SimpleClient implements
     }
 
     private void createClientManager(String name, String gversion) {
-        gameName = name;
+        clientGameName = name;
         version = gversion;
         clientManager = new marauroa.client.ClientFramework(
                 "log4j.properties") {
 
             @Override
             protected String getGameName() {
-                return gameName;
+                return clientGameName;
             }
 
             @Override
@@ -244,19 +240,7 @@ public final class MonitorClient extends SimpleClient implements
 
     @Override
     public void onRPEventReceived(RPEvent rpe) {
-        if (rpe instanceof PrivateTextEvent) {
-            PrivateTextEvent pte = (PrivateTextEvent) rpe;
-            Logger.getLogger(MonitorClient.class.getSimpleName()).log(
-                    Level.INFO, "Got private text! {0}", pte.get(PrivateTextEvent.TEXT));
-        }
-        if (rpe instanceof TextEvent) {
-            TextEvent pte = (TextEvent) rpe;
-            Logger.getLogger(MonitorClient.class.getSimpleName()).log(
-                    Level.INFO, "Got text! {0}", pte.get(PrivateTextEvent.TEXT));
-        } else {
-            Logger.getLogger(MonitorClient.class.getSimpleName()).log(
-                    Level.WARNING, "Got unexpected event! {0}", rpe);
-        }
+        //TODO
     }
 
     @Override

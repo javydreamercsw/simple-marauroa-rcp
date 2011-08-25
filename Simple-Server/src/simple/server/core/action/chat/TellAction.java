@@ -1,8 +1,3 @@
-/*
- * $Rev$
- * $LastChangedDate$
- * $LastChangedBy$
- */
 package simple.server.core.action.chat;
 
 import simple.common.Grammar;
@@ -157,8 +152,6 @@ public class TellAction implements ActionListener {
             RPObject buddies = ((RPObject) receiver).getSlot("!buddy").iterator().next();
             boolean senderFound = false;
             for (String buddyName : buddies) {
-                // TODO: as in Player.java, remove '_' prefix if ID is made
-                // completely virtual
                 if (buddyName.charAt(0) == '_') {
                     buddyName = buddyName.substring(1);
                 }

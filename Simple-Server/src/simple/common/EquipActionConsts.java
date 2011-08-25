@@ -1,13 +1,7 @@
-/*
- * $Rev$
- * $LastChangedDate$
- * $LastChangedBy$
- */
 package simple.common;
 
 /**
  * Constants using during the procession of an Equipment action.
- * TODO everywhere use this constants instead of plain strings
  */
 public interface EquipActionConsts {
 

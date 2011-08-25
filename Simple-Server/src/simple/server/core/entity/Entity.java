@@ -304,7 +304,6 @@ public class Entity extends RPObject implements RPEntityInterface {
     /**
      * Notifies the SimpleRPWorld that this entity's attributes have changed.
      * 
-     * TODO: Find a way to move this up to RPObject.
      */
     public void notifyWorldAboutChanges() {
         logger.debug("Object zone: "+get("zoneid"));

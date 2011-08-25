@@ -26,6 +26,7 @@ public class ZoneEvent extends SimpleRPEvent implements IZoneEvent {
         rpclass.add(DefinitionClass.ATTRIBUTE, FIELD, Type.STRING);
         rpclass.add(DefinitionClass.ATTRIBUTE, DESC, Type.LONG_STRING);
         rpclass.add(DefinitionClass.ATTRIBUTE, ACTION, Type.INT);
+        addCommonAttributes(rpclass);
     }
 
     /**
