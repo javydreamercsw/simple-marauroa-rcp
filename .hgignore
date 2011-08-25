@@ -5,3 +5,4 @@ netbeans/*
 */private/*
 *.db
 *server_stats.xml
+*/log*.txt

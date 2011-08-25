@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-OpenIDE-Module: marauroa.lib/1
-OpenIDE-Module-Implementation-Version: 0
+OpenIDE-Module: marauroa.lib/3
+OpenIDE-Module-Implementation-Version: 7
 OpenIDE-Module-Localizing-Bundle: marauroa/lib/Bundle.properties
 

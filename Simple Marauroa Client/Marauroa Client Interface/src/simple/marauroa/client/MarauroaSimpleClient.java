@@ -1,6 +1,8 @@
 package simple.marauroa.client;
 
+import simple.common.NotificationType;
 import marauroa.common.game.AccountResult;
+import marauroa.common.game.RPEvent;
 import simple.marauroa.client.components.api.IClientFramework;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -97,13 +99,7 @@ public class MarauroaSimpleClient extends SimpleClient implements
 
     @Override
     protected void registerListeners() {
-        if (MCITool.getChatManager() != null) {
-            //Register the chat component
-            userContext.registerRPEventListener(new TextEvent(),
-                    MCITool.getChatManager());
-            userContext.registerRPEventListener(new PrivateTextEvent(),
-                    MCITool.getChatManager());
-        }
+        //Override SimpleClient registration
     }
 
     /**
@@ -508,5 +504,23 @@ public class MarauroaSimpleClient extends SimpleClient implements
         action.put(TARGET, target);
         action.put(TEXT, mess);
         send(action);
+    }
+
+    @Override
+    public void processEvent(RPEvent event) {
+        if (event != null) {
+            logger.log(Level.INFO, "Got notified of event: {0}", event);
+            if (event.getName().equals(TextEvent.getRPClassName())) {
+                TextEvent textEvent = new TextEvent();
+                textEvent.fill(event);
+                MCITool.getChatManager().addLine((textEvent.get("from") == null ? "System" : textEvent.get("from")),
+                        textEvent.get("text"), NotificationType.NORMAL);
+            } else if (event.getName().equals(PrivateTextEvent.getRPClassName())) {
+                PrivateTextEvent pTextEvent = new PrivateTextEvent();
+                pTextEvent.fill(event);
+                MCITool.getChatManager().addLine((pTextEvent.get("from") == null ? "System" : pTextEvent.get("from")),
+                        pTextEvent.get("text"), NotificationType.PRIVMSG);
+            }
+        }
     }
 }
