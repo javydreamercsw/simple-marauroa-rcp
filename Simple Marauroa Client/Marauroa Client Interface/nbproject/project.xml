@@ -20,8 +20,8 @@
                     <build-prerequisite/>
                     <compile-dependency/>
                     <run-dependency>
-                        <release-version>1</release-version>
-                        <specification-version>0</specification-version>
+                        <release-version>3</release-version>
+                        <specification-version>8</specification-version>
                     </run-dependency>
                 </dependency>
                 <dependency>
@@ -38,6 +38,14 @@
                     <run-dependency>
                         <release-version>1</release-version>
                         <specification-version>1.11.1</specification-version>
+                    </run-dependency>
+                </dependency>
+                <dependency>
+                    <code-name-base>org.openide.actions</code-name-base>
+                    <build-prerequisite/>
+                    <compile-dependency/>
+                    <run-dependency>
+                        <specification-version>6.22.1</specification-version>
                     </run-dependency>
                 </dependency>
                 <dependency>
@@ -86,8 +94,8 @@
                     <build-prerequisite/>
                     <compile-dependency/>
                     <run-dependency>
-                        <release-version>0-1</release-version>
-                        <specification-version>1.0</specification-version>
+                        <release-version>1</release-version>
+                        <specification-version>0.2</specification-version>
                     </run-dependency>
                 </dependency>
                 <dependency>
@@ -95,8 +103,8 @@
                     <build-prerequisite/>
                     <compile-dependency/>
                     <run-dependency>
-                        <release-version>0-1</release-version>
-                        <specification-version>1.0</specification-version>
+                        <release-version>0</release-version>
+                        <specification-version>0.2</specification-version>
                     </run-dependency>
                 </dependency>
             </module-dependencies>

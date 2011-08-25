@@ -2,14 +2,13 @@ package simple.marauroa.client.components.api;
 
 import org.jivesoftware.smack.util.ReaderListener;
 import simple.client.EventLine;
-import simple.client.event.listener.RPEventListener;
 import simple.common.NotificationType;
 
 /**
  *
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
-public interface IChatComponent extends ReaderListener, RPEventListener {
+public interface IChatComponent extends ReaderListener {
 
     /**
      * Add line to the output window.

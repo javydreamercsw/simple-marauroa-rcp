@@ -11,8 +11,8 @@
                     <build-prerequisite/>
                     <compile-dependency/>
                     <run-dependency>
-                        <release-version>1</release-version>
-                        <specification-version>0</specification-version>
+                        <release-version>3</release-version>
+                        <specification-version>8</specification-version>
                     </run-dependency>
                 </dependency>
             </module-dependencies>
@@ -105,15 +105,15 @@
                 <binary-origin>release/modules/ext/marauroa-simple-server.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/lib/h2.jar</runtime-relative-path>
+                <runtime-relative-path>ext/h2.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/h2.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/lib/jsqlparser.jar</runtime-relative-path>
+                <runtime-relative-path>ext/jsqlparser.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/jsqlparser.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/lib/mysql-connector-java.jar</runtime-relative-path>
+                <runtime-relative-path>ext/mysql-connector-java.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/mysql-connector-java.jar</binary-origin>
             </class-path-extension>
         </data>

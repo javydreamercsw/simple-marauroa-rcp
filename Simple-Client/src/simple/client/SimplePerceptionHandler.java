@@ -1,7 +1,6 @@
 package simple.client;
 
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import marauroa.client.net.IPerceptionListener;
@@ -10,7 +9,6 @@ import marauroa.common.game.RPEvent;
 import marauroa.common.game.RPObject;
 import marauroa.common.game.RPObject.ID;
 import marauroa.common.net.message.MessageS2CPerception;
-import simple.client.event.listener.RPEventNotifier;
 
 /**
  *
@@ -92,26 +90,8 @@ public class SimplePerceptionHandler extends PerceptionHandler implements IPerce
         }
         RPObject object = world_objects.get(id);
         if (object != null) {
-            //Get the list zones event results
-            for (Entry<RPEvent, Boolean> entry :
-                    RPEventNotifier.get().logic(object.events()).entrySet()) {
-                try {
-                    /*
-                     * Allow client to handle the unhandled events.
-                     * This shouldn't happen. Client should register 
-                     * listeners to all events it's expecting.
-                     */
-                    if (!entry.getValue()) {
-                        client.processEvent(entry.getKey());
-                        logger.log(Level.WARNING, "Sending event: {0}"
-                                + " to client. Consider "
-                                + "registering a listener for "
-                                + "this event instead.", entry.getKey());
-                    }
-                } catch (Exception e) {
-                    logger.log(Level.SEVERE, null, e);
-                    break;
-                }
+            for (RPEvent event : object.events()) {
+                client.processEvent(event);
             }
             client.setPlayerRPC(object);
         }

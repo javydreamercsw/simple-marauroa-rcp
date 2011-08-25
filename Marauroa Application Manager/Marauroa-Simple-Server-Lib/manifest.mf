@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-OpenIDE-Module: simple.server.lib/1
-OpenIDE-Module-Implementation-Version: 0
+OpenIDE-Module: simple.server.lib/0
+OpenIDE-Module-Implementation-Version: 3
 OpenIDE-Module-Localizing-Bundle: simple/server/lib/Bundle.properties
 

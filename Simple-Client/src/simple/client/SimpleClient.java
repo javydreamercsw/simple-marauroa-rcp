@@ -22,6 +22,7 @@ import simple.client.entity.UserContext;
 import simple.client.event.ChatListener;
 import simple.client.gui.GameObjects;
 import simple.client.sound.SoundSystem;
+import simple.server.core.event.MonitorEvent;
 import simple.server.core.event.PrivateTextEvent;
 import simple.server.core.event.TextEvent;
 
@@ -72,6 +73,7 @@ public class SimpleClient extends ClientFramework {
         //**************************
         TextEvent.generateRPClass();
         PrivateTextEvent.generateRPClass();
+        MonitorEvent.generateRPClass();
         //Register listeners for normal chat and private messages
         registerListeners();
         //**************************

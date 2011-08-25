@@ -2,20 +2,12 @@ package simple.marauroa.client.components.chat;
 
 import com.dreamer.outputhandler.InputMonitor;
 import com.dreamer.outputhandler.OutputHandler;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import marauroa.common.game.RPEvent;
 import org.jivesoftware.smack.util.ReaderListener;
-import org.openide.util.Exceptions;
 import org.openide.util.lookup.ServiceProvider;
 import simple.client.EventLine;
 import simple.common.NotificationType;
 import simple.marauroa.client.components.api.IChatComponent;
 import simple.marauroa.client.components.common.MCITool;
-import simple.server.core.event.PrivateTextEvent;
-import simple.server.core.event.SimpleRPEvent;
-import simple.server.core.event.TextEvent;
 
 /**
  * Manages the chat aspect of an application.
@@ -27,9 +19,6 @@ public class ChatManager implements IChatComponent, ReaderListener {
     private final String chat = "Chat";
     private final String priv = "Private-";
     private String sender = "";
-    private static final Logger logger = Logger.getLogger(ChatManager.class.getName());
-    private ArrayList<String> processedIdList = new ArrayList<String>();
-    private int bufferSize = 10;
 
     @Override
     public void addLine(String header, String line, NotificationType type) {
@@ -101,38 +90,5 @@ public class ChatManager implements IChatComponent, ReaderListener {
     public void read(String read) {
         //It will be typed here when it gets to the client on the next perception.
         MCITool.getClient().sendMessage(read.replaceAll("\n", ""));
-    }
-
-    @Override
-    public void onRPEventReceived(RPEvent event) throws Exception {
-        try {
-            //TODO: Remove hack when issue is fixed
-            if (event != null
-                    && !processedIdList.contains(event.get(SimpleRPEvent.EVENT_ID))) {
-                processedIdList.add(event.get(SimpleRPEvent.EVENT_ID));
-                //Keep the list in a manageable size
-                while (processedIdList.size() > bufferSize) {
-                    processedIdList.remove(0);
-                }
-                logger.log(Level.INFO, "Got notified of event: {0}", event);
-                if (event.getName().equals(TextEvent.getRPClassName())) {
-                    TextEvent textEvent = new TextEvent();
-                    textEvent.fill(event);
-                    addLine((textEvent.get("from") == null ? "System" : textEvent.get("from")),
-                            textEvent.get("text"), NotificationType.NORMAL);
-                } else if (event.getName().equals(PrivateTextEvent.getRPClassName())) {
-                    PrivateTextEvent pTextEvent = new PrivateTextEvent();
-                    pTextEvent.fill(event);
-                    addLine((pTextEvent.get("from") == null ? "System" : pTextEvent.get("from")),
-                            pTextEvent.get("text"), NotificationType.PRIVMSG);
-                }
-            } else if (event != null) {
-                logger.log(Level.WARNING,
-                        "Ignored duplicated event notice: {0}", event);
-            }
-        } catch (Exception e) {
-            Exceptions.printStackTrace(e);
-            logger.log(Level.SEVERE, null, e);
-        }
     }
 }
