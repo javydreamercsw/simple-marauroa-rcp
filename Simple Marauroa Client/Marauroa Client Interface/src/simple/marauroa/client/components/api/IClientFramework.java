@@ -7,7 +7,6 @@ import marauroa.client.TimeoutException;
 import marauroa.common.game.AccountResult;
 import marauroa.common.game.RPObject;
 import marauroa.common.net.InvalidVersionException;
-import simple.common.NotificationType;
 
 /**
  *
@@ -132,8 +131,8 @@ public interface IClientFramework extends Runnable{
 
     /**
      * Send private text
-     * @param mess  Message to send
-     * @param type  Notification type
+     * @param mess      Message to send
+     * @param target    Message's target
      */
-    public void sendPrivateText(String mess, NotificationType type);
+    public void sendPrivateText(String mess, String target);
 }

@@ -1,6 +1,5 @@
 package simple.marauroa.client;
 
-import simple.common.NotificationType;
 import simple.marauroa.client.components.api.IClientFramework;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -15,7 +14,6 @@ import marauroa.client.LoginFailedException;
 import marauroa.client.TimeoutException;
 import marauroa.common.game.CharacterResult;
 import marauroa.common.game.RPAction;
-import marauroa.common.game.RPEvent;
 import marauroa.common.game.RPObject;
 import marauroa.common.net.InvalidVersionException;
 import marauroa.common.net.message.MessageS2CPerception;
@@ -34,14 +32,11 @@ import simple.client.SimpleClient;
 import simple.client.action.update.ClientGameConfiguration;
 import simple.client.conf.ExtensionXMLLoader;
 import simple.client.soundreview.SoundMaster;
-import simple.marauroa.application.core.EventBus;
 import simple.marauroa.client.components.common.MCITool;
-import simple.server.core.entity.clientobject.ClientObject;
-import simple.server.core.event.MonitorEvent;
+import simple.server.core.action.chat.ChatAction;
 import simple.server.core.event.PrivateTextEvent;
-import simple.server.core.event.ZoneEvent;
-import simple.server.core.event.SimpleRPEvent;
 import simple.server.core.event.TextEvent;
+import static simple.server.core.action.WellKnownActionConstants.*;
 
 /**
  *
@@ -223,6 +218,7 @@ public class MarauroaSimpleClient extends SimpleClient implements
                             NotifyDescriptor.OK_OPTION // default option is "Cancel"
                             ));
                     //Don't exit, let them retry.
+                    ph.finish();
                     return;
                 } catch (TimeoutException ex) {
                     logger.log(Level.SEVERE, null, ex);
@@ -264,6 +260,18 @@ public class MarauroaSimpleClient extends SimpleClient implements
                             ));
                     //Don't exit, let them retry.
                     return;
+                } catch (Exception ex) {
+                    logger.log(Level.SEVERE, null, ex);
+                    DialogDisplayer.getDefault().notify(new NotifyDescriptor(
+                            "Make sure the target server is correct and available."
+                            + "Please send a Support request to "
+                            + ClientGameConfiguration.get("SUPPORT"),
+                            "Unexpected error", // title of the dialog
+                            NotifyDescriptor.PLAIN_MESSAGE,
+                            NotifyDescriptor.ERROR_MESSAGE,
+                            null,
+                            NotifyDescriptor.OK_OPTION // default option is "Cancel"
+                            ));
                 }
             }
             MCITool.getClient().setAccountUsername(userName);
@@ -274,6 +282,7 @@ public class MarauroaSimpleClient extends SimpleClient implements
 
             ph.switchToIndeterminate();
             ph.progress("Connected to server");
+            ph.finish();
             while (cond) {
                 loop(0);
                 try {
@@ -284,7 +293,7 @@ public class MarauroaSimpleClient extends SimpleClient implements
             }
         } else {
             DialogDisplayer.getDefault().notify(new NotifyDescriptor(
-                    "Unable to proceed withot credentials.\n "
+                    "Unable to proceed without credentials.\n "
                     + "If you see this error contact the application's developer "
                     + "since this is a programming error.",
                     "Unable to proceed", // title of the dialog
@@ -293,10 +302,12 @@ public class MarauroaSimpleClient extends SimpleClient implements
                     null,
                     NotifyDescriptor.OK_OPTION // default option is "Cancel"
                     ));
+            ph.finish();
         }
     }
 
     private void exit() {
+        ph.finish();
         MCITool.getClient().setLoginDone(true);
         LifecycleManager.getDefault().exit();
     }
@@ -314,8 +325,8 @@ public class MarauroaSimpleClient extends SimpleClient implements
     public void sendMessage(String text) {
         RPAction action;
         action = new RPAction();
-        action.put("type", "chat");
-        action.put("text", text);
+        action.put("type", ChatAction._CHAT);
+        action.put(TEXT, text);
         send(action);
     }
 
@@ -473,35 +484,12 @@ public class MarauroaSimpleClient extends SimpleClient implements
     }
 
     @Override
-    public void processEvent(RPEvent event) {
-        logger.log(Level.INFO, "Received event: {0} from server", event);
-        //Publish the event to the bus so all listeners can react to it
-        //TODO: Remove hack while the interfaces are not part of Marauroa 
-        if (event.getName().equals(TextEvent.getRPClassName())) {
-            TextEvent textEvent = new TextEvent();
-            textEvent.fill(event);
-            EventBus.getDefault().publish(textEvent);
-        } else if (event.getName().equals(PrivateTextEvent.getRPClassName())) {
-            PrivateTextEvent privateTextEvent = new PrivateTextEvent();
-            privateTextEvent.fill(event);
-            EventBus.getDefault().publish(privateTextEvent);
-        } else if (event.getName().equals(ZoneEvent.getRPClassName())) {
-            ZoneEvent zoneEvent = new ZoneEvent();
-            zoneEvent.fill(event);
-            EventBus.getDefault().publish(zoneEvent);
-        } else if (event.getName().equals(MonitorEvent.getRPClassName())) {
-            MonitorEvent monitorEvent = new MonitorEvent();
-            monitorEvent.fill(event);
-            EventBus.getDefault().publish(monitorEvent);
-        } else {
-            //Non special events. If Interfaces are moved to Marauroa only this line will be needed
-            EventBus.getDefault().publish(new SimpleRPEvent(event));
-        }
-    }
-
-    @Override
-    public void sendPrivateText(String mess, NotificationType type) {
-        MCITool.getClient().getPlayerRPC().addEvent(new PrivateTextEvent(type, mess));
-        ((ClientObject) MCITool.getClient().getPlayerRPC()).notifyWorldAboutChanges();
+    public void sendPrivateText(String mess, String target) {
+        RPAction action;
+        action = new RPAction();
+        action.put("type", ChatAction._PRIVATE_CHAT);
+        action.put(TARGET, target);
+        action.put(TEXT, mess);
+        send(action);
     }
 }
