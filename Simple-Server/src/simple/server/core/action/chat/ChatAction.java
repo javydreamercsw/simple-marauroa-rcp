@@ -1,8 +1,3 @@
-/*
- * $Rev$
- * $LastChangedDate$
- * $LastChangedBy$
- */
 package simple.server.core.action.chat;
 
 import simple.server.core.action.CommandCenter;
