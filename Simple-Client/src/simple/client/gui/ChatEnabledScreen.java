@@ -41,19 +41,10 @@ public abstract class ChatEnabledScreen extends javax.swing.JFrame {
      */
     public void addLine(String header, String line,
             NotificationType type) {
-        // Goal of the new code is making it easier to read older messages:
-        // The client should only scroll down automatically if the scrollbar
-        // was at the bottom before.
-        // TODO: There were some bugs, so it is disabled until there is time to
-        // fix it.
-        boolean useNewCode = false;
-
         // Determine whether the scrollbar is currently at the very bottom
         // position. We will only auto-scroll down if the user is not currently
         // reading old texts (like IRC clients do).
         final JScrollBar vbar = getChatScrollPane().getVerticalScrollBar();
-
-        boolean autoScroll = (vbar.getValue() + vbar.getVisibleAmount() == vbar.getMaximum());
 
         insertNewline();
 
@@ -64,32 +55,14 @@ public abstract class ChatEnabledScreen extends javax.swing.JFrame {
         insertHeader(header);
         insertText(line, type);
 
-        if (useNewCode) {
-            if (autoScroll) {
-                if (SwingUtilities.isEventDispatchThread()) {
-                    // you can't call invokeAndWait from the event dispatch
-                    // thread.
-                    new Thread() {
-
-                        @Override
-                        public void run() {
-                            scrollToBottom();
-                        }
-                    }.start();
-                } else {
-                    scrollToBottom();
-                }
+        if (getCurrentTextPane().getDocument().getLength() > 20000) {
+            try {
+                getCurrentTextPane().getDocument().remove(0, 100);
+            } catch (BadLocationException e) {
+                logger.info(e);
             }
-        } else {
-            if (getCurrentTextPane().getDocument().getLength() > 20000) {
-                try {
-                    getCurrentTextPane().getDocument().remove(0, 100);
-                } catch (BadLocationException e) {
-                    logger.info(e);
-                }
-            }
-            getCurrentTextPane().setCaretPosition(getCurrentTextPane().getDocument().getLength());
         }
+        getCurrentTextPane().setCaretPosition(getCurrentTextPane().getDocument().getLength());
     }
 
     public abstract JScrollPane getChatScrollPane();

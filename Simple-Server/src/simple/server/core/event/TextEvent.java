@@ -32,6 +32,7 @@ public class TextEvent extends SimpleRPEvent implements IChatEvent {
             rpclass.add(DefinitionClass.ATTRIBUTE, TEXT, Type.LONG_STRING);
             rpclass.add(DefinitionClass.ATTRIBUTE, FROM, Type.LONG_STRING);
             rpclass.add(DefinitionClass.ATTRIBUTE, TEXT_TYPE, Type.STRING);
+            addCommonAttributes(rpclass);
         }
     }
 

@@ -553,7 +553,6 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
         if (player.getSlot("!buddy").size() > 0) {
             RPObject buddies = player.getSlot("!buddy").iterator().next();
             for (String buddyName : buddies) {
-                // TODO: Remove '_' prefix if ID is made completely virtual
                 if (buddyName.charAt(0) == '_') {
                     ClientObject buddy = (ClientObject) SimpleSingletonRepository.get().get(SimpleRPRuleProcessor.class).getPlayer(
                             buddyName.substring(1));
@@ -577,7 +576,6 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
      *            ClientObject to check for super admin status.
      */
     protected static void readAdminsFromFile(ClientObject player) {
-        //TODO: obtain from database
         if (adminNames == null) {
             adminNames = new LinkedList<String>();
 
@@ -738,7 +736,6 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
             try {
                 // We simply ignore corpses...
                 if (item.get("type").equals("item")) {
-                    // TODO: Move to Item.create(RPObject)?
 
                     String name = item.get("name");
                     Item entity = SimpleSingletonRepository.getEntityManager().getItem(name);
@@ -941,8 +938,6 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
          * is removed from a zone, but we need to keep it for players so that it
          * can be serialized.
          * 
-         * TODO: Find a better way to decouple "active" zone info from "resume"
-         * zone info, or save just before removing from zone instead.
          */
         if (player.getZone() != null) {
             player.getZone().remove(player);

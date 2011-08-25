@@ -83,8 +83,7 @@ public class Item extends RPEntity implements TurnListener, EquipListener {
         entity.addAttribute("infostring", Type.STRING);
 
         // Some items have individual values
-        // TODO: Change to FLAG (on DB reset)?
-        entity.addAttribute("persistent", Type.SHORT);
+        entity.addAttribute("persistent", Type.FLAG);
 
         // Some items have lifesteal values
         entity.addAttribute("lifesteal", Type.FLOAT);
@@ -138,7 +137,7 @@ public class Item extends RPEntity implements TurnListener, EquipListener {
     }
 
     /**
-     * copy constuctor
+     * copy constructor
      *
      * @param item
      *            item to copy
@@ -433,7 +432,6 @@ public class Item extends RPEntity implements TurnListener, EquipListener {
         return possibleSlots.contains(slot) || slot.equals("content");
     }
 
-    // TODO: Move this (in some form) up to Entity
     public void removeFromWorld() {
         if (isContained()) {
             // We modify the base container if the object change.

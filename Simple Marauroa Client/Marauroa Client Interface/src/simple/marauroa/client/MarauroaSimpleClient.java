@@ -1,5 +1,6 @@
 package simple.marauroa.client;
 
+import marauroa.common.game.AccountResult;
 import simple.marauroa.client.components.api.IClientFramework;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -204,10 +205,26 @@ public class MarauroaSimpleClient extends SimpleClient implements
             } catch (Exception e) {
                 try {
                     logger.log(Level.INFO, "Creating account and logging in to continue....");
-                    createAccount(userName, password, host);
-                    logger.log(Level.INFO, "Logging as: {0}", userName);
-                    login(userName, password);
-                    ph.progress("Logged in", 2);
+                    AccountResult result = createAccount(userName, password, host);
+                    if (!result.failed()) {
+                        logger.log(Level.INFO, "Logging as: {0}", userName);
+                        login(userName, password);
+                        ph.progress("Logged in", 2);
+                    } else {
+                        logger.log(Level.SEVERE, "Unable to create account: {0}.\n{1}",
+                                new Object[]{userName, result.getResult()});
+                        DialogDisplayer.getDefault().notify(new NotifyDescriptor(
+                                "Unable to create account: " + userName + ".\n"
+                                + result.getResult(),
+                                "Account creation failed", // title of the dialog
+                                NotifyDescriptor.PLAIN_MESSAGE,
+                                NotifyDescriptor.ERROR_MESSAGE,
+                                null,
+                                NotifyDescriptor.OK_OPTION // default option is "Cancel"
+                                ));
+                        //Don't exit, let them retry.
+                        ph.finish();
+                    }
                 } catch (LoginFailedException ex) {
                     logger.log(Level.SEVERE, null, ex);
                     DialogDisplayer.getDefault().notify(new NotifyDescriptor(e.getMessage(),

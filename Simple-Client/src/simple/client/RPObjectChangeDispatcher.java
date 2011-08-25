@@ -39,7 +39,8 @@ public class RPObjectChangeDispatcher {
      * @param userListener
      *            The user object listener.
      */
-    public RPObjectChangeDispatcher(final RPObjectChangeListener listener, final RPObjectChangeListener userListener) {
+    public RPObjectChangeDispatcher(final RPObjectChangeListener listener, 
+            final RPObjectChangeListener userListener) {
         this.listener = listener;
         this.userListener = userListener;
     }
@@ -103,9 +104,9 @@ public class RPObjectChangeDispatcher {
             fireChangedAdded(object, changes, user);
             object.applyDifferences(changes, null);
         } catch (Exception e) {
-            logger.debug("dispatchModifyAdded failed, object is " + object + ", changes is " + changes, e);
+            logger.debug("dispatchModifyAdded failed, object is " + object 
+                    + ", changes is " + changes, e);
         }
-
     }
 
     /**
@@ -132,7 +133,8 @@ public class RPObjectChangeDispatcher {
             logger.debug("Modified(" + object + ") modified in client");
             logger.debug("Changes(" + changes + ") modified in client");
         } catch (Exception e) {
-            logger.error("dispatchModifyRemoved failed, object is " + object + ", changes is " + changes, e);
+            logger.error("dispatchModifyRemoved failed, object is " + object 
+                    + ", changes is " + changes, e);
         }
     }
 
@@ -180,7 +182,7 @@ public class RPObjectChangeDispatcher {
     }
 
     /**
-     * Fix parent <-> child linkage. TODO: Remove once containers are set right
+     * Fix parent <-> child linkage.
      * on creation.
      * @param object whose slots shall be fixed.
      */

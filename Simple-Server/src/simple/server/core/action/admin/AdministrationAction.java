@@ -1,8 +1,3 @@
-/*
- * $Rev$
- * $LastChangedDate$
- * $LastChangedBy$
- */
 package simple.server.core.action.admin;
 
 import simple.server.core.action.ActionListener;
@@ -104,11 +99,10 @@ public abstract class AdministrationAction implements ActionListener {
      *
      * @param player
      * @param action
-     * @return the Entity or null if it does not exist TODO merge with
-     *         EntityHelper.entityFromTargetName()
+     * @return the Entity or null if it does not exist
      */
     protected final Entity getTarget(ClientObjectInterface player, RPAction action) {
-
+        
         String id = null;
         Entity target = null;
 

@@ -26,6 +26,7 @@ import marauroa.server.game.rp.RPWorld;
 import simple.common.game.ClientObjectInterface;
 import simple.server.core.entity.clientobject.ClientObject;
 import simple.server.core.entity.clientobject.GagManager;
+import simple.server.core.event.MonitorEvent;
 
 public class SimpleRPWorld extends RPWorld {
 
@@ -139,6 +140,10 @@ public class SimpleRPWorld extends RPWorld {
         if (!RPClass.hasRPClass(TextEvent.getRPClassName())) {
             TextEvent.generateRPClass();
         }
+        
+        if (!RPClass.hasRPClass(MonitorEvent.getRPClassName())) {
+            MonitorEvent.generateRPClass();
+        }
         //guilds
 
         //Client events
@@ -195,7 +200,10 @@ public class SimpleRPWorld extends RPWorld {
                         Configuration.getConfiguration().get("system_email"));
                 logger.info("Done!");
             } else {
-                //TODO handle password change
+                //Account exists, make sure the password is up to date
+                DAORegister.get().get(AccountDAO.class).changePassword(
+                        Configuration.getConfiguration().get("system_account_name"),
+                        Configuration.getConfiguration().get("system_password"));
             }
             super.onInit();
             addZone(getDefaultRoom(), "");

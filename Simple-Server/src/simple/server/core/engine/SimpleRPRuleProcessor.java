@@ -298,8 +298,8 @@ public class SimpleRPRuleProcessor implements IRPRuleProcessor {
             }
             SimpleRPObjectFactory.destroyClientObject(player);
             getOnlinePlayers().remove(player);
+            
             //Player is still somewhere else?
-            //TODO remove if unnecesary
             Iterator it = SimpleRPWorld.get().iterator();
             while (it.hasNext()) {
                 if (((SimpleRPZone) it.next()).has(((RPObject) player).getID())) {

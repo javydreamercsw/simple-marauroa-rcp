@@ -1,8 +1,3 @@
-/*
- * $Rev: 348 $
- * $LastChangedDate: 2011-04-17 09:52:49 -0500 (Sun, 17 Apr 2011) $
- * $LastChangedBy: javydreamercsw $
- */
 package simple.client.entity;
 
 import simple.client.SimpleClient;
@@ -22,8 +17,8 @@ import simple.client.gui.GameObjects;
 
 /**
  * The player user context. This class holds/manages the data for the user of
- * this client. This is independent of any on-screen representation ClientEntity that,
- * while related, serves an entirely different purpose.
+ * this client. This is independent of any on-screen representation ClientEntity 
+ * that, while related, serves an entirely different purpose.
  * 
  * Currently this is just a helper class for jWrestlingClient. Maybe it will be
  * directly used by other code later.
@@ -88,7 +83,7 @@ public class UserContext implements RPObjectChangeListener {
      */
     public void registerRPEventListener(RPEvent event, RPEventListener listener) {
         logger.debug("Adding event: " + event.getName()
-                + " to the listener list with listener: " 
+                + " to the listener list with listener: "
                 + listener.getClass().getSimpleName());
         eventNotifier.notifyAtEvent(event, listener);
     }
@@ -312,7 +307,8 @@ public class UserContext implements RPObjectChangeListener {
     public RPObject onRPEvent(RPObject object) {
         HashMap<RPEvent, Boolean> result = eventNotifier.logic(object.events());
         if (!result.entrySet().isEmpty()) {
-            logger.info("Here are the processed events. A false means that probably RPEventListeners not registered.\n");
+            logger.info("Here are the processed events. A false means "
+                    + "that probably RPEventListeners not registered.\n");
             for (Entry e : result.entrySet()) {
                 logger.debug(e.getKey() + " Processed? " + e.getValue());
             }
@@ -352,8 +348,10 @@ public class UserContext implements RPObjectChangeListener {
 
     private void addSmiley(String s, String imagePath) {
         if (s.contains("-")) {
-            logger.debug("Adding: " + s.toLowerCase().replaceAll("-", "") + ": " + imagePath);
-            smileys.put(s.toLowerCase().replaceAll("-", ""), smileyPath + imagePath);
+            logger.debug("Adding: " + s.toLowerCase().replaceAll("-", "")
+                    + ": " + imagePath);
+            smileys.put(s.toLowerCase().replaceAll("-", ""), smileyPath
+                    + imagePath);
         }
         logger.debug("Adding: " + s + ": " + imagePath);
         smileys.put(s.toLowerCase(), smileyPath + imagePath);
@@ -365,9 +363,7 @@ public class UserContext implements RPObjectChangeListener {
      * @return
      */
     public boolean isSmiley(String txt) {
-        boolean found = smileys.containsKey(txt.toLowerCase());
-        //TODO: Reevaluate
-        return found;
+        return smileys.containsKey(txt.toLowerCase()) && smileys.get(txt) != null;
     }
 
     /**
