@@ -701,10 +701,9 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
     }
 
     public static void copyFile(File sourceFile, File destFile) throws IOException {
-        if (!destFile.exists()) {
+        if (!destFile.getParentFile().exists()) {
             //Make sure the new path exists
             destFile.getParentFile().mkdirs();
-            destFile.createNewFile();
         }
         FileChannel source = null;
         FileChannel destination = null;
@@ -830,13 +829,6 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
             //Make sure that the lib folder is present
             File lib = new File(getAppDirPath()
                     + System.getProperty("file.separator") + "lib");
-            if (!lib.exists()) {
-                DialogDisplayer.getDefault().notifyLater(
-                        new NotifyDescriptor.Message(NbBundle.getMessage(
-                        MarauroaApplication.class,
-                        "application.lib.dir.not.exists"),
-                        NotifyDescriptor.WARNING_MESSAGE));
-            }
             try {
                 updateLibs();
             } catch (IOException ex) {
