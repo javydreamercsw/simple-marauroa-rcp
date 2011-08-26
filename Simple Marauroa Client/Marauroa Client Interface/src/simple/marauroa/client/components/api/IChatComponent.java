@@ -3,12 +3,15 @@ package simple.marauroa.client.components.api;
 import org.jivesoftware.smack.util.ReaderListener;
 import simple.client.EventLine;
 import simple.common.NotificationType;
+import simple.marauroa.application.core.EventBusListener;
+import simple.server.core.event.api.IChatEvent;
 
 /**
  *
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
-public interface IChatComponent extends ReaderListener {
+public interface IChatComponent extends ReaderListener, IClientComponent, 
+        EventBusListener<IChatEvent> {
 
     /**
      * Add line to the output window.

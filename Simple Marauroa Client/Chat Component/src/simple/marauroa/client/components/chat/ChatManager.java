@@ -2,12 +2,19 @@ package simple.marauroa.client.components.chat;
 
 import com.dreamer.outputhandler.InputMonitor;
 import com.dreamer.outputhandler.OutputHandler;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import marauroa.common.game.RPEvent;
 import org.jivesoftware.smack.util.ReaderListener;
 import org.openide.util.lookup.ServiceProvider;
 import simple.client.EventLine;
 import simple.common.NotificationType;
 import simple.marauroa.client.components.api.IChatComponent;
 import simple.marauroa.client.components.common.MCITool;
+import simple.server.core.event.PrivateTextEvent;
+import simple.server.core.event.TextEvent;
+import simple.server.core.event.api.IChatEvent;
 
 /**
  * Manages the chat aspect of an application.
@@ -18,7 +25,10 @@ public class ChatManager implements IChatComponent, ReaderListener {
 
     private final String chat = "Chat";
     private final String priv = "Private-";
+    private ArrayList<String> privateTabs = new ArrayList<String>();
     private String sender = "";
+    private static final Logger logger =
+            Logger.getLogger(ChatManager.class.getSimpleName());
 
     @Override
     public void addLine(String header, String line, NotificationType type) {
@@ -32,6 +42,7 @@ public class ChatManager implements IChatComponent, ReaderListener {
             sender = "";
             if (!OutputHandler.has(getNormalOutputName())) {
                 tabName = getNormalOutputName();
+                privateTabs.add(tabName);
             }
         }
         if (!tabName.isEmpty()) {
@@ -90,5 +101,39 @@ public class ChatManager implements IChatComponent, ReaderListener {
     public void read(String read) {
         //It will be typed here when it gets to the client on the next perception.
         MCITool.getClient().sendMessage(read.replaceAll("\n", ""));
+    }
+
+    @Override
+    public void open() {
+    }
+
+    @Override
+    public boolean close() {
+        OutputHandler.closeOutput(chat);
+        //Remove private tabs
+        for (String tab : privateTabs) {
+            if (OutputHandler.has(tab)) {
+                OutputHandler.closeOutput(tab);
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public void notify(IChatEvent event) {
+        if (event != null) {
+            logger.log(Level.INFO, "Got notified of event: {0}", event);
+            if (event.getName().equals(TextEvent.getRPClassName())) {
+                TextEvent textEvent = new TextEvent();
+                textEvent.fill((RPEvent) event);
+                MCITool.getChatManager().addLine((textEvent.get("from") == null ? "System" : textEvent.get("from")),
+                        textEvent.get("text"), NotificationType.NORMAL);
+            } else if (event.getName().equals(PrivateTextEvent.getRPClassName())) {
+                PrivateTextEvent pTextEvent = new PrivateTextEvent();
+                pTextEvent.fill((RPEvent) event);
+                MCITool.getChatManager().addLine((pTextEvent.get("from") == null ? "System" : pTextEvent.get("from")),
+                        pTextEvent.get("text"), NotificationType.PRIVMSG);
+            }
+        }
     }
 }

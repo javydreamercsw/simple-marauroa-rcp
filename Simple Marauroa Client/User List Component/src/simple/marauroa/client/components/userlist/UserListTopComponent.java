@@ -22,6 +22,7 @@ import simple.common.NotificationType;
 import simple.marauroa.client.components.api.IUserListComponent;
 import simple.marauroa.client.components.common.SortedListModel;
 import simple.marauroa.client.components.common.MCITool;
+import simple.marauroa.client.components.common.WindowModeManager;
 
 /**
  * Top component which displays something.
@@ -29,9 +30,8 @@ import simple.marauroa.client.components.common.MCITool;
 @ConvertAsProperties(dtd = "-//simple.marauroa.client.components.userlist//UserList//EN",
 autostore = false)
 @TopComponent.Description(preferredID = "UserListTopComponent",
-//iconBase="SET/PATH/TO/ICON/HERE", 
-persistenceType = TopComponent.PERSISTENCE_ALWAYS)
-@TopComponent.Registration(mode = "rightSlidingSide", openAtStartup = true)
+persistenceType = TopComponent.PERSISTENCE_NEVER)
+@TopComponent.Registration(mode = "rightSlidingSide", openAtStartup = false)
 @ActionID(category = "Window", id = "simple.marauroa.client.components.userlist.UserListTopComponent")
 @ActionReference(path = "Menu/Window" /*, position = 333 */)
 @TopComponent.OpenActionRegistration(displayName = "#CTL_UserListAction",
@@ -49,6 +49,7 @@ public final class UserListTopComponent extends TopComponent
         putClientProperty(TopComponent.PROP_CLOSING_DISABLED, Boolean.TRUE);
         putClientProperty(TopComponent.PROP_MAXIMIZATION_DISABLED, Boolean.TRUE);
         putClientProperty(TopComponent.PROP_KEEP_PREFERRED_SIZE_WHEN_SLIDED_IN, Boolean.TRUE);
+        WindowModeManager.changeMode(UserListTopComponent.this, "rightSlidingSide");
     }
 
     /** This method is called from within the constructor to
