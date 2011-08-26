@@ -1,6 +1,10 @@
 package simple.marauroa.client;
 
-import simple.common.NotificationType;
+import simple.server.core.event.MonitorEvent;
+import simple.server.core.event.PrivateTextEvent;
+import simple.server.core.event.SimpleRPEvent;
+import simple.server.core.event.TextEvent;
+import simple.server.core.event.ZoneEvent;
 import marauroa.common.game.AccountResult;
 import marauroa.common.game.RPEvent;
 import simple.marauroa.client.components.api.IClientFramework;
@@ -35,10 +39,9 @@ import simple.client.SimpleClient;
 import simple.client.action.update.ClientGameConfiguration;
 import simple.client.conf.ExtensionXMLLoader;
 import simple.client.soundreview.SoundMaster;
+import simple.marauroa.application.core.EventBus;
 import simple.marauroa.client.components.common.MCITool;
 import simple.server.core.action.chat.ChatAction;
-import simple.server.core.event.PrivateTextEvent;
-import simple.server.core.event.TextEvent;
 import static simple.server.core.action.WellKnownActionConstants.*;
 
 /**
@@ -59,7 +62,10 @@ public class MarauroaSimpleClient extends SimpleClient implements
     private static String confPath;
     private static boolean extLoaded = false;
     protected String userName;
-    private static final Logger logger = Logger.getLogger(MarauroaSimpleClient.class.getSimpleName());
+    private final int bufferSize = 10;
+    private ArrayList<String> processedEvents = new ArrayList<String>(bufferSize);
+    private static final Logger logger =
+            Logger.getLogger(MarauroaSimpleClient.class.getSimpleName());
     /**
      * default folder
      */
@@ -203,7 +209,9 @@ public class MarauroaSimpleClient extends SimpleClient implements
                     logger.log(Level.INFO, "Creating account and logging in to continue....");
                     AccountResult result = createAccount(userName, password, host);
                     if (!result.failed()) {
-                        logger.log(Level.INFO, "Logging as: {0}", userName);
+                        logger.log(Level.INFO, "Logging as: {0} with pass: {1}",
+                                new Object[]{userName,
+                                    (logger.isLoggable(Level.FINEST) ? password : "*******")});
                         login(userName, password);
                         ph.progress("Logged in", 2);
                     } else {
@@ -291,12 +299,11 @@ public class MarauroaSimpleClient extends SimpleClient implements
             ph.progress("Processing", 3);
             MCITool.getClient().setLoginDone(true);
             ph.progress("Done!", 4);
-            boolean cond = true;
 
             ph.switchToIndeterminate();
             ph.progress("Connected to server");
             ph.finish();
-            while (cond) {
+            while (getConnectionState()) {
                 loop(0);
                 try {
                     Thread.sleep(100);
@@ -509,18 +516,41 @@ public class MarauroaSimpleClient extends SimpleClient implements
     @Override
     public void processEvent(RPEvent event) {
         if (event != null) {
-            logger.log(Level.INFO, "Got notified of event: {0}", event);
-            if (event.getName().equals(TextEvent.getRPClassName())) {
-                TextEvent textEvent = new TextEvent();
-                textEvent.fill(event);
-                MCITool.getChatManager().addLine((textEvent.get("from") == null ? "System" : textEvent.get("from")),
-                        textEvent.get("text"), NotificationType.NORMAL);
-            } else if (event.getName().equals(PrivateTextEvent.getRPClassName())) {
-                PrivateTextEvent pTextEvent = new PrivateTextEvent();
-                pTextEvent.fill(event);
-                MCITool.getChatManager().addLine((pTextEvent.get("from") == null ? "System" : pTextEvent.get("from")),
-                        pTextEvent.get("text"), NotificationType.PRIVMSG);
+            if (!processedEvents.contains(event.get(SimpleRPEvent.EVENT_ID))) {
+                logger.log(Level.INFO, "Received event: {0} from server", event);
+                processedEvents.add(event.get(SimpleRPEvent.EVENT_ID));
+                //Publish the event to the bus so all listeners can react to it
+                //TODO: Remove hack while the interfaces are not part of Marauroa 
+                if (event.getName().equals(TextEvent.getRPClassName())) {
+                    TextEvent textEvent = new TextEvent();
+                    textEvent.fill(event);
+                    EventBus.getDefault().publish(textEvent);
+                } else if (event.getName().equals(PrivateTextEvent.getRPClassName())) {
+                    PrivateTextEvent privateTextEvent = new PrivateTextEvent();
+                    privateTextEvent.fill(event);
+                    EventBus.getDefault().publish(privateTextEvent);
+                } else if (event.getName().equals(ZoneEvent.getRPClassName())) {
+                    ZoneEvent zoneEvent = new ZoneEvent();
+                    zoneEvent.fill(event);
+                    EventBus.getDefault().publish(zoneEvent);
+                } else if (event.getName().equals(MonitorEvent.getRPClassName())) {
+                    MonitorEvent monitorEvent = new MonitorEvent();
+                    monitorEvent.fill(event);
+                    EventBus.getDefault().publish(monitorEvent);
+                } else {
+                    //Non special events. If Interfaces are moved to Marauroa only this line will be needed
+                    EventBus.getDefault().publish(new SimpleRPEvent(event));
+                }
+            }else{
+                logger.fine("Ignoring duplicated event.");
             }
+        } else {
+            logger.warning("Received a null event from server.");
         }
+    }
+
+    @Override
+    public void startModules() {
+        //To be extended in clients if needed
     }
 }

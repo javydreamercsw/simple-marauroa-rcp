@@ -135,4 +135,9 @@ public interface IClientFramework extends Runnable{
      * @param target    Message's target
      */
     public void sendPrivateText(String mess, String target);
+
+    /**
+     * Logic to start additional modules after the login was successful.
+     */
+    public void startModules();
 }

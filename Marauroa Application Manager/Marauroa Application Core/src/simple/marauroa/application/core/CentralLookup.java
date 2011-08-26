@@ -11,6 +11,7 @@ import org.openide.util.lookup.InstanceContent;
  * 
  * A singleton instance is created using @see getDefault().
  * This class is as thread safe as Lookup. Lookup appears to be safe.
+ * 
  * @author Wade Chandler
  * @version 1.0
  */

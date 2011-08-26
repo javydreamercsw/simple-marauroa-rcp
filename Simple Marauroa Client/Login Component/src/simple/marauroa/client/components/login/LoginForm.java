@@ -78,6 +78,17 @@ public final class LoginForm extends javax.swing.JPanel implements ILoginCompone
         }
     }
 
+    @Override
+    public void open() {
+        setVisible(true);
+    }
+
+    @Override
+    public boolean close() {
+        setVisible(false);
+        return true;
+    }
+
     /**
      * Profiles combo box selection change listener.
      */
