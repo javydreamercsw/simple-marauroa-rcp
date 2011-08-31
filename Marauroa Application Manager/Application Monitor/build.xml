@@ -5,4 +5,6 @@
 <project name="simple.marauroa.application.monitor" default="netbeans" basedir=".">
     <description>Builds, tests, and runs the project simple.marauroa.application.monitor.</description>
     <import file="nbproject/build-impl.xml"/>
+    <!--Add this to have the module-fix-dependencies target work from within each module-->
+    <import file="${suite.dir}/build.xml"/>
 </project>

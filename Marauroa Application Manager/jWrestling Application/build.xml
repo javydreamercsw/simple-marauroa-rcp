@@ -9,7 +9,10 @@
     
     <target name="init" depends="init-netbeans, init-hudson, harness.init">
         <if>
-            <available file="../../../jWrestling Project/jWrestling/build.xml" type="file" />
+            <and>
+                <available file="../../../jWrestling Project/jWrestling/build.xml" type="file" />
+                <isset property="src.src.dir"/>
+            </and>
             <then>
                 <property file="../../../jWrestling Project/jWrestling/nbproject/project.properties" prefix="jwrestling-lib"/>
                 <length string="${jwrestling-lib.dist.dir}" property="length.dist" />

@@ -251,7 +251,7 @@
 	<!-- Windows-only target that replaces the icon for the launcher exe with our own icon. -->
     <target name="replaceWindowsLauncherIcon" if="isWindows" description="Replace the icon for the Windows launcher exe">
         <echo message="Replacing icon of Windows launcher executable."/>
-        <exec executable="tools/ReplaceVistaIcon.exe" resolveexecutable="true">
+        <exec executable="../tools/ReplaceVistaIcon.exe" resolveexecutable="true">
             <arg line="build/launcher/bin/${app.name}.exe resources/${app.name}.ico"/>
         </exec>
     </target>
@@ -446,5 +446,49 @@
                 <echo>Done!</echo>
             </sequential>
         </for>
+    </target>
+    
+    <target name="fix-dependencies" depends="init-netbeans, init-hudson" description="Removes unused compilation dependencies on other modules.">
+        <!--Define custom task-->
+        <taskdef resource="org/netbeans/nbbuild/taskdefs.properties">
+            <classpath>
+                <pathelement location="${harness.dir}/tasks.jar"/>
+            </classpath>
+        </taskdef>
+        <property name="build.compiler.deprecation" value="false" />
+        <for list="${modules}" delimiter=":" param="cur" trim="true">
+            <sequential>
+                <echo>@{cur}</echo>
+                <if>
+                    <available file="@{cur}/build.xml"/>
+                    <then>
+                        <ant antfile="@{cur}/build.xml" target="module-fix-dependencies" inheritall="false" />
+                    </then>
+                    <else>
+                        <echo>@{cur}/build.xml not found!</echo>
+                    </else>
+                </if>
+            </sequential>
+        </for>
+        <!--Run fix dependencies in all modules
+        <subant target="fix-dependencies" buildpath="${modules}" inheritrefs="false" inheritall="false"/>-->
+    </target>
+    
+    <target name="module-fix-dependencies">
+        <taskdef resource="org/netbeans/nbbuild/taskdefs.properties">
+            <classpath>
+                <pathelement location="${harness.dir}/tasks.jar"/>
+            </classpath>
+        </taskdef>
+        <property name="build.compiler.deprecation" value="false" />
+        <fixdependencies antfile="../../build.xml" 
+                        buildtarget="netbeans" cleantarget="clean" failonerror="true" sanitycheck="false">
+            <replace codenamebase="marauroa.lib" addcompiletime="true" >
+                <module codenamebase="marauroa" spec="4.0"/>
+            </replace>
+            <fileset dir="nbproject" >
+                <include name="project.xml" />
+            </fileset>
+        </fixdependencies>  
     </target>
 </project>
