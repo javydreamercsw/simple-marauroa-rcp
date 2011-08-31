@@ -9,7 +9,10 @@
     
     <target name="init" depends="init-netbeans, init-hudson, harness.init">
         <if>
-            <available file="../../Simple-Client/build.xml" type="file" />
+            <and>
+                <available file="../../Simple-Client/build.xml" type="file" />
+                <isset property="src.src.dir"/>
+            </and>
             <then>
                 <property file="../../Simple-Client/nbproject/project.properties" prefix="client-lib"/>
                 <length string="${client-lib.dist.dir}" property="length.dist" />
