@@ -1,17 +1,8 @@
 package simple.marauroa.client;
 
-import simple.server.core.event.MonitorEvent;
-import simple.server.core.event.PrivateTextEvent;
-import simple.server.core.event.SimpleRPEvent;
-import simple.server.core.event.TextEvent;
-import simple.server.core.event.ZoneEvent;
-import marauroa.common.game.AccountResult;
-import marauroa.common.game.RPEvent;
-import simple.marauroa.client.components.api.IClientFramework;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,9 +10,7 @@ import javax.swing.UIManager;
 import marauroa.client.BannedAddressException;
 import marauroa.client.LoginFailedException;
 import marauroa.client.TimeoutException;
-import marauroa.common.game.CharacterResult;
-import marauroa.common.game.RPAction;
-import marauroa.common.game.RPObject;
+import marauroa.common.game.*;
 import marauroa.common.net.InvalidVersionException;
 import marauroa.common.net.message.MessageS2CPerception;
 import org.netbeans.api.progress.ProgressHandle;
@@ -40,14 +29,17 @@ import simple.client.action.update.ClientGameConfiguration;
 import simple.client.conf.ExtensionXMLLoader;
 import simple.client.soundreview.SoundMaster;
 import simple.marauroa.application.core.EventBus;
+import simple.marauroa.client.components.api.IClientFramework;
 import simple.marauroa.client.components.common.MCITool;
+import static simple.server.core.action.WellKnownActionConstants.TARGET;
+import static simple.server.core.action.WellKnownActionConstants.TEXT;
 import simple.server.core.action.chat.ChatAction;
-import static simple.server.core.action.WellKnownActionConstants.*;
+import simple.server.core.event.*;
 
 /**
  *
- * @author Javier A. Ortiz <javier.ortiz.78@gmail.com>
- * A base class for the Simple client UI (not GUI).
+ * @author Javier A. Ortiz <javier.ortiz.78@gmail.com> A base class for the
+ * Simple client UI (not GUI).
  *
  * This should have minimal UI-implementation dependent code. That's what
  * sub-classes are for!
@@ -57,7 +49,6 @@ public class MarauroaSimpleClient extends SimpleClient implements
         IClientFramework {
 
     private boolean loginDone = false, profileReady = false;
-    private List<String> quotes = new ArrayList<String>();
     private static ExtensionXMLLoader extensionLoader;
     private static String confPath;
     private static boolean extLoaded = false;
@@ -69,7 +60,7 @@ public class MarauroaSimpleClient extends SimpleClient implements
     /**
      * default folder
      */
-    public static String APPLICATION_FOLDER;
+    private static String APPLICATION_FOLDER;
     protected Class configRelativeTo;
     private String character;
     private String password;
@@ -95,7 +86,9 @@ public class MarauroaSimpleClient extends SimpleClient implements
         }
         gameName = ClientGameConfiguration.get("GAME_NAME");
         versionNumber = ClientGameConfiguration.get("GAME_VERSION");
-        /** We set the main game folder to the game name */
+        /**
+         * We set the main game folder to the game name
+         */
         APPLICATION_FOLDER = System.getProperty("user.home")
                 + System.getProperty("file.separator")
                 + "." + gameName + System.getProperty("file.separator");
@@ -157,7 +150,6 @@ public class MarauroaSimpleClient extends SimpleClient implements
                 logger.log(Level.INFO, MarauroaSimpleClient.class.getSimpleName()
                         + "::onAvailableCharacters{0}", e);
             }
-            return;
         }
     }
 
@@ -219,7 +211,7 @@ public class MarauroaSimpleClient extends SimpleClient implements
                                 new Object[]{userName, result.getResult()});
                         DialogDisplayer.getDefault().notify(new NotifyDescriptor(
                                 "Unable to create account: " + userName + ".\n"
-                                + result.getResult(),
+                                + result == null ? "" : result.getResult(),
                                 "Account creation failed", // title of the dialog
                                 NotifyDescriptor.PLAIN_MESSAGE,
                                 NotifyDescriptor.ERROR_MESSAGE,
@@ -332,15 +324,6 @@ public class MarauroaSimpleClient extends SimpleClient implements
         LifecycleManager.getDefault().exit();
     }
 
-    String popQuote() {
-        if (quotes.isEmpty()) {
-            return null;
-        }
-        String result = quotes.get(0);
-        quotes.remove(0);
-        return result;
-    }
-
     @Override
     public void sendMessage(String text) {
         RPAction action;
@@ -368,7 +351,7 @@ public class MarauroaSimpleClient extends SimpleClient implements
     }
 
     /**
-     * @param confPath the confPath to set
+     * @param cP the confPath to set
      */
     public static void setConfPath(String cP) {
         if (!extLoaded) {
@@ -541,7 +524,7 @@ public class MarauroaSimpleClient extends SimpleClient implements
                     //Non special events. If Interfaces are moved to Marauroa only this line will be needed
                     EventBus.getDefault().publish(new SimpleRPEvent(event));
                 }
-            }else{
+            } else {
                 logger.fine("Ignoring duplicated event.");
             }
         } else {
@@ -552,5 +535,12 @@ public class MarauroaSimpleClient extends SimpleClient implements
     @Override
     public void startModules() {
         //To be extended in clients if needed
+    }
+
+    /**
+     * @return the APPLICATION_FOLDER
+     */
+    public static String getAPPLICATION_FOLDER() {
+        return APPLICATION_FOLDER;
     }
 }

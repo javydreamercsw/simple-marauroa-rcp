@@ -16,6 +16,7 @@ public interface IClientFramework extends Runnable{
 
     /**
      * Get account username
+     *
      * @return
      */
     String getAccountUsername();
@@ -115,7 +116,7 @@ public interface IClientFramework extends Runnable{
      * @return true if new messages were received.
      */
     public boolean loop(int delay);
-    
+
     /**
      * Connect to the server
      * @param host

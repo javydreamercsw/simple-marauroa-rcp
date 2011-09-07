@@ -1,12 +1,7 @@
 package simple.client;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-
 import marauroa.client.net.IPerceptionListener;
 import marauroa.common.Log4J;
 import marauroa.common.Logger;
@@ -16,7 +11,7 @@ import marauroa.common.net.message.MessageS2CPerception;
 
 /**
  * Translates received perception to object listeners.
- * 
+ *
  * @author astrid
  *
  */

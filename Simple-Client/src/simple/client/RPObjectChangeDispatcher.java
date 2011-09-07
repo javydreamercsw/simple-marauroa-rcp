@@ -1,15 +1,15 @@
 package simple.client;
 
+import java.util.ArrayList;
 import marauroa.common.Log4J;
 import marauroa.common.Logger;
-
 import marauroa.common.game.RPObject;
 import marauroa.common.game.RPSlot;
 
 /**
  * A dispatcher for RPObjectChangeListeners. This normalizes the tree deltas
  * into individual object deltas.
- * 
+ *
  * NOTE: The order of dispatch between contained objects and when their
  * container is very specific. Children objects are given a chance to perform
  * creation/updates before their parent is notified it happened to that specific
@@ -29,7 +29,8 @@ public class RPObjectChangeDispatcher {
     /**
      * The user object listener.
      */
-    protected RPObjectChangeListener userListener;
+    protected ArrayList<RPObjectChangeListener> userListeners =
+            new ArrayList<RPObjectChangeListener>();
 
     /**
      * Create an RPObjectChange event dispatcher.
@@ -39,10 +40,10 @@ public class RPObjectChangeDispatcher {
      * @param userListener
      *            The user object listener.
      */
-    public RPObjectChangeDispatcher(final RPObjectChangeListener listener, 
+    public RPObjectChangeDispatcher(final RPObjectChangeListener listener,
             final RPObjectChangeListener userListener) {
         this.listener = listener;
-        this.userListener = userListener;
+        userListeners.add(userListener);
     }
 
     //
@@ -104,7 +105,7 @@ public class RPObjectChangeDispatcher {
             fireChangedAdded(object, changes, user);
             object.applyDifferences(changes, null);
         } catch (Exception e) {
-            logger.debug("dispatchModifyAdded failed, object is " + object 
+            logger.debug("dispatchModifyAdded failed, object is " + object
                     + ", changes is " + changes, e);
         }
     }
@@ -133,7 +134,7 @@ public class RPObjectChangeDispatcher {
             logger.debug("Modified(" + object + ") modified in client");
             logger.debug("Changes(" + changes + ") modified in client");
         } catch (Exception e) {
-            logger.error("dispatchModifyRemoved failed, object is " + object 
+            logger.error("dispatchModifyRemoved failed, object is " + object
                     + ", changes is " + changes, e);
         }
     }
@@ -215,7 +216,9 @@ public class RPObjectChangeDispatcher {
         listener.onAdded(object);
 
         if (user) {
-            userListener.onAdded(object);
+            for (RPObjectChangeListener userListener : userListeners) {
+                userListener.onAdded(object);
+            }
         }
 
         /*
@@ -255,7 +258,9 @@ public class RPObjectChangeDispatcher {
         listener.onSlotAdded(object, slotName, sobject);
 
         if (user) {
-            userListener.onSlotAdded(object, slotName, sobject);
+            for (RPObjectChangeListener userListener : userListeners) {
+                userListener.onSlotAdded(object, slotName, sobject);
+            }
         }
     }
 
@@ -288,7 +293,9 @@ public class RPObjectChangeDispatcher {
         listener.onChangedAdded(object, changes);
 
         if (user) {
-            userListener.onChangedAdded(object, changes);
+            for (RPObjectChangeListener userListener : userListeners) {
+                userListener.onChangedAdded(object, changes);
+            }
         }
     }
 
@@ -328,8 +335,10 @@ public class RPObjectChangeDispatcher {
                 listener.onSlotChangedAdded(object, slotName, sobject, schanges);
 
                 if (user) {
-                    userListener.onSlotChangedAdded(object, slotName, sobject,
-                            schanges);
+                    for (RPObjectChangeListener userListener : userListeners) {
+                        userListener.onSlotChangedAdded(object, slotName, sobject,
+                                schanges);
+                    }
                 }
 
                 fireChangedAdded(sobject, schanges, user);
@@ -363,7 +372,9 @@ public class RPObjectChangeDispatcher {
         listener.onChangedRemoved(object, changes);
 
         if (user) {
-            userListener.onChangedRemoved(object, changes);
+            for (RPObjectChangeListener userListener : userListeners) {
+                userListener.onChangedRemoved(object, changes);
+            }
         }
 
         /*
@@ -415,8 +426,10 @@ public class RPObjectChangeDispatcher {
                         schanges);
 
                 if (user) {
-                    userListener.onSlotChangedRemoved(object, slotName,
-                            sobject, schanges);
+                    for (RPObjectChangeListener userListener : userListeners) {
+                        userListener.onSlotChangedRemoved(object, slotName,
+                                sobject, schanges);
+                    }
                 }
 
                 fireChangedRemoved(sobject, schanges, user);
@@ -453,7 +466,9 @@ public class RPObjectChangeDispatcher {
         listener.onRemoved(object);
 
         if (user) {
-            userListener.onRemoved(object);
+            for (RPObjectChangeListener userListener : userListeners) {
+                userListener.onRemoved(object);
+            }
         }
     }
 
@@ -477,12 +492,22 @@ public class RPObjectChangeDispatcher {
         listener.onSlotRemoved(object, slotName, sobject);
 
         if (user) {
-            userListener.onSlotRemoved(object, slotName, sobject);
+            for (RPObjectChangeListener userListener : userListeners) {
+                userListener.onSlotRemoved(object, slotName, sobject);
+            }
         }
 
         /*
          * Notify child
          */
         fireRemoved(sobject, user);
+    }
+    
+    public boolean addRPObjectChangeListener(RPObjectChangeListener listener){
+        return userListeners.add(listener);
+    }
+    
+    public boolean removeRPObjectChangeListener(RPObjectChangeListener listener){
+        return userListeners.remove(listener);
     }
 }

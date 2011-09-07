@@ -38,11 +38,13 @@ public class SimplePerceptionHandler extends PerceptionHandler implements IPerce
     public boolean onAdded(RPObject object) {
         logger.log(Level.FINE, "onAdded: {0}", object);
         rpobjDispatcher.dispatchAdded(object, isUser(object));
+        client.onAdded(object);
         return false;
     }
 
     @Override
     public boolean onClear() {
+        client.onClear();
         return false;
     }
 
@@ -50,6 +52,7 @@ public class SimplePerceptionHandler extends PerceptionHandler implements IPerce
     public boolean onDeleted(RPObject object) {
         logger.log(Level.FINE, "onDeleted: {0}", object);
         rpobjDispatcher.dispatchRemoved(object, isUser(object));
+        client.onDeleted(object);
         return false;
     }
 
@@ -57,12 +60,14 @@ public class SimplePerceptionHandler extends PerceptionHandler implements IPerce
     public void onException(Exception exception,
             MessageS2CPerception perception) {
         logger.log(Level.SEVERE, null, exception);
+        client.onException(exception, perception);
     }
 
     @Override
     public boolean onModifiedAdded(RPObject object, RPObject changes) {
         logger.log(Level.FINE, "onModifiedAdded: {0}:{1}", new Object[]{object, changes});
         rpobjDispatcher.dispatchModifyAdded(object, changes, false);
+        client.onModifiedAdded(object, changes);
         return false;
     }
 
@@ -70,6 +75,7 @@ public class SimplePerceptionHandler extends PerceptionHandler implements IPerce
     public boolean onModifiedDeleted(RPObject object, RPObject changes) {
         logger.log(Level.FINE, "onModifiedDeleted: {0}:{1}", new Object[]{object, changes});
         rpobjDispatcher.dispatchModifyRemoved(object, changes, false);
+        client.onModifiedDeleted(object, changes);
         return false;
     }
 
@@ -95,23 +101,28 @@ public class SimplePerceptionHandler extends PerceptionHandler implements IPerce
             }
             client.setPlayerRPC(object);
         }
+        client.onMyRPObject(added, deleted);
         return true;
     }
 
     @Override
     public void onPerceptionBegin(byte type, int timestamp) {
+        client.onPerceptionBegin(type, timestamp);
     }
 
     @Override
     public void onPerceptionEnd(byte type, int timestamp) {
+        client.onPerceptionEnd(type, timestamp);
     }
 
     @Override
     public void onSynced() {
+        client.onSynced();
     }
 
     @Override
     public void onUnsynced() {
+        client.onUnsynced();
     }
 
     /**

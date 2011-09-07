@@ -1,6 +1,5 @@
 package simple.client;
 
-import simple.client.conf.ExtensionXMLLoader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -12,12 +11,14 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import marauroa.client.ClientFramework;
+import marauroa.client.net.IPerceptionListener;
 import marauroa.common.game.RPAction;
 import marauroa.common.game.RPEvent;
 import marauroa.common.game.RPObject;
 import marauroa.common.net.message.MessageS2CPerception;
 import marauroa.common.net.message.TransferContent;
 import org.xml.sax.SAXException;
+import simple.client.conf.ExtensionXMLLoader;
 import simple.client.entity.UserContext;
 import simple.client.event.ChatListener;
 import simple.client.gui.GameObjects;
@@ -34,7 +35,7 @@ import simple.server.core.event.TextEvent;
  * This should have minimal UI-implementation dependent code. That's what
  * sub-classes are for!
  */
-public class SimpleClient extends ClientFramework {
+public class SimpleClient extends ClientFramework implements IPerceptionListener{
 
     private SimplePerceptionHandler handler;
     protected static SimpleClient client;
@@ -81,6 +82,7 @@ public class SimpleClient extends ClientFramework {
         PerceptionToObject pto = new PerceptionToObject();
         pto.setObjectFactory(new ObjectFactory());
         dispatch.register(pto);
+        dispatch.register(SimpleClient.this);
         world_objects = new HashMap<RPObject.ID, RPObject>();
         handler = new SimplePerceptionHandler(dispatch, rpobjDispatcher, world_objects, this);
         //**************************
@@ -264,7 +266,7 @@ public class SimpleClient extends ClientFramework {
     }
 
     /**
-     * @param confPath the confPath to set
+     * @param cP the confPath to set
      */
     public static void setConfPath(String cP) {
         if (!extLoaded) {
@@ -320,5 +322,66 @@ public class SimpleClient extends ClientFramework {
             logger.log(Level.WARNING, "Received the following event but didn\'t "
                     + "know how to handle it: {0}", event);
         }
+    }
+
+    @Override
+    public boolean onAdded(RPObject rpo) {
+        logger.log(Level.INFO, "onAdded {0}", rpo.toString());
+        return true;
+    }
+
+    @Override
+    public boolean onModifiedAdded(RPObject object, RPObject changes) {
+        logger.log(Level.INFO, "onModifiedAdded {0}: {1}", new Object[]{object, changes});
+        return true;
+    }
+
+    @Override
+    public boolean onModifiedDeleted(RPObject object, RPObject changes) {
+        logger.log(Level.INFO, "onModifiedDeleted {0}: {1}", new Object[]{object, changes});
+        return true;
+    }
+
+    @Override
+    public boolean onDeleted(RPObject object) {
+        logger.log(Level.INFO, "onDeleted {0}", new Object[]{object});
+        return true;
+    }
+
+    @Override
+    public boolean onMyRPObject(RPObject added, RPObject deleted) {
+        logger.log(Level.INFO, "onMyRPObject {0}: {1}", new Object[]{added, deleted});
+        return true;
+    }
+
+    @Override
+    public boolean onClear() {
+        logger.log(Level.INFO, "onClear");
+        return true;
+    }
+
+    @Override
+    public void onSynced() {
+        logger.log(Level.INFO, "onSynced");
+    }
+
+    @Override
+    public void onUnsynced() {
+        logger.log(Level.INFO, "onUnsynced");
+    }
+
+    @Override
+    public void onPerceptionBegin(byte b, int i) {
+        logger.log(Level.INFO, "onPerceptionBegin {0}: {1}", new Object[]{b, i});
+    }
+
+    @Override
+    public void onPerceptionEnd(byte b, int i) {
+        logger.log(Level.INFO, "onPerceptionEnd {0}: {1}", new Object[]{b, i});
+    }
+
+    @Override
+    public void onException(Exception excptn, MessageS2CPerception mscp) {
+        logger.log(Level.INFO, "onException {0}: {1}", new Object[]{excptn, mscp});
     }
 }

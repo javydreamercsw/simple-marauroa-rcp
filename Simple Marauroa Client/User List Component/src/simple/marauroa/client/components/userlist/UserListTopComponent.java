@@ -1,27 +1,24 @@
 package simple.marauroa.client.components.userlist;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractListModel;
 import javax.swing.JList;
 import marauroa.common.game.RPObject;
-import org.openide.util.LookupEvent;
-import org.openide.util.NbBundle;
-import org.openide.windows.TopComponent;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
-import org.openide.util.Lookup;
-import org.openide.util.LookupListener;
-import org.openide.util.Utilities;
+import org.openide.util.*;
 import org.openide.util.lookup.ServiceProvider;
+import org.openide.windows.TopComponent;
 import simple.client.HeaderLessEventLine;
 import simple.common.NotificationType;
 import simple.marauroa.client.components.api.IUserListComponent;
-import simple.marauroa.client.components.common.SortedListModel;
 import simple.marauroa.client.components.common.MCITool;
+import simple.marauroa.client.components.common.SortedListModel;
 import simple.marauroa.client.components.common.WindowModeManager;
 
 /**
@@ -31,7 +28,7 @@ import simple.marauroa.client.components.common.WindowModeManager;
 autostore = false)
 @TopComponent.Description(preferredID = "UserListTopComponent",
 persistenceType = TopComponent.PERSISTENCE_NEVER)
-@TopComponent.Registration(mode = "rightSlidingSide", openAtStartup = false)
+@TopComponent.Registration(mode = "properties", openAtStartup = false)
 @ActionID(category = "Window", id = "simple.marauroa.client.components.userlist.UserListTopComponent")
 @ActionReference(path = "Menu/Window" /*, position = 333 */)
 @TopComponent.OpenActionRegistration(displayName = "#CTL_UserListAction",
@@ -40,7 +37,7 @@ preferredID = "UserListTopComponent")
 public final class UserListTopComponent extends TopComponent
         implements IUserListComponent, LookupListener {
 
-    private Lookup.Result result = null;
+    private Lookup.Result<RPObject> result = null;
 
     public UserListTopComponent() {
         initComponents();
@@ -49,7 +46,7 @@ public final class UserListTopComponent extends TopComponent
         putClientProperty(TopComponent.PROP_CLOSING_DISABLED, Boolean.TRUE);
         putClientProperty(TopComponent.PROP_MAXIMIZATION_DISABLED, Boolean.TRUE);
         putClientProperty(TopComponent.PROP_KEEP_PREFERRED_SIZE_WHEN_SLIDED_IN, Boolean.TRUE);
-        WindowModeManager.changeMode(UserListTopComponent.this, "rightSlidingSide");
+//        WindowModeManager.changeMode(UserListTopComponent.this, "properties");
     }
 
     /** This method is called from within the constructor to
@@ -230,11 +227,14 @@ public final class UserListTopComponent extends TopComponent
 
     @Override
     public void resultChanged(LookupEvent ev) {
-        Lookup.Result r = (Lookup.Result) ev.getSource();
-        Collection c = r.allInstances();
-        //Repopulate
+        Lookup.Result<RPObject> r = (Lookup.Result<RPObject>) ev.getSource();
+        Collection<RPObject> c = (Collection<RPObject>) r.allInstances();
         if (!c.isEmpty()) {
-            RPObject selected = (RPObject) c.iterator().next();
+            Iterator<RPObject> iterator = c.iterator();
+            while (iterator.hasNext()) {
+                RPObject selected = c.iterator().next();
+                System.out.println("Got changes for: " + selected);
+            }
         }
     }
 }

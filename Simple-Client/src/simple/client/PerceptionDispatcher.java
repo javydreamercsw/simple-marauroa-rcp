@@ -2,7 +2,6 @@ package simple.client;
 
 import java.util.LinkedList;
 import java.util.List;
-
 import marauroa.client.net.IPerceptionListener;
 import marauroa.common.game.RPObject;
 import marauroa.common.net.message.MessageS2CPerception;
