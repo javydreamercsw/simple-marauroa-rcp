@@ -449,46 +449,111 @@
     </target>
     
     <target name="fix-dependencies" depends="init-netbeans, init-hudson" description="Removes unused compilation dependencies on other modules.">
+        <echo>Fixing dependencies for suite...</echo>
         <!--Define custom task-->
         <taskdef resource="org/netbeans/nbbuild/taskdefs.properties">
             <classpath>
                 <pathelement location="${harness.dir}/tasks.jar"/>
             </classpath>
         </taskdef>
-        <property name="build.compiler.deprecation" value="false" />
-        <for list="${modules}" delimiter=":" param="cur" trim="true">
-            <sequential>
-                <echo>@{cur}</echo>
-                <if>
-                    <available file="@{cur}/build.xml"/>
-                    <then>
-                        <ant antfile="@{cur}/build.xml" target="module-fix-dependencies" inheritall="false" />
-                    </then>
-                    <else>
-                        <echo>@{cur}/build.xml not found!</echo>
-                    </else>
-                </if>
-            </sequential>
-        </for>
-        <!--Run fix dependencies in all modules
-        <subant target="fix-dependencies" buildpath="${modules}" inheritrefs="false" inheritall="false"/>-->
-    </target>
-    
-    <target name="module-fix-dependencies">
-        <taskdef resource="org/netbeans/nbbuild/taskdefs.properties">
+        <taskdef name="stringutil" classname="ise.antelope.tasks.StringUtilTask">
+            <classpath>
+                <pathelement location="${suite.dir}/../tools/AntelopeTasks_3.5.3.jar"/>
+            </classpath>
+        </taskdef>
+        <echo>Create the ant script...</echo>
+        <!--Create the ant script-->
+        <echo file="versions.xml"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<project name="Fix Versions" basedir="." default="fix">
+    <taskdef resource="org/netbeans/nbbuild/taskdefs.properties">
             <classpath>
                 <pathelement location="${harness.dir}/tasks.jar"/>
             </classpath>
-        </taskdef>
+    </taskdef>
+    <target name="fix">
         <property name="build.compiler.deprecation" value="false" />
         <fixdependencies antfile="../../build.xml" 
-                        buildtarget="netbeans" cleantarget="clean" failonerror="true" sanitycheck="false">
-            <replace codenamebase="marauroa.lib" addcompiletime="true" >
-                <module codenamebase="marauroa" spec="4.0"/>
-            </replace>
+                        buildtarget="netbeans" cleantarget="clean" failonerror="true" sanitycheck="false">]]>
+        </echo>
+        <for list="${modules}" delimiter=":" param="cur" trim="true">
+            <sequential>
+                <property file="@{cur}/manifest.mf" prefix="@{cur}"/>
+                <if>
+                    <contains string="${@{cur}.OpenIDE-Module}" substring="/"/>
+                    <then>
+                        <length string="${@{cur}.OpenIDE-Module}" property="@{cur}.length.dist" />
+                        <stringutil string="${@{cur}.OpenIDE-Module}" 
+                        property="@{cur}.OpenIDE-Module.indexOf">
+                            <indexof string="/"/>
+                        </stringutil>
+                        <math result="@{cur}.after" operand1="1" operation="+" 
+                        operand2="${@{cur}.OpenIDE-Module.indexOf}" datatype="int"/>
+                        <substring text="${@{cur}.OpenIDE-Module}" 
+                        start="${@{cur}.after}" 
+                        end="${@{cur}.length.dist}" 
+                        property="@{cur}.release-version" />
+                        <substring text="${@{cur}.OpenIDE-Module}" start="0" 
+                        end="${@{cur}.OpenIDE-Module.indexOf}" 
+                        property="@{cur}.OpenIDE-Module" />
+                    </then>
+                </if>
+                <property file="@{cur}/nbproject/project.properties" prefix="@{cur}."/>
+                <if>
+                    <or>
+                        <isset property="@{cur}.release-version"/>
+                        <isset property="@{cur}.spec.version.base"/>
+                    </or>
+                    <then>
+                        <echo file="versions.xml" append="true"><![CDATA[
+                <replace codenamebase="]]>${@{cur}.OpenIDE-Module}<![CDATA[" addcompiletime="true">
+                    <module codenamebase="]]>${@{cur}.OpenIDE-Module}</echo>
+                        <if>
+                            <isset property="@{cur}.spec.version.base"/>
+                            <then>
+                                <echo file="versions.xml" append="true"><![CDATA[" spec="]]>${@{cur}.spec.version.base}<![CDATA["]]></echo>
+                            </then>
+                            <else>
+                                <echo file="versions.xml" append="true"><![CDATA[/>]]>
+                                </echo>
+                            </else>
+                        </if>
+                        <if>
+                            <isset property="@{cur}.release-version"/>
+                            <then>
+                                <echo file="versions.xml" append="true"><![CDATA[ release="]]>${@{cur}.release-version}<![CDATA["/>]]></echo>
+                            </then>
+                            <else>
+                                <echo file="versions.xml" append="true"><![CDATA[/>]]></echo>
+                            </else>
+                        </if>
+                        <echo file="versions.xml" append="true"><![CDATA[
+                </replace>]]>
+                        </echo>
+                    </then>
+                </if>
+            </sequential>
+        </for>
+        <echo file="versions.xml" append="true"><![CDATA[
             <fileset dir="nbproject" >
                 <include name="project.xml" />
             </fileset>
-        </fixdependencies>  
+        </fixdependencies>
+    </target>
+</project>]]>
+        </echo>
+        <echo>Create the ant script...Done!</echo>
+        <!--Now update modules-->
+        <echo>Fixing module dependencies...</echo>
+        <property name="build.compiler.deprecation" value="false" />
+        <subant target="module-fix-dependencies">
+            <fileset dir="." includes="**/build.xml" excludes="build.xml"/>
+        </subant>
+        <echo>Fixing module dependencies...Done!</echo>
+        <delete file="versions.xml"/>
+        <echo>Fixing dependencies for suite...Done!</echo>
+    </target>
+    
+    <target name="module-fix-dependencies">
+        <ant antfile= "${suite.dir}/versions.xml" target="fix"/>
     </target>
 </project>

@@ -5,15 +5,11 @@
 <project name="simple.server.lib" default="netbeans" basedir=".">
     <description>Builds, tests, and runs the project simple.server.lib.</description>
     <import file="nbproject/build-impl.xml"/>
-    <!--Add this to have the module-fix-dependencies target work from within each module-->
     <import file="${suite.dir}/build.xml"/>
     
     <target name="init" depends="init-netbeans, init-hudson, harness.init">
         <if>
-            <and>
                 <available file="../../Simple-Server/build.xml" type="file" />
-                <isset property="src.src.dir"/>
-            </and>
             <then>
                 <property file="../../Simple-Server/nbproject/project.properties" prefix="server-lib"/>
                 <length string="${server-lib.dist.dir}" property="length.dist" />

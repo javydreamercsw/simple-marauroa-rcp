@@ -5,15 +5,11 @@
 <project name="marauroa.lib" default="netbeans" basedir=".">
     <description>Builds, tests, and runs the project marauroa.lib.</description>
     <import file="nbproject/build-impl.xml"/>
-    <!--Add this to have the module-fix-dependencies target work from within each module-->
     <import file="${suite.dir}/build.xml"/>
     
     <target name="init" depends="init-netbeans, init-hudson, harness.init">
         <if>
-            <and>
-                <available file="../../../Marauroa NB/nbbuild.xml" type="file" />
-                <isset property="src.src.dir"/>
-            </and>
+            <available file="../../../Marauroa NB/nbbuild.xml" type="file" />
             <then>
                 <property file="../../../Marauroa NB/nbproject/project.properties" prefix="marauroa-lib"/>
                 <!--Copy the Marauroa Related files-->

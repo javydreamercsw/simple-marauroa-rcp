@@ -5,4 +5,22 @@
 <project name="simple.marauroa.client" default="netbeans" basedir=".">
     <description>Builds, tests, and runs the project simple.marauroa.client.</description>
     <import file="nbproject/build-impl.xml"/>
+    <import file="${suite.dir}/../Marauroa Application Manager/build.xml"/>
+    
+    <target name="init" depends="init-netbeans, init-hudson, harness.init">
+    <!--Update with information from Marauroa Simple Server project-->
+        <if>
+            <available file="${marauroa.simple.server.project.path}/build.xml" type="file" />
+            <then>
+                <property file="${marauroa.simple.server.project.path}/build.ant.properties" prefix="server"/>
+                <replaceregexp file="src/simple/marauroa/client/game-default.properties"
+			match="GAME_VERSION?=?.*"
+			replace="GAME_VERSION=${server.version}"
+			byline="true"/>
+            </then>
+            <else>
+                <echo>${marauroa.simple.server.project.path}/build.xml not found!</echo>
+            </else>
+        </if>
+    </target>
 </project>

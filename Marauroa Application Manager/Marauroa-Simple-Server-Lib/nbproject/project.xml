@@ -6,7 +6,16 @@
             <code-name-base>simple.server.lib</code-name-base>
             <suite-component/>
             <module-dependencies>
-                </module-dependencies>
+                <dependency>
+                    <code-name-base>marauroa</code-name-base>
+                    <build-prerequisite/>
+                    <compile-dependency/>
+                    <run-dependency>
+                        <release-version>3</release-version>
+                        <specification-version>8</specification-version>
+                    </run-dependency>
+                </dependency>
+            </module-dependencies>
             <public-packages>
                 <package>com.mysql.jdbc</package>
                 <package>com.mysql.jdbc.exceptions</package>

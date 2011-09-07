@@ -5,21 +5,16 @@
 <project name="simple.marauroa.client.lib" default="netbeans" basedir=".">
     <description>Builds, tests, and runs the project simple.marauroa.client.lib.</description>
     <import file="nbproject/build-impl.xml"/>
-    <!--Add this to have the module-fix-dependencies target work from within each module-->
     <import file="${suite.dir}/build.xml"/>
     
     <target name="init" depends="init-netbeans, init-hudson, harness.init">
         <if>
-            <and>
-                <available file="../../Simple-Client/build.xml" type="file" />
-                <isset property="src.src.dir"/>
-            </and>
+            <available file="../../Simple-Client/build.xml" type="file" />
             <then>
                 <property file="../../Simple-Client/nbproject/project.properties" prefix="client-lib"/>
                 <length string="${client-lib.dist.dir}" property="length.dist" />
                 <length string="${client-lib.dist.jar}" property="length.dist.jar" />
                 <substring text="${client-lib.dist.jar}" start="${length.dist}" end="${length.dist.jar}" property="client-lib.dist.jar" />
-                <echo>${client-lib.dist.jar}</echo>
                 <ant antfile="../../Simple-Client/build.xml" target="clean" inheritall="false" />
                 <ant antfile="../../Simple-Client/build.xml" target="jar" inheritall="false" />
                 <copy file="../../Simple-Client/dist/${client-lib.dist.jar}" tofile="release/modules/ext/${client-lib.dist.jar}"/>
