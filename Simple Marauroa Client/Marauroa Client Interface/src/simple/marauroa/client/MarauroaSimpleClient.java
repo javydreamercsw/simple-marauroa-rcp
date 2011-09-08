@@ -73,6 +73,7 @@ public class MarauroaSimpleClient extends SimpleClient implements
             "Talking with server");
     private RequestProcessor.Task theTask = null;
     private boolean running = false;
+    private int duplicateCounter = 0;
 
     public MarauroaSimpleClient() {
         super(LOG4J_PROPERTIES);
@@ -525,7 +526,9 @@ public class MarauroaSimpleClient extends SimpleClient implements
                     EventBus.getDefault().publish(new SimpleRPEvent(event));
                 }
             } else {
-                logger.fine("Ignoring duplicated event.");
+                duplicateCounter++;
+                logger.log(Level.WARNING, "Ignoring duplicated event: {0}. "
+                        + "{1} duplicates so far!", new Object[]{event, duplicateCounter});
             }
         } else {
             logger.warning("Received a null event from server.");
@@ -542,5 +545,35 @@ public class MarauroaSimpleClient extends SimpleClient implements
      */
     public static String getAPPLICATION_FOLDER() {
         return APPLICATION_FOLDER;
+    }
+
+    @Override
+    public boolean onMyRPObject(RPObject added, RPObject deleted) {
+        RPObject.ID id = null;
+        if (added != null) {
+            id = added.getID();
+            if (!added.events().isEmpty()) {
+                for (RPEvent event : added.events()) {
+                    processEvent(event);
+                }
+            }
+        }
+        if (deleted != null) {
+            id = deleted.getID();
+            logger.log(Level.INFO, "Do something with deleted: {0}", deleted);
+            if (!deleted.events().isEmpty()) {
+            }
+        }
+        if (id == null) {
+            // Unchanged.
+            logger.fine("Unchanged, returning");
+            return true;
+        }
+        RPObject object = world_objects.get(id);
+        //Process Events
+        if (object != null) {
+            setPlayerRPC(object);
+        }
+        return true;
     }
 }
