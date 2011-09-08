@@ -51,7 +51,7 @@ public class Installer extends ModuleInstall {
                     if (MCITool.getChatManager() != null) {
                         MCITool.getChatManager().addLine("System", NbBundle.getMessage(
                                 Installer.class,
-                                "welcome.message"), NotificationType.NORMAL);
+                                "welcome.message"), NotificationType.TUTORIAL);
                     }
                     //Start the User List component
                     MCITool.getUserListManager().open();
