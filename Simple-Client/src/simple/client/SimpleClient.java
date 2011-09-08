@@ -83,7 +83,6 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
         pto.setObjectFactory(new ObjectFactory());
         dispatch.register(pto);
         dispatch.register(SimpleClient.this);
-        world_objects = new HashMap<RPObject.ID, RPObject>();
         handler = new SimplePerceptionHandler(dispatch, rpobjDispatcher, world_objects, this);
         //**************************
     }
@@ -308,7 +307,7 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
      * 
      * @param event Event to process
      */
-    public void processEvent(RPEvent event) {
+    protected void processEvent(RPEvent event) {
         logger.log(Level.FINE, "Processing: {0}", event);
         if (event.getName().equals(TextEvent.getRPClassName())) {
             logger.log(Level.FINE, "<{0}> {1}", new Object[]{
