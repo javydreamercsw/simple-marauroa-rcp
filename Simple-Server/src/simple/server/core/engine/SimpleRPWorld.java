@@ -160,7 +160,7 @@ public class SimpleRPWorld extends RPWorld {
             try {
                 config = Configuration.getConfiguration();
                 String[] extensionsToLoad = config.get("server_extension").split(",");
-                if (extensionsToLoad.length > 0) {
+                if (extensionsToLoad.length > 0 && !extensionsToLoad[0].isEmpty()) {
                     logger.info("Loading extensions: ");
                 }
                 for (String extension : extensionsToLoad) {
