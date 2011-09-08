@@ -5,7 +5,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import marauroa.client.net.IPerceptionListener;
 import marauroa.client.net.PerceptionHandler;
-import marauroa.common.game.RPEvent;
 import marauroa.common.game.RPObject;
 import marauroa.common.game.RPObject.ID;
 import marauroa.common.net.message.MessageS2CPerception;
@@ -82,46 +81,32 @@ public class SimplePerceptionHandler extends PerceptionHandler implements IPerce
     @Override
     public boolean onMyRPObject(RPObject added, RPObject deleted) {
         logger.fine("onMyRPObject");
-        RPObject.ID id = null;
-        if (added != null) {
-            id = added.getID();
-        }
-        if (deleted != null) {
-            id = deleted.getID();
-        }
-        if (id == null) {
-            // Unchanged.
-            logger.fine("Unchanged, returning");
-            return true;
-        }
-        RPObject object = world_objects.get(id);
-        if (object != null) {
-            for (RPEvent event : object.events()) {
-                client.processEvent(event);
-            }
-            client.setPlayerRPC(object);
-        }
-        client.onMyRPObject(added, deleted);
-        return true;
+        return client.onMyRPObject(added, deleted);
     }
 
     @Override
     public void onPerceptionBegin(byte type, int timestamp) {
+        logger.log(Level.FINE, "onPerceptionBegin: {0}, {1}", 
+                new Object[]{type, timestamp});
         client.onPerceptionBegin(type, timestamp);
     }
 
     @Override
     public void onPerceptionEnd(byte type, int timestamp) {
+        logger.log(Level.FINE, "onPerceptionEnd: {0}, {1}", 
+                new Object[]{type, timestamp});
         client.onPerceptionEnd(type, timestamp);
     }
 
     @Override
     public void onSynced() {
+        logger.fine("onSynced");
         client.onSynced();
     }
 
     @Override
     public void onUnsynced() {
+        logger.fine("onUnsynced");
         client.onUnsynced();
     }
 
