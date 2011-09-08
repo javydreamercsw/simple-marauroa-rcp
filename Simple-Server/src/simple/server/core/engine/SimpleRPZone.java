@@ -6,33 +6,27 @@ import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import marauroa.common.game.Perception;
-import simple.server.core.entity.Entity;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.Map.Entry;
-
+import java.util.logging.Level;
 import marauroa.common.CRC;
 import marauroa.common.Configuration;
 import marauroa.common.Log4J;
 import marauroa.common.Logger;
 import marauroa.common.game.IRPZone;
+import marauroa.common.game.Perception;
 import marauroa.common.game.RPEvent;
 import marauroa.common.game.RPObject;
 import marauroa.common.net.message.TransferContent;
 import marauroa.server.game.extension.MarauroaServerExtension;
 import marauroa.server.game.rp.MarauroaRPZone;
-
 import simple.common.NotificationType;
 import simple.common.game.ClientObjectInterface;
+import simple.server.core.entity.Entity;
 import simple.server.core.entity.RPEntityInterface;
 import simple.server.core.entity.clientobject.ClientObject;
 import simple.server.core.event.DelayedPlayerEventSender;
+import simple.server.core.event.PrivateTextEvent;
 import simple.server.core.event.TurnNotifier;
 import simple.server.extension.SimpleServerExtension;
 
@@ -327,7 +321,9 @@ public class SimpleRPZone extends MarauroaRPZone {
             logger.error(null, e);
         }
         if (msg != null && !msg.isEmpty()) {
-            player.sendPrivateText(msg);
+            SimpleSingletonRepository.get().get(TurnNotifier.class).notifyInTurns(2,
+                        new DelayedPlayerEventSender(new PrivateTextEvent(
+                    NotificationType.TUTORIAL, msg), player));
         }
     }
 

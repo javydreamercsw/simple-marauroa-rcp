@@ -1,17 +1,13 @@
-/*
- * $Rev$
- * $LastChangedDate$
- * $LastChangedBy$
- */
 package simple.server.core.event;
 
-import simple.server.core.event.api.IChatEvent;
-import simple.common.NotificationType;
 
 import marauroa.common.game.Definition.DefinitionClass;
 import marauroa.common.game.Definition.Type;
 import marauroa.common.game.RPClass;
-import static simple.server.core.action.WellKnownActionConstants.*;
+import simple.common.NotificationType;
+import static simple.server.core.action.WellKnownActionConstants.TARGET;
+import static simple.server.core.action.WellKnownActionConstants.TEXT;
+import simple.server.core.event.api.IChatEvent;
 
 /**
  * A text message.
@@ -65,6 +61,7 @@ public class PrivateTextEvent extends SimpleRPEvent implements IChatEvent {
      *
      * @param type NotificationType
      * @param text Text
+     * @param target  
      */
     public PrivateTextEvent(NotificationType type, String text, String target) {
         super(RPCLASS_NAME);
