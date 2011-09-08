@@ -46,7 +46,7 @@ public final class UserListTopComponent extends TopComponent
         putClientProperty(TopComponent.PROP_CLOSING_DISABLED, Boolean.TRUE);
         putClientProperty(TopComponent.PROP_MAXIMIZATION_DISABLED, Boolean.TRUE);
         putClientProperty(TopComponent.PROP_KEEP_PREFERRED_SIZE_WHEN_SLIDED_IN, Boolean.TRUE);
-//        WindowModeManager.changeMode(UserListTopComponent.this, "properties");
+        WindowModeManager.changeMode(UserListTopComponent.this, "properties");
     }
 
     /** This method is called from within the constructor to
