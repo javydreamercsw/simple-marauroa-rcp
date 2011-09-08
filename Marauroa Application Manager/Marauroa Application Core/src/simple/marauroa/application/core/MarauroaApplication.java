@@ -1,32 +1,15 @@
 package simple.marauroa.application.core;
 
 import com.dreamer.outputhandler.OutputHandler;
-import simple.marauroa.application.api.IAddApplicationDialogProvider;
 import java.awt.Image;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.DatagramSocket;
 import java.net.ServerSocket;
 import java.nio.channels.FileChannel;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map.Entry;
-import java.util.Properties;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,10 +21,7 @@ import org.openide.modules.InstalledFileLocator;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
-import simple.marauroa.application.api.ApplicationStatusChangeListener;
-import simple.marauroa.application.api.ConfigurationElement;
-import simple.marauroa.application.api.IMarauroaApplication;
-import simple.marauroa.application.api.STATUS;
+import simple.marauroa.application.api.*;
 import simple.marauroa.application.core.executor.DefaultMarauroaProcess;
 import simple.marauroa.application.core.executor.IMarauroaProcess;
 import simple.marauroa.application.core.executor.ScriptExecuter;
@@ -290,7 +270,11 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
         }
     }
 
-    /**  * Checks to see if a specific port is available.  *  * @param port the port to check for availability  */
+    /** 
+     * Checks to see if a specific port is available.  *  
+     * @param port the port to check for availability
+     * @return true if port is available
+     */
     public static boolean available(int port) {
         if (port < MIN_PORT_NUMBER || port > MAX_PORT_NUMBER) {
             throw new IllegalArgumentException("Invalid port: " + port);
