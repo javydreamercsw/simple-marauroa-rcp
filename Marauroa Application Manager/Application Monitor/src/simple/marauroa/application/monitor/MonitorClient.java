@@ -1,6 +1,5 @@
 package simple.marauroa.application.monitor;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -87,7 +86,7 @@ public final class MonitorClient extends SimpleClient implements
                             Level.INFO, "Received perception {0}",
                             message.getPerceptionTimestamp());
 
-                    handler.apply(message, world_objects);
+                    handler.apply(message, world.getWorldObjects());
                     if (message.getPerceptionTimestamp() == 0) {
                         Logger.getLogger(MonitorClient.class.getSimpleName()).info(
                                 "Sending register request to server...");
@@ -187,10 +186,10 @@ public final class MonitorClient extends SimpleClient implements
             character = MonitorExtension._MONITOR;
             client_name = getApplication().getName();
             version = getApplication().getVersion();
-            world_objects = new HashMap<RPObject.ID, RPObject>();
+            world = new World();
 
             handler = new SimplePerceptionHandler(dispatch, rpobjDispatcher,
-                    world_objects, this);
+                    world, this);
             createClientManager(client_name != null ? client_name : "Simple",
                     version != null ? version : "0.02.03");
             return true;

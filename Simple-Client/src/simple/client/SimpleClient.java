@@ -3,9 +3,7 @@ package simple.client;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -37,9 +35,8 @@ import simple.server.core.event.TextEvent;
  */
 public class SimpleClient extends ClientFramework implements IPerceptionListener{
 
-    private SimplePerceptionHandler handler;
+    protected SimplePerceptionHandler handler;
     protected static SimpleClient client;
-    protected Map<RPObject.ID, RPObject> world_objects;
     private String[] available_characters;
     private RPObject player;
     private static ExtensionXMLLoader extensionLoader;
@@ -56,6 +53,7 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
     protected final PerceptionDispatcher dispatch = new PerceptionDispatcher();
     private static final Logger logger = Logger.getLogger(SimpleClient.class.getSimpleName());
     protected String gameName, versionNumber;
+    protected World world;
 
     public static SimpleClient get() {
         if (client == null) {
@@ -67,7 +65,7 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
     protected SimpleClient(String properties) {
         super(properties);
         SoundSystem.get();
-        world_objects = new HashMap<RPObject.ID, RPObject>();
+        world = new World();
         gameObjects = GameObjects.createInstance();
         userContext = new UserContext(this);
         //Register default event listeners
@@ -78,12 +76,14 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
         //Register listeners for normal chat and private messages
         registerListeners();
         //**************************
-        rpobjDispatcher = new RPObjectChangeDispatcher(gameObjects, getUserContext());
+        rpobjDispatcher = new RPObjectChangeDispatcher(gameObjects, 
+                getUserContext());
         PerceptionToObject pto = new PerceptionToObject();
         pto.setObjectFactory(new ObjectFactory());
         dispatch.register(pto);
         dispatch.register(SimpleClient.this);
-        handler = new SimplePerceptionHandler(dispatch, rpobjDispatcher, world_objects, this);
+        handler = new SimplePerceptionHandler(dispatch, rpobjDispatcher, 
+                world, this);
         //**************************
     }
 
@@ -196,17 +196,10 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
         }
     }
 
-    /**
-     * @return the world_objects
-     */
-    public Map<RPObject.ID, RPObject> getWorldObjects() {
-        return world_objects;
-    }
-
     @Override
     protected void onPerception(MessageS2CPerception message) {
         try {
-            handler.apply(message, world_objects);
+            handler.apply(message, world.getWorldObjects());
         } catch (java.lang.Exception e) {
             // Something weird happened while applying perception
             logger.log(Level.SEVERE, message.toString(), e);
@@ -252,8 +245,8 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
     @Override
     protected void onPreviousLogins(List<String> previousLogins) {
         logger.log(Level.FINE, "Previous logins");
-        for (String info_string : previousLogins) {
-            logger.log(Level.FINE, info_string);
+        for (String FINE_string : previousLogins) {
+            logger.log(Level.FINE, FINE_string);
         }
     }
 

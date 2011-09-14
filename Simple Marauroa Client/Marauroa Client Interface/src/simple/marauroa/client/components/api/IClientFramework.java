@@ -7,6 +7,7 @@ import marauroa.client.TimeoutException;
 import marauroa.common.game.AccountResult;
 import marauroa.common.game.RPObject;
 import marauroa.common.net.InvalidVersionException;
+import simple.client.WorldChangeListener;
 
 /**
  *
@@ -141,4 +142,16 @@ public interface IClientFramework extends Runnable{
      * Logic to start additional modules after the login was successful.
      */
     public void startModules();
+    
+    /**
+     * Register WorldChangeListeners
+     * @param wcl 
+     */
+    public void registerWorldMapChangeListener(WorldChangeListener wcl);
+    
+    /**
+     * Unregister WorldChangeListeners
+     * @param wcl 
+     */
+    public void unregisterWorldMapChangeListener(WorldChangeListener wcl);
 }

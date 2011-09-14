@@ -1,10 +1,25 @@
 package simple.server.core.entity.clientobject;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map.Entry;
 import java.util.logging.Level;
-import simple.common.game.ClientObjectInterface;
+import marauroa.common.Configuration;
+import marauroa.common.Log4J;
+import marauroa.common.Logger;
+import marauroa.common.game.Definition.Type;
+import marauroa.common.game.*;
+import marauroa.common.io.UnicodeSupportingInputStreamReader;
+import marauroa.server.game.extension.MarauroaServerExtension;
 import simple.common.FeatureList;
+import simple.common.NotificationType;
+import simple.common.game.ClientObjectInterface;
 import simple.server.core.action.admin.AdministrationAction;
+import simple.server.core.engine.SimpleRPRuleProcessor;
 import simple.server.core.engine.SimpleRPWorld;
 import simple.server.core.engine.SimpleRPZone;
 import simple.server.core.engine.SimpleSingletonRepository;
@@ -15,27 +30,8 @@ import simple.server.core.entity.item.Item;
 import simple.server.core.entity.item.StackableItem;
 import simple.server.core.entity.slot.PlayerSlot;
 import simple.server.core.event.PrivateTextEvent;
-import simple.server.core.event.ZoneEvent;
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map.Entry;
-import marauroa.common.Configuration;
-import marauroa.common.Log4J;
-import marauroa.common.Logger;
-import marauroa.common.game.Definition;
-import marauroa.common.game.Definition.Type;
-import marauroa.common.game.IRPZone;
-import marauroa.common.game.RPClass;
-import marauroa.common.game.RPObject;
-import marauroa.common.game.RPSlot;
-import marauroa.common.io.UnicodeSupportingInputStreamReader;
-import marauroa.server.game.extension.MarauroaServerExtension;
-import simple.common.NotificationType;
-import simple.server.core.engine.SimpleRPRuleProcessor;
 import simple.server.core.event.TextEvent;
+import simple.server.core.event.ZoneEvent;
 
 /**
  *
@@ -44,7 +40,7 @@ import simple.server.core.event.TextEvent;
 public class ClientObject extends RPEntity implements ClientObjectInterface {
 
     /**
-     * The admin level attribute name.
+     * The administration level attribute name.
      */
     protected static final String ATTR_ADMINLEVEL = "adminlevel";
     /**
@@ -52,7 +48,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
      */
     protected static final String ATTR_AWAY = "away";
     /**
-     * The ghostmode attribute name.
+     * The ghost mode attribute name.
      */
     protected static final String ATTR_GHOSTMODE = "ghostmode";
     /**
@@ -352,18 +348,18 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
         addEvent(new PrivateTextEvent(type, text));
         notifyWorldAboutChanges();
     }
-    
+
     @Override
     public void sendText(String text) {
         try {
-            addEvent(new TextEvent(text, 
+            addEvent(new TextEvent(text,
                     Configuration.getConfiguration().get("system_account_name")));
             notifyWorldAboutChanges();
         } catch (IOException ex) {
             java.util.logging.Logger.getLogger(ClientObject.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     /**
      * Set whether this player is a ghost (invisible/non-interactive).
      * 
@@ -1027,5 +1023,40 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
 
     public static ClientObjectInterface createDefaultClientObject(String name) {
         return createEmptyZeroLevelPlayer(name);
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        if (o instanceof ClientObjectInterface) {
+            ClientObjectInterface player = (ClientObjectInterface) o;
+            return getName().compareTo(player.getName());
+        } else {
+            throw new ClassCastException("Unable to cast " + o + " as a "
+                    + ClientObjectInterface.class.getSimpleName());
+        }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ClientObject other = (ClientObject) obj;
+        return this.hashCode() == other.hashCode();
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 31 * hash + (int) (Double.doubleToLongBits(this.karma) ^ (Double.doubleToLongBits(this.karma) >>> 32));
+        hash = 31 * hash + (this.features != null ? this.features.hashCode() : 0);
+        hash = 31 * hash + this.adminLevel;
+        hash = 31 * hash + (this.quests != null ? this.quests.hashCode() : 0);
+        hash = 31 * hash + (this.getName() != null ? this.getName().hashCode() : 0);
+        hash = 31 * hash + (this.getID() != null ? this.getID().hashCode() : 0);
+        return hash;
     }
 }

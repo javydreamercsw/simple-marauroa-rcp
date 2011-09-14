@@ -25,6 +25,7 @@ import org.openide.util.TaskListener;
 import org.openide.util.lookup.ServiceProvider;
 import org.xml.sax.SAXException;
 import simple.client.SimpleClient;
+import simple.client.WorldChangeListener;
 import simple.client.action.update.ClientGameConfiguration;
 import simple.client.conf.ExtensionXMLLoader;
 import simple.client.soundreview.SoundMaster;
@@ -35,6 +36,7 @@ import static simple.server.core.action.WellKnownActionConstants.TARGET;
 import static simple.server.core.action.WellKnownActionConstants.TEXT;
 import simple.server.core.action.chat.ChatAction;
 import simple.server.core.event.*;
+import simple.server.extension.RoomCRUDExtension;
 
 /**
  *
@@ -74,6 +76,8 @@ public class MarauroaSimpleClient extends SimpleClient implements
     private RequestProcessor.Task theTask = null;
     private boolean running = false;
     private int duplicateCounter = 0;
+    private ArrayList<WorldChangeListener> worldChangeListeners =
+            new ArrayList<WorldChangeListener>();
 
     public MarauroaSimpleClient() {
         super(LOG4J_PROPERTIES);
@@ -100,13 +104,6 @@ public class MarauroaSimpleClient extends SimpleClient implements
     @Override
     protected void registerListeners() {
         //Override SimpleClient registration
-    }
-
-    /**
-     * @return the world_objects
-     */
-    public Map<RPObject.ID, RPObject> getWorld_objects() {
-        return world_objects;
     }
 
     /**
@@ -171,12 +168,24 @@ public class MarauroaSimpleClient extends SimpleClient implements
                 if (logger.isLoggable(Level.FINEST)) {
                     logger.log(Level.INFO, "<World contents ------------------------------------->");
                     int j = 0;
-                    for (RPObject object : getWorld_objects().values()) {
+                    for (RPObject object : world.getWorldObjects().values()) {
                         j++;
                         logger.log(Level.INFO, "{0}. {1}", new Object[]{j, object});
                     }
                     logger.log(Level.INFO, "</World contents ------------------------------------->");
                 }
+            }
+            if (message.getPerceptionTimestamp() == 0) {
+                logger.fine("Requesting update...");
+                //Ask for a zone refresher just in case
+                RPAction action = new RPAction();
+                action.put("type", RoomCRUDExtension.TYPE);
+                action.put(RoomCRUDExtension.OPERATION, RoomCRUDExtension.LISTZONES);
+                send(action);
+                action = new RPAction();
+                action.put("type", RoomCRUDExtension.TYPE);
+                action.put(RoomCRUDExtension.OPERATION, RoomCRUDExtension.LISTPLAYERS);
+                send(action);
             }
         } catch (Exception ex) {
             Exceptions.printStackTrace(ex);
@@ -548,10 +557,23 @@ public class MarauroaSimpleClient extends SimpleClient implements
     }
 
     @Override
+    public boolean onAdded(RPObject object) {
+        fireOnAdded(object);
+        return true;
+    }
+    
+    @Override
+    public boolean onDeleted(RPObject object) {
+        fireOnDeleted(object);
+        return true;
+    }
+
+    @Override
     public boolean onMyRPObject(RPObject added, RPObject deleted) {
         RPObject.ID id = null;
         if (added != null) {
             id = added.getID();
+            //Process Events
             if (!added.events().isEmpty()) {
                 for (RPEvent event : added.events()) {
                     processEvent(event);
@@ -569,11 +591,46 @@ public class MarauroaSimpleClient extends SimpleClient implements
             logger.fine("Unchanged, returning");
             return true;
         }
-        RPObject object = world_objects.get(id);
-        //Process Events
+        RPObject object = world.getWorldObjects().get(id);
         if (object != null) {
             setPlayerRPC(object);
         }
         return true;
+    }
+
+    private void fireOnAdded(RPObject object) {
+        for (WorldChangeListener wcl : worldChangeListeners) {
+            wcl.onAdded(object);
+        }
+    }
+    
+    private void fireOnDeleted(RPObject object) {
+        for (WorldChangeListener wcl : worldChangeListeners) {
+            wcl.onDeleted(object);
+        }
+    }
+
+    @Override
+    public void registerWorldMapChangeListener(WorldChangeListener wcl) {
+        if (!worldChangeListeners.contains(wcl)) {
+            worldChangeListeners.add(wcl);
+            logger.log(Level.INFO, "WorldChangeListener registered: {0}",
+                    wcl.getClass().getCanonicalName());
+        } else {
+            logger.log(Level.WARNING, "WorldChangeListener already registered: {0}",
+                    wcl.getClass().getCanonicalName());
+        }
+    }
+
+    @Override
+    public void unregisterWorldMapChangeListener(WorldChangeListener wcl) {
+        if (worldChangeListeners.contains(wcl)) {
+            worldChangeListeners.remove(wcl);
+            logger.log(Level.INFO, "WorldChangeListener unregistered: {0}",
+                    wcl.getClass().getCanonicalName());
+        } else {
+            logger.log(Level.WARNING, "WorldChangeListener already unregistered: {0}",
+                    wcl.getClass().getCanonicalName());
+        }
     }
 }

@@ -55,7 +55,7 @@ public class Installer extends ModuleInstall {
                     }
                     //Start the User List component
                     MCITool.getUserListManager().open();
-
+                    MCITool.getClient().registerWorldMapChangeListener(MCITool.getUserListManager());
                     //Now start client specific modules
                     MCITool.getClient().startModules();
                 } catch (Exception e) {

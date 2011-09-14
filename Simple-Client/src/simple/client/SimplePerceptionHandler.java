@@ -1,12 +1,10 @@
 package simple.client;
 
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import marauroa.client.net.IPerceptionListener;
 import marauroa.client.net.PerceptionHandler;
 import marauroa.common.game.RPObject;
-import marauroa.common.game.RPObject.ID;
 import marauroa.common.net.message.MessageS2CPerception;
 
 /**
@@ -17,18 +15,19 @@ public class SimplePerceptionHandler extends PerceptionHandler implements IPerce
 
     private final PerceptionDispatcher dispatch;
     private RPObjectChangeDispatcher rpobjDispatcher;
-    private Map<RPObject.ID, RPObject> world_objects;
+    private World world;
     private SimpleClient client;
-    private static final Logger logger = Logger.getLogger(SimplePerceptionHandler.class.getSimpleName());
+    private static final Logger logger =
+            Logger.getLogger(SimplePerceptionHandler.class.getSimpleName());
 
     public SimplePerceptionHandler(PerceptionDispatcher dispatch,
             RPObjectChangeDispatcher rpobjDispatcher,
-            Map<ID, RPObject> world_objects, SimpleClient client) {
+            World world, SimpleClient client) {
         super(dispatch);
         this.dispatch = dispatch;
         this.rpobjDispatcher = rpobjDispatcher;
-        this.world_objects = world_objects;
         this.client = client;
+        this.world = world;
         //Register itself so the methods below are executed.
         this.dispatch.register(SimplePerceptionHandler.this);
     }
@@ -86,14 +85,14 @@ public class SimplePerceptionHandler extends PerceptionHandler implements IPerce
 
     @Override
     public void onPerceptionBegin(byte type, int timestamp) {
-        logger.log(Level.FINE, "onPerceptionBegin: {0}, {1}", 
+        logger.log(Level.FINE, "onPerceptionBegin: {0}, {1}",
                 new Object[]{type, timestamp});
         client.onPerceptionBegin(type, timestamp);
     }
 
     @Override
     public void onPerceptionEnd(byte type, int timestamp) {
-        logger.log(Level.FINE, "onPerceptionEnd: {0}, {1}", 
+        logger.log(Level.FINE, "onPerceptionEnd: {0}, {1}",
                 new Object[]{type, timestamp});
         client.onPerceptionEnd(type, timestamp);
     }

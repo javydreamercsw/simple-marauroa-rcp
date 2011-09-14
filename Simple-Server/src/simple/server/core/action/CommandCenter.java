@@ -1,17 +1,12 @@
-/*
- * $Rev$
- * $LastChangedDate$
- * $LastChangedBy$
- */
 package simple.server.core.action;
 
-import simple.common.game.ClientObjectInterface;
+
 import java.util.concurrent.ConcurrentHashMap;
 import marauroa.common.Log4J;
 import marauroa.common.Logger;
-
 import marauroa.common.game.RPAction;
 import marauroa.common.game.RPObject;
+import simple.common.game.ClientObjectInterface;
 import simple.server.core.action.admin.AdministrationAction;
 import simple.server.core.action.chat.ChatAction;
 
