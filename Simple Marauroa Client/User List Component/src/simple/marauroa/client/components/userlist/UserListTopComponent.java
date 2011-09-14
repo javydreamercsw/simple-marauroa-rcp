@@ -1,8 +1,6 @@
 package simple.marauroa.client.components.userlist;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.StringTokenizer;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractListModel;
@@ -30,15 +28,19 @@ autostore = false)
 persistenceType = TopComponent.PERSISTENCE_NEVER)
 @TopComponent.Registration(mode = "properties", openAtStartup = false)
 @ActionID(category = "Window", id = "simple.marauroa.client.components.userlist.UserListTopComponent")
-@ActionReference(path = "Menu/Window" /*, position = 333 */)
+@ActionReference(path = "Menu/Window" /*
+ * , position = 333
+ */)
 @TopComponent.OpenActionRegistration(displayName = "#CTL_UserListAction",
 preferredID = "UserListTopComponent")
 @ServiceProvider(service = IUserListComponent.class)
 public final class UserListTopComponent extends TopComponent
         implements IUserListComponent, LookupListener {
-
+    
     private Lookup.Result<RPObject> result = null;
-
+    //Player names
+    final ArrayList<String> players = new ArrayList<String>();
+    
     public UserListTopComponent() {
         initComponents();
         setName(NbBundle.getMessage(UserListTopComponent.class, "CTL_UserListTopComponent"));
@@ -59,12 +61,19 @@ public final class UserListTopComponent extends TopComponent
 
         jScrollPane1 = new javax.swing.JScrollPane();
         playerList = new javax.swing.JList();
-
         playerList.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
+
+            @Override
+            public int getSize() {
+                return players.size();
+            }
+
+            @Override
+            public Object getElementAt(int i) {
+                return players.get(i);
+            }
         });
+
         jScrollPane1.setViewportView(playerList);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -94,25 +103,25 @@ public final class UserListTopComponent extends TopComponent
         result = Utilities.actionsGlobalContext().lookupResult(RPObject.class);
         result.addLookupListener(this);
     }
-
+    
     @Override
     public void componentClosed() {
         result.removeLookupListener(this);
         result = null;
     }
-
+    
     void writeProperties(java.util.Properties p) {
         // better to version settings since initial version as advocated at
         // http://wiki.apidesign.org/wiki/PropertyFiles
         p.setProperty("version", "1.0");
         //TODO store your settings
     }
-
+    
     void readProperties(java.util.Properties p) {
         String version = p.getProperty("version");
         //TODO read your settings according to their version
     }
-
+    
     @Override
     public void addPlayer(RPObject p) {
         Logger.getLogger(UserListTopComponent.class.getSimpleName()).log(
@@ -122,13 +131,13 @@ public final class UserListTopComponent extends TopComponent
             if (temp.getSize() == 0) {
                 getPlayerList().setModel(addToModel(p.get("")));
             } else {
-                String players = getModelElements(temp) + "#" + p;
-                getPlayerList().setModel(addToModel(players));
+                String playersLits = getModelElements(temp) + "#" + p;
+                getPlayerList().setModel(addToModel(playersLits));
             }
         }
         getPlayerList().repaint();
     }
-
+    
     @Override
     public boolean modelHasElement(AbstractListModel m, String e) {
         for (int i = 0; i < m.getSize(); i++) {
@@ -138,12 +147,12 @@ public final class UserListTopComponent extends TopComponent
         }
         return false;
     }
-
+    
     @Override
     public JList getPlayerList() {
         return playerList;
     }
-
+    
     @Override
     public SortedListModel addToModel(final String list) {
         Logger.getLogger(UserListTopComponent.class.getSimpleName()).log(
@@ -158,12 +167,12 @@ public final class UserListTopComponent extends TopComponent
                 i++;
             }
             model = new javax.swing.AbstractListModel() {
-
+                
                 @Override
                 public int getSize() {
                     return strings.length;
                 }
-
+                
                 @Override
                 public Object getElementAt(int i) {
                     return strings[i];
@@ -171,14 +180,14 @@ public final class UserListTopComponent extends TopComponent
             };
         } else {
             model = new javax.swing.AbstractListModel() {
-
+                
                 final String strings[] = {list};
-
+                
                 @Override
                 public int getSize() {
                     return strings.length;
                 }
-
+                
                 @Override
                 public Object getElementAt(int i) {
                     return strings[i];
@@ -187,7 +196,7 @@ public final class UserListTopComponent extends TopComponent
         }
         return new SortedListModel(model);
     }
-
+    
     private String getModelElements(AbstractListModel m) {
         if (m.getSize() == 0) {
             return "";
@@ -201,12 +210,12 @@ public final class UserListTopComponent extends TopComponent
         }
         return elements;
     }
-
+    
     @Override
     public void setListSeparator(char character) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
+    
     @Override
     public void removePlayer(RPObject p) {
         Logger.getLogger(UserListTopComponent.class.getSimpleName()).log(
@@ -216,15 +225,15 @@ public final class UserListTopComponent extends TopComponent
             if (temp.getSize() == 1) {
                 getPlayerList().setModel(addToModel(""));
             } else {
-                String players = getModelElements(temp);
-                players.replaceAll("," + p, "").replaceAll(p.get("name"), "");
-                getPlayerList().setModel(addToModel(players));
+                String playerLists = getModelElements(temp);
+                playerLists.replaceAll("," + p, "").replaceAll(p.get("name"), "");
+                getPlayerList().setModel(addToModel(playerLists));
             }
             MCITool.outputInChatComponent(new HeaderLessEventLine(p
                     + " just left the room!", NotificationType.INFORMATION));
         }
     }
-
+    
     @Override
     public void resultChanged(LookupEvent ev) {
         Lookup.Result<RPObject> r = (Lookup.Result<RPObject>) ev.getSource();
@@ -235,6 +244,28 @@ public final class UserListTopComponent extends TopComponent
                 RPObject selected = c.iterator().next();
                 System.out.println("Got changes for: " + selected);
             }
+        }
+    }
+    
+    @Override
+    public void onAdded(RPObject object) {
+        addToList(object);
+    }
+    
+    private void addToList(RPObject object) {
+        if (!players.contains(object.get("name"))) {
+            players.add(object.get("name"));
+            //Sort it
+            Collections.sort(players);
+            playerList.updateUI();
+        }
+    }
+    
+    @Override
+    public void onDeleted(RPObject object) {
+        if (players.contains(object.get("name"))) {
+            players.remove(object.get("name"));
+            playerList.updateUI();
         }
     }
 }

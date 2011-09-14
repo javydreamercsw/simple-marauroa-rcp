@@ -1,12 +1,7 @@
 package simple.server.core.engine;
 
-import simple.server.core.entity.Entity;
-import simple.server.core.entity.RPEntity;
-import simple.server.core.entity.item.Item;
-import simple.server.core.event.PrivateTextEvent;
-import simple.server.core.event.TextEvent;
-import java.util.Iterator;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 import marauroa.common.Configuration;
@@ -14,7 +9,6 @@ import marauroa.common.Log4J;
 import marauroa.common.Logger;
 import marauroa.common.crypto.Hash;
 import marauroa.common.game.IRPZone;
-
 import marauroa.common.game.IRPZone.ID;
 import marauroa.common.game.RPClass;
 import marauroa.common.game.RPEvent;
@@ -24,20 +18,29 @@ import marauroa.server.game.db.DAORegister;
 import marauroa.server.game.extension.MarauroaServerExtension;
 import marauroa.server.game.rp.RPWorld;
 import simple.common.game.ClientObjectInterface;
+import simple.server.core.entity.Entity;
+import simple.server.core.entity.RPEntity;
 import simple.server.core.entity.clientobject.ClientObject;
 import simple.server.core.entity.clientobject.GagManager;
+import simple.server.core.entity.item.Item;
 import simple.server.core.event.MonitorEvent;
+import simple.server.core.event.PrivateTextEvent;
+import simple.server.core.event.TextEvent;
 
 public class SimpleRPWorld extends RPWorld {
 
-    /** the logger instance. */
+    /**
+     * the logger instance.
+     */
     private static final Logger logger = Log4J.getLogger(SimpleRPWorld.class);
     private static String DEFAULT_ROOM = "Default Room";
     /**
      * A common place for milliseconds per turn.
      */
     public static final int MILLISECONDS_PER_TURN = 300;
-    /** The Singleton instance. */
+    /**
+     * The Singleton instance.
+     */
     protected static SimpleRPWorld instance = null;
 
     /**
@@ -140,7 +143,7 @@ public class SimpleRPWorld extends RPWorld {
         if (!RPClass.hasRPClass(TextEvent.getRPClassName())) {
             TextEvent.generateRPClass();
         }
-        
+
         if (!RPClass.hasRPClass(MonitorEvent.getRPClassName())) {
             MonitorEvent.generateRPClass();
         }
@@ -167,12 +170,12 @@ public class SimpleRPWorld extends RPWorld {
                     try {
                         if (extension.length() > 0) {
                             MarauroaServerExtension extensionClass =
-                                    MarauroaServerExtension.getInstance(config.get(extension));
+                                    MarauroaServerExtension.getInstance(config.get(extension.trim()));
                             extensionClass.init();
                             logger.info(extensionClass.getClass());
                         }
                     } catch (Exception ex) {
-                        logger.error("Error while loading extension: " + extension, ex);
+                        logger.error("Error while loading extension: " + extension.trim(), ex);
                     }
                 }
             } catch (Exception ep) {

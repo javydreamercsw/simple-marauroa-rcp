@@ -28,17 +28,21 @@ import simple.server.core.entity.clientobject.ClientObject;
 import simple.server.core.event.DelayedPlayerEventSender;
 import simple.server.core.event.PrivateTextEvent;
 import simple.server.core.event.TurnNotifier;
+import simple.server.core.tool.Tool;
 import simple.server.extension.SimpleServerExtension;
 
 public class SimpleRPZone extends MarauroaRPZone {
 
-    /** the logger instance. */
+    /**
+     * the logger instance.
+     */
     private static final Logger logger = Log4J.getLogger(SimpleRPZone.class);
     private List<TransferContent> contents;
     private HashMap<String, ClientObjectInterface> players;
     private String description = "";
     private boolean deleteWhenEmpty = false;
     private boolean visited = false;
+    private String password = "";
 
     public SimpleRPZone(String name) {
         super(name);
@@ -81,8 +85,7 @@ public class SimpleRPZone extends MarauroaRPZone {
     public void onFinish() throws Exception {
         super.onFinish();
         /**
-         * Kick everyone to the default zone or they'll end in the
-         * limbo!
+         * Kick everyone to the default zone or they'll end in the limbo!
          */
         Iterator i = getPlayers().iterator();
         while (i.hasNext()) {
@@ -322,7 +325,7 @@ public class SimpleRPZone extends MarauroaRPZone {
         }
         if (msg != null && !msg.isEmpty()) {
             SimpleSingletonRepository.get().get(TurnNotifier.class).notifyInTurns(2,
-                        new DelayedPlayerEventSender(new PrivateTextEvent(
+                    new DelayedPlayerEventSender(new PrivateTextEvent(
                     NotificationType.TUTORIAL, msg), player));
         }
     }
@@ -394,5 +397,45 @@ public class SimpleRPZone extends MarauroaRPZone {
      */
     public void setDeleteWhenEmpty(boolean deleteWhenEmpty) {
         this.deleteWhenEmpty = deleteWhenEmpty;
+    }
+
+    public void setPassword(String pass) throws IOException {
+        /**
+         * Encrypt password with private key. This way encryption is unique
+         * per server. (Assuming that the server.ini file was generated and not
+         * copied)
+         */
+        if (pass != null && !pass.isEmpty()) {
+            password = Tool.Encrypt(pass, Configuration.getConfiguration().get("d"));
+        }
+    }
+
+    /**
+     * @return the password
+     */
+    protected String getPassword() {
+        return password;
+    }
+
+    /**
+     * @return the locked
+     */
+    public boolean isLocked() {
+        return !password.trim().isEmpty();
+    }
+
+    public void unlock() {
+        if (isLocked()) {
+            password = "";
+        }
+    }
+
+    public boolean isPassword(String pass) {
+        try {
+            return Tool.Encrypt(pass, Configuration.getConfiguration().get("d")).equals(password);
+        } catch (IOException ex) {
+            logger.error(ex);
+            return false;
+        }
     }
 }

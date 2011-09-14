@@ -44,15 +44,12 @@
         <Component class="javax.swing.JList" name="playerList">
           <Properties>
             <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
-              <StringArray count="5">
-                <StringItem index="0" value="Item 1"/>
-                <StringItem index="1" value="Item 2"/>
-                <StringItem index="2" value="Item 3"/>
-                <StringItem index="3" value="Item 4"/>
-                <StringItem index="4" value="Item 5"/>
-              </StringArray>
+              <StringArray count="0"/>
             </Property>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="            playerList.setModel(new javax.swing.AbstractListModel() {&#xa;                &#xa;                @Override&#xa;                public int getSize() {&#xa;                    return players.size();&#xa;                }&#xa;                &#xa;                @Override&#xa;                public Object getElementAt(int i) {&#xa;                    return players.get(i);&#xa;                }&#xa;            });"/>
+          </AuxValues>
         </Component>
       </SubComponents>
     </Container>

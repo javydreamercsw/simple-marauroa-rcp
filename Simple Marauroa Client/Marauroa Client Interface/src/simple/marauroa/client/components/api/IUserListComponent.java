@@ -3,19 +3,21 @@ package simple.marauroa.client.components.api;
 import javax.swing.AbstractListModel;
 import javax.swing.JList;
 import marauroa.common.game.RPObject;
+import simple.client.WorldChangeListener;
 import simple.marauroa.client.components.common.SortedListModel;
 
 /**
  *
- * @author user=Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
+ * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
-public interface IUserListComponent extends IClientComponent{
+public interface IUserListComponent extends IClientComponent, WorldChangeListener {
+
     /**
      * Add a player to the user list
      * @param p Player to add
      */
     public void addPlayer(RPObject p);
-    
+
     /**
      * Remove a player from the UI
      * @param p
@@ -42,7 +44,7 @@ public interface IUserListComponent extends IClientComponent{
      * @return
      */
     public SortedListModel addToModel(final String list);
-    
+
     /**
      * The character to separate items in the list (String representation)
      * @param character 

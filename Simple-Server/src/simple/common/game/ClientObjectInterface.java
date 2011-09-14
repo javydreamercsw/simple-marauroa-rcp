@@ -16,7 +16,7 @@ import simple.server.core.entity.RPEntityInterface;
  *
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
-public interface ClientObjectInterface extends RPEntityInterface, Serializable {
+public interface ClientObjectInterface extends RPEntityInterface, Serializable, Comparable {
 
     String DEFAULT_ENTRY_ZONE = "Default Zone";
     /**
