@@ -27,13 +27,13 @@ import simple.server.core.event.TextEvent;
 
 /**
  *
- * @author Javier A. Ortiz <javier.ortiz.78@gmail.com>
+ * @author Javier A. Ortiz <javier.ortiz.78@gmail.com> 
  * A base class for the Simple client UI (not GUI).
  *
  * This should have minimal UI-implementation dependent code. That's what
  * sub-classes are for!
  */
-public class SimpleClient extends ClientFramework implements IPerceptionListener{
+public class SimpleClient extends ClientFramework implements IPerceptionListener {
 
     protected SimplePerceptionHandler handler;
     protected static SimpleClient client;
@@ -43,7 +43,7 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
     private static String confPath;
     private static boolean extLoaded = false;
     private String userName;
-    public static String LOG4J_PROPERTIES;
+    public static String LOG4J_PROPERTIES = "log4j.properties";
     public ArrayList<String> whoplayers;
     protected static UserContext userContext;
     protected GameObjects gameObjects;
@@ -57,7 +57,7 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
 
     public static SimpleClient get() {
         if (client == null) {
-            client = new SimpleClient("log4j.properties");
+            client = new SimpleClient(LOG4J_PROPERTIES);
         }
         return client;
     }
@@ -76,13 +76,13 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
         //Register listeners for normal chat and private messages
         registerListeners();
         //**************************
-        rpobjDispatcher = new RPObjectChangeDispatcher(gameObjects, 
+        rpobjDispatcher = new RPObjectChangeDispatcher(gameObjects,
                 getUserContext());
         PerceptionToObject pto = new PerceptionToObject();
         pto.setObjectFactory(new ObjectFactory());
         dispatch.register(pto);
         dispatch.register(SimpleClient.this);
-        handler = new SimplePerceptionHandler(dispatch, rpobjDispatcher, 
+        handler = new SimplePerceptionHandler(dispatch, rpobjDispatcher,
                 world, this);
         //**************************
     }

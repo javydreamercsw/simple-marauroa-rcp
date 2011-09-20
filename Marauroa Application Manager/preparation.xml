@@ -19,18 +19,6 @@
             </sequential>
         </for>
     </target>
-    
-    <target name="update-nb-plugins">
-        <!--Update the nb-plugins folder-->
-        <delete includeemptydirs="true">
-            <fileset dir="${plugin.dir}" includes="**/*"/>
-        </delete>
-        <mkdir dir="${plugin.dir}"/>
-        <copy todir="${plugin.dir}">
-            <fileset dir="${plugin.src.dir}"/>
-        </copy>
-        <zip destfile="${platform.dir}nb-plugins.zip" basedir="${plugin.dir}" update="true"/>
-    </target>
 
     <target name="unzip-compilation-env" depends="init-netbeans, init-hudson">
         <!--Hudson needs to run this task first as it gets the core modules as zip from version control-->
@@ -64,8 +52,6 @@
                 <include name="**/.svn/**"/>
                 <include name="**/CVS"/>
                 <include name="**/CVS/**"/>
-                <!--Exclude the nb-plugins folder-->
-                <exclude name="nb-plugins/**"/>
                 <!--Exclude the root folder-->
                 <exclude name="${platform.dir}"/>
             </dirset>

@@ -2,11 +2,7 @@ package simple.marauroa.client.components.common;
 
 import org.openide.util.Lookup;
 import simple.client.EventLine;
-import simple.marauroa.client.components.api.ICAManager;
-import simple.marauroa.client.components.api.IChatComponent;
-import simple.marauroa.client.components.api.IClientFramework;
-import simple.marauroa.client.components.api.ILoginManager;
-import simple.marauroa.client.components.api.IUserListComponent;
+import simple.marauroa.client.components.api.*;
 
 /**
  *
@@ -27,7 +23,7 @@ public class MCITool {
     }
 
     public static void outputInChatComponent(EventLine el) {
-        IChatComponent app = Lookup.getDefault().lookup(IChatComponent.class);
+        IPublicChatComponent app = Lookup.getDefault().lookup(IPublicChatComponent.class);
         if (app != null) {
             app.addLine(el);
         }
@@ -42,11 +38,19 @@ public class MCITool {
     }
 
     /**
-     * Get chat implementation
+     * Get public chat implementation
      * @return chat implementation
      */
-    public static IChatComponent getChatManager() {
-        return Lookup.getDefault().lookup(IChatComponent.class);
+    public static IPublicChatComponent getPublicChatManager() {
+        return Lookup.getDefault().lookup(IPublicChatComponent.class);
+    }
+    
+    /**
+     * Get private chat implementation
+     * @return chat implementation
+     */
+    public static IPrivateChatComponent getPrivateChatManager() {
+        return Lookup.getDefault().lookup(IPrivateChatComponent.class);
     }
 
     /**
@@ -64,8 +68,8 @@ public class MCITool {
     public static ICAManager getCAManager() {
         return Lookup.getDefault().lookup(ICAManager.class);
     }
-    
-    public static IUserListComponent getUserListManager(){
+
+    public static IUserListComponent getUserListManager() {
         return Lookup.getDefault().lookup(IUserListComponent.class);
     }
 }

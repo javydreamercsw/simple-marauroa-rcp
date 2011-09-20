@@ -1,21 +1,16 @@
-/*
- * $Rev$
- * $LastChangedDate$
- * $LastChangedBy$
- */
 package simple.server.core.entity;
 
 import marauroa.common.Log4J;
 import marauroa.common.Logger;
-import simple.common.Grammar;
-import simple.server.core.engine.SimpleRPZone;
-import simple.server.core.engine.SimpleSingletonRepository;
 import marauroa.common.game.Definition;
 import marauroa.common.game.Definition.Type;
 import marauroa.common.game.RPClass;
 import marauroa.common.game.RPObject;
 import marauroa.server.game.rp.RPWorld;
+import simple.common.Grammar;
 import simple.server.core.engine.SimpleRPWorld;
+import simple.server.core.engine.SimpleRPZone;
+import simple.server.core.engine.SimpleSingletonRepository;
 
 /**
  *

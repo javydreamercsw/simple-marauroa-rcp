@@ -154,4 +154,16 @@ public interface IClientFramework extends Runnable{
      * @param wcl 
      */
     public void unregisterWorldMapChangeListener(WorldChangeListener wcl);
+    
+    /**
+     * Check if chat notifications is enabled
+     * @return true if enabled
+     */
+    public boolean isChatNotifications();
+    
+    /**
+     * Set chat notifications
+     * @param chatNotifications true to enable
+     */
+    public void setChatNotifications(boolean chatNotifications);
 }

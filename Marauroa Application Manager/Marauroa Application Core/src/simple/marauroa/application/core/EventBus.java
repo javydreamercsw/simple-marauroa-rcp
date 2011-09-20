@@ -7,6 +7,7 @@ import org.openide.util.Lookup.Result;
 
 /**
  * Based on work from Fabrizio Giudici
+ *
  * @author Javier A. Ortiz Bultrón <javier.ortiz.78@gmail.com>
  */
 public class EventBus {
@@ -31,7 +32,6 @@ public class EventBus {
         for (final Object old : getCentralLookup().lookupAll(object.getClass())) {
             getCentralLookup().remove(old);
         }
-
         getCentralLookup().add(object);
     }
 
@@ -41,7 +41,7 @@ public class EventBus {
         }
     }
 
-    public <T extends Object> Collection<? extends T> lookupAll(Class<T> clazz){
+    public <T extends Object> Collection<? extends T> lookupAll(Class<T> clazz) {
         return EventBus.getDefault().getCentralLookup().lookupAll(clazz);
     }
 
@@ -77,15 +77,15 @@ public class EventBus {
         return centralLookup;
     }
 
-    public void add(Object instance){
+    public void add(Object instance) {
         getCentralLookup().add(instance);
     }
 
     public void remove(Object instance) {
         getCentralLookup().remove(instance);
     }
-    
-    public final <T extends Object> T lookup(Class<T> clazz){
+
+    public final <T extends Object> T lookup(Class<T> clazz) {
         return getCentralLookup().lookup(clazz);
     }
 }

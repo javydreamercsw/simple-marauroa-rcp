@@ -7,14 +7,14 @@ import marauroa.common.game.RPClass;
 import simple.common.NotificationType;
 import static simple.server.core.action.WellKnownActionConstants.TARGET;
 import static simple.server.core.action.WellKnownActionConstants.TEXT;
-import simple.server.core.event.api.IChatEvent;
+import simple.server.core.event.api.IPrivateChatEvent;
 
 /**
  * A text message.
  *
  * @author hendrik
  */
-public class PrivateTextEvent extends SimpleRPEvent implements IChatEvent {
+public class PrivateTextEvent extends SimpleRPEvent implements IPrivateChatEvent {
 
     public static final String RPCLASS_NAME = "private_text";
     public static final String TEXT_TYPE = "texttype";
