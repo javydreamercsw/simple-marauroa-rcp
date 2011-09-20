@@ -48,6 +48,8 @@
                 <source>./jWrestling Application/src</source>
                 
                 <source>./Application Monitor/src</source>
+                
+                <source>./Sound Manager/src</source>
                 </sources>
                         </configuration>
                     </execution>

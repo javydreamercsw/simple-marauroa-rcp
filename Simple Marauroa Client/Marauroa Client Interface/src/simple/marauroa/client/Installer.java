@@ -16,7 +16,6 @@ import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 import org.openide.windows.WindowManager;
 import simple.client.action.update.ClientGameConfiguration;
-import simple.common.NotificationType;
 import simple.marauroa.application.core.MarauroaApplicationRepository;
 import simple.marauroa.client.components.common.MCITool;
 
@@ -35,7 +34,9 @@ public class Installer extends ModuleInstall {
                     MarauroaApplicationRepository.get();
                     //Initialize Client Configuration
                     ClientGameConfiguration.setRelativeTo(MarauroaSimpleClient.class);
-                    /** We set the main game folder to the game name */
+                    /**
+                     * We set the main game folder to the game name
+                     */
                     APPLICATION_FOLDER = System.getProperty("user.home")
                             + System.getProperty("file.separator")
                             + "." + MCITool.getClient().getGameName()
@@ -47,15 +48,6 @@ public class Installer extends ModuleInstall {
                     MCITool.getLoginManager().displayLoginManager();
                     //Wait for the login process to finish
                     MCITool.getLoginManager().waitUntilDone();
-                    //Start the chat window after successful login
-                    if (MCITool.getChatManager() != null) {
-                        MCITool.getChatManager().addLine("System", NbBundle.getMessage(
-                                Installer.class,
-                                "welcome.message"), NotificationType.TUTORIAL);
-                    }
-                    //Start the User List component
-                    MCITool.getUserListManager().open();
-                    MCITool.getClient().registerWorldMapChangeListener(MCITool.getUserListManager());
                     //Now start client specific modules
                     MCITool.getClient().startModules();
                 } catch (Exception e) {
@@ -106,8 +98,7 @@ public class Installer extends ModuleInstall {
     @Override
     public void close() {
         try {
-            if (((ClientFramework) MCITool.getClient()) != null 
-                    &&((ClientFramework) MCITool.getClient()).getConnectionState()) {
+            if (MCITool.getClient() != null) {
                 ((ClientFramework) MCITool.getClient()).logout();
             }
         } catch (BannedAddressException ex) {

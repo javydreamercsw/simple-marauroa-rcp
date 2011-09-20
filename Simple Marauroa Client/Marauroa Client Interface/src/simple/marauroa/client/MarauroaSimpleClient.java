@@ -78,6 +78,10 @@ public class MarauroaSimpleClient extends SimpleClient implements
     private int duplicateCounter = 0;
     private ArrayList<WorldChangeListener> worldChangeListeners =
             new ArrayList<WorldChangeListener>();
+    /**
+     * When enabled zone is notified when a player enters/exit the zone.
+     */
+    private boolean chatNotifications = true;
 
     public MarauroaSimpleClient() {
         super(LOG4J_PROPERTIES);
@@ -188,7 +192,7 @@ public class MarauroaSimpleClient extends SimpleClient implements
                 send(action);
             }
         } catch (Exception ex) {
-            Exceptions.printStackTrace(ex);
+            logger.log(Level.WARNING, null, ex);
         }
     }
 
@@ -558,14 +562,38 @@ public class MarauroaSimpleClient extends SimpleClient implements
 
     @Override
     public boolean onAdded(RPObject object) {
+        logger.log(Level.INFO, "onAdded object: {0}", object);
         fireOnAdded(object);
         return true;
     }
-    
+
+    @Override
+    public boolean onModifiedAdded(RPObject object, RPObject changes) {
+        logger.log(Level.FINE, "onModifiedAdded {0}: {1}", new Object[]{object, changes});
+        if (itsMe(object)) {
+            processEvents(changes);
+        }
+        return true;
+    }
+
+    private boolean itsMe(RPObject object) {
+        return MCITool.getClient().getPlayerRPC().get("name").equals(object.get("name"));
+    }
+
     @Override
     public boolean onDeleted(RPObject object) {
+        logger.log(Level.INFO, "onDeleted object: {0}", object);
         fireOnDeleted(object);
         return true;
+    }
+
+    private void processEvents(RPObject object) {
+        //Process Events
+        if (!object.events().isEmpty()) {
+            for (RPEvent event : object.events()) {
+                processEvent(event);
+            }
+        }
     }
 
     @Override
@@ -574,11 +602,7 @@ public class MarauroaSimpleClient extends SimpleClient implements
         if (added != null) {
             id = added.getID();
             //Process Events
-            if (!added.events().isEmpty()) {
-                for (RPEvent event : added.events()) {
-                    processEvent(event);
-                }
-            }
+            processEvents(added);
         }
         if (deleted != null) {
             id = deleted.getID();
@@ -594,6 +618,9 @@ public class MarauroaSimpleClient extends SimpleClient implements
         RPObject object = world.getWorldObjects().get(id);
         if (object != null) {
             setPlayerRPC(object);
+            if (object.getInt("id") > 0 && MCITool.getUserListManager() != null) {
+                MCITool.getUserListManager().addPlayer(object);
+            }
         }
         return true;
     }
@@ -603,7 +630,7 @@ public class MarauroaSimpleClient extends SimpleClient implements
             wcl.onAdded(object);
         }
     }
-    
+
     private void fireOnDeleted(RPObject object) {
         for (WorldChangeListener wcl : worldChangeListeners) {
             wcl.onDeleted(object);
@@ -632,5 +659,21 @@ public class MarauroaSimpleClient extends SimpleClient implements
             logger.log(Level.WARNING, "WorldChangeListener already unregistered: {0}",
                     wcl.getClass().getCanonicalName());
         }
+    }
+
+    /**
+     * @return the chatNotifications
+     */
+    @Override
+    public boolean isChatNotifications() {
+        return chatNotifications;
+    }
+
+    /**
+     * @param chatNotifications the chatNotifications to set
+     */
+    @Override
+    public void setChatNotifications(boolean chatNotifications) {
+        this.chatNotifications = chatNotifications;
     }
 }

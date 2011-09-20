@@ -1,23 +1,17 @@
-/*
- * $Rev$
- * $LastChangedDate$
- * $LastChangedBy$
- */
 package simple.server.core.event;
-
-import simple.server.core.event.api.IChatEvent;
-import simple.common.NotificationType;
 
 import marauroa.common.game.Definition.DefinitionClass;
 import marauroa.common.game.Definition.Type;
 import marauroa.common.game.RPClass;
+import simple.common.NotificationType;
+import simple.server.core.event.api.IPublicChatEvent;
 
 /**
  * A public text message.
  *
  * @author hendrik
  */
-public class TextEvent extends SimpleRPEvent implements IChatEvent {
+public class TextEvent extends SimpleRPEvent implements IPublicChatEvent {
 
     private static final String RPCLASS_NAME = "text";
     private static final String TEXT = "text", FROM = "from";
