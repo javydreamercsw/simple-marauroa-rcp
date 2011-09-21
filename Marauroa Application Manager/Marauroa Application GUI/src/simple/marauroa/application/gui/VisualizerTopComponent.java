@@ -1,21 +1,17 @@
 package simple.marauroa.application.gui;
 
+//import org.openide.util.ImageUtilities;
 import java.awt.BorderLayout;
 import java.util.Collection;
 import javax.swing.JComponent;
-import org.openide.util.NbBundle.Messages;
-import org.openide.windows.TopComponent;
-//import org.openide.util.ImageUtilities;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.explorer.view.BeanTreeView;
-import org.openide.util.Exceptions;
-import org.openide.util.Lookup;
-import org.openide.util.LookupEvent;
-import org.openide.util.LookupListener;
-import org.openide.util.Utilities;
+import org.openide.util.NbBundle.Messages;
+import org.openide.util.*;
 import org.openide.util.lookup.Lookups;
+import org.openide.windows.TopComponent;
 import simple.marauroa.application.api.IDiagramManager;
 import simple.marauroa.application.api.IMarauroaApplication;
 import simple.marauroa.application.core.EventBus;

@@ -54,7 +54,7 @@ public class MockSimpleRPZone extends SimpleRPZone {
     public boolean has(RPObject.ID id) {
         System.out.println("Zone: " + getID() + " has " + objects.size() + " objects in it.");
         for (RPObject o : objects.values()) {
-                System.out.println((o instanceof ClientObjectInterface?"Player: ":"Object: ")+o);
+            System.out.println((o instanceof ClientObjectInterface ? "Player: " : "Object: ") + o);
         }
         return super.has(id);
     }

@@ -1,7 +1,7 @@
 package utilities.RPClass;
 
-import simple.server.core.entity.Entity;
 import marauroa.common.game.RPClass;
+import simple.server.core.entity.Entity;
 
 public class EntityTestHelper {
 

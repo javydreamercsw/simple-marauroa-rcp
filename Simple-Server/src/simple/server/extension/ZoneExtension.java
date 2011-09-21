@@ -19,18 +19,20 @@ import simple.server.core.event.TextEvent;
 import simple.server.core.event.ZoneEvent;
 
 /**
- * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
- * # load SimpleServerExtension(s).
- * RoomCRUD=simple.server.extension.RoomCRUDExtension
+ * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com> # load
+ * SimpleServerExtension(s). RoomCRUD=simple.server.extension.ZoneExtension
  * server_extension=RoomCRUD
  */
-public class RoomCRUDExtension extends SimpleServerExtension implements ActionListener {
+public class ZoneExtension extends SimpleServerExtension implements ActionListener {
 //Create, Read, Update or Remove action
 
-    /** the logger instance. */
-    private static final Logger logger = Log4J.getLogger(RoomCRUDExtension.class);
-    public static final String TYPE = "CRUDRoom", ROOM = "room", DESC = "description", OPERATION = "operation", PASSWORD = "password";
-    public static final int CREATE = 1, UPDATE = 2, DELETE = 3, LISTZONES = 4, LISTPLAYERS = 5, JOIN = 6;
+    /**
+     * the logger instance.
+     */
+    private static final Logger logger = Log4J.getLogger(ZoneExtension.class);
+    public static final String TYPE = "CRUDRoom", ROOM = "room",
+            DESC = "description", OPERATION = "operation", PASSWORD = "password";
+    public static final int CREATE = 1, UPDATE = 2, DELETE = 3, LISTZONES = 4, JOIN = 5;
 
     @Override
     public void init() {
@@ -55,9 +57,6 @@ public class RoomCRUDExtension extends SimpleServerExtension implements ActionLi
                         remove(player, action);
                         break;
                     case LISTZONES:
-                        list(player, op, action);
-                        break;
-                    case LISTPLAYERS:
                         list(player, op, action);
                         break;
                     case JOIN:
@@ -143,7 +142,7 @@ public class RoomCRUDExtension extends SimpleServerExtension implements ActionLi
             try {
                 world.removeRPZone(new ID(action.get(ROOM)));
             } catch (Exception ex) {
-                java.util.logging.Logger.getLogger(RoomCRUDExtension.class.getSimpleName()).log(Level.SEVERE, null, ex);
+                java.util.logging.Logger.getLogger(ZoneExtension.class.getSimpleName()).log(Level.SEVERE, null, ex);
             }
         }
         world.applyPublicEvent(null,
@@ -160,15 +159,11 @@ public class RoomCRUDExtension extends SimpleServerExtension implements ActionLi
 
     private void list(ClientObjectInterface player, int option, RPAction a) {
         try {
-            if (option == LISTZONES) {
-                ((RPObject) player).addEvent(new ZoneEvent(SimpleSingletonRepository.get().get(SimpleRPWorld.class).listZones().toString(), option));
-            }
-            if (option == LISTPLAYERS) {
-                ((RPObject) player).addEvent(new ZoneEvent(SimpleSingletonRepository.get().get(SimpleRPWorld.class).getZone(((RPObject) player).get("zoneid")).getPlayersInString(), option));
-            }
+            ((RPObject) player).addEvent(
+                    new ZoneEvent(SimpleSingletonRepository.get().get(SimpleRPWorld.class).listZones("#").toString(), option));
             player.notifyWorldAboutChanges();
         } catch (Exception ex) {
-            java.util.logging.Logger.getLogger(RoomCRUDExtension.class.getSimpleName()).log(Level.SEVERE, null, ex);
+            logger.fatal(null, ex);
         }
     }
 }

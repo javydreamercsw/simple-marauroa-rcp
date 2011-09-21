@@ -148,12 +148,6 @@ public interface ChatScreenInterface {
     void onZoneList(String list);
 
     /**
-     * Received a list of players in your zone
-     * @param get
-     */
-    void onPlayerList(String get);
-
-    /**
      * You need a password to enter this room
      * @param event
      */

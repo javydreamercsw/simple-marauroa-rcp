@@ -2,10 +2,11 @@ package simple.server.core.engine;
 
 import marauroa.common.Log4J;
 import marauroa.common.game.IRPZone.ID;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import simple.server.core.entity.clientobject.ClientObject;
-import static org.junit.Assert.*;
 
 /**
  *

@@ -2,13 +2,13 @@ package simple.marauroa.client.components.api;
 
 import javax.swing.JList;
 import marauroa.common.game.RPObject;
-import simple.client.WorldChangeListener;
+import org.openide.util.LookupListener;
 
 /**
  *
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
-public interface IUserListComponent extends IClientComponent, WorldChangeListener {
+public interface IUserListComponent extends IClientComponent, LookupListener{
 
     /**
      * Add a player to the user list

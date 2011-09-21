@@ -4,7 +4,6 @@ import java.net.SocketException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import marauroa.client.BannedAddressException;
@@ -28,7 +27,7 @@ public class TextClient extends Thread {
     private String password;
     private String character;
     private String port, gameName, version;
-    private static boolean ShowWorld;
+    private static boolean showWorld = false, chat = false;
     private Map<RPObject.ID, RPObject> world_objects;
     private marauroa.client.ClientFramework clientManager;
     private PerceptionHandler handler;
@@ -95,10 +94,10 @@ public class TextClient extends Thread {
                     //Get the list zones event results
                     for (RPEvent event : object.events()) {
                         try {
-                            logger.log(Level.INFO, "Processing: {0}, {1}", 
+                            logger.log(Level.INFO, "Processing: {0}, {1}",
                                     new Object[]{event, event.getName()});
                             if (event.getName().equals(TextEvent.getRPClassName())) {
-                                logger.log(Level.INFO, "<{0}>{1}", 
+                                logger.log(Level.INFO, "<{0}>{1}",
                                         new Object[]{event.get("from"), event.get("text")});
                             } else {
                                 logger.log(Level.WARNING, "Received the following event but didn\'t "
@@ -157,20 +156,22 @@ public class TextClient extends Thread {
                     handler.apply(message, world_objects);
                     int i = message.getPerceptionTimestamp();
 
-                    RPAction action = new RPAction();
-                    action.put("type", "chat");
-                    action.put("text", "Hi!");
-                    clientManager.send(action);
-                    if (i % 50 == 0) {
+                    if (chat) {
+                        RPAction action = new RPAction();
                         action.put("type", "chat");
                         action.put("text", "Hi!");
                         clientManager.send(action);
-                    } else if (i % 50 == 20) {
-                        action.put("type", "chat");
-                        action.put("text", "How are you?");
-                        clientManager.send(action);
+                        if (i % 50 == 0) {
+                            action.put("type", "chat");
+                            action.put("text", "Hi!");
+                            clientManager.send(action);
+                        } else if (i % 50 == 20) {
+                            action.put("type", "chat");
+                            action.put("text", "How are you?");
+                            clientManager.send(action);
+                        }
                     }
-                    if (ShowWorld) {
+                    if (showWorld) {
                         System.out.println("<World contents ------------------------------------->");
                         int j = 0;
                         for (RPObject object : world_objects.values()) {
@@ -317,7 +318,11 @@ public class TextClient extends Thread {
                         port = args[i + 1];
                     } else if (args[i].equals("-W")) {
                         if ("1".equals(args[i + 1])) {
-                            ShowWorld = true;
+                            showWorld = true;
+                        }
+                    } else if (args[i].equals("-chat")) {
+                        if ("1".equals(args[i + 1])) {
+                            chat = true;
                         }
                     } else if (args[i].equals("-t")) {
                         tcp = true;
@@ -348,7 +353,8 @@ public class TextClient extends Thread {
             System.out.println("Optional parameters");
             System.out.println("* -W\tShow world content? 0 or 1");
             System.out.println("* -n\tGame name (Default is 'Simple')");
-            System.out.println("* -v\tGame Version (Default is '0.02.01')");
+            System.out.println("* -v\tGame Version (Default is '0.02.03')");
+            System.out.println("* -chat\tEnable/Disable chat? 0 or 1");
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(1);

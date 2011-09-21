@@ -13,10 +13,10 @@ import simple.server.core.event.api.IZoneEvent;
  */
 public class ZoneEvent extends SimpleRPEvent implements IZoneEvent {
 
-    private static final String FIELD = "field", RPCLASS_NAME = "Zone_Event", 
+    public static final String FIELD = "field", RPCLASS_NAME = "Zone_Event",
             ACTION = "action", DESC = "description";
-    public static final int ADD = 1, UPDATE = 2, REMOVE = 3, LISTZONES = 4, 
-            LISTPLAYERS = 5, NEEDPASS = 6;
+    public static final int ADD = 1, UPDATE = 2, REMOVE = 3, LISTZONES = 4,
+            NEEDPASS = 5;
 
     /**
      * Creates the rpclass.

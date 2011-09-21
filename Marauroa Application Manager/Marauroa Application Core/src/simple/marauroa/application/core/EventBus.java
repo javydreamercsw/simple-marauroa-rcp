@@ -24,21 +24,23 @@ public class EventBus {
         return instance;
     }
 
+    public void clearLookup(final Class clazz) {
+        for (final Object old : getCentralLookup().lookupAll(clazz)) {
+            getCentralLookup().remove(old);
+        }
+    }
+
     public void publish(final Object object) {
         if (object == null) {
             throw new IllegalArgumentException("object is mandatory");
         }
 
-        for (final Object old : getCentralLookup().lookupAll(object.getClass())) {
-            getCentralLookup().remove(old);
-        }
+        clearLookup(object.getClass());
         getCentralLookup().add(object);
     }
 
     public void unpublish(final Class<?> topic) {
-        for (final Object old : getCentralLookup().lookupAll(topic)) {
-            getCentralLookup().remove(old);
-        }
+        clearLookup(topic);
     }
 
     public <T extends Object> Collection<? extends T> lookupAll(Class<T> clazz) {

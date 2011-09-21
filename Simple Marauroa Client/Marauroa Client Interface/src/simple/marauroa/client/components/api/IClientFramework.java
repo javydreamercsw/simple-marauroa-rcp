@@ -7,7 +7,6 @@ import marauroa.client.TimeoutException;
 import marauroa.common.game.AccountResult;
 import marauroa.common.game.RPObject;
 import marauroa.common.net.InvalidVersionException;
-import simple.client.WorldChangeListener;
 
 /**
  *
@@ -144,18 +143,6 @@ public interface IClientFramework extends Runnable{
     public void startModules();
     
     /**
-     * Register WorldChangeListeners
-     * @param wcl 
-     */
-    public void registerWorldMapChangeListener(WorldChangeListener wcl);
-    
-    /**
-     * Unregister WorldChangeListeners
-     * @param wcl 
-     */
-    public void unregisterWorldMapChangeListener(WorldChangeListener wcl);
-    
-    /**
      * Check if chat notifications is enabled
      * @return true if enabled
      */
@@ -166,4 +153,12 @@ public interface IClientFramework extends Runnable{
      * @param chatNotifications true to enable
      */
     public void setChatNotifications(boolean chatNotifications);
+    
+    /**
+     * Get an RPObject by its id as know by the client
+     * 
+     * @param id Id to look for
+     * @return RPObject with that id or null if not found
+     */
+    public RPObject getFromWorld(RPObject.ID id);
 }
