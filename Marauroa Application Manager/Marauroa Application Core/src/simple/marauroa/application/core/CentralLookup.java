@@ -1,5 +1,8 @@
 package simple.marauroa.application.core;
 
+import java.util.Collection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.openide.util.lookup.AbstractLookup;
 import org.openide.util.lookup.InstanceContent;
 
@@ -19,6 +22,9 @@ public class CentralLookup extends AbstractLookup {
 
     private InstanceContent content = null;
     private static CentralLookup def = new CentralLookup();
+    private static final Logger logger =
+            Logger.getLogger(CentralLookup.class.getSimpleName());
+    private static boolean showContents = false;
 
     /**
      * Creates a CentralLookup instances with a specific content set.
@@ -43,6 +49,9 @@ public class CentralLookup extends AbstractLookup {
      */
     public void add(Object instance) {
         content.add(instance);
+        if(showContents){
+            displayLookupContents(instance.getClass());
+        }
     }
 
     /**
@@ -51,6 +60,9 @@ public class CentralLookup extends AbstractLookup {
      */
     public void remove(Object instance) {
         content.remove(instance);
+        if(showContents){
+            displayLookupContents(instance.getClass());
+        }
     }
 
     /**
@@ -63,5 +75,18 @@ public class CentralLookup extends AbstractLookup {
      */
     public static CentralLookup getDefault() {
         return def;
+    }
+    
+    public void setShowContents(boolean show){
+        showContents = show;
+    }
+    
+    private void displayLookupContents(Class template) {
+        Collection<? extends Class> result = EventBus.getDefault().getCentralLookup().lookupAll(template);
+        logger.log(Level.INFO, "{0} {1} in lookup.",
+                new Object[]{result.size(), template.getSimpleName()});
+        for (Object o : result) {
+            logger.log(Level.INFO, o.toString());
+        }
     }
 }
