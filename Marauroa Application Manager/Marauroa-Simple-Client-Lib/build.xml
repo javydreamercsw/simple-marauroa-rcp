@@ -5,7 +5,7 @@
 <project name="simple.marauroa.client.lib" default="netbeans" basedir=".">
     <description>Builds, tests, and runs the project simple.marauroa.client.lib.</description>
     <import file="nbproject/build-impl.xml"/>
-    <import file="${suite.dir}/build.xml"/>
+    <import file="${suite.dir}/preparation.xml"/>
     
     <target name="init" depends="init-netbeans, init-hudson, harness.init">
         <if>

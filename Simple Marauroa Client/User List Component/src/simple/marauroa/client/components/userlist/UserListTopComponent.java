@@ -1,23 +1,17 @@
 package simple.marauroa.client.components.userlist;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.AbstractListModel;
 import javax.swing.JList;
 import marauroa.common.game.RPObject;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
-import org.openide.util.*;
-import org.openide.util.lookup.ServiceProvider;
+import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
-import simple.client.HeaderLessEventLine;
-import simple.common.NotificationType;
-import simple.marauroa.client.components.api.IUserListComponent;
 import simple.marauroa.client.components.common.MCITool;
-import simple.marauroa.client.components.common.SortedListModel;
-import simple.marauroa.client.components.common.WindowModeManager;
 
 /**
  * Top component which displays something.
@@ -26,21 +20,18 @@ import simple.marauroa.client.components.common.WindowModeManager;
 autostore = false)
 @TopComponent.Description(preferredID = "UserListTopComponent",
 persistenceType = TopComponent.PERSISTENCE_NEVER)
-@TopComponent.Registration(mode = "properties", openAtStartup = false)
+@TopComponent.Registration(mode = "properties", openAtStartup = true)
 @ActionID(category = "Window", id = "simple.marauroa.client.components.userlist.UserListTopComponent")
 @ActionReference(path = "Menu/Window" /*
  * , position = 333
  */)
 @TopComponent.OpenActionRegistration(displayName = "#CTL_UserListAction",
 preferredID = "UserListTopComponent")
-@ServiceProvider(service = IUserListComponent.class)
-public final class UserListTopComponent extends TopComponent
-        implements IUserListComponent, LookupListener {
-    
-    private Lookup.Result<RPObject> result = null;
+public final class UserListTopComponent extends TopComponent {
     //Player names
+
     final ArrayList<String> players = new ArrayList<String>();
-    
+
     public UserListTopComponent() {
         initComponents();
         setName(NbBundle.getMessage(UserListTopComponent.class, "CTL_UserListTopComponent"));
@@ -48,7 +39,6 @@ public final class UserListTopComponent extends TopComponent
         putClientProperty(TopComponent.PROP_CLOSING_DISABLED, Boolean.TRUE);
         putClientProperty(TopComponent.PROP_MAXIMIZATION_DISABLED, Boolean.TRUE);
         putClientProperty(TopComponent.PROP_KEEP_PREFERRED_SIZE_WHEN_SLIDED_IN, Boolean.TRUE);
-        WindowModeManager.changeMode(UserListTopComponent.this, "properties");
     }
 
     /** This method is called from within the constructor to
@@ -89,8 +79,8 @@ public final class UserListTopComponent extends TopComponent
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(121, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -98,174 +88,70 @@ public final class UserListTopComponent extends TopComponent
     private javax.swing.JList playerList;
     // End of variables declaration//GEN-END:variables
 
-    @Override
-    public void componentOpened() {
-        result = Utilities.actionsGlobalContext().lookupResult(RPObject.class);
-        result.addLookupListener(this);
-    }
-    
-    @Override
-    public void componentClosed() {
-        result.removeLookupListener(this);
-        result = null;
-    }
-    
     void writeProperties(java.util.Properties p) {
         // better to version settings since initial version as advocated at
         // http://wiki.apidesign.org/wiki/PropertyFiles
         p.setProperty("version", "1.0");
         //TODO store your settings
     }
-    
+
     void readProperties(java.util.Properties p) {
         String version = p.getProperty("version");
         //TODO read your settings according to their version
     }
-    
-    @Override
-    public void addPlayer(RPObject p) {
-        Logger.getLogger(UserListTopComponent.class.getSimpleName()).log(
-                Level.FINE, "Request to add player: {0}", p);
-        if (!modelHasElement((AbstractListModel) getPlayerList().getModel(), p.get("name"))) {
-            AbstractListModel temp = (AbstractListModel) getPlayerList().getModel();
-            if (temp.getSize() == 0) {
-                getPlayerList().setModel(addToModel(p.get("")));
-            } else {
-                String playersLits = getModelElements(temp) + "#" + p;
-                getPlayerList().setModel(addToModel(playersLits));
+
+    public void addPlayer(RPObject object) {
+        String player = object.get("name");
+        if (player == null) {
+            //Try to get it from the world
+            RPObject fromWorld = MCITool.getClient().getFromWorld(object.getID());
+            if (fromWorld != null) {
+                object = fromWorld;
+                player = object.get("name");
             }
         }
-        getPlayerList().repaint();
-    }
-    
-    @Override
-    public boolean modelHasElement(AbstractListModel m, String e) {
-        for (int i = 0; i < m.getSize(); i++) {
-            if (m.getElementAt(i).equals(e)) {
-                return true;
-            }
+        if (player != null && !players.contains(player)) {
+            Logger.getLogger(UserListTopComponent.class.getSimpleName()).log(
+                    Level.INFO, "Request to add player: {0}", player);
+            players.add(player);
+            //Sort it
+            Collections.sort(players);
         }
-        return false;
+        updateModel();
     }
-    
-    @Override
+
     public JList getPlayerList() {
         return playerList;
     }
-    
-    @Override
-    public SortedListModel addToModel(final String list) {
-        Logger.getLogger(UserListTopComponent.class.getSimpleName()).log(
-                Level.FINE, "Request to add list to model: {0}", list);
-        AbstractListModel model = null;
-        if (list.contains("#")) {
-            StringTokenizer st = new StringTokenizer(list, "#");
-            final String strings[] = new String[st.countTokens()];
-            int i = 0;
-            while (st.hasMoreTokens()) {
-                strings[i] = st.nextToken();
-                i++;
-            }
-            model = new javax.swing.AbstractListModel() {
-                
-                @Override
-                public int getSize() {
-                    return strings.length;
-                }
-                
-                @Override
-                public Object getElementAt(int i) {
-                    return strings[i];
-                }
-            };
-        } else {
-            model = new javax.swing.AbstractListModel() {
-                
-                final String strings[] = {list};
-                
-                @Override
-                public int getSize() {
-                    return strings.length;
-                }
-                
-                @Override
-                public Object getElementAt(int i) {
-                    return strings[i];
-                }
-            };
-        }
-        return new SortedListModel(model);
-    }
-    
-    private String getModelElements(AbstractListModel m) {
-        if (m.getSize() == 0) {
-            return "";
-        }
-        String elements = "";
-        for (int i = 0; i < m.getSize(); i++) {
-            elements += m.getElementAt(i);
-            if (i < m.getSize() && m.getSize() > 1) {
-                elements += "#";
-            }
-        }
-        return elements;
-    }
-    
-    @Override
-    public void setListSeparator(char character) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-    
-    @Override
-    public void removePlayer(RPObject p) {
-        Logger.getLogger(UserListTopComponent.class.getSimpleName()).log(
-                Level.FINE, "Request to remove player: {0}", p);
-        if (modelHasElement((AbstractListModel) getPlayerList().getModel(), p.get("name"))) {
-            AbstractListModel temp = (AbstractListModel) getPlayerList().getModel();
-            if (temp.getSize() == 1) {
-                getPlayerList().setModel(addToModel(""));
-            } else {
-                String playerLists = getModelElements(temp);
-                playerLists.replaceAll("," + p, "").replaceAll(p.get("name"), "");
-                getPlayerList().setModel(addToModel(playerLists));
-            }
-            MCITool.outputInChatComponent(new HeaderLessEventLine(p
-                    + " just left the room!", NotificationType.INFORMATION));
-        }
-    }
-    
-    @Override
-    public void resultChanged(LookupEvent ev) {
-        Lookup.Result<RPObject> r = (Lookup.Result<RPObject>) ev.getSource();
-        Collection<RPObject> c = (Collection<RPObject>) r.allInstances();
-        if (!c.isEmpty()) {
-            Iterator<RPObject> iterator = c.iterator();
-            while (iterator.hasNext()) {
-                RPObject selected = c.iterator().next();
-                System.out.println("Got changes for: " + selected);
-            }
-        }
-    }
-    
-    @Override
-    public void onAdded(RPObject object) {
-        addToList(object);
-    }
-    
-    private void addToList(RPObject object) {
-        if (!players.contains(object.get("name"))) {
-            players.add(object.get("name"));
-            //Sort it
-            Collections.sort(players);
+
+    public void removePlayer(RPObject object) {
+        String player = object.get("name");
+        if (player != null && players.contains(player)) {
+            Logger.getLogger(UserListTopComponent.class.getSimpleName()).log(
+                    Level.FINE, "Request to remove player: {0}", player);
+            players.remove(player);
             playerList.updateUI();
         }
+        updateModel();
     }
-    
-    @Override
-    public void onDeleted(RPObject object) {
-        if (players.contains(object.get("name"))) {
-            players.remove(object.get("name"));
-            playerList.updateUI();
-        }
+
+    protected void clearList() {
+        players.clear();
+        updateModel();
+    }
+
+    private void updateModel() {
+        playerList.setModel(new javax.swing.AbstractListModel() {
+
+            @Override
+            public int getSize() {
+                return players.size();
+            }
+
+            @Override
+            public Object getElementAt(int i) {
+                return players.get(i);
+            }
+        });
     }
 }

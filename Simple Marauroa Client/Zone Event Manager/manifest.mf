@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+OpenIDE-Module: simple.marauroa.event.manager.zone
+OpenIDE-Module-Install: simple/marauroa/event/manager/zone/Installer.class
+OpenIDE-Module-Localizing-Bundle: simple/marauroa/event/manager/zone/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+

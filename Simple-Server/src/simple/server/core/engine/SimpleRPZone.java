@@ -106,7 +106,8 @@ public class SimpleRPZone extends MarauroaRPZone {
         }
 
         if (object instanceof ClientObjectInterface) {
-            players.remove(((ClientObjectInterface) object).getName());
+            ClientObjectInterface player = (ClientObjectInterface) object;
+            players.remove(player.getName());
             if (object instanceof ClientObjectInterface) {
                 try {
                     //Make sure that the correct onRemoved method is called
@@ -131,6 +132,10 @@ public class SimpleRPZone extends MarauroaRPZone {
                     java.util.logging.Logger.getLogger(SimpleRPZone.class.getSimpleName()).log(Level.SEVERE, null, ex);
                 }
             }
+            //Let everyone else know
+            applyPublicEvent(new PrivateTextEvent(
+                    NotificationType.INFORMATION, player.getName() 
+                    + " left " + getName()));
         } else if (object instanceof Entity) {
             ((Entity) object).onRemoved(this);
         }
@@ -164,16 +169,16 @@ public class SimpleRPZone extends MarauroaRPZone {
 
     /**
      * Gets all players in this zone.
-     *
+     * @param separator Character to separate the names in the list.
      * @return A list of all players.
      */
-    public String getPlayersInString() {
+    public String getPlayersInString(String separator) {
         String playerList = "";
         Iterator i = players.values().iterator();
         while (i.hasNext()) {
             playerList += ((ClientObjectInterface) i.next()).getName();
             if (i.hasNext()) {
-                playerList += "#";
+                playerList += separator;
             }
         }
         return playerList;
@@ -225,6 +230,9 @@ public class SimpleRPZone extends MarauroaRPZone {
                     players.put(p.getName(), p);
                     logger.debug("Object zone: " + ((RPObject) p).get("zoneid"));
                     welcome(p);
+                    //Let everyone else know
+                    applyPublicEvent(new PrivateTextEvent(
+                            NotificationType.INFORMATION, p.getName() + " joined " + getName()));
                 } catch (IllegalAccessException ex) {
                     java.util.logging.Logger.getLogger(SimpleRPZone.class.getSimpleName()).log(Level.SEVERE, null, ex);
                 } catch (IllegalArgumentException ex) {
@@ -401,8 +409,8 @@ public class SimpleRPZone extends MarauroaRPZone {
 
     public void setPassword(String pass) throws IOException {
         /**
-         * Encrypt password with private key. This way encryption is unique
-         * per server. (Assuming that the server.ini file was generated and not
+         * Encrypt password with private key. This way encryption is unique per
+         * server. (Assuming that the server.ini file was generated and not
          * copied)
          */
         if (pass != null && !pass.isEmpty()) {

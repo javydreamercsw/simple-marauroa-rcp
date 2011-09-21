@@ -1,8 +1,8 @@
 package utilities.RPClass;
 
+import marauroa.common.game.RPClass;
 import simple.server.core.entity.item.Item;
 import simple.server.core.entity.item.StackableItem;
-import marauroa.common.game.RPClass;
 
 public class ItemTestHelper {
 

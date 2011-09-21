@@ -222,7 +222,12 @@ public class SimpleRPWorld extends RPWorld {
         }
     }
 
-    public StringBuilder listZones() {
+    /**
+     * Gets all zones in this world.
+     * @param separator Character to separate the names in the list.
+     * @return zones in this world in a list separated with the separator character.
+     */
+    public StringBuilder listZones(String separator) {
         StringBuilder rooms = new StringBuilder();
         Iterator i = iterator();
         while (i.hasNext()) {
@@ -231,7 +236,7 @@ public class SimpleRPWorld extends RPWorld {
                     sZone.getDescription().isEmpty() ? "" : ": "
                     + sZone.getDescription());
             if (i.hasNext()) {
-                rooms.append("#");
+                rooms.append(separator);
             }
         }
         return rooms;

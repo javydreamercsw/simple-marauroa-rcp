@@ -25,18 +25,18 @@ import org.openide.util.TaskListener;
 import org.openide.util.lookup.ServiceProvider;
 import org.xml.sax.SAXException;
 import simple.client.SimpleClient;
-import simple.client.WorldChangeListener;
 import simple.client.action.update.ClientGameConfiguration;
 import simple.client.conf.ExtensionXMLLoader;
 import simple.client.soundreview.SoundMaster;
 import simple.marauroa.application.core.EventBus;
+import simple.marauroa.application.core.LookupRPObjectManager;
 import simple.marauroa.client.components.api.IClientFramework;
 import simple.marauroa.client.components.common.MCITool;
 import static simple.server.core.action.WellKnownActionConstants.TARGET;
 import static simple.server.core.action.WellKnownActionConstants.TEXT;
 import simple.server.core.action.chat.ChatAction;
 import simple.server.core.event.*;
-import simple.server.extension.RoomCRUDExtension;
+import simple.server.extension.ZoneExtension;
 
 /**
  *
@@ -76,8 +76,6 @@ public class MarauroaSimpleClient extends SimpleClient implements
     private RequestProcessor.Task theTask = null;
     private boolean running = false;
     private int duplicateCounter = 0;
-    private ArrayList<WorldChangeListener> worldChangeListeners =
-            new ArrayList<WorldChangeListener>();
     /**
      * When enabled zone is notified when a player enters/exit the zone.
      */
@@ -103,6 +101,10 @@ public class MarauroaSimpleClient extends SimpleClient implements
                 + "." + gameName + System.getProperty("file.separator");
         startSoundMaster();
         startSwingLookAndFeel();
+        //TODO: Uncomment
+//        if (logger.isLoggable(Level.FINE)) {
+        EventBus.getDefault().getCentralLookup().setShowContents(true);
+//        }
     }
 
     @Override
@@ -183,12 +185,8 @@ public class MarauroaSimpleClient extends SimpleClient implements
                 logger.fine("Requesting update...");
                 //Ask for a zone refresher just in case
                 RPAction action = new RPAction();
-                action.put("type", RoomCRUDExtension.TYPE);
-                action.put(RoomCRUDExtension.OPERATION, RoomCRUDExtension.LISTZONES);
-                send(action);
-                action = new RPAction();
-                action.put("type", RoomCRUDExtension.TYPE);
-                action.put(RoomCRUDExtension.OPERATION, RoomCRUDExtension.LISTPLAYERS);
+                action.put("type", ZoneExtension.TYPE);
+                action.put(ZoneExtension.OPERATION, ZoneExtension.LISTZONES);
                 send(action);
             }
         } catch (Exception ex) {
@@ -519,18 +517,22 @@ public class MarauroaSimpleClient extends SimpleClient implements
                 //Publish the event to the bus so all listeners can react to it
                 //TODO: Remove hack while the interfaces are not part of Marauroa 
                 if (event.getName().equals(TextEvent.getRPClassName())) {
+                    logger.log(Level.FINE, TextEvent.getRPClassName());
                     TextEvent textEvent = new TextEvent();
                     textEvent.fill(event);
                     EventBus.getDefault().publish(textEvent);
                 } else if (event.getName().equals(PrivateTextEvent.getRPClassName())) {
+                    logger.log(Level.FINE, PrivateTextEvent.getRPClassName());
                     PrivateTextEvent privateTextEvent = new PrivateTextEvent();
                     privateTextEvent.fill(event);
                     EventBus.getDefault().publish(privateTextEvent);
                 } else if (event.getName().equals(ZoneEvent.getRPClassName())) {
+                    logger.log(Level.INFO, ZoneEvent.getRPClassName());
                     ZoneEvent zoneEvent = new ZoneEvent();
                     zoneEvent.fill(event);
                     EventBus.getDefault().publish(zoneEvent);
                 } else if (event.getName().equals(MonitorEvent.getRPClassName())) {
+                    logger.log(Level.INFO, MonitorEvent.getRPClassName());
                     MonitorEvent monitorEvent = new MonitorEvent();
                     monitorEvent.fill(event);
                     EventBus.getDefault().publish(monitorEvent);
@@ -562,28 +564,22 @@ public class MarauroaSimpleClient extends SimpleClient implements
 
     @Override
     public boolean onAdded(RPObject object) {
-        logger.log(Level.INFO, "onAdded object: {0}", object);
-        fireOnAdded(object);
-        return true;
-    }
-
-    @Override
-    public boolean onModifiedAdded(RPObject object, RPObject changes) {
-        logger.log(Level.FINE, "onModifiedAdded {0}: {1}", new Object[]{object, changes});
-        if (itsMe(object)) {
-            processEvents(changes);
+        if (object != null) {
+            logger.log(Level.INFO, "onAdded object: {0}", object.toAttributeString());
+            if (object.getInt("id") > 0) {
+                //Add it to the lookup
+                EventBus.getDefault().getCentralLookup().add(object);
+            }
         }
         return true;
     }
 
-    private boolean itsMe(RPObject object) {
-        return MCITool.getClient().getPlayerRPC().get("name").equals(object.get("name"));
-    }
-
     @Override
     public boolean onDeleted(RPObject object) {
-        logger.log(Level.INFO, "onDeleted object: {0}", object);
-        fireOnDeleted(object);
+        logger.log(Level.FINE, "onDeleted object: {0}", object);
+        if (object != null) {
+            LookupRPObjectManager.remove(object);
+        }
         return true;
     }
 
@@ -617,47 +613,21 @@ public class MarauroaSimpleClient extends SimpleClient implements
         }
         RPObject object = world.getWorldObjects().get(id);
         if (object != null) {
-            setPlayerRPC(object);
-            if (object.getInt("id") > 0 && MCITool.getUserListManager() != null) {
-                MCITool.getUserListManager().addPlayer(object);
+            if (getPlayerRPC() == null) {
+                setPlayerRPC(object);
+                update();
             }
         }
         return true;
     }
 
-    private void fireOnAdded(RPObject object) {
-        for (WorldChangeListener wcl : worldChangeListeners) {
-            wcl.onAdded(object);
-        }
-    }
-
-    private void fireOnDeleted(RPObject object) {
-        for (WorldChangeListener wcl : worldChangeListeners) {
-            wcl.onDeleted(object);
-        }
-    }
-
-    @Override
-    public void registerWorldMapChangeListener(WorldChangeListener wcl) {
-        if (!worldChangeListeners.contains(wcl)) {
-            worldChangeListeners.add(wcl);
-            logger.log(Level.INFO, "WorldChangeListener registered: {0}",
-                    wcl.getClass().getCanonicalName());
-        } else {
-            logger.log(Level.WARNING, "WorldChangeListener already registered: {0}",
-                    wcl.getClass().getCanonicalName());
-        }
-    }
-
-    @Override
-    public void unregisterWorldMapChangeListener(WorldChangeListener wcl) {
-        if (worldChangeListeners.contains(wcl)) {
-            worldChangeListeners.remove(wcl);
-            logger.log(Level.INFO, "WorldChangeListener unregistered: {0}",
-                    wcl.getClass().getCanonicalName());
-        } else {
-            logger.log(Level.WARNING, "WorldChangeListener already unregistered: {0}",
-                    wcl.getClass().getCanonicalName());
+    private void update(){
+        //Fill the lookup with objects already in the world
+        EventBus.getDefault().clearLookup(RPObject.class);
+        for (RPObject obj : world.getWorldObjects().values()) {
+            if (obj.getInt("id") > 0) {
+                EventBus.getDefault().getCentralLookup().add(obj);
+            }
         }
     }
 
@@ -675,5 +645,10 @@ public class MarauroaSimpleClient extends SimpleClient implements
     @Override
     public void setChatNotifications(boolean chatNotifications) {
         this.chatNotifications = chatNotifications;
+    }
+
+    @Override
+    public RPObject getFromWorld(RPObject.ID id) {
+        return world.getWorldObjects().get(id);
     }
 }

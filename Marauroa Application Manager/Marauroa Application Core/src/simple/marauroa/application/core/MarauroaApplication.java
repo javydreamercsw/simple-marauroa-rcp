@@ -288,7 +288,7 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
             ds.setReuseAddress(true);
             return true;
         } catch (IOException e) {
-            logger.log(Level.SEVERE, null, e);
+            //Nothing to log
         } finally {
             if (ds != null) {
                 ds.close();
