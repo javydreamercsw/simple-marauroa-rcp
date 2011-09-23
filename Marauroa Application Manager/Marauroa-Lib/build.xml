@@ -19,11 +19,11 @@
             </then>
             <else>
                 <if>
-                    <available file="../../Simple-Server/build.xml" type="file" />
+                    <available file="../../Simple Marauroa Java/Simple-Server/build.xml" type="file" />
                     <then>
-                        <property file="../../Simple-Server/nbproject/project.properties" prefix="server-lib"/>
+                        <property file="../../Simple Marauroa Java/Simple-Server/nbproject/project.properties" prefix="server-lib"/>
                 <!--Copy the Marauroa Related files-->
-                        <ant antfile="../../Simple-Server/build.xml" target="jar" inheritall="false" />
+                        <ant antfile="../../Simple Marauroa Java/Simple-Server/build.xml" target="jar" inheritall="false" />
                         <copy file="../${server-lib.file.reference.marauroa.jar}" tofile="release/modules/ext/Marauroa.jar"/>
                         <copy file="../${server-lib.file.reference.log4j.jar}" tofile="release/modules/ext/log4j.jar"/>
                     </then>
@@ -31,15 +31,15 @@
             </else>
         </if>
         <if>
-            <available file="../../Marauroa Monitor Extension/build.xml" type="file" />
+            <available file="../../Simple Marauroa Java/Marauroa Monitor Extension/build.xml" type="file" />
             <then>
-                <property file="../../Marauroa Monitor Extension/nbproject/project.properties" prefix="monitor-lib"/>
+                <property file="../../Simple Marauroa Java/Marauroa Monitor Extension/nbproject/project.properties" prefix="monitor-lib"/>
                 <length string="${monitor-lib.dist.dir}" property="length.dist" />
                 <math result="length.dist" operand1="1" operation="+" operand2="${length.dist}" datatype="int"/>
                 <length string="${monitor-lib.dist.jar}" property="length.dist.jar" />
                 <substring text="${monitor-lib.dist.jar}" start="${length.dist}" end="${length.dist.jar}" property="monitor-lib.dist.jar" />
-                <ant antfile="../../Marauroa Monitor Extension/build.xml" target="jar" inheritall="false" />
-                <copy file="../../Marauroa Monitor Extension/dist/${monitor-lib.dist.jar}" tofile="release/modules/ext/${monitor-lib.dist.jar}"/>
+                <ant antfile="../../Simple Marauroa Java/Marauroa Monitor Extension/build.xml" target="jar" inheritall="false" />
+                <copy file="../../Simple Marauroa Java/Marauroa Monitor Extension/dist/${monitor-lib.dist.jar}" tofile="release/modules/ext/${monitor-lib.dist.jar}"/>
             </then>
         </if>
     </target>
