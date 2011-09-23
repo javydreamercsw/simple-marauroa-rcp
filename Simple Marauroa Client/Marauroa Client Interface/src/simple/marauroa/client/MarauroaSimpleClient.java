@@ -27,6 +27,7 @@ import org.xml.sax.SAXException;
 import simple.client.SimpleClient;
 import simple.client.action.update.ClientGameConfiguration;
 import simple.client.conf.ExtensionXMLLoader;
+import simple.client.event.listener.RPEventListener;
 import simple.client.soundreview.SoundMaster;
 import simple.marauroa.application.core.EventBus;
 import simple.marauroa.application.core.LookupRPObjectManager;
@@ -80,6 +81,7 @@ public class MarauroaSimpleClient extends SimpleClient implements
      * When enabled zone is notified when a player enters/exit the zone.
      */
     private boolean chatNotifications = true;
+    private long perceptions = -2, refreshAmount = 500;
 
     public MarauroaSimpleClient() {
         super(LOG4J_PROPERTIES);
@@ -101,10 +103,9 @@ public class MarauroaSimpleClient extends SimpleClient implements
                 + "." + gameName + System.getProperty("file.separator");
         startSoundMaster();
         startSwingLookAndFeel();
-        //TODO: Uncomment
-//        if (logger.isLoggable(Level.FINE)) {
-        EventBus.getDefault().getCentralLookup().setShowContents(true);
-//        }
+        if (logger.isLoggable(Level.FINE)) {
+            EventBus.getDefault().getCentralLookup().setShowContents(true);
+        }
     }
 
     @Override
@@ -151,8 +152,8 @@ public class MarauroaSimpleClient extends SimpleClient implements
             try {
                 chooseCharacter(getCharacter());
             } catch (final Exception e) {
-                logger.log(Level.INFO, MarauroaSimpleClient.class.getSimpleName()
-                        + "::onAvailableCharacters{0}", e);
+                logger.log(Level.SEVERE, MarauroaSimpleClient.class.getSimpleName()
+                        + "onAvailableCharactersDetails\n{0}", e);
             }
         }
     }
@@ -162,7 +163,7 @@ public class MarauroaSimpleClient extends SimpleClient implements
         try {
             super.onPerception(message);
             if (logger.isLoggable(Level.FINE)) {
-                logger.log(Level.INFO, "Received perception {0}", message.getPerceptionTimestamp());
+                logger.log(Level.FINE, "Received perception {0}", message.getPerceptionTimestamp());
                 int i = message.getPerceptionTimestamp();
 
                 sendMessage("Hi");
@@ -172,22 +173,14 @@ public class MarauroaSimpleClient extends SimpleClient implements
                     sendMessage("How are you?");
                 }
                 if (logger.isLoggable(Level.FINEST)) {
-                    logger.log(Level.INFO, "<World contents ------------------------------------->");
+                    logger.log(Level.FINEST, "<World contents ------------------------------------->");
                     int j = 0;
                     for (RPObject object : world.getWorldObjects().values()) {
                         j++;
-                        logger.log(Level.INFO, "{0}. {1}", new Object[]{j, object});
+                        logger.log(Level.FINEST, "{0}. {1}", new Object[]{j, object});
                     }
-                    logger.log(Level.INFO, "</World contents ------------------------------------->");
+                    logger.log(Level.FINEST, "</World contents ------------------------------------->");
                 }
-            }
-            if (message.getPerceptionTimestamp() == 0) {
-                logger.fine("Requesting update...");
-                //Ask for a zone refresher just in case
-                RPAction action = new RPAction();
-                action.put("type", ZoneExtension.TYPE);
-                action.put(ZoneExtension.OPERATION, ZoneExtension.LISTZONES);
-                send(action);
             }
         } catch (Exception ex) {
             logger.log(Level.WARNING, null, ex);
@@ -203,17 +196,17 @@ public class MarauroaSimpleClient extends SimpleClient implements
             try {
                 connect(host, Integer.parseInt(port));
                 ph.progress("Connected", 1);
-                logger.log(Level.INFO, "Logging as: {0} with pass: {1}",
+                logger.log(Level.FINE, "Logging as: {0} with pass: {1}",
                         new Object[]{userName,
                             (logger.isLoggable(Level.FINEST) ? password : "*******")});
                 login(userName, password);
                 ph.progress("Logged in", 2);
             } catch (Exception e) {
                 try {
-                    logger.log(Level.INFO, "Creating account and logging in to continue....");
+                    logger.log(Level.FINE, "Creating account and logging in to continue....");
                     AccountResult result = createAccount(userName, password, host);
                     if (!result.failed()) {
-                        logger.log(Level.INFO, "Logging as: {0} with pass: {1}",
+                        logger.log(Level.FINE, "Logging as: {0} with pass: {1}",
                                 new Object[]{userName,
                                     (logger.isLoggable(Level.FINEST) ? password : "*******")});
                         login(userName, password);
@@ -368,7 +361,7 @@ public class MarauroaSimpleClient extends SimpleClient implements
     public static void setConfPath(String cP) {
         if (!extLoaded) {
             confPath = cP;
-            logger.log(Level.INFO, "Loading extensions from: {0}", confPath);
+            logger.log(Level.FINE, "Loading extensions from: {0}", confPath);
             if (extensionLoader == null) {
                 extensionLoader = new ExtensionXMLLoader();
                 try {
@@ -499,6 +492,13 @@ public class MarauroaSimpleClient extends SimpleClient implements
     }
 
     @Override
+    public void send(RPAction action) {
+        //This is just for debugging purposes
+        logger.log(Level.INFO, "Sending action: {0}", action);
+        super.send(action);
+    }
+
+    @Override
     public void sendPrivateText(String mess, String target) {
         RPAction action;
         action = new RPAction();
@@ -527,7 +527,7 @@ public class MarauroaSimpleClient extends SimpleClient implements
                     privateTextEvent.fill(event);
                     EventBus.getDefault().publish(privateTextEvent);
                 } else if (event.getName().equals(ZoneEvent.getRPClassName())) {
-                    logger.log(Level.INFO, ZoneEvent.getRPClassName());
+                    logger.log(Level.FINE, ZoneEvent.getRPClassName());
                     ZoneEvent zoneEvent = new ZoneEvent();
                     zoneEvent.fill(event);
                     EventBus.getDefault().publish(zoneEvent);
@@ -537,12 +537,14 @@ public class MarauroaSimpleClient extends SimpleClient implements
                     monitorEvent.fill(event);
                     EventBus.getDefault().publish(monitorEvent);
                 } else {
+                    logger.log(Level.WARNING,
+                            "No specific way of handling event: {0}", event);
                     //Non special events. If Interfaces are moved to Marauroa only this line will be needed
                     EventBus.getDefault().publish(new SimpleRPEvent(event));
                 }
             } else {
                 duplicateCounter++;
-                logger.log(Level.WARNING, "Ignoring duplicated event: {0}. "
+                logger.log(Level.FINE, "Ignoring duplicated event: {0}. "
                         + "{1} duplicates so far!", new Object[]{event, duplicateCounter});
             }
         } else {
@@ -565,7 +567,7 @@ public class MarauroaSimpleClient extends SimpleClient implements
     @Override
     public boolean onAdded(RPObject object) {
         if (object != null) {
-            logger.log(Level.INFO, "onAdded object: {0}", object.toAttributeString());
+            logger.log(Level.FINE, "onAdded object: {0}", object.toAttributeString());
             if (object.getInt("id") > 0) {
                 //Add it to the lookup
                 EventBus.getDefault().getCentralLookup().add(object);
@@ -583,6 +585,17 @@ public class MarauroaSimpleClient extends SimpleClient implements
         return true;
     }
 
+    @Override
+    public boolean onModifiedAdded(RPObject object, RPObject changes) {
+        if (object != null) {
+            if (itsMe(object)) {
+                processEvents(changes);
+                update();
+            }
+        }
+        return true;
+    }
+
     private void processEvents(RPObject object) {
         //Process Events
         if (!object.events().isEmpty()) {
@@ -590,6 +603,14 @@ public class MarauroaSimpleClient extends SimpleClient implements
                 processEvent(event);
             }
         }
+    }
+
+    private boolean itsMe(RPObject object) {
+        if (getPlayerRPC() != null && (object.get("id") == null
+                ? getPlayerRPC().get("id") == null : object.get("id").equals(getPlayerRPC().get("id")))) {
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -602,7 +623,7 @@ public class MarauroaSimpleClient extends SimpleClient implements
         }
         if (deleted != null) {
             id = deleted.getID();
-            logger.log(Level.INFO, "Do something with deleted: {0}", deleted);
+            logger.log(Level.FINE, "Do something with deleted: {0}", deleted);
             if (!deleted.events().isEmpty()) {
             }
         }
@@ -618,10 +639,22 @@ public class MarauroaSimpleClient extends SimpleClient implements
                 update();
             }
         }
+        perceptions++;
+        if (perceptions >= refreshAmount || perceptions == -1) {
+            logger.fine("Requesting zone update...");
+            //Ask for a zone refresher.
+            //We don't get information about other zones in the perception.
+            RPAction action = new RPAction();
+            action.put("type", ZoneExtension.TYPE);
+            action.put(ZoneExtension.OPERATION, ZoneExtension.LISTZONES);
+            action.put(ZoneExtension.SEPARATOR, "#");
+            send(action);
+            perceptions = 0;
+        }
         return true;
     }
 
-    private void update(){
+    private void update() {
         //Fill the lookup with objects already in the world
         EventBus.getDefault().clearLookup(RPObject.class);
         for (RPObject obj : world.getWorldObjects().values()) {
@@ -650,5 +683,10 @@ public class MarauroaSimpleClient extends SimpleClient implements
     @Override
     public RPObject getFromWorld(RPObject.ID id) {
         return world.getWorldObjects().get(id);
+    }
+
+    @Override
+    public void addRPEventListener(RPEvent event, RPEventListener l) {
+        getUserContext().registerRPEventListener(event, l);
     }
 }

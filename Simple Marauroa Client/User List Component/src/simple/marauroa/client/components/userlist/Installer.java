@@ -18,8 +18,8 @@ public class Installer extends ModuleInstall {
 
     @Override
     public void close() {
-        MCITool.getUserListManager().close();
         result.removeLookupListener(MCITool.getUserListManager());
         result = null;
+        MCITool.getUserListManager().close();
     }
 }

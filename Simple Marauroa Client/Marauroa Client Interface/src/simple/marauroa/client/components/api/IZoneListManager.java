@@ -1,5 +1,7 @@
 package simple.marauroa.client.components.api;
 
+import java.util.List;
+
 /**
  * This is a component that handles the zone addition and removal from the
  * world. It makes more sense for chat-like applications that have chat rooms
@@ -32,4 +34,21 @@ public interface IZoneListManager {
      * Need password to join room
      */
     public void requestPassword();
+    
+    /**
+     * Clear the list
+     */
+    public void clearList();
+    
+    /**
+     * Get the selected values
+     * @return selected values or null if none is selected
+     */
+    public List getSelectedValues();
+    
+    /**
+     * Get the selected value
+     * @return selected value or null if none is selected
+     */
+    public Object getSelectedValue();
 }

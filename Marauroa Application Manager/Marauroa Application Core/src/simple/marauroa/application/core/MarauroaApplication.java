@@ -297,7 +297,9 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
                 try {
                     ss.close();
                 } catch (IOException e) {
-                    /* should not be thrown */
+                    /*
+                     * should not be thrown
+                     */
                     logger.log(Level.SEVERE, null, e);
                 }
             }
@@ -338,7 +340,8 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
                 DialogDisplayer.getDefault().notifyLater(
                         new NotifyDescriptor.Message(NbBundle.getMessage(
                         MarauroaApplication.class,
-                        "add.application.unable.create.dir").replaceAll("%d", getAppDirPath()),
+                        "add.application.unable.create.dir").replaceAll("%d",
+                        getAppDirPath()),
                         NotifyDescriptor.ERROR_MESSAGE));
             } else {
                 //Set to true when something goes wrong so we can cleanup
@@ -453,10 +456,12 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
                 }
             }
             //Don't override key if already there
-            if ((!props.contains("n") || !props.contains("e") || !props.contains("d"))
-                    && (!custom.contains("n") || !custom.contains("e") || !custom.contains("d"))) {
+            if ((!props.contains("n") && !props.contains("e") && !props.contains("d"))
+                    && (!custom.contains("n") && !custom.contains("e") && !custom.contains("d"))) {
                 //Add RSA key
-                /* The size of the RSA Key in bits, usually 512 */
+                /*
+                 * The size of the RSA Key in bits, usually 512
+                 */
                 String keySize = "512";
                 OutputHandler.setStatus(NbBundle.getMessage(
                         MarauroaApplication.class,

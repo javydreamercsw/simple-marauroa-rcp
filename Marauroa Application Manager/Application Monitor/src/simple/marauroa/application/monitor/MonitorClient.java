@@ -39,7 +39,6 @@ public final class MonitorClient extends SimpleClient implements
     private String character;
     private String port, clientGameName, version;
     private marauroa.client.ClientFramework clientManager;
-    private SimplePerceptionHandler handler;
     private IMarauroaApplication application;
     private boolean running = false;
     private String client_name;
@@ -153,7 +152,6 @@ public final class MonitorClient extends SimpleClient implements
                         Logger.getLogger(MonitorClient.class.getSimpleName()).log(
                                 Level.INFO, "MonitorClient::onAvailableCharacters{0}", e);
                     }
-                    return;
                 }
             }
 
@@ -187,9 +185,7 @@ public final class MonitorClient extends SimpleClient implements
             client_name = getApplication().getName();
             version = getApplication().getVersion();
             world = new World();
-
-            handler = new SimplePerceptionHandler(dispatch, rpobjDispatcher,
-                    world, this);
+            handler = new SimplePerceptionHandler(dispatch, rpobjDispatcher, this);
             createClientManager(client_name != null ? client_name : "Simple",
                     version != null ? version : "0.02.03");
             return true;

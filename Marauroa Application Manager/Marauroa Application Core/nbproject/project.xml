@@ -121,8 +121,7 @@
             <public-packages>
                 <package>simple.marauroa.application.core</package>
                 <package>simple.marauroa.application.core.executor</package>
-                <package>simple.marauroa.application.core.node</package>
-                <package>simple.marauroa.application.editors</package>
+                <package>simple.marauroa.application.core.tool</package>
             </public-packages>
         </data>
     </configuration>
