@@ -1,9 +1,7 @@
 package simple.client.entity;
 
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map.Entry;
-import javax.swing.ImageIcon;
 import marauroa.common.Log4J;
 import marauroa.common.Logger;
 import marauroa.common.game.RPEvent;
