@@ -30,8 +30,9 @@ public class ZoneExtension extends SimpleServerExtension implements ActionListen
      * the logger instance.
      */
     private static final Logger logger = Log4J.getLogger(ZoneExtension.class);
-    public static final String TYPE = "CRUDRoom", ROOM = "room",
-            DESC = "description", OPERATION = "operation", PASSWORD = "password";
+    public static final String TYPE = "CRUDZone", ROOM = "room",
+            DESC = "description", OPERATION = "operation", PASSWORD = "password",
+            SEPARATOR = "separator";
     public static final int CREATE = 1, UPDATE = 2, DELETE = 3, LISTZONES = 4, JOIN = 5;
 
     @Override
@@ -44,6 +45,7 @@ public class ZoneExtension extends SimpleServerExtension implements ActionListen
     public void onAction(RPObject rpo, RPAction action) {
         if (rpo instanceof ClientObjectInterface) {
             ClientObjectInterface player = (ClientObjectInterface) rpo;
+            logger.info("Action requested by: "+rpo+", action: "+action);
             int op = action.getInt(OPERATION);
             try {
                 switch (op) {
@@ -73,21 +75,27 @@ public class ZoneExtension extends SimpleServerExtension implements ActionListen
     }
 
     private void create(ClientObjectInterface player, RPAction action) {
+        logger.info("Request for zone creation from: "
+                + player.getName() + ", zone: " + action.get(ROOM));
         SimpleRPWorld world = (SimpleRPWorld) SimpleSingletonRepository.get().get(SimpleRPWorld.class);
         //Make sure the zone doesn't exists!
         if (!world.hasRPZone(new ID(action.get(ROOM)))) {
             SimpleRPZone zone = new SimpleRPZone(action.get(ROOM));
             if (action.get(DESC) != null && !action.get(DESC).isEmpty()) {
+                logger.info("Setting description: " + action.get(DESC));
                 zone.setDescription(action.get(DESC));
             }
             if (action.get(PASSWORD) != null && !action.get(PASSWORD).isEmpty()) {
                 try {
+                    logger.info("Setting password: " + action.get(PASSWORD));
                     zone.setPassword(action.get(PASSWORD));
                 } catch (IOException ex) {
                     logger.error(ex);
                 }
             }
+            logger.info("Adding zone to the world...");
             world.addRPZone(zone);
+            logger.info("Moving player to created zone...");
             world.changeZone(action.get(ROOM), (RPObject) player);
         } else {
             player.sendPrivateText(NotificationType.PRIVMSG, "Sorry, that room already exists!");
@@ -159,8 +167,18 @@ public class ZoneExtension extends SimpleServerExtension implements ActionListen
 
     private void list(ClientObjectInterface player, int option, RPAction a) {
         try {
-            ((RPObject) player).addEvent(
-                    new ZoneEvent(SimpleSingletonRepository.get().get(SimpleRPWorld.class).listZones("#").toString(), option));
+            logger.debug("Request for zone list from: " + player.getName());
+            String separator = "#";
+            if (a.has(SEPARATOR)) {
+                if (a.get(SEPARATOR) != null && !a.get(SEPARATOR).isEmpty()) {
+                    separator = a.get(SEPARATOR);
+                    logger.debug("Separator requested: " + separator);
+                }
+            }
+            String list = SimpleSingletonRepository.get().get(
+                    SimpleRPWorld.class).listZones(separator).toString();
+            logger.debug("Zone List: " + list);
+            ((RPObject) player).addEvent(new ZoneEvent(list, option));
             player.notifyWorldAboutChanges();
         } catch (Exception ex) {
             logger.fatal(null, ex);

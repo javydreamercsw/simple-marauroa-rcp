@@ -26,6 +26,7 @@ import simple.server.core.entity.item.Item;
 import simple.server.core.event.MonitorEvent;
 import simple.server.core.event.PrivateTextEvent;
 import simple.server.core.event.TextEvent;
+import simple.server.core.event.ZoneEvent;
 
 public class SimpleRPWorld extends RPWorld {
 
@@ -242,6 +243,14 @@ public class SimpleRPWorld extends RPWorld {
         return rooms;
     }
 
+    @Override
+    public void addRPZone(IRPZone zone) {
+        super.addRPZone(zone);
+        //Let everyone know
+        logger.info("Notifying everyone about the creation of zone: " + zone.getID());
+        applyPublicEvent(new ZoneEvent((SimpleRPZone) zone, ZoneEvent.ADD));
+    }
+
     public void addZone(String name) {
         addZone(name, "");
     }
@@ -253,6 +262,8 @@ public class SimpleRPWorld extends RPWorld {
                 zone.setDescription(description);
             }
             addRPZone(zone);
+        } else {
+            logger.warn("Request to add an already existing zone: " + name);
         }
     }
 
@@ -307,6 +318,10 @@ public class SimpleRPWorld extends RPWorld {
         }
         logger.debug("Unable to find player:" + target + "!");
         return false;
+    }
+
+    public boolean applyPublicEvent(RPEvent event) {
+        return applyPublicEvent(null, event);
     }
 
     public boolean applyPublicEvent(SimpleRPZone zone, RPEvent event) {
