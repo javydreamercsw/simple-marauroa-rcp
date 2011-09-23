@@ -9,15 +9,15 @@
     
     <target name="init" depends="init-netbeans, init-hudson, harness.init">
         <if>
-            <available file="../../Simple-Client/build.xml" type="file" />
+            <available file="../../Simple Marauroa Java/Simple-Client/build.xml" type="file" />
             <then>
-                <property file="../../Simple-Client/nbproject/project.properties" prefix="client-lib"/>
+                <property file="../../Simple Marauroa Java/Simple-Client/nbproject/project.properties" prefix="client-lib"/>
                 <length string="${client-lib.dist.dir}" property="length.dist" />
                 <length string="${client-lib.dist.jar}" property="length.dist.jar" />
                 <substring text="${client-lib.dist.jar}" start="${length.dist}" end="${length.dist.jar}" property="client-lib.dist.jar" />
-                <ant antfile="../../Simple-Client/build.xml" target="clean" inheritall="false" />
-                <ant antfile="../../Simple-Client/build.xml" target="jar" inheritall="false" />
-                <copy file="../../Simple-Client/dist/${client-lib.dist.jar}" tofile="release/modules/ext/${client-lib.dist.jar}"/>
+                <ant antfile="../../Simple Marauroa Java/Simple-Client/build.xml" target="clean" inheritall="false" />
+                <ant antfile="../../Simple Marauroa Java/Simple-Client/build.xml" target="jar" inheritall="false" />
+                <copy file="../../Simple Marauroa Java/Simple-Client/dist/${client-lib.dist.jar}" tofile="release/modules/ext/${client-lib.dist.jar}"/>
                 <antcall target="harness.init"/>
             </then>
         </if>
