@@ -1,12 +1,12 @@
 package simple.client.event;
 
+import marauroa.common.game.RPEvent;
+import simple.client.ChatScreenInterface;
+import simple.client.SimpleClient;
 import simple.client.event.listener.RPEventListener;
 import simple.common.NotificationType;
 import simple.server.core.event.PrivateTextEvent;
 import simple.server.core.event.TextEvent;
-import marauroa.common.game.RPEvent;
-import simple.client.ChatScreenInterface;
-import simple.client.SimpleClient;
 
 /**
  *

@@ -59,10 +59,6 @@ public class DefaultMarauroaProcess implements IMarauroaProcess {
                         commands.add(st.nextToken());
                     }
                 }
-                for (int i = 0; i < commands.size(); i++) {
-                    Logger.getLogger(DefaultMarauroaProcess.class.getSimpleName()).debug(
-                            commands.get(i));
-                }
                 ProcessBuilder pb = new ProcessBuilder(commands);
                 pb.directory(new File(app.getApplicationPath()));
                 pb.redirectErrorStream(true);

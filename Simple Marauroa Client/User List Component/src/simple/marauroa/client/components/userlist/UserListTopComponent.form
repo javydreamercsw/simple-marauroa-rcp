@@ -48,7 +48,7 @@
             </Property>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="            playerList.setModel(new javax.swing.AbstractListModel() {&#xa;                &#xa;                @Override&#xa;                public int getSize() {&#xa;                    return players.size();&#xa;                }&#xa;                &#xa;                @Override&#xa;                public Object getElementAt(int i) {&#xa;                    return players.get(i);&#xa;                }&#xa;            });"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="            updateModel();"/>
           </AuxValues>
         </Component>
       </SubComponents>

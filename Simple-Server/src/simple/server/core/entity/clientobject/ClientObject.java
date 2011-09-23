@@ -616,7 +616,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
         player.isA("rpentity");
         //This is the assigned key for encryption purposes on the client
         player.addAttribute(KEY, Type.LONG_STRING, Definition.PRIVATE);
-        player.addRPEvent("text", Definition.VOLATILE);
+        player.addRPEvent(TextEvent.getRPClassName(), Definition.VOLATILE);
         /*
          * Add event
          * player.addRPEvent("<Event RPClassName>", Definition.VOLATILE);

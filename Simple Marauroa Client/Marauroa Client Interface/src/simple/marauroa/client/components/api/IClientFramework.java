@@ -5,8 +5,10 @@ import marauroa.client.BannedAddressException;
 import marauroa.client.LoginFailedException;
 import marauroa.client.TimeoutException;
 import marauroa.common.game.AccountResult;
+import marauroa.common.game.RPEvent;
 import marauroa.common.game.RPObject;
 import marauroa.common.net.InvalidVersionException;
+import simple.client.event.listener.RPEventListener;
 
 /**
  *
@@ -161,4 +163,11 @@ public interface IClientFramework extends Runnable{
      * @return RPObject with that id or null if not found
      */
     public RPObject getFromWorld(RPObject.ID id);
+    
+    /**
+     * Add RPEvent listener
+     * @param event
+     * @param l
+     */
+    public void addRPEventListener(RPEvent event, RPEventListener l);
 }

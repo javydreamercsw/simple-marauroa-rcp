@@ -5,19 +5,19 @@ import java.util.Map;
 import marauroa.common.Log4J;
 import marauroa.common.Logger;
 
-public abstract class SimpleClientExtension {
+public abstract class SimpleClientExtension implements ClientExtension {
 
     /** the logger instance. */
     private static final Logger logger = Log4J.getLogger(SimpleClientExtension.class);
     /** Lists the instances of the loaded extensions. */
     private static Map<String, SimpleClientExtension> loadedInstances = new HashMap<String, SimpleClientExtension>();
 
-    public abstract void init();
-
+    @Override
     public synchronized boolean perform(String name) {
         return (false);
     }
 
+    @Override
     public String getMessage(String name) {
         return (null);
     }

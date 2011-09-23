@@ -1,11 +1,7 @@
 package simple.client.entity;
 
-import simple.client.SimpleClient;
-import simple.client.event.listener.RPEventListener;
-import simple.client.event.listener.RPEventNotifier;
 import java.net.URL;
 import java.util.HashMap;
-
 import java.util.Map.Entry;
 import javax.swing.ImageIcon;
 import marauroa.common.Log4J;
@@ -13,13 +9,16 @@ import marauroa.common.Logger;
 import marauroa.common.game.RPEvent;
 import marauroa.common.game.RPObject;
 import simple.client.RPObjectChangeListener;
+import simple.client.SimpleClient;
+import simple.client.event.listener.RPEventListener;
+import simple.client.event.listener.RPEventNotifier;
 import simple.client.gui.GameObjects;
 
 /**
  * The player user context. This class holds/manages the data for the user of
- * this client. This is independent of any on-screen representation ClientEntity 
+ * this client. This is independent of any on-screen representation ClientEntity
  * that, while related, serves an entirely different purpose.
- * 
+ *
  * Currently this is just a helper class for jWrestlingClient. Maybe it will be
  * directly used by other code later.
  */
@@ -29,8 +28,6 @@ public class UserContext implements RPObjectChangeListener {
      * The logger.
      */
     private static final Logger logger = Log4J.getLogger(UserContext.class);
-    private final String smileyPath = "/games/jwrestling/resources/smileys/";
-    private static HashMap<String, String> smileys = new HashMap<String, String>();
     /**
      * The currently known buddies.
      */
@@ -59,7 +56,6 @@ public class UserContext implements RPObjectChangeListener {
      * The player client.
      */
     protected SimpleClient client;
-    private boolean inited = false;
 
     /**
      * Constructor.
@@ -73,7 +69,6 @@ public class UserContext implements RPObjectChangeListener {
         name = null;
         buddies = new HashMap<String, Boolean>();
         features = new HashMap<String, String>();
-        init();
     }
 
     /**
@@ -322,76 +317,5 @@ public class UserContext implements RPObjectChangeListener {
         }
         object.clearEvents();
         return object;
-    }
-
-    private void init() {
-        if (!inited) {
-            logger.debug("Init UserContext.");
-            addSmiley(":-)", "happy.gif");
-            addSmiley(":-(", "sad.gif");
-            addSmiley(":-o", "surprise.gif");
-            addSmiley(":-d", "smile.gif");
-            addSmiley(":-p", "tongue.gif");
-            addSmiley(":-i", "no-expression.gif");
-            addSmiley(";-)", "wink.gif");
-            addSmiley(">-@", "mad.gif");
-            addSmiley("8-)", "cool.gif");
-            addSmiley(":'-(", "tear.gif");
-            addSmiley("(y)", "yes.gif");
-            addSmiley("(n)", "no.gif");
-            addSmiley("lol", "LOL.gif");
-            addSmiley(":-$", "shhhh.gif");
-            addSmiley("brb", "BRB.gif");
-            inited = true;
-        }
-    }
-
-    private void addSmiley(String s, String imagePath) {
-        if (s.contains("-")) {
-            logger.debug("Adding: " + s.toLowerCase().replaceAll("-", "")
-                    + ": " + imagePath);
-            smileys.put(s.toLowerCase().replaceAll("-", ""), smileyPath
-                    + imagePath);
-        }
-        logger.debug("Adding: " + s + ": " + imagePath);
-        smileys.put(s.toLowerCase(), smileyPath + imagePath);
-    }
-
-    /**
-     *
-     * @param txt
-     * @return
-     */
-    public boolean isSmiley(String txt) {
-        return smileys.containsKey(txt.toLowerCase()) && smileys.get(txt) != null;
-    }
-
-    /**
-     *
-     * @param txt
-     * @return
-     */
-    public ImageIcon getSmiley(String txt) {
-        init();
-        if (isSmiley(txt)) {
-            return loadImage(smileys.get(txt.toLowerCase()));
-        }
-        return null;
-    }
-
-    private ImageIcon loadImage(String image_name) {
-        URL image_url = null;
-        try {
-            image_url = getClass().getResource(image_name);
-            if (image_url != null) {
-                return new ImageIcon(image_url);
-            } else {
-                return null;
-            }
-        } catch (Exception e) {
-            return null;
-        } finally {
-            image_url = null;
-        }
     }
 }

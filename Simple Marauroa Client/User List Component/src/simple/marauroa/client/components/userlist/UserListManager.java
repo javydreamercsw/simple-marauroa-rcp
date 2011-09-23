@@ -67,7 +67,7 @@ public class UserListManager implements IUserListComponent {
         Lookup.Result r = (Lookup.Result) le.getSource();
         Collection c = r.allInstances();
         if (c.isEmpty() || size > c.size()) {
-            logger.info("Someone got removed, clear the list and start over");
+            logger.fine("Some one got removed, clear the list and start over");
             getInstance().clearList();
         }
         //Repopulate

@@ -51,18 +51,7 @@ public final class UserListTopComponent extends TopComponent {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         playerList = new javax.swing.JList();
-        playerList.setModel(new javax.swing.AbstractListModel() {
-
-            @Override
-            public int getSize() {
-                return players.size();
-            }
-
-            @Override
-            public Object getElementAt(int i) {
-                return players.get(i);
-            }
-        });
+        updateModel();
 
         jScrollPane1.setViewportView(playerList);
 
@@ -112,7 +101,7 @@ public final class UserListTopComponent extends TopComponent {
         }
         if (player != null && !players.contains(player)) {
             Logger.getLogger(UserListTopComponent.class.getSimpleName()).log(
-                    Level.INFO, "Request to add player: {0}", player);
+                    Level.FINE, "Request to add player: {0}", player);
             players.add(player);
             //Sort it
             Collections.sort(players);
