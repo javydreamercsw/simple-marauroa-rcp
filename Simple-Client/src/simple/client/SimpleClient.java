@@ -27,8 +27,8 @@ import simple.server.core.event.TextEvent;
 
 /**
  *
- * @author Javier A. Ortiz <javier.ortiz.78@gmail.com> 
- * A base class for the Simple client UI (not GUI).
+ * @author Javier A. Ortiz <javier.ortiz.78@gmail.com> A base class for the
+ * Simple client UI (not GUI).
  *
  * This should have minimal UI-implementation dependent code. That's what
  * sub-classes are for!
@@ -82,8 +82,7 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
         pto.setObjectFactory(new ObjectFactory());
         dispatch.register(pto);
         dispatch.register(SimpleClient.this);
-        handler = new SimplePerceptionHandler(dispatch, rpobjDispatcher,
-                world, this);
+        handler = new SimplePerceptionHandler(dispatch, rpobjDispatcher, this);
         //**************************
     }
 
