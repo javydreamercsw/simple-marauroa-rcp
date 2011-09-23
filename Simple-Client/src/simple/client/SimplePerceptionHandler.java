@@ -15,19 +15,16 @@ public class SimplePerceptionHandler extends PerceptionHandler implements IPerce
 
     private final PerceptionDispatcher dispatch;
     private RPObjectChangeDispatcher rpobjDispatcher;
-    private World world;
     private SimpleClient client;
     private static final Logger logger =
             Logger.getLogger(SimplePerceptionHandler.class.getSimpleName());
 
     public SimplePerceptionHandler(PerceptionDispatcher dispatch,
-            RPObjectChangeDispatcher rpobjDispatcher,
-            World world, SimpleClient client) {
+            RPObjectChangeDispatcher rpobjDispatcher, SimpleClient client) {
         super(dispatch);
         this.dispatch = dispatch;
         this.rpobjDispatcher = rpobjDispatcher;
         this.client = client;
-        this.world = world;
         //Register itself so the methods below are executed.
         this.dispatch.register(SimplePerceptionHandler.this);
     }
