@@ -7,6 +7,7 @@ package simple.marauroa.application.core;
  *
  * @author Javier A. Ortiz Bultrón <javier.ortiz.78@gmail.com>
  */
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.openide.util.Lookup;
@@ -16,6 +17,7 @@ import org.openide.util.LookupListener;
 public class ListenerAdapter<T> implements LookupListener {
 
     private final EventBusListener eventBusListener;
+    private int size;
     private static final Logger logger =
             Logger.getLogger(ListenerAdapter.class.getSimpleName());
 
@@ -26,16 +28,24 @@ public class ListenerAdapter<T> implements LookupListener {
     @Override
     public void resultChanged(final LookupEvent event) {
         final Lookup.Result result = (Lookup.Result) event.getSource();
-        if (!result.allInstances().isEmpty()) {
-            if (result.allInstances().size() > 1) {
-                logger.log(Level.WARNING, 
-                        "More than one listener for this event: {0}."
-                        + "This is not handled by EventBusListener.", 
-                        result.allInstances().size());
+        int newSize = result.allInstances().size();
+        logger.log(Level.INFO, "{0} = {1}?",
+                    new Object[]{size, newSize});
+        if (!result.allInstances().isEmpty() && newSize > size) {
+            //There's something to add
+            Iterator iterator = result.allInstances().iterator();
+            logger.log(Level.INFO, "Notifying {0} listeners!",
+                    result.allInstances().size());
+            while (iterator.hasNext()) {
+                Object listener = iterator.next();
+                logger.log(Level.FINE, listener.getClass().getCanonicalName());
+                eventBusListener.notify((T) listener);
             }
-            eventBusListener.notify((T) result.allInstances().iterator().next());
         } else {
+            //If new size is less, someone got removed.
+            logger.info("Notifying something got removed (null)");
             eventBusListener.notify(null);
         }
+        size = newSize;
     }
 }
