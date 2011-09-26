@@ -4,6 +4,7 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.beans.IntrospectionException;
 import java.beans.PropertyChangeSupport;
+import java.net.MalformedURLException;
 import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -14,7 +15,6 @@ import org.openide.actions.DeleteAction;
 import org.openide.nodes.BeanNode;
 import org.openide.nodes.Children;
 import org.openide.util.Exceptions;
-import org.openide.util.ImageUtilities;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.openide.util.actions.SystemAction;
@@ -22,10 +22,11 @@ import org.openide.util.lookup.Lookups;
 import simple.marauroa.application.api.ApplicationStatusChangeListener;
 import simple.marauroa.application.api.IDiagramManager;
 import simple.marauroa.application.api.IMarauroaApplication;
+import simple.marauroa.application.api.STATUS;
 import simple.marauroa.application.core.MarauroaApplication;
 import simple.marauroa.application.core.MarauroaApplicationRepository;
 import simple.marauroa.application.core.MonitorService;
-import simple.marauroa.application.api.STATUS;
+import simple.marauroa.application.core.tool.Tool;
 import simple.marauroa.application.gui.dialog.AddRPZoneDialog;
 
 /**
@@ -46,15 +47,21 @@ public class MarauroaApplicationNode extends BeanNode implements ApplicationStat
         setDisplayName(application.toStringForDisplay());
         this.application = application;
         application.setStatus(STATUS.STOPPED);
-        application.addStatusListener(this);
+        application.addStatusListener(MarauroaApplicationNode.this);
     }
 
     @Override
     public Image getIcon(int type) {
         Image icon = getMarauroaApplication().getIcon(type);
         if (icon == null) {
-            icon = ImageUtilities.loadImage(
-                    "simple/marauroa/application/gui/resource/app.png");
+            try {
+                icon = Tool.createImage("simple.marauroa.application.gui",
+                        "resources/images/app.png", "App icon");
+            } catch (MalformedURLException ex) {
+                Exceptions.printStackTrace(ex);
+            } catch (Exception ex) {
+                Exceptions.printStackTrace(ex);
+            }
         }
         return icon;
     }
