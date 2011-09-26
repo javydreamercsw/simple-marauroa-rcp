@@ -1,25 +1,25 @@
 package simple.marauroa.client.components.userlist;
 
+import java.util.logging.Logger;
 import marauroa.common.game.RPObject;
 import org.openide.modules.ModuleInstall;
-import org.openide.util.Lookup;
 import simple.marauroa.application.core.EventBus;
 import simple.marauroa.client.components.common.MCITool;
 
 public class Installer extends ModuleInstall {
-
-    private Lookup.Result result = null;
-
+private static final Logger logger =
+            Logger.getLogger(Installer.class.getCanonicalName());
     @Override
     public void restored() {
-        result = EventBus.getDefault().getCentralLookup().lookupResult(RPObject.class);
-        result.addLookupListener(MCITool.getUserListManager());
+        logger.fine("Subscribing ZoneEventManager");
+        //Register
+        EventBus.getDefault().subscribe(RPObject.class, MCITool.getUserListManager());
     }
 
     @Override
     public void close() {
-        result.removeLookupListener(MCITool.getUserListManager());
-        result = null;
-        MCITool.getUserListManager().close();
+        logger.fine("Subscribing ZoneEventManager");
+        //Register
+        EventBus.getDefault().subscribe(RPObject.class, MCITool.getUserListManager());
     }
 }

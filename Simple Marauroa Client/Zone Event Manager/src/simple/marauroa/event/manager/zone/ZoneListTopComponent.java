@@ -10,10 +10,8 @@ import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.util.NbBundle;
-import org.openide.util.lookup.ServiceProvider;
 import org.openide.windows.TopComponent;
 import simple.marauroa.application.core.tool.Tool;
-import simple.marauroa.client.components.api.IZoneListManager;
 import simple.marauroa.client.components.common.MCITool;
 import simple.marauroa.event.manager.zone.dialog.ZoneDialog;
 import simple.server.extension.ZoneExtension;
@@ -33,8 +31,7 @@ persistenceType = TopComponent.PERSISTENCE_NEVER)
  */)
 @TopComponent.OpenActionRegistration(displayName = "#CTL_ZoneListAction",
 preferredID = "ZoneListTopComponent")
-public final class ZoneListTopComponent extends TopComponent
-        implements IZoneListManager {
+public final class ZoneListTopComponent extends TopComponent{
 
     final ArrayList<String> zones = new ArrayList<String>();
     private ZoneDialog crd = null;
@@ -203,7 +200,6 @@ public final class ZoneListTopComponent extends TopComponent
         // TODO read your settings according to their version
     }
 
-    @Override
     public void addZone(String zone) {
         if (!zones.contains(zone)) {
             zones.add(zone);
@@ -211,7 +207,6 @@ public final class ZoneListTopComponent extends TopComponent
         }
     }
 
-    @Override
     public void removeZone(String zone) {
         if (zones.contains(zone)) {
             zones.remove(zone);
@@ -219,7 +214,6 @@ public final class ZoneListTopComponent extends TopComponent
         }
     }
 
-    @Override
     public void updateZone(String zone, String modified) {
         if (zones.contains(zone)) {
             removeZone(zone);
@@ -228,7 +222,6 @@ public final class ZoneListTopComponent extends TopComponent
         }
     }
 
-    @Override
     public void requestPassword() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -249,7 +242,6 @@ public final class ZoneListTopComponent extends TopComponent
         });
     }
 
-    @Override
     public void clearList() {
         zones.clear();
         updateModel();
@@ -270,12 +262,10 @@ public final class ZoneListTopComponent extends TopComponent
         return crd;
     }
 
-    @Override
     public List getSelectedValues() {
         return zoneList.getSelectedValuesList();
     }
 
-    @Override
     public Object getSelectedValue() {
         return zoneList.getSelectedValue();
     }

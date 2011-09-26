@@ -656,12 +656,12 @@ public class MarauroaSimpleClient extends SimpleClient implements
 
     private void update() {
         //Fill the lookup with objects already in the world
-        EventBus.getDefault().clearLookup(RPObject.class);
-        for (RPObject obj : world.getWorldObjects().values()) {
-            if (obj.getInt("id") > 0) {
-                EventBus.getDefault().getCentralLookup().add(obj);
-            }
-        }
+//        EventBus.getDefault().clearLookup(RPObject.class);
+//        for (RPObject obj : world.getWorldObjects().values()) {
+//            if (obj.getInt("id") > 0) {
+//                EventBus.getDefault().getCentralLookup().add(obj);
+//            }
+//        }
     }
 
     /**
