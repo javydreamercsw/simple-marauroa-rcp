@@ -34,8 +34,6 @@ public class LookupRPObjectManager {
                 return;
             }
         }
-        //Hopefully this works
-        lookup.remove(object);
     }
 
     /**
