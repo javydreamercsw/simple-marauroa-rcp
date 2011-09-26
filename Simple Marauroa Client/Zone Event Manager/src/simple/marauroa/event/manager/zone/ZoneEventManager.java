@@ -6,7 +6,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.openide.util.lookup.ServiceProvider;
 import org.openide.windows.TopComponent;
-import simple.marauroa.application.core.EventBusListener;
 import simple.marauroa.client.components.api.IZoneListManager;
 import simple.marauroa.client.components.common.MCITool;
 import simple.server.core.event.ZoneEvent;
@@ -17,7 +16,7 @@ import simple.server.core.event.api.IZoneEvent;
  * @author Javier A. Ortiz <javier.ortiz.78@gmail.com>
  */
 @ServiceProvider(service = IZoneListManager.class)
-public class ZoneEventManager implements EventBusListener<IZoneEvent>, IZoneListManager {
+public class ZoneEventManager implements IZoneListManager {
 
     private static final Logger logger =
             Logger.getLogger(ZoneEventManager.class.getSimpleName());

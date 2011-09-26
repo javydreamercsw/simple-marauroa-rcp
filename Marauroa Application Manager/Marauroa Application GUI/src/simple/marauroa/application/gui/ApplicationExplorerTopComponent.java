@@ -1,5 +1,6 @@
 package simple.marauroa.application.gui;
 
+//import org.openide.util.ImageUtilities;
 import java.awt.BorderLayout;
 import java.beans.IntrospectionException;
 import java.io.IOException;
@@ -8,10 +9,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ActionMap;
 import javax.swing.text.DefaultEditorKit;
-import org.openide.util.Exceptions;
-import org.openide.util.NbBundle.Messages;
-import org.openide.windows.TopComponent;
-//import org.openide.util.ImageUtilities;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -19,6 +16,9 @@ import org.openide.explorer.ExplorerManager;
 import org.openide.explorer.ExplorerUtils;
 import org.openide.explorer.view.BeanTreeView;
 import org.openide.filesystems.FileUtil;
+import org.openide.util.Exceptions;
+import org.openide.util.NbBundle.Messages;
+import org.openide.windows.TopComponent;
 import simple.marauroa.application.api.IMarauroaApplication;
 import simple.marauroa.application.core.EventBus;
 import simple.marauroa.application.core.EventBusListener;

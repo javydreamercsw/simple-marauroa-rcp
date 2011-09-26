@@ -1,14 +1,12 @@
 package simple.marauroa.client.components.userlist;
 
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JList;
 import marauroa.common.game.RPObject;
-import org.openide.util.Lookup;
-import org.openide.util.LookupEvent;
 import org.openide.util.lookup.ServiceProvider;
 import org.openide.windows.TopComponent;
+import simple.marauroa.application.core.EventBus;
 import simple.marauroa.client.components.api.IUserListComponent;
 
 /**
@@ -19,7 +17,6 @@ import simple.marauroa.client.components.api.IUserListComponent;
 public class UserListManager implements IUserListComponent {
 
     private static UserListTopComponent instance;
-    private int size = 0;
     private static final Logger logger =
             Logger.getLogger(UserListManager.class.getSimpleName());
 
@@ -37,6 +34,7 @@ public class UserListManager implements IUserListComponent {
 
     @Override
     public void addPlayer(RPObject p) {
+        logger.log(Level.FINE, "Adding player: {0}", p.get("name"));
         getInstance().addPlayer(p);
     }
 
@@ -63,21 +61,14 @@ public class UserListManager implements IUserListComponent {
     }
 
     @Override
-    public void resultChanged(LookupEvent le) {
-        Lookup.Result r = (Lookup.Result) le.getSource();
-        Collection c = r.allInstances();
-        if (c.isEmpty() || size > c.size()) {
+    public void notify(RPObject object) {
+        if (object != null) {
+            addPlayer(object);
+        } else {
             logger.fine("Some one got removed, clear the list and start over");
             getInstance().clearList();
-        }
-        //Repopulate
-        if (!c.isEmpty()) {
-            size = c.size();
-            Iterator iterator = c.iterator();
-            //Reset
-            while (iterator.hasNext()) {
-                RPObject object = (RPObject) iterator.next();
-                addPlayer(object);
+            for (RPObject entity : EventBus.getDefault().lookupAll(RPObject.class)) {
+                addPlayer(entity);
             }
         }
     }

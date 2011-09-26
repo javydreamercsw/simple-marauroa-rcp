@@ -1,6 +1,8 @@
 package simple.marauroa.client.components.api;
 
 import java.util.List;
+import simple.marauroa.application.core.EventBusListener;
+import simple.server.core.event.api.IZoneEvent;
 
 /**
  * This is a component that handles the zone addition and removal from the
@@ -9,7 +11,7 @@ import java.util.List;
  *
  * @author Javier A. Ortiz <javier.ortiz.78@gmail.com>
  */
-public interface IZoneListManager {
+public interface IZoneListManager extends EventBusListener<IZoneEvent>{
 
     /**
      * Add a zone

@@ -29,12 +29,10 @@ public class ListenerAdapter<T> implements LookupListener {
     public void resultChanged(final LookupEvent event) {
         final Lookup.Result result = (Lookup.Result) event.getSource();
         int newSize = result.allInstances().size();
-        logger.log(Level.INFO, "{0} = {1}?",
-                    new Object[]{size, newSize});
         if (!result.allInstances().isEmpty() && newSize > size) {
             //There's something to add
             Iterator iterator = result.allInstances().iterator();
-            logger.log(Level.INFO, "Notifying {0} listeners!",
+            logger.log(Level.FINE, "Notifying {0} listeners!",
                     result.allInstances().size());
             while (iterator.hasNext()) {
                 Object listener = iterator.next();
@@ -43,7 +41,7 @@ public class ListenerAdapter<T> implements LookupListener {
             }
         } else {
             //If new size is less, someone got removed.
-            logger.info("Notifying something got removed (null)");
+            logger.fine("Notifying something got removed (null)");
             eventBusListener.notify(null);
         }
         size = newSize;
