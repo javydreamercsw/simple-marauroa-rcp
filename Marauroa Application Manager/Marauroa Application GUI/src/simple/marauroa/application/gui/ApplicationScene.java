@@ -2,11 +2,8 @@ package simple.marauroa.application.gui;
 
 import java.awt.Image;
 import java.awt.Point;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+import java.net.MalformedURLException;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -26,6 +23,7 @@ import org.netbeans.api.visual.widget.LabelWidget;
 import org.netbeans.api.visual.widget.LayerWidget;
 import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.api.visual.widget.general.IconNodeWidget;
+import org.openide.util.Exceptions;
 import org.openide.util.ImageUtilities;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
@@ -34,6 +32,7 @@ import simple.marauroa.application.api.IDataBase;
 import simple.marauroa.application.api.IDiagramManager;
 import simple.marauroa.application.api.IMarauroaApplication;
 import simple.marauroa.application.core.MarauroaApplicationRepository;
+import simple.marauroa.application.core.tool.Tool;
 
 /**
  *
@@ -49,17 +48,35 @@ public class ApplicationScene extends GraphScene implements IDiagramManager {
     private ArrayList<LayerWidget> layersToClear = new ArrayList<LayerWidget>();
     private HashMap<String, Widget> widgets = new HashMap<String, Widget>();
     public final String SERVER = "Server", ZONE = "Zone", OBJECT = "Object";
-    private Image serverImg = ImageUtilities.icon2Image(new ImageIcon(getClass().getResource("resource/arianne.png")));
-    private Image zoneImg = ImageUtilities.icon2Image(new ImageIcon(getClass().getResource("resource/zone.png")));
-    private Image objectImg = ImageUtilities.icon2Image(new ImageIcon(getClass().getResource("resource/entity.png")));
+    private Image serverImg;
+    private Image zoneImg;
+    private Image objectImg;
     private WidgetAction editorAction = ActionFactory.createInplaceEditorAction(new LabelTextFieldEditor());
     private final HashMap<String, Image> mapping;
 
     {
         mapping = new HashMap<String, Image>();
-        mapping.put(SERVER, serverImg);
-        mapping.put(ZONE, zoneImg);
-        mapping.put(OBJECT, objectImg);
+        try {
+            serverImg = ImageUtilities.icon2Image(
+                    new ImageIcon(Tool.createImage(
+                    "simple.marauroa.application.gui",
+                    "resources/images/arianne.png", "Arianne icon")));
+            zoneImg = ImageUtilities.icon2Image(
+                    new ImageIcon(Tool.createImage(
+                    "simple.marauroa.application.gui",
+                    "resources/images/zone.png", "Zone icon")));
+            objectImg = ImageUtilities.icon2Image(
+                    new ImageIcon(Tool.createImage(
+                    "simple.marauroa.application.gui",
+                    "resources/images/entity.png", "Entity icon")));
+            mapping.put(SERVER, serverImg);
+            mapping.put(ZONE, zoneImg);
+            mapping.put(OBJECT, objectImg);
+        } catch (MalformedURLException ex) {
+            Exceptions.printStackTrace(ex);
+        } catch (Exception ex) {
+            Exceptions.printStackTrace(ex);
+        }
     }
 
     @Override

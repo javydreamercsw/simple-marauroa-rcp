@@ -3,11 +3,13 @@ package simple.marauroa.application.gui;
 import java.awt.Image;
 import java.beans.IntrospectionException;
 import java.beans.PropertyChangeSupport;
+import java.net.MalformedURLException;
 import marauroa.common.game.IRPZone;
 import org.openide.nodes.BeanNode;
 import org.openide.nodes.Children;
-import org.openide.util.ImageUtilities;
+import org.openide.util.Exceptions;
 import org.openide.util.lookup.Lookups;
+import simple.marauroa.application.core.tool.Tool;
 
 /**
  *
@@ -28,7 +30,16 @@ public class RPZoneNode extends BeanNode {
 
     @Override
     public Image getIcon(int type) {
-        return ImageUtilities.loadImage("simple/marauroa/application/gui/resource/zone.png");
+        Image icon = null;
+        try {
+            icon = Tool.createImage("simple.marauroa.application.gui",
+                    "resources/images/zone.png", "Zone icon");
+        } catch (MalformedURLException ex) {
+            Exceptions.printStackTrace(ex);
+        } catch (Exception ex) {
+            Exceptions.printStackTrace(ex);
+        }
+        return icon;
     }
 
     @Override

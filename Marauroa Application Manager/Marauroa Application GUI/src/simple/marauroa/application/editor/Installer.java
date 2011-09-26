@@ -1,23 +1,14 @@
 package simple.marauroa.application.editor;
 
-import java.awt.AWTException;
-import java.awt.Image;
-import java.awt.MenuItem;
-import java.awt.PopupMenu;
-import java.awt.SystemTray;
-import java.awt.TrayIcon;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyEditorManager;
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Arrays;
-import javax.swing.ImageIcon;
-import org.openide.modules.InstalledFileLocator;
 import org.openide.modules.ModuleInstall;
 import org.openide.util.Exceptions;
 import org.openide.windows.WindowManager;
+import simple.marauroa.application.core.tool.Tool;
 
 /**
  * Manages a module's lifecycle. Remember that an installer is optional and
@@ -55,7 +46,9 @@ public class Installer extends ModuleInstall implements ActionListener {
                     } else {
                         try {
                             final PopupMenu popup = new PopupMenu();
-                            final TrayIcon trayIcon = new TrayIcon(createImage("taskbarIcon.png",
+                            final TrayIcon trayIcon = new TrayIcon(Tool.createImage(
+                                    "simple.marauroa.application.gui",
+                                    "resources/images/taskbarIcon.png",
                                     "tray icon"));
                             final SystemTray tray = SystemTray.getSystemTray();
 
@@ -81,20 +74,6 @@ public class Installer extends ModuleInstall implements ActionListener {
                     }
                 }
             });
-        }
-    }
-
-    //Obtain the image URL
-    protected static Image createImage(String path, String description)
-            throws MalformedURLException, Exception {
-        File icon = InstalledFileLocator.getDefault().locate(path,
-                "simple.marauroa.application.gui", false);
-        URL imageURL = icon.toURI().toURL();
-
-        if (imageURL == null) {
-            throw new Exception("Resource not found: " + path);
-        } else {
-            return (new ImageIcon(imageURL, description)).getImage();
         }
     }
 

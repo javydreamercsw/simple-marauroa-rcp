@@ -2,14 +2,16 @@ package simple.marauroa.application.gui;
 
 import java.awt.Image;
 import java.awt.event.ActionEvent;
+import java.net.MalformedURLException;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JDialog;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
-import org.openide.util.ImageUtilities;
+import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import simple.marauroa.application.api.IAddApplicationDialogProvider;
+import simple.marauroa.application.core.tool.Tool;
 
 /**
  *
@@ -28,12 +30,30 @@ public class RootNode extends AbstractNode {
 
     @Override
     public Image getIcon(int type) {
-        return ImageUtilities.loadImage("simple/marauroa/application/gui/resource/right.png");
+        Image icon = null;
+        try {
+            icon = Tool.createImage("simple.marauroa.application.gui",
+                    "resources/images/right.png", "Root closed icon");
+        } catch (MalformedURLException ex) {
+            Exceptions.printStackTrace(ex);
+        } catch (Exception ex) {
+            Exceptions.printStackTrace(ex);
+        }
+        return icon;
     }
 
     @Override
     public Image getOpenedIcon(int type) {
-        return ImageUtilities.loadImage("simple/marauroa/application/gui/resource/down.png");
+        Image icon = null;
+        try {
+            icon = Tool.createImage("simple.marauroa.application.gui",
+                    "resources/images/down.png", "Root opened icon");
+        } catch (MalformedURLException ex) {
+            Exceptions.printStackTrace(ex);
+        } catch (Exception ex) {
+            Exceptions.printStackTrace(ex);
+        }
+        return icon;
     }
 
     @Override
