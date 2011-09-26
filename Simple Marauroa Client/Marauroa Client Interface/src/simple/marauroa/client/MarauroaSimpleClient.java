@@ -590,7 +590,6 @@ public class MarauroaSimpleClient extends SimpleClient implements
         if (object != null) {
             if (itsMe(object)) {
                 processEvents(changes);
-                update();
             }
         }
         return true;
@@ -636,7 +635,6 @@ public class MarauroaSimpleClient extends SimpleClient implements
         if (object != null) {
             if (getPlayerRPC() == null) {
                 setPlayerRPC(object);
-                update();
             }
         }
         perceptions++;
@@ -652,16 +650,6 @@ public class MarauroaSimpleClient extends SimpleClient implements
             perceptions = 0;
         }
         return true;
-    }
-
-    private void update() {
-        //Fill the lookup with objects already in the world
-//        EventBus.getDefault().clearLookup(RPObject.class);
-//        for (RPObject obj : world.getWorldObjects().values()) {
-//            if (obj.getInt("id") > 0) {
-//                EventBus.getDefault().getCentralLookup().add(obj);
-//            }
-//        }
     }
 
     /**
