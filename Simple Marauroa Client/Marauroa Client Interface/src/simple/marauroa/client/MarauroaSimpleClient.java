@@ -33,8 +33,8 @@ import simple.marauroa.application.core.EventBus;
 import simple.marauroa.application.core.LookupRPObjectManager;
 import simple.marauroa.client.components.api.IClientFramework;
 import simple.marauroa.client.components.common.MCITool;
-import static simple.server.core.action.WellKnownActionConstants.TARGET;
-import static simple.server.core.action.WellKnownActionConstants.TEXT;
+import static simple.server.core.action.WellKnownActionConstant.TARGET;
+import static simple.server.core.action.WellKnownActionConstant.TEXT;
 import simple.server.core.action.chat.ChatAction;
 import simple.server.core.event.*;
 import simple.server.extension.ZoneExtension;
@@ -424,6 +424,7 @@ public class MarauroaSimpleClient extends SimpleClient implements
 
     /**
      * Set Account username
+     *
      * @param username
      */
     @Override
@@ -433,6 +434,7 @@ public class MarauroaSimpleClient extends SimpleClient implements
 
     /**
      * Get account username
+     *
      * @return
      */
     @Override
