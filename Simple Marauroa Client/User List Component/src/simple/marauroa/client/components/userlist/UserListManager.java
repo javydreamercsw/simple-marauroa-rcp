@@ -14,8 +14,6 @@ import simple.marauroa.client.components.api.IUserListManager;
 public class UserListManager implements IUserListManager {
 
     private static UserListTopComponent instance;
-    private static final Logger logger =
-            Logger.getLogger(UserListManager.class.getSimpleName());
 
     protected UserListTopComponent getInstance() {
         if (instance == null) {

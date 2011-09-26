@@ -1,14 +1,19 @@
 package simple.marauroa.client.components.userlist;
 
 import java.awt.Image;
+import java.awt.event.ActionEvent;
 import java.beans.IntrospectionException;
-import java.beans.PropertyChangeSupport;
 import java.net.MalformedURLException;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JFrame;
 import marauroa.common.game.RPObject;
 import org.openide.nodes.BeanNode;
 import org.openide.util.Exceptions;
+import org.openide.util.NbBundle;
 import org.openide.util.lookup.Lookups;
 import simple.marauroa.application.core.tool.Tool;
+import simple.marauroa.client.components.userlist.dialog.PrivateChatDialog;
 
 /**
  *
@@ -16,7 +21,8 @@ import simple.marauroa.application.core.tool.Tool;
  */
 public class ClientRPObjectNode extends BeanNode {
 
-    private final PropertyChangeSupport supp = new PropertyChangeSupport(this);
+    private Action[] actions;
+    private PrivateChatDialog dialog;
 
     public ClientRPObjectNode(RPObject object) throws IntrospectionException {
         super(object, null, Lookups.singleton(object));
@@ -41,5 +47,37 @@ public class ClientRPObjectNode extends BeanNode {
     @Override
     public Image getOpenedIcon(int i) {
         return getIcon(i);
+    }
+
+    @Override
+    public Action[] getActions(boolean popup) {
+        actions = new Action[]{
+            new StartPrivateChatAction()};
+        updateActionsState();
+        return actions;
+    }
+
+    private void updateActionsState() {
+        //TODO: enable/disable actions
+    }
+
+    private class StartPrivateChatAction extends AbstractAction {
+
+        public StartPrivateChatAction() {
+            putValue(NAME, NbBundle.getMessage(ClientRPObjectNode.class, "private.chat"));
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            getDialog(getLookup().lookup(RPObject.class).get("name")).setVisible(true);
+        }
+
+        private PrivateChatDialog getDialog(String target) {
+            if (dialog == null) {
+                dialog = new PrivateChatDialog(new JFrame(), target, true);
+            }
+            Tool.centerDialog(dialog);
+            return dialog;
+        }
     }
 }

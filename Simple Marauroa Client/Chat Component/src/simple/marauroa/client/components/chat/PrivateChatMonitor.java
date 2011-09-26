@@ -9,14 +9,12 @@ import simple.marauroa.client.components.common.MCITool;
  */
 public class PrivateChatMonitor implements ReaderListener {
 
-    private String tabName;
-
-    public PrivateChatMonitor(String tabName) {
-        this.tabName = tabName;
+    public PrivateChatMonitor() {
     }
 
     @Override
     public void read(String read) {
-        MCITool.getClient().sendPrivateText(read.replaceAll("\n", ""), tabName);
+        MCITool.getClient().sendPrivateText(read.replaceAll("\n", ""),
+                MCITool.getClient().getPlayerRPC().get("name"));
     }
 }

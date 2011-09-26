@@ -9,6 +9,8 @@ import simple.common.NotificationType;
 import simple.marauroa.application.core.EventBusListener;
 import simple.marauroa.client.components.api.IPrivateChatComponent;
 import simple.marauroa.client.components.common.MCITool;
+import static simple.server.core.action.WellKnownActionConstant.FROM;
+import static simple.server.core.action.WellKnownActionConstant.TEXT;
 import simple.server.core.event.PrivateTextEvent;
 import simple.server.core.event.api.IPrivateChatEvent;
 
@@ -28,8 +30,8 @@ public class PrivateChatManager implements IPrivateChatComponent, EventBusListen
             logger.log(Level.FINE, "Got notified of event: {0}", event);
             PrivateTextEvent pTextEvent = new PrivateTextEvent();
             pTextEvent.fill((RPEvent) event);
-            MCITool.getPublicChatManager().addLine((pTextEvent.get("from") == null ? "System" : pTextEvent.get("from")),
-                    pTextEvent.get("text"), NotificationType.PRIVMSG);
+            MCITool.getPublicChatManager().addLine((pTextEvent.get(FROM) == null ? "System" : pTextEvent.get(FROM)),
+                    pTextEvent.get(TEXT), NotificationType.PRIVMSG);
         }
     }
 

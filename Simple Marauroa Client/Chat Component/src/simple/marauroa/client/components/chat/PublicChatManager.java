@@ -52,7 +52,7 @@ public class PublicChatManager implements IPublicChatComponent, ReaderListener {
             InputMonitor monitor = OutputHandler.createMonitor(tabName, 1000);
             //Add a listener to be notified.
             monitor.addListener(tabName.equals(getPrivateOutputname())
-                    ? new PrivateChatMonitor(tabName) : this);
+                    ? new PrivateChatMonitor() : this);
         }
         insertText((header == null || header.isEmpty() ? "" : "<" + header + "> ") + line, type);
     }
