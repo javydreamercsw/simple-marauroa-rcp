@@ -69,8 +69,8 @@ public class MCITool {
         return Lookup.getDefault().lookup(ICAManager.class);
     }
 
-    public static IUserListComponent getUserListManager() {
-        return Lookup.getDefault().lookup(IUserListComponent.class);
+    public static IUserListManager getUserListManager() {
+        return Lookup.getDefault().lookup(IUserListManager.class);
     }
     
     public static IZoneListManager getZoneListManager() {
