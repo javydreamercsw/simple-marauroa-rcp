@@ -13,6 +13,7 @@ import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 import org.openide.util.lookup.Lookups;
 import simple.marauroa.application.core.tool.Tool;
+import simple.marauroa.client.components.common.MCITool;
 import simple.marauroa.client.components.userlist.dialog.PrivateChatDialog;
 
 /**
@@ -58,7 +59,13 @@ public class ClientRPObjectNode extends BeanNode {
     }
 
     private void updateActionsState() {
-        //TODO: enable/disable actions
+        for (int i = 0; i < actions.length; i++) {
+            if (actions[i] != null && actions[i] instanceof StartPrivateChatAction) {
+                actions[i].setEnabled(!getLookup().lookup(RPObject.class)
+                        .get("name").equals(MCITool.getClient().getPlayerRPC()
+                        .get("name")));
+            }
+        }
     }
 
     private class StartPrivateChatAction extends AbstractAction {

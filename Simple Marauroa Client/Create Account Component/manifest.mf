@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-OpenIDE-Module: simple.marauroa.client.components.createaccount
+OpenIDE-Module: simple.marauroa.client.components.createaccount/0
+OpenIDE-Module-Implementation-Version: 1
 OpenIDE-Module-Localizing-Bundle: simple/marauroa/client/components/createaccount/Bundle.properties
-OpenIDE-Module-Specification-Version: 1.0
 

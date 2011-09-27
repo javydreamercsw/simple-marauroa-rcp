@@ -13,9 +13,10 @@
             <then>
                 <property file="../../../Marauroa NB/nbproject/project.properties" prefix="marauroa-lib"/>
                 <!--Copy the Marauroa Related files-->
-                <ant antfile="../../../Marauroa NB/nbbuild.xml" target="jar" inheritall="false" />
-                <copy file="../../../Marauroa NB/${marauroa-lib.dist.jar}" tofile="release/modules/ext/Marauroa.jar"/>
-                <copy file="../../../Marauroa NB/${marauroa-lib.file.reference.log4j.jar}" tofile="release/modules/ext/log4j.jar"/>
+                <ant antfile="../../../marauroa/build.xml" target="clean" inheritall="false" />
+                <ant antfile="../../../marauroa/build.xml" target="jar" inheritall="false" />
+                <copy file="../../../marauroa/build-archive/marauroa.jar" tofile="release/modules/ext/Marauroa.jar"/>
+                <copy file="../../../marauroa/libs/log4j.jar" tofile="release/modules/ext/log4j.jar"/>
             </then>
             <else>
                 <if>
