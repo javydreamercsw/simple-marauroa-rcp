@@ -7,6 +7,6 @@ import simple.server.core.event.api.IPrivateChatEvent;
  *
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
-public interface IPrivateChatComponent extends 
+public interface IPrivateChatManager extends 
         EventBusListener<IPrivateChatEvent>, IChatInterface {
 }
