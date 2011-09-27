@@ -49,8 +49,8 @@ public class MCITool {
      * Get private chat implementation
      * @return chat implementation
      */
-    public static IPrivateChatComponent getPrivateChatManager() {
-        return Lookup.getDefault().lookup(IPrivateChatComponent.class);
+    public static IPrivateChatManager getPrivateChatManager() {
+        return Lookup.getDefault().lookup(IPrivateChatManager.class);
     }
 
     /**

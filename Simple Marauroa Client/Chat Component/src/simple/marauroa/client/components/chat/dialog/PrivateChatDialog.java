@@ -1,4 +1,4 @@
-package simple.marauroa.client.components.userlist.dialog;
+package simple.marauroa.client.components.chat.dialog;
 
 import simple.marauroa.client.components.common.MCITool;
 

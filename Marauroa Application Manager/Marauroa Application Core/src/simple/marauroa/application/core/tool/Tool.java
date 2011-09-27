@@ -6,9 +6,16 @@ import java.awt.Toolkit;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import org.openide.modules.InstalledFileLocator;
+import org.openide.util.Lookup;
+import simple.marauroa.application.core.MarauroaAction;
+import simple.marauroa.application.core.MarauroaActionProvider;
 
 /**
  *
@@ -21,6 +28,7 @@ public class Tool {
 
     /**
      * Center dialog in screen
+     *
      * @param dialog
      */
     public static void centerDialog(JDialog dialog) {
@@ -32,9 +40,9 @@ public class Tool {
                 (s.height - window.height) / 2);
 
     }
-    
+
     //Obtain the image URL
-    public static Image createImage(String module_id ,String path, String description)
+    public static Image createImage(String module_id, String path, String description)
             throws MalformedURLException, Exception {
         File icon = InstalledFileLocator.getDefault().locate(path,
                 "simple.marauroa.application.gui", false);
@@ -45,5 +53,22 @@ public class Tool {
         } else {
             return (new ImageIcon(imageURL, description)).getImage();
         }
+    }
+
+    public static <T> Action[] getActions(Class<? extends MarauroaActionProvider> provider) {
+        Action[] actions = new Action[1];
+        ArrayList<MarauroaAction> actionList = new ArrayList<MarauroaAction>();
+        for (Iterator<? extends MarauroaActionProvider> it = Lookup.getDefault().lookupAll(provider).iterator(); it.hasNext();) {
+            MarauroaActionProvider providerImpl = it.next();
+            actionList.addAll(providerImpl.getActions());
+        }
+        //Sort them in position order
+        Collections.sort(actionList);
+        //Update its status
+        for (MarauroaAction action : actionList) {
+            action.updateStatus();
+        }
+        actionList.toArray(actions);
+        return actions;
     }
 }

@@ -60,7 +60,7 @@
     <Component class="javax.swing.JLabel" name="privateMessageLabel">
       <Properties>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="simple/marauroa/client/components/userlist/dialog/Bundle.properties" key="PrivateChatDialog.privateMessageLabel.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+          <ResourceString bundle="simple/marauroa/client/components/chat/dialog/Bundle.properties" key="PrivateChatDialog.privateMessageLabel.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
       </Properties>
     </Component>
@@ -85,7 +85,7 @@
     <Component class="javax.swing.JButton" name="send">
       <Properties>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="simple/marauroa/client/components/userlist/dialog/Bundle.properties" key="PrivateChatDialog.send.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+          <ResourceString bundle="simple/marauroa/client/components/chat/dialog/Bundle.properties" key="PrivateChatDialog.send.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
       </Properties>
       <Events>
@@ -95,7 +95,7 @@
     <Component class="javax.swing.JButton" name="cancel">
       <Properties>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="simple/marauroa/client/components/userlist/dialog/Bundle.properties" key="PrivateChatDialog.cancel.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+          <ResourceString bundle="simple/marauroa/client/components/chat/dialog/Bundle.properties" key="PrivateChatDialog.cancel.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
       </Properties>
       <Events>
