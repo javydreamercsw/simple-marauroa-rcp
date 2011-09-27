@@ -7,7 +7,6 @@ import simple.marauroa.application.core.EventBusListener;
  *
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
-public interface IUserListManager extends IClientComponent, 
-        EventBusListener<RPObject>{
-
+public interface IUserListManager extends IClientComponent,
+        EventBusListener<RPObject> {
 }

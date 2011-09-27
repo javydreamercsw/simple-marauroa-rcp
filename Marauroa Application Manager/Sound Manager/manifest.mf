@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-OpenIDE-Module: simple.marauroa.sound/1
-OpenIDE-Module-Implementation-Version: 0
+OpenIDE-Module: simple.marauroa.sound/0
+OpenIDE-Module-Implementation-Version: 1
 OpenIDE-Module-Localizing-Bundle: simple/marauroa/sound/Bundle.properties
 

@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates and open the template in
- * the editor.
- */
 package simple.marauroa.client.components.api;
 
 import org.jivesoftware.smack.util.ReaderListener;

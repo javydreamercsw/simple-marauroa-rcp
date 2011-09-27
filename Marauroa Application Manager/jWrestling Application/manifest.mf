@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
-OpenIDE-Module: games.jwrestling.application/1
-OpenIDE-Module-Implementation-Version: 0
+OpenIDE-Module: games.jwrestling.application/0
+OpenIDE-Module-Implementation-Version: 9
 OpenIDE-Module-Localizing-Bundle: games/jwrestling/application/Bundle.properties
 OpenIDE-Module-Provides: simple.marauroa.application.api
 

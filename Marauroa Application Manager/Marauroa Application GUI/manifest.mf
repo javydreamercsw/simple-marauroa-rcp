@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-OpenIDE-Module: simple.marauroa.application.gui
+OpenIDE-Module: simple.marauroa.application.gui/0
 OpenIDE-Module-Implementation-Version: 1
 OpenIDE-Module-Install: simple/marauroa/application/editor/Installer.class
 OpenIDE-Module-Localizing-Bundle: simple/marauroa/application/gui/Bundle.properties

@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
 OpenIDE-Module: simple.marauroa.client.lib/1
-OpenIDE-Module-Implementation-Version: 3
+OpenIDE-Module-Implementation-Version: 4
 OpenIDE-Module-Localizing-Bundle: simple/marauroa/client/lib/Bundle.properties
 

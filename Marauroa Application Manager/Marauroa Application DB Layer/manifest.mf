@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 OpenIDE-Module: simple.marauroa.application.core.db/0
-OpenIDE-Module-Implementation-Version: 0
+OpenIDE-Module-Implementation-Version: 1
 OpenIDE-Module-Install: simple/marauroa/application/core/db/manager/Installer.class
 OpenIDE-Module-Localizing-Bundle: simple/marauroa/application/core/db/manager/Bundle.properties
 

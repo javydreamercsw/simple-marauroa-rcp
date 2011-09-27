@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
-OpenIDE-Module: simple.marauroa.client
+OpenIDE-Module: simple.marauroa.client/0
+OpenIDE-Module-Implementation-Version: 1
 OpenIDE-Module-Install: simple/marauroa/client/Installer.class
 OpenIDE-Module-Localizing-Bundle: simple/marauroa/client/Bundle.properties
 OpenIDE-Module-Requires: org.openide.windows.WindowManager
-OpenIDE-Module-Specification-Version: 1.0
 
