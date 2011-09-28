@@ -3,15 +3,12 @@ package simple.marauroa.application.core;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import marauroa.common.Log4J;
 import marauroa.common.game.IRPZone;
 import marauroa.common.game.IRPZone.ID;
-import marauroa.common.game.Perception;
 import marauroa.common.game.RPObject;
-import marauroa.common.game.RPObjectInvalidException;
 import org.openide.util.Lookup;
 import simple.marauroa.application.api.IDataBase;
 import simple.marauroa.application.api.IMarauroaApplication;
@@ -74,94 +71,12 @@ public class MarauroaApplicationRepository {
     public static Collection<? extends IRPZone> getZonesForApplication(IMarauroaApplication app) {
         ArrayList<IRPZone> zones = new ArrayList<IRPZone>();
         for (final String key : app.getContents().keySet()) {
-            //This is just a dumy zone with the correct name
-            IRPZone newZone = new IRPZone() {
-
-                private ArrayList<RPObject> objects = new ArrayList<RPObject>();
-
-                @Override
-                public ID getID() {
-                    return new ID(key);
-                }
-
-                @Override
-                public void onInit() throws Exception {
-                    //Do nothing
-                }
-
-                @Override
-                public void onFinish() throws Exception {
-                    //Do nothing
-                }
-
-                @Override
-                public void add(RPObject rpo) throws RPObjectInvalidException {
-                    objects.add(rpo);
-                }
-
-                @Override
-                public void modify(RPObject rpo) throws RPObjectInvalidException {
-                    //Do nothing
-                }
-
-                @Override
-                public RPObject remove(RPObject.ID id) {
-                    //Do nothing
-                    return null;
-                }
-
-                @Override
-                public void hide(RPObject rpo) {
-                    //Do nothing
-                }
-
-                @Override
-                public void unhide(RPObject rpo) {
-                    //Do nothing
-                }
-
-                @Override
-                public RPObject get(RPObject.ID id) {
-                    //Do nothing
-                    return null;
-                }
-
-                @Override
-                public boolean has(RPObject.ID id) {
-                    //Do nothing
-                    return false;
-                }
-
-                @Override
-                public void assignRPObjectID(RPObject rpo) {
-                    //Do nothing
-                }
-
-                @Override
-                public Iterator<RPObject> iterator() {
-                    return null;
-                }
-
-                @Override
-                public long size() {
-                    return objects.size();
-                }
-
-                @Override
-                public Perception getPerception(RPObject rpo, byte b) {
-                    return null;
-                }
-
-                @Override
-                public void nextTurn() {
-                    //Do nothing
-                }
-            };
+            Zone zone = new Zone(key);
             //Now add the objects to it
             for (RPObject object : app.getContents().get(key)) {
-                newZone.add(object);
+                zone.add(object);
             }
-            zones.add(newZone);
+            zones.add(zone);
         }
         return zones;
     }
