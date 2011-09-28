@@ -16,7 +16,6 @@ public class EventBus {
     private final CentralLookup centralLookup = CentralLookup.getDefault();
     private final Map<Class<?>, Result<?>> resultMapByClass = new HashMap<Class<?>, Result<?>>();
     private final Map<EventBusListener<?>, ListenerAdapter<?>> adapterMapByListener = new HashMap<EventBusListener<?>, ListenerAdapter<?>>();
-    private final Map<Class<?>, LookupSync> syncs = new HashMap<Class<?>, LookupSync>();
 
     private EventBus() {
     }
@@ -55,10 +54,6 @@ public class EventBus {
             result = getCentralLookup().lookupResult(topic);
             resultMapByClass.put(topic, result);
             result.allInstances();
-        }
-
-        if (!syncs.containsKey(topic)) {
-            syncs.put(topic, new LookupSync(topic));
         }
 
         final ListenerAdapter<T> adapter = new ListenerAdapter<T>(listener);
