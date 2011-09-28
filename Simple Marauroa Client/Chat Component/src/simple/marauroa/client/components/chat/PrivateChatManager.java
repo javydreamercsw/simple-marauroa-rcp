@@ -110,12 +110,13 @@ public class PrivateChatManager implements IPrivateChatManager,
         actions.add(new StartPrivateChatAction());
         return actions;
     }
-    
+
     private class StartPrivateChatAction extends UserListAction {
+
         private PrivateChatDialog dialog;
 
         public StartPrivateChatAction() {
-            super(100, NbBundle.getMessage(PrivateChatManager.class, 
+            super(100, NbBundle.getMessage(PrivateChatManager.class,
                     "private.chat"));
         }
 

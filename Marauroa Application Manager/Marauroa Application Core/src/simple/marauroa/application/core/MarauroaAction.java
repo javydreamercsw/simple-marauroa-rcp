@@ -2,6 +2,8 @@ package simple.marauroa.application.core;
 
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
+import marauroa.common.game.RPObject;
+import org.openide.util.Utilities;
 
 /**
  *
@@ -35,5 +37,9 @@ public abstract class MarauroaAction extends AbstractAction implements Comparabl
         int position = (Integer) getValue(POSITION);
         int otherPosition = (Integer) otherAction.getValue(POSITION);
         return position - otherPosition;
+    }
+
+    protected boolean isMe(RPObject object) {
+        return Utilities.actionsGlobalContext().lookup(RPObject.class).get("name").equals(object.get("name"));
     }
 }
