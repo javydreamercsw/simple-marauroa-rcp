@@ -12,6 +12,7 @@ import java.util.Iterator;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
+import marauroa.common.game.IRPZone;
 import org.openide.modules.InstalledFileLocator;
 import org.openide.util.Lookup;
 import simple.marauroa.application.core.MarauroaAction;
@@ -56,7 +57,6 @@ public class Tool {
     }
 
     public static <T> Action[] getActions(Class<? extends MarauroaActionProvider> provider) {
-        Action[] actions = new Action[1];
         ArrayList<MarauroaAction> actionList = new ArrayList<MarauroaAction>();
         for (Iterator<? extends MarauroaActionProvider> it = Lookup.getDefault().lookupAll(provider).iterator(); it.hasNext();) {
             MarauroaActionProvider providerImpl = it.next();
@@ -68,7 +68,13 @@ public class Tool {
         for (MarauroaAction action : actionList) {
             action.updateStatus();
         }
+        Action[] actions = new Action[actionList.size()];
         actionList.toArray(actions);
         return actions;
+    }
+    
+    public static String getZoneName(IRPZone.ID id){
+        String stringId = id.toString();
+        return stringId.substring(stringId.indexOf('=') + 1, stringId.indexOf(']'));
     }
 }
