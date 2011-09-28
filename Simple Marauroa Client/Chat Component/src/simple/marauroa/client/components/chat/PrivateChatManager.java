@@ -135,7 +135,7 @@ public class PrivateChatManager implements IPrivateChatManager,
         @Override
         public void updateStatus() {
             //Active if it is not me
-            setEnabled(!isMe());
+            setEnabled(!isMe(MCITool.getClient().getPlayerRPC()));
         }
     }
 }
