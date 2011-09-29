@@ -7,6 +7,7 @@
     <import file="nbproject/build-impl.xml"/>
     <import file="preparation.xml"/>
     <property name="ant-contrib-filename" value="ant-contrib-1.0b3.jar" />
+    <taskdef name="doxygen" classname="org.doxygen.tools.DoxygenTask" classpath="../tools/doxygen/ant_doxygen.jar" />
     
     <scriptdef name="substring" language="javascript">
         <attribute name="text" />
@@ -75,7 +76,7 @@
         <!--Create pom.xml-->
         <echo file="${suite.dir}/pom.xml"><![CDATA[<project>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.dreamer</groupId>
+    <groupId>simple.marauroa.rcp.server</groupId>
     <artifactId>MSM</artifactId>
     <version>]]>${app.version}<![CDATA[</version>
     <packaging>pom</packaging>
@@ -188,9 +189,10 @@
             <description>Core Files</description>
             <file targetdir="$INSTALL_PATH" src="dist/]]>${app.name}<![CDATA[/bin"/>
             <file targetdir="$INSTALL_PATH" src="dist/]]>${app.name}<![CDATA[/etc"/>
+            <file targetdir="$INSTALL_PATH" src="dist/]]>${app.name}<![CDATA[/extra"/>
             <file targetdir="$INSTALL_PATH" src="dist/]]>${app.name}<![CDATA[/harness"/>
             <file targetdir="$INSTALL_PATH" src="dist/]]>${app.name}<![CDATA[/ide"/>
-            <file targetdir="$INSTALL_PATH" src="dist/]]>${app.name}<![CDATA[/java"/>
+            <file targetdir="$INSTALL_PATH" src="dist/]]>${app.name}<![CDATA[/nb"/>
             <file targetdir="$INSTALL_PATH" src="dist/]]>${app.name}<![CDATA[/platform"/>
             <file targetdir="$INSTALL_PATH/]]>${app.name}<![CDATA[/config/Modules/" src="dist/]]>${app.name}<![CDATA[/]]>${app.name}<![CDATA[/config/Modules/marauroa-lib.xml"/>
             <file targetdir="$INSTALL_PATH/]]>${app.name}<![CDATA[/config/Modules/" src="dist/]]>${app.name}<![CDATA[/]]>${app.name}<![CDATA[/config/Modules/simple-marauroa-application-api.xml"/>
@@ -212,8 +214,8 @@
             <file targetdir="$INSTALL_PATH/]]>${app.name}<![CDATA[/update_tracking" src="dist/]]>${app.name}<![CDATA[/]]>${app.name}<![CDATA[/update_tracking/simple-marauroa-application-monitor.xml"/>
             <file targetdir="$INSTALL_PATH/]]>${app.name}<![CDATA[/update_tracking" src="dist/]]>${app.name}<![CDATA[/]]>${app.name}<![CDATA[/update_tracking/simple-marauroa-client-lib.xml"/>
             <file targetdir="$INSTALL_PATH/]]>${app.name}<![CDATA[/update_tracking" src="dist/]]>${app.name}<![CDATA[/]]>${app.name}<![CDATA[/update_tracking/simple-server-lib.xml"/>
-            <file targetdir="$INSTALL_PATH/]]>${app.name}<![CDATA[/modules/" src="dist/]]>${app.name}<![CDATA[/]]>${app.name}<![CDATA[/modules/ext"/>
-            <file targetdir="$INSTALL_PATH/]]>${app.name}<![CDATA[/modules/" src="dist/]]>${app.name}<![CDATA[/]]>${app.name}<![CDATA[/modules/locale"/>
+            <file targetdir="$INSTALL_PATH/]]>${app.name}<![CDATA[/modules" src="dist/]]>${app.name}<![CDATA[/]]>${app.name}<![CDATA[/modules/ext"/>
+            <file targetdir="$INSTALL_PATH/]]>${app.name}<![CDATA[/modules" src="dist/]]>${app.name}<![CDATA[/]]>${app.name}<![CDATA[/modules/locale"/>
             <file targetdir="$INSTALL_PATH/]]>${app.name}<![CDATA[/modules" src="dist/]]>${app.name}<![CDATA[/]]>${app.name}<![CDATA[/modules/marauroa-lib.jar"/>
             <file targetdir="$INSTALL_PATH/]]>${app.name}<![CDATA[/modules" src="dist/]]>${app.name}<![CDATA[/]]>${app.name}<![CDATA[/modules/simple-marauroa-application-api.jar"/>
             <file targetdir="$INSTALL_PATH/]]>${app.name}<![CDATA[/modules" src="dist/]]>${app.name}<![CDATA[/]]>${app.name}<![CDATA[/modules/simple-marauroa-application-core.jar"/>
@@ -223,6 +225,7 @@
             <file targetdir="$INSTALL_PATH/]]>${app.name}<![CDATA[/modules" src="dist/]]>${app.name}<![CDATA[/]]>${app.name}<![CDATA[/modules/simple-marauroa-application-monitor.jar"/>
             <file targetdir="$INSTALL_PATH/]]>${app.name}<![CDATA[/modules" src="dist/]]>${app.name}<![CDATA[/]]>${app.name}<![CDATA[/modules/simple-marauroa-client-lib.jar"/>
             <file targetdir="$INSTALL_PATH/]]>${app.name}<![CDATA[/modules" src="dist/]]>${app.name}<![CDATA[/]]>${app.name}<![CDATA[/modules/simple-server-lib.jar"/>
+            <file targetdir="$INSTALL_PATH/]]>${app.name}<![CDATA[/" src="dist/]]>${app.name}<![CDATA[/]]>${app.name}<![CDATA[/resources"/>
         </pack>
         <pack name="jWrestling" preselected="no" installGroups="]]>${app.name}<![CDATA[" required="no" hidden="false">
             <description>jWrestling plugin</description>
@@ -260,22 +263,12 @@
         <echo message="Setting property and task for installer creation" />
         <property name="nbdist.dir" value="dist"/>
         <property name="nbdist-app.dir" value="${nbdist.dir}/${app.name}"/>
-        <property name="izpack-installer" value="${app.title}-Setup.jar"/>
-        <property name="exeName" value="${app.title}-Setup"/>
-        <property name="izpack.dir" location="tools/IzPack"/>
-        <property name="launch4j.dir" location="tools/launch4j" />
-        <taskdef name="izpack" classpath="${izpack.dir}/lib/compiler.jar"
-             classname="com.izforge.izpack.ant.IzPackTask"/>
-        <!--Launch 4J task-->
-        <taskdef name="launch4j" classname="net.sf.launch4j.ant.Launch4jTask"
-             classpath="${launch4j.dir}/launch4j.jar:${launch4j.dir}/lib/xstream.jar" />
 
         <echo message="Preparing ...." />
         <!--Delete the folder just in case-->
         <delete dir="${app.name}"/>
         <echo message="Creating zip distribution." />
         <antcall target="build-zip"/>
-        <autoupdate/>
         <unzip src="${nbdist.dir}/${app.name}.zip" dest="${nbdist.dir}"/>
 
         <replace file="shortcutSpec.xml">
@@ -286,19 +279,33 @@
         <replace file="${nbdist.dir}/${app.name}/etc/${app.name}.conf">
             <replacefilter token="/dev" value="/${app.version}" />
             <replacefilter token="-J-Xms24m -J-Xmx64m" value="${run.args.extra}" />
-        </replace>
-
+        </replace>    
+        <antcall target="use-izpack"/>
+    </target>
+    
+    <target name="use-izpack">
+        <property name="izpack.dir" location="../tools/IzPack"/>
+        <property name="exeName" value="${app.title}-Setup"/>
+        <property name="izpack-installer" value="${exeName}.jar"/>
+        <taskdef name="izpack" classpath="${izpack.dir}/lib/compiler.jar"
+             classname="com.izforge.izpack.ant.IzPackTask"/>
+        <property name="launch4j.dir" location="../tools/launch4j" />
         <echo message="Makes the installer using IzPack into ${izpack-installer}"/>
         <izpack input="${basedir}/nizpack.xml"
             output="${basedir}/${izpack-installer}"
             installerType="standard"
             basedir="${basedir}"
             izPackDir="${izpack.dir}/"/>
-
+        <!--Launch 4J task-->
+        <taskdef name="launch4j" classname="net.sf.launch4j.ant.Launch4jTask"
+             classpath="${launch4j.dir}/launch4j.jar:${launch4j.dir}/lib/xstream.jar" />
         <antcall target="create-launch4j-installer"/>
-        
         <echo message="Cleaning and finalizing release..." />
         <delete dir="${nbdist-app.dir}"/>
+        <delete file="${izpack-installer}"/>
+        <delete file="${app.title}.xml"/>
+        <delete file="shortcutSpec.xml"/>
+        <delete file="nizpack.xml"/>
     </target>
     
     <target name="create-launch4j-installer">
@@ -354,7 +361,7 @@
     </target>
 
     <target name="create-doxygen-docs">
-        <doxygen doxygenPath="${suite.dir}/tools/doxygen/doxygen.exe" >
+        <doxygen doxygenPath="${suite.dir}/../tools/doxygen/doxygen.exe" >
             <property name="INPUT" value="${suite.dir}" />
             <property name="PROJECT_NAME" value="${app.title}" />
             <property name="PROJECT_NUMBER" value="${app.version}" />
@@ -425,7 +432,7 @@
                 </if>
             </sequential>
         </for>
-        <echo> Source distribution file available at ${suite.dir}/dist/</echo>
+        <echo>Source distribution file available at ${suite.dir}/dist/</echo>
     </target>
     
     <target name="update-keystore-info" depends="init-netbeans, init-hudson">
@@ -506,11 +513,13 @@
                     <then>
                         <echo file="versions.xml" append="true"><![CDATA[
                 <replace codenamebase="]]>${@{cur}.OpenIDE-Module}<![CDATA[" addcompiletime="true">
-                    <module codenamebase="]]>${@{cur}.OpenIDE-Module}</echo>
+                    <module codenamebase="]]>${@{cur}.OpenIDE-Module}
+                        </echo>
                         <if>
                             <isset property="@{cur}.spec.version.base"/>
                             <then>
-                                <echo file="versions.xml" append="true"><![CDATA[" spec="]]>${@{cur}.spec.version.base}<![CDATA["]]></echo>
+                                <echo file="versions.xml" append="true"><![CDATA[" spec="]]>${@{cur}.spec.version.base}<![CDATA["]]>
+                                </echo>
                             </then>
                             <else>
                                 <echo file="versions.xml" append="true"><![CDATA[/>]]>
@@ -520,10 +529,12 @@
                         <if>
                             <isset property="@{cur}.release-version"/>
                             <then>
-                                <echo file="versions.xml" append="true"><![CDATA[ release="]]>${@{cur}.release-version}<![CDATA["/>]]></echo>
+                                <echo file="versions.xml" append="true"><![CDATA[ release="]]>${@{cur}.release-version}<![CDATA["/>]]>
+                                </echo>
                             </then>
                             <else>
-                                <echo file="versions.xml" append="true"><![CDATA[/>]]></echo>
+                                <echo file="versions.xml" append="true"><![CDATA[/>]]>
+                                </echo>
                             </else>
                         </if>
                         <echo file="versions.xml" append="true"><![CDATA[
