@@ -6,3 +6,4 @@ netbeans/*
 *.db
 *server_stats.xml
 */log*.txt
+**/keystore/*
