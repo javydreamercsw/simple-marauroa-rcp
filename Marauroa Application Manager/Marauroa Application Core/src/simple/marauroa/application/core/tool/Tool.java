@@ -72,8 +72,8 @@ public class Tool {
         actionList.toArray(actions);
         return actions;
     }
-    
-    public static String getZoneName(IRPZone.ID id){
+
+    public static String getZoneName(IRPZone.ID id) {
         String stringId = id.toString();
         return stringId.substring(stringId.indexOf('=') + 1, stringId.indexOf(']'));
     }
