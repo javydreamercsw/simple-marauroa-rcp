@@ -8,7 +8,6 @@ import org.openide.explorer.ExplorerManager;
 import org.openide.explorer.ExplorerUtils;
 import org.openide.explorer.view.ListView;
 import org.openide.util.NbBundle;
-import org.openide.util.lookup.InstanceContent;
 import org.openide.windows.TopComponent;
 import simple.marauroa.application.core.EventBusListener;
 
@@ -30,7 +29,6 @@ public final class UserListTopComponent extends TopComponent
         implements ExplorerManager.Provider, EventBusListener<RPObject> {
 
     private final ExplorerManager mgr = new ExplorerManager();
-    private final InstanceContent content = new InstanceContent();
 
     public UserListTopComponent() {
         initComponents();
@@ -78,12 +76,10 @@ public final class UserListTopComponent extends TopComponent
         // better to version settings since initial version as advocated at
         // http://wiki.apidesign.org/wiki/PropertyFiles
         p.setProperty("version", "1.0");
-        //TODO store your settings
     }
 
     void readProperties(java.util.Properties p) {
         String version = p.getProperty("version");
-        //TODO read your settings according to their version
     }
 
     @Override

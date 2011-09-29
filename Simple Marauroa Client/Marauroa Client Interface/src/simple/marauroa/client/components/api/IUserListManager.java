@@ -9,4 +9,10 @@ import simple.marauroa.application.core.EventBusListener;
  */
 public interface IUserListManager extends IClientComponent,
         EventBusListener<RPObject> {
+    
+    /**
+     * Clear the user list.
+     * This is needed when you are changing zones.
+     */
+    public void clearList();
 }

@@ -1,9 +1,9 @@
 package simple.marauroa.client.components.userlist;
 
-import java.util.logging.Logger;
 import marauroa.common.game.RPObject;
 import org.openide.util.lookup.ServiceProvider;
 import org.openide.windows.TopComponent;
+import simple.marauroa.application.core.EventBus;
 import simple.marauroa.client.components.api.IUserListManager;
 
 /**
@@ -42,5 +42,12 @@ public class UserListManager implements IUserListManager {
     @Override
     public void notify(RPObject object) {
         getInstance().update();
+    }
+
+    @Override
+    public void clearList() {
+        for (RPObject player : EventBus.getDefault().lookupAll(RPObject.class)) {
+            EventBus.getDefault().getCentralLookup().remove(player);
+        }
     }
 }
