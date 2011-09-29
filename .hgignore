@@ -7,3 +7,5 @@ netbeans/*
 *server_stats.xml
 */log*.txt
 **/keystore/*
+**/jWrestling/*
+marauroa/*
