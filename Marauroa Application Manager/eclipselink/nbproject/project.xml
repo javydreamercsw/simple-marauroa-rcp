@@ -259,10 +259,6 @@
                 <runtime-relative-path>ext/javax.persistence_2.0.3.v201010191057.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/javax.persistence_2.0.3.v201010191057.jar</binary-origin>
             </class-path-extension>
-            <class-path-extension>
-                <runtime-relative-path>ext/eclipselink-jpa-modelgen_2.3.0.v20110604-r9504.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/eclipselink-jpa-modelgen_2.3.0.v20110604-r9504.jar</binary-origin>
-            </class-path-extension>
         </data>
     </configuration>
 </project>
