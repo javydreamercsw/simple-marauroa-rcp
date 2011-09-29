@@ -28,7 +28,6 @@ import simple.client.SimpleClient;
 import simple.client.action.update.ClientGameConfiguration;
 import simple.client.conf.ExtensionXMLLoader;
 import simple.client.event.listener.RPEventListener;
-import simple.client.soundreview.SoundMaster;
 import simple.marauroa.application.core.EventBus;
 import simple.marauroa.application.core.LookupRPObjectManager;
 import simple.marauroa.client.components.api.IClientFramework;
@@ -101,7 +100,6 @@ public class MarauroaSimpleClient extends SimpleClient implements
         APPLICATION_FOLDER = System.getProperty("user.home")
                 + System.getProperty("file.separator")
                 + "." + gameName + System.getProperty("file.separator");
-        startSoundMaster();
         startSwingLookAndFeel();
         if (logger.isLoggable(Level.FINE)) {
             EventBus.getDefault().getCentralLookup().setShowContents(true);
@@ -443,16 +441,6 @@ public class MarauroaSimpleClient extends SimpleClient implements
     }
 
     /**
-     * Start the Sound System
-     */
-    private static void startSoundMaster() {
-        SoundMaster sm = new SoundMaster();
-        sm.init();
-        Thread th = new Thread(sm);
-        th.start();
-    }
-
-    /**
      * Try to use the system look and feel.
      */
     private static void startSwingLookAndFeel() {
@@ -496,7 +484,7 @@ public class MarauroaSimpleClient extends SimpleClient implements
     @Override
     public void send(RPAction action) {
         //This is just for debugging purposes
-        logger.log(Level.INFO, "Sending action: {0}", action);
+        logger.log(Level.FINE, "Sending action: {0}", action);
         super.send(action);
     }
 
@@ -514,7 +502,7 @@ public class MarauroaSimpleClient extends SimpleClient implements
     public void processEvent(RPEvent event) {
         if (event != null) {
             if (!processedEvents.contains(event.get(SimpleRPEvent.EVENT_ID))) {
-                logger.log(Level.INFO, "Received event: {0} from server", event);
+                logger.log(Level.FINE, "Received event: {0} from server", event);
                 processedEvents.add(event.get(SimpleRPEvent.EVENT_ID));
                 //Publish the event to the bus so all listeners can react to it
                 //TODO: Remove hack while the interfaces are not part of Marauroa 
@@ -534,7 +522,7 @@ public class MarauroaSimpleClient extends SimpleClient implements
                     zoneEvent.fill(event);
                     EventBus.getDefault().publish(zoneEvent);
                 } else if (event.getName().equals(MonitorEvent.getRPClassName())) {
-                    logger.log(Level.INFO, MonitorEvent.getRPClassName());
+                    logger.log(Level.FINE, MonitorEvent.getRPClassName());
                     MonitorEvent monitorEvent = new MonitorEvent();
                     monitorEvent.fill(event);
                     EventBus.getDefault().publish(monitorEvent);
@@ -571,6 +559,12 @@ public class MarauroaSimpleClient extends SimpleClient implements
         if (object != null) {
             logger.log(Level.FINE, "onAdded object: {0}", object.toAttributeString());
             if (object.getInt("id") > 0) {
+                //Check the lookup to see if its already there
+                for (RPObject player : EventBus.getDefault().lookupAll(RPObject.class)) {
+                    if (player.get("name").equals(object.get("name"))) {
+                        EventBus.getDefault().getCentralLookup().remove(player);
+                    }
+                }
                 //Add it to the lookup
                 EventBus.getDefault().getCentralLookup().add(object);
             }
@@ -646,7 +640,7 @@ public class MarauroaSimpleClient extends SimpleClient implements
             //We don't get information about other zones in the perception.
             RPAction action = new RPAction();
             action.put("type", ZoneExtension.TYPE);
-            action.put(ZoneExtension.OPERATION, ZoneExtension.LISTZONES);
+            action.put(ZoneExtension.OPERATION, ZoneEvent.LISTZONES);
             action.put(ZoneExtension.SEPARATOR, "#");
             send(action);
             perceptions = 0;

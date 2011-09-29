@@ -1,10 +1,7 @@
 package simple.marauroa.client.components.api.actions;
 
 import javax.swing.Icon;
-import marauroa.common.game.RPObject;
-import simple.marauroa.application.core.EventBus;
 import simple.marauroa.application.core.MarauroaAction;
-import simple.marauroa.client.components.common.MCITool;
 
 /**
  *
@@ -36,9 +33,5 @@ public abstract class UserListAction extends MarauroaAction {
      */
     public String getName() {
         return (String) getValue(NAME);
-    }
-
-    protected boolean isMe() {
-        return !EventBus.getDefault().lookup(RPObject.class).get("name").equals(MCITool.getClient().getPlayerRPC().get("name"));
     }
 }
