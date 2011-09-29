@@ -271,11 +271,6 @@
         <antcall target="build-zip"/>
         <unzip src="${nbdist.dir}/${app.name}.zip" dest="${nbdist.dir}"/>
 
-        <replace file="shortcutSpec.xml">
-            <replacefilter token="$APP-VERSION" value="${app.version}" />
-            <replacefilter token="$APP_TITLE" value="${app.title}" />
-            <replacefilter token="$APP-NAME" value="${app.name}" />
-        </replace>
         <replace file="${nbdist.dir}/${app.name}/etc/${app.name}.conf">
             <replacefilter token="/dev" value="/${app.version}" />
             <replacefilter token="-J-Xms24m -J-Xmx64m" value="${run.args.extra}" />
@@ -291,6 +286,24 @@
              classname="com.izforge.izpack.ant.IzPackTask"/>
         <property name="launch4j.dir" location="../tools/launch4j" />
         <echo message="Makes the installer using IzPack into ${izpack-installer}"/>
+        <echo file="${suite.dir}/shortcutSpec.xml"><![CDATA[<shortcuts>
+    <skipIfNotSupported/>
+    <programGroup location="applications" defaultName="$APP_NAME"/>
+    <shortcut name="$APP-NAME" type="Application" 
+    encoding="UTF-8" description="$APP_NAME" 
+    target="$INSTALL_PATH/bin/$APP-NAME.exe" applications="no" 
+    programGroup="yes" desktop="yes"/>
+    <shortcut name="Uninstall $APP_NAME" type="Application" 
+    encoding="UTF-8" description="$APP_NAME Uninstaller" 
+    target="$INSTALL_PATH/Uninstaller/uninstaller.jar" 
+    programGroup="yes"/>
+</shortcuts>]]>
+        </echo>
+        <replace file="shortcutSpec.xml">
+            <replacefilter token="$APP-VERSION" value="${app.version}" />
+            <replacefilter token="$APP_TITLE" value="${app.title}" />
+            <replacefilter token="$APP-NAME" value="${app.name}" />
+        </replace>
         <izpack input="${basedir}/nizpack.xml"
             output="${basedir}/${izpack-installer}"
             installerType="standard"
