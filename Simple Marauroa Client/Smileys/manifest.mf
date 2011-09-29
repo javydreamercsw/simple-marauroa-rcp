@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+OpenIDE-Module: simple.client.smileys/0
+OpenIDE-Module-Implementation-Version: 1
+OpenIDE-Module-Install: simple/client/smileys/Installer.class
+OpenIDE-Module-Localizing-Bundle: simple/client/smileys/Bundle.properties
+
