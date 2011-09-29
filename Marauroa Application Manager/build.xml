@@ -44,7 +44,7 @@
         </if>
     </target>
     
-    <target name="build" depends="init-netbeans, init-hudson, build-brand, suite.build"/>
+    <target name="build" depends="init-netbeans, init-hudson, check-dev-environent, build-brand, suite.build"/>
         
     <target name="build-brand" depends="pre-init, -init">
         <copy file="${app.icon}" tofile="resources/${app.name}.ico"/>
@@ -366,6 +366,24 @@
                 keystore="${keystore.location}${keystore.name}"/> 
         <!--Generate nbms and javadoc for applicable projects-->
         <antcall target="suite.nbms"/>
+    </target>
+    
+    <target name="check-dev-environent" depends="init-netbeans,init-hudson">
+        <taskdef resource="net/sourceforge/ant4hg/taskdefs/antlib.xml">
+            <classpath>
+                <pathelement location="../tools/ant4hg-V0.07.jar"/>
+            </classpath>
+        </taskdef>
+        <!--Simple Marauroa Java Project-->
+        <update-or-clone 
+        url="https://hg.java.net/hg/simple-marauroa-java~repository"
+        path="${suite.dir}/../Simple Marauroa Java"
+        repo="hg"/>
+        <!--jWrestling Project-->
+        <update-or-clone 
+        url="https://hg.java.net/hg/jwrestling~code"
+        path="${suite.dir}/../jWrestling"
+        repo="hg"/>
     </target>
 
     <target name="create-doxygen-docs">

@@ -202,4 +202,52 @@
             </classpath>
         </taskdef>
     </target>
+    
+    <macrodef name="update-or-clone">
+        <attribute name="url"/>
+        <attribute name="path"/>
+        <attribute name="repo"/>
+        <!--Make sure the required projects are there-->
+        <sequential>
+            <mkdir dir="@{path}"/>
+            <if>
+                <or>
+                    <not>
+                        <available file="@{path}" type="dir"/>
+                    </not>
+                    <not>
+                        <available file="@{path}/.hg" type="dir"/>
+                    </not>
+                </or>
+                <then>
+                    <echo>Project @{path} not found, checking out please wait!</echo>
+                    <if>
+                        <equals arg1="@{repo}" arg2="hg"/> 
+                        <then>
+                            <hg cmd="clone" source="@{url}" destination="@{path}">
+                                <arg value="--insecure" />    
+                            </hg>
+                        </then>
+                        <else>
+                            <fail message="Repository @{repo} not supported!"/>
+                        </else>
+                    </if>
+                </then>
+                <else>
+                    <if>
+                        <equals arg1="@{repo}" arg2="hg"/> 
+                        <then>
+                            <echo>Project @{path} found, updating please wait!</echo>
+                            <hg cmd="update" dir="@{path}"/>
+                        </then>
+
+                        <else>
+                            <fail message="Repository @{repo} not supported!"/>
+                        </else>
+                    </if>
+                </else>
+            </if>
+                        
+        </sequential>
+    </macrodef>  
 </project>

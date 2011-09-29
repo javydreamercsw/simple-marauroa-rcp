@@ -9,23 +9,26 @@
     
     <target name="init" depends="init-netbeans, init-hudson, harness.init">
         <if>
-            <available file="../../../jWrestling Project/jWrestling/build.xml" type="file" />
+            <available file="../../jWrestling/jWrestling/build.xml" type="file" />
             <then>
-                <property file="../../../jWrestling Project/jWrestling/nbproject/project.properties" prefix="jwrestling-lib"/>
+                <property file="../../jWrestling/jWrestling/nbproject/project.properties" prefix="jwrestling-lib"/>
                 <length string="${jwrestling-lib.dist.dir}" property="length.dist" />
                 <math result="length.dist" operand1="1" operation="+" operand2="${length.dist}" datatype="int"/>
                 <length string="${jwrestling-lib.dist.jar}" property="length.dist.jar" />
                 <substring text="${jwrestling-lib.dist.jar}" start="${length.dist}" end="${length.dist.jar}" property="jwrestling-lib.dist.jar"/>
-                <ant antfile="../../../jWrestling Project/jWrestlingClient/build.xml" target="clean" inheritall="false" />
-                <ant antfile="../../../jWrestling Project/jWrestlingClient/build.xml" target="jar" inheritall="false" />
-                <copy file="../../../jWrestling Project/jWrestling/dist/${jwrestling-lib.dist.jar}" tofile="release/modules/ext/jWrestling/${jwrestling-lib.dist.jar}"/>
+                <ant antfile="../../jWrestling/jWrestlingClient/build.xml" target="clean" inheritall="false" />
+                <ant antfile="../../jWrestling/jWrestlingClient/build.xml" target="jar" inheritall="false" />
+                <copy file="../../jWrestling/jWrestling/dist/${jwrestling-lib.dist.jar}" tofile="release/modules/ext/jWrestling/${jwrestling-lib.dist.jar}"/>
                 <!--Ignore the marauroa ad log4j jars, use the ones in the Marauroa library instead-->
                 <copy todir="release/modules/ext/jWrestling">
-                    <fileset dir="../../../jWrestling Project/jWrestling/dist/lib" excludes="*marauroa*.jar, log4j*.jar, mysql*.jar, h2*.jar, swing-layout*.jar"/>
+                    <fileset dir="../../jWrestling/jWrestling/dist/lib" excludes="*marauroa*.jar, log4j*.jar, mysql*.jar, h2*.jar, swing-layout*.jar"/>
                 </copy>
                 <!--Copy the server.ini file to use as default-->
-                <copy file="../../../jWrestling Project/jWrestling/server.ini" tofile="src/games/jwrestling/application/default.ini"/>
+                <copy file="../../jWrestling/jWrestling/server.ini" tofile="src/games/jwrestling/application/default.ini"/>
             </then>
+            <else>
+                <fail message="Missing jWrestling"/>    
+            </else>
         </if>
     </target>
 </project>
