@@ -356,19 +356,14 @@
     </target>
 
     <target name="nbms" depends="init-netbeans,init-hudson">
-        <if>
-            <isset property="Hudson"/>
-            <then>
-                <!--Update keystore info in projects-->
-                <antcall target="update-keystore-info"/>
-                <!--Create/Update keystore-->
-                <delete file="${keystore.location}${keystore.name}"/>
-                <mkdir dir="${keystore.location}"/>
-                <genkey alias="${keystore.alias}" storepass="${keystore.password}"
+        <!--Update keystore info in projects-->
+        <antcall target="update-keystore-info"/>
+        <!--Create/Update keystore-->
+        <delete file="${keystore.location}${keystore.name}"/>
+        <mkdir dir="${keystore.location}"/>
+        <genkey alias="${keystore.alias}" storepass="${keystore.password}"
                 dname="${keystore.dname}"
                 keystore="${keystore.location}${keystore.name}"/> 
-            </then>
-        </if>
         <!--Generate nbms and javadoc for applicable projects-->
         <antcall target="suite.nbms"/>
     </target>
