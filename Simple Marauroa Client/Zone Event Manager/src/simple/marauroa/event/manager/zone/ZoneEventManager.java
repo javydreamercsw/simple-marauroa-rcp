@@ -1,67 +1,76 @@
 package simple.marauroa.event.manager.zone;
 
+import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import marauroa.client.ClientFramework;
+import marauroa.common.game.IRPZone;
+import marauroa.common.game.RPAction;
+import org.openide.util.NbBundle;
+import org.openide.util.Utilities;
 import org.openide.util.lookup.ServiceProvider;
+import org.openide.util.lookup.ServiceProviders;
 import org.openide.windows.TopComponent;
+import simple.marauroa.application.core.EventBus;
+import simple.marauroa.application.core.Zone;
+import simple.marauroa.application.core.tool.Tool;
+import simple.marauroa.client.components.api.IZoneListActionProvider;
 import simple.marauroa.client.components.api.IZoneListManager;
+import simple.marauroa.client.components.api.actions.ZoneListAction;
 import simple.marauroa.client.components.common.MCITool;
+import simple.marauroa.event.manager.zone.dialog.ZoneDialog;
+import simple.server.core.engine.SimpleRPZone;
 import simple.server.core.event.ZoneEvent;
 import simple.server.core.event.api.IZoneEvent;
+import simple.server.extension.ZoneExtension;
 
 /**
  *
  * @author Javier A. Ortiz <javier.ortiz.78@gmail.com>
  */
-@ServiceProvider(service = IZoneListManager.class)
-public class ZoneEventManager implements IZoneListManager {
+@ServiceProviders({
+    @ServiceProvider(service = IZoneListManager.class),
+    @ServiceProvider(service = IZoneListActionProvider.class)})
+public class ZoneEventManager implements IZoneListManager, IZoneListActionProvider {
 
     private static final Logger logger =
             Logger.getLogger(ZoneEventManager.class.getSimpleName());
     private static ZoneListTopComponent instance;
+    private ZoneDialog zd;
 
     private void processAdd(IZoneEvent event) {
-        if (MCITool.getZoneListManager() != null) {
-            logger.log(Level.INFO, "Adding zone: {0}", event.get(ZoneEvent.FIELD));
-            MCITool.getZoneListManager().addZone(event.get(ZoneEvent.FIELD)
-                    + (event.get(ZoneEvent.DESC) == null ? "" : ": " + event.get(ZoneEvent.DESC)));
-        }
+        logger.log(Level.FINE, "Adding zone: {0}", event.get(ZoneEvent.FIELD));
+        addZone(event.get(ZoneEvent.FIELD)
+                + (event.get(ZoneEvent.DESC) == null ? "" : ": " + event.get(ZoneEvent.DESC)));
     }
 
     private void processUpdate(IZoneEvent event) {
-        if (MCITool.getZoneListManager() != null) {
-            logger.log(Level.INFO, "Updating zone: {0}", event.get(ZoneEvent.FIELD));
-            MCITool.getZoneListManager().updateZone(event.get(ZoneEvent.FIELD),
-                    event.get(ZoneEvent.DESC));
-        }
+        logger.log(Level.FINE, "Updating zone: {0}", event.get(ZoneEvent.FIELD));
+        updateZone(event.get(ZoneEvent.FIELD),
+                event.get(ZoneEvent.DESC));
     }
 
     private void processRemove(IZoneEvent event) {
-        if (MCITool.getZoneListManager() != null) {
-            logger.log(Level.INFO, "Removing zone: {0}", event.get(ZoneEvent.FIELD));
-            MCITool.getZoneListManager().removeZone(event.get(ZoneEvent.FIELD));
-        }
+        logger.log(Level.FINE, "Removing zone: {0}", event.get(ZoneEvent.FIELD));
+        removeZone(event.get(ZoneEvent.FIELD));
     }
 
     private void processListZones(IZoneEvent event) {
-        if (MCITool.getZoneListManager() != null) {
-            MCITool.getZoneListManager().clearList();
-            StringTokenizer st = new StringTokenizer(event.get(ZoneEvent.FIELD), "#");
-            while (st.hasMoreTokens()) {
-                String token = st.nextToken();
-                logger.log(Level.INFO, "Adding zone: {0}", token);
-                MCITool.getZoneListManager().addZone(token);
-            }
+        StringTokenizer st = new StringTokenizer(event.get(ZoneEvent.FIELD), "#");
+        while (st.hasMoreTokens()) {
+            String token = st.nextToken();
+            logger.log(Level.FINE, "Adding zone: {0}", token);
+            addZone(token);
         }
     }
 
     private void processNeedPass(IZoneEvent event) {
         //TODO: Fully implement
-        if (MCITool.getZoneListManager() != null) {
-            MCITool.getZoneListManager().requestPassword();
-        }
+        MCITool.getZoneListManager().requestPassword();
     }
 
     @Override
@@ -106,19 +115,74 @@ public class ZoneEventManager implements IZoneListManager {
         return instance;
     }
 
+    /**
+     * Get the appropriate dialog for the action
+     *
+     * @param mode Mode for the dialog
+     * @return the ZoneDialog
+     */
+    public ZoneDialog getRoomDialog(int mode) {
+        if (zd == null) {
+            zd = new ZoneDialog(true, mode);
+        } else {
+            zd.update(mode);
+        }
+        Tool.centerDialog(zd);
+        zd.setVisible(true);
+        return zd;
+    }
+
     @Override
     public void addZone(String zone) {
-        getInstance().addZone(zone);
+        Zone newZone;
+        String desc = null;
+        if (zone.indexOf(':') > 0) {
+            desc = zone.substring(zone.indexOf(':') + 2);
+            zone = zone.substring(0, zone.indexOf(':'));
+        }
+        newZone = new Zone(zone);
+        if (desc != null) {
+            newZone.setDescription(desc);
+        }
+        EventBus.getDefault().add(newZone);
     }
 
     @Override
     public void removeZone(String zone) {
-        getInstance().removeZone(zone);
+        for (Iterator<? extends IRPZone> it = Utilities.actionsGlobalContext().lookupAll(IRPZone.class).iterator(); it.hasNext();) {
+            IRPZone z = it.next();
+            String zoneName = Tool.getZoneName(z.getID());
+            if (zoneName.indexOf(':') > 0) {
+                //Remove the description
+                zoneName = zoneName.substring(0, zoneName.indexOf(':'));
+            }
+            if (zoneName.equals(zone)) {
+                EventBus.getDefault().remove(z);
+            }
+        }
     }
 
     @Override
     public void updateZone(String zone, String modified) {
-        getInstance().updateZone(zone, modified);
+        for (Iterator<? extends IRPZone> it = Utilities.actionsGlobalContext().lookupAll(IRPZone.class).iterator(); it.hasNext();) {
+            IRPZone z = it.next();
+            String zoneName = Tool.getZoneName(z.getID());
+            if (zoneName.indexOf(':') > 0) {
+                //Remove the description
+                zoneName = zoneName.substring(0, zoneName.indexOf(':'));
+            }
+            if (zoneName.equals(zone)) {
+                if (z instanceof SimpleRPZone) {
+                    ((SimpleRPZone) z).setDescription(modified);
+                    IRPZone copy = z;
+                    EventBus.getDefault().remove(z);
+                    EventBus.getDefault().add((Zone) copy);
+                    break;
+                } else {
+                    logger.warning("Zone is not an instance of SimpleRPZone.");
+                }
+            }
+        }
     }
 
     @Override
@@ -127,17 +191,104 @@ public class ZoneEventManager implements IZoneListManager {
     }
 
     @Override
-    public void clearList() {
-        getInstance().clearList();
+    public List<ZoneListAction> getActions() {
+        ArrayList<ZoneListAction> actions = new ArrayList<ZoneListAction>();
+        actions.add(new CreateZoneAction());
+        actions.add(new EditZoneAction());
+        actions.add(new DeleteZoneAction());
+        actions.add(new JoinZoneAction());
+        return actions;
     }
 
-    @Override
-    public List getSelectedValues() {
-        return getInstance().getSelectedValues();
+    private class JoinZoneAction extends ZoneListAction {
+
+        public JoinZoneAction() {
+            super(100, NbBundle.getMessage(ZoneEventManager.class,
+                    "join.zone"));
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            RPAction action = new RPAction();
+            action.put("type", ZoneExtension.TYPE);
+            action.put(ZoneExtension.ROOM, Tool.getZoneName(
+                    Utilities.actionsGlobalContext().lookup(IRPZone.class).getID()));
+            action.put(ZoneExtension.OPERATION, ZoneEvent.JOIN);
+            ((ClientFramework) MCITool.getClient()).send(action);
+            //Need to clear the player list
+            if(MCITool.getUserListManager()!= null){
+                MCITool.getUserListManager().clearList();
+            }
+        }
+
+        @Override
+        public void updateStatus() {
+            setEnabled(true);
+        }
     }
 
-    @Override
-    public Object getSelectedValue() {
-        return getInstance().getSelectedValue();
+    private class CreateZoneAction extends ZoneListAction {
+
+        public CreateZoneAction() {
+            super(200, NbBundle.getMessage(ZoneEventManager.class,
+                    "create.zone"));
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            getRoomDialog(ZoneEvent.ADD);
+            //Request zone update
+            RPAction action = new RPAction();
+            action.put("type", ZoneExtension.TYPE);
+            action.put(ZoneExtension.OPERATION, ZoneEvent.LISTZONES);
+            action.put(ZoneExtension.SEPARATOR, "#");
+            ((ClientFramework) MCITool.getClient()).send(action);
+        }
+
+        @Override
+        public void updateStatus() {
+            setEnabled(true);
+        }
+    }
+
+    private class EditZoneAction extends ZoneListAction {
+
+        public EditZoneAction() {
+            super(300, NbBundle.getMessage(ZoneEventManager.class,
+                    "edit.zone"));
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            getRoomDialog(ZoneEvent.UPDATE);
+        }
+
+        @Override
+        public void updateStatus() {
+            setEnabled(true);
+        }
+    }
+
+    private class DeleteZoneAction extends ZoneListAction {
+
+        public DeleteZoneAction() {
+            super(400, NbBundle.getMessage(ZoneEventManager.class,
+                    "delete.zone"));
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            RPAction action = new RPAction();
+            action.put("type", ZoneExtension.TYPE);
+            action.put(ZoneExtension.ROOM, Tool.getZoneName(
+                    Utilities.actionsGlobalContext().lookup(IRPZone.class).getID()));
+            action.put(ZoneExtension.OPERATION, ZoneEvent.REMOVE);
+            ((ClientFramework) MCITool.getClient()).send(action);
+        }
+
+        @Override
+        public void updateStatus() {
+            setEnabled(true);
+        }
     }
 }
