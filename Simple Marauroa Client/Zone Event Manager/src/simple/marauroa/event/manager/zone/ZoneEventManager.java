@@ -24,8 +24,8 @@ import simple.marauroa.client.components.api.actions.ZoneListAction;
 import simple.marauroa.client.components.common.MCITool;
 import simple.marauroa.event.manager.zone.dialog.ZoneDialog;
 import simple.server.core.engine.SimpleRPZone;
-import simple.server.core.event.ZoneEvent;
 import simple.server.core.event.api.IZoneEvent;
+import simple.server.extension.ZoneEvent;
 import simple.server.extension.ZoneExtension;
 
 /**
@@ -75,7 +75,7 @@ public class ZoneEventManager implements IZoneListManager, IZoneListActionProvid
 
     @Override
     public void notify(IZoneEvent event) {
-        if (event != null && event.getName().equals(ZoneEvent.getRPClassName())) {
+        if (event != null && event.getName().equals(ZoneEvent.RPCLASS_NAME)) {
             logger.log(Level.INFO, "Got Zone Event: {0}", event);
             //Default Zone Event
             switch (event.getInt(ZoneEvent.ACTION)) {

@@ -47,23 +47,6 @@ public interface IMarauroaApplication {
     public void removeStatusListener(ApplicationStatusChangeListener listener);
 
     /*
-     * This method takes care of generating the INI file for the application.
-     * The INI file links Marauroa with the application by specifying the 
-     * following:
-     *  database_implementation: Class in charge of the database access
-     *  factory_implementation: Factory in charge of creating objects
-     *  gameserver_implementation: The application's server manage
-     *  world: The application's "world"
-     *  ruleprocessor: The application's Rule processor
-     * 
-     * Don't get fooled by the references to game. Maruroa can be used for 
-     * applications other than games.
-     * 
-     * TODO: This should be configurable.
-     */
-    public void generateINI();
-
-    /*
      * Get the application's name
      */
     public String getName();

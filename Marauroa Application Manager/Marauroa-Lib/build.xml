@@ -12,10 +12,13 @@
             <available file="../../marauroa/build.xml" type="file" />
             <then>
                 <!--Copy the Marauroa Related files-->
+                <property file="../../marauroa/build.ant.properties" prefix="marauroa-lib"/>
                 <ant antfile="../../marauroa/build.xml" target="clean" inheritall="false" />
                 <ant antfile="../../marauroa/build.xml" target="jar" inheritall="false" />
                 <copy file="../../marauroa/build-archive/marauroa.jar" tofile="release/modules/ext/Marauroa.jar"/>
                 <copy file="../../marauroa/build-archive/marauroa.jar" tofile="../jWrestling/jWrestling Libs/marauroa.jar"/>
+                <copy file="../../marauroa/build-archive/marauroa.jar" tofile="../../Simple Libs/marauroa.jar"/>
+                <copy file="../../marauroa/build-archive/marauroa-client-only-${marauroa-lib.version}.jar" tofile="../../Simple Libs/marauroa-client.jar"/>
                 <copy file="../../marauroa/libs/log4j.jar" tofile="release/modules/ext/log4j.jar"/>
             </then>
             <else>
@@ -23,7 +26,7 @@
                     <available file="../../Simple Marauroa Java/Simple-Server/build.xml" type="file" />
                     <then>
                         <property file="../../Simple Marauroa Java/Simple-Server/nbproject/project.properties" prefix="server-lib"/>
-                <!--Copy the Marauroa Related files-->
+                        <!--Copy the Marauroa Related files-->
                         <ant antfile="../../Simple Marauroa Java/Simple-Server/build.xml" target="jar" inheritall="false" />
                         <copy file="../${server-lib.file.reference.marauroa.jar}" tofile="release/modules/ext/Marauroa.jar"/>
                         <copy file="../${server-lib.file.reference.log4j.jar}" tofile="release/modules/ext/log4j.jar"/>

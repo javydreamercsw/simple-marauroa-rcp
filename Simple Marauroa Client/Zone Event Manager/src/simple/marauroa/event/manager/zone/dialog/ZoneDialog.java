@@ -8,7 +8,7 @@ import org.openide.util.Utilities;
 import simple.marauroa.application.core.Zone;
 import simple.marauroa.application.core.tool.Tool;
 import simple.marauroa.client.components.common.MCITool;
-import simple.server.core.event.ZoneEvent;
+import simple.server.extension.ZoneEvent;
 import simple.server.extension.ZoneExtension;
 
 /**

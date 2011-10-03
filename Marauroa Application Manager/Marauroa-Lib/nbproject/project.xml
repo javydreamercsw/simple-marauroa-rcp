@@ -8,6 +8,7 @@
             <module-dependencies/>
             <public-packages>
                 <package>marauroa.client</package>
+                <package>marauroa.client.extension</package>
                 <package>marauroa.client.net</package>
                 <package>marauroa.common</package>
                 <package>marauroa.common.crypto</package>
@@ -23,6 +24,7 @@
                 <package>marauroa.server.game.container</package>
                 <package>marauroa.server.game.db</package>
                 <package>marauroa.server.game.dbcommand</package>
+                <package>marauroa.server.game.extension</package>
                 <package>marauroa.server.game.messagehandler</package>
                 <package>marauroa.server.game.python</package>
                 <package>marauroa.server.game.rp</package>
@@ -45,7 +47,6 @@
                 <package>org.apache.log4j.spi</package>
                 <package>org.apache.log4j.varia</package>
                 <package>org.apache.log4j.xml</package>
-                <package>simple.server.extension</package>
             </public-packages>
             <class-path-extension>
                 <runtime-relative-path>ext/Marauroa.jar</runtime-relative-path>

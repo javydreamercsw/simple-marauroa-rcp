@@ -7,11 +7,12 @@
             <suite-component/>
             <module-dependencies/>
             <public-packages>
+                <package>simple.client.extension</package>
                 <package>simple.server.extension</package>
             </public-packages>
             <class-path-extension>
-                <runtime-relative-path>ext/extensions/Zone Extension.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/extensions/Zone Extension.jar</binary-origin>
+                <runtime-relative-path>ext/extensions/Zone_Extension.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/extensions/Zone_Extension.jar</binary-origin>
             </class-path-extension>
         </data>
     </configuration>
