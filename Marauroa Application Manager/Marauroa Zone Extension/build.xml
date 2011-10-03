@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- You may freely edit this file. See harness/README in the NetBeans platform -->
+<!-- for some information on what you could do (e.g. targets to override). -->
+<!-- If you delete this file and reopen the project it will be recreated. -->
+<project name="simple.server.extension.zone" default="netbeans" basedir=".">
+    <description>Builds, tests, and runs the project simple.server.extension.zone.</description>
+    <import file="nbproject/build-impl.xml"/>
+    <import file="${suite.dir}/preparation.xml"/>
+    
+    <target name="init" depends="init-netbeans, init-hudson, harness.init">
+        <if>
+                <available file="../../Simple Marauroa Java/Zone Extension/build.xml" type="file" />
+            <then>
+                <property file="../../Simple Marauroa Java/Zone Extension/nbproject/project.properties" prefix="extension-lib"/>
+                <length string="${extension-lib.dist.dir}" property="length.dist" />
+                <math result="length.dist" operand1="1" operation="+" operand2="${length.dist}" datatype="int"/>
+                <length string="${extension-lib.dist.jar}" property="length.dist.jar" />
+                <substring text="${extension-lib.dist.jar}" start="${length.dist}" end="${length.dist.jar}" property="extension-lib.dist.jar" />
+                <ant antfile="../../Simple Marauroa Java/Zone Extension/build.xml" target="clean" inheritall="false" />
+                <ant antfile="../../Simple Marauroa Java/Zone Extension/build.xml" target="jar" inheritall="false" />
+                <copy file="../../Simple Marauroa Java/Zone Extension/dist/${extension-lib.dist.jar}" tofile="release/modules/ext/extensions/${extension-lib.dist.jar}"/>
+            </then>
+        </if>
+    </target>
+</project>
