@@ -44,8 +44,6 @@ public interface IChatInterface extends IClientComponent, ReaderListener {
      * String to output
      * @param type
      * Type of notification
-     * @param from
-     * The sender of the message
      */
     void addLine(String line, NotificationType type);
 

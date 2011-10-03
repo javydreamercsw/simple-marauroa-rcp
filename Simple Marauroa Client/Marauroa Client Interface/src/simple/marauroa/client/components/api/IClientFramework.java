@@ -19,7 +19,7 @@ public interface IClientFramework extends Runnable{
     /**
      * Get account username
      *
-     * @return
+     * @return Account user name
      */
     String getAccountUsername();
 
@@ -121,13 +121,11 @@ public interface IClientFramework extends Runnable{
 
     /**
      * Connect to the server
-     * @param host
-     * @param username
-     * @param password
-     * @param character
-     * @param port
-     * @param name
-     * @param verison 
+     * @param host IP/server name of the host
+     * @param username user name to login with
+     * @param password password for the user name
+     * @param character character name
+     * @param port port to connect to
      */
     public void provideCredentials(String host, String username, String password,
             String character, final String port);

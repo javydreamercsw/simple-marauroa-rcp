@@ -25,7 +25,6 @@ import simple.marauroa.application.api.*;
 import simple.marauroa.application.core.executor.DefaultMarauroaProcess;
 import simple.marauroa.application.core.executor.IMarauroaProcess;
 import simple.marauroa.application.core.executor.ScriptExecuter;
-import simple.server.extension.MonitorExtension;
 
 /**
  *
@@ -376,6 +375,16 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
                     rollback = true;
                     success = false;
                 }
+                //Copy extension libraries
+                if (success) {
+                    try {
+                        updateExtLibs();
+                    } catch (IOException ex) {
+                        Exceptions.printStackTrace(ex);
+                        rollback = true;
+                        success = false;
+                    }
+                }
                 //Create marauroad.bat file
                 try {
                     if (success) {
@@ -470,18 +479,6 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
                 props.put("n", rsakey.getN().toString());
                 props.put("e", rsakey.getE().toString());
                 props.put("d", rsakey.getD().toString());
-            }
-
-            //Make sure to configure the monitor extension
-            custom.put(MonitorExtension._MONITOR, "simple.server.extension.MonitorExtension");
-            if (props.getProperty(ConfigurationElement.SERVER_EXTENSION.getName()) != null
-                    && !props.getProperty(ConfigurationElement.SERVER_EXTENSION.getName()).contains(MonitorExtension._MONITOR)) {
-                //Append to the list
-                props.put(ConfigurationElement.SERVER_EXTENSION.getName(),
-                        props.get(ConfigurationElement.SERVER_EXTENSION.getName())
-                        + "," + MonitorExtension._MONITOR);
-            } else {
-                props.put(ConfigurationElement.SERVER_EXTENSION.getName(), MonitorExtension._MONITOR);
             }
             //For some reason this deletes the file
             BufferedWriter writer = new BufferedWriter(new FileWriter(ini));
@@ -815,11 +812,15 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
                     Exceptions.printStackTrace(ex);
                 }
             }
-            //Make sure that the lib folder is present
-            File lib = new File(getAppDirPath()
-                    + System.getProperty("file.separator") + "lib");
             try {
                 updateLibs();
+            } catch (IOException ex) {
+                logger.log(Level.SEVERE, null, ex);
+                Exceptions.printStackTrace(ex);
+            }
+            //Copy extension libraries
+            try {
+                updateExtLibs();
             } catch (IOException ex) {
                 logger.log(Level.SEVERE, null, ex);
                 Exceptions.printStackTrace(ex);
@@ -881,7 +882,15 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
         StringBuilder libs = new StringBuilder();
         File libDir = new File(getAppDirPath()
                 + System.getProperty("file.separator") + "lib");
-        listLibrariesInFolder(libDir, libs);
+        if (libDir.exists()) {
+            listLibrariesInFolder(libDir, libs);
+        }
+        File extLibDir = new File(getAppDirPath()
+                + System.getProperty("file.separator") + "lib"
+                + System.getProperty("file.separator") + "extensions");
+        if (extLibDir.exists()) {
+            listLibrariesInFolder(extLibDir, libs);
+        }
         return libs.toString();
     }
 
@@ -900,7 +909,10 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
                             libs.append(";");
                         }
                     }
-                    libs.append("lib").append(System.getProperty("file.separator")).append(lib.getName());
+                    if(folder.getParentFile().getName().equals("lib")){
+                        libs.append(folder.getParentFile().getName()).append(System.getProperty("file.separator"));
+                    }
+                    libs.append(folder.getName()).append(System.getProperty("file.separator")).append(lib.getName());
                 } else {
                     listLibrariesInFolder(lib, libs);
                 }
@@ -1099,5 +1111,16 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
      */
     protected void setRelativeToClass(Class relativeToClass) {
         this.relativeToClass = relativeToClass;
+    }
+
+    private void updateExtLibs() throws IOException {
+        File folder = InstalledFileLocator.getDefault().locate("modules/ext",
+                "marauroa.lib", false);
+        if (folder != null) {
+            //Delete the library contents in case something got removed.
+            File dir = new File(getAppDirPath() + System.getProperty("file.separator") + "lib");
+            MarauroaApplicationRepository.deleteFolder(dir);
+            copyContentsOfFolder(folder, dir.getAbsolutePath(), true);
+        }
     }
 }

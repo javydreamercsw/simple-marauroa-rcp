@@ -7,7 +7,7 @@
     <import file="nbproject/build-impl.xml"/>
     <import file="${suite.dir}/preparation.xml"/>
     
-    <target name="init" depends="init-netbeans, init-hudson, harness.init">
+    <target name="init" depends="init-netbeans, init-hudson, harness.init, update-lookup-lib">
         <if>
             <available file="../../jWrestling/jWrestling/build.xml" type="file" />
             <then>
@@ -16,8 +16,8 @@
                 <math result="length.dist" operand1="1" operation="+" operand2="${length.dist}" datatype="int"/>
                 <length string="${jwrestling-lib.dist.jar}" property="length.dist.jar" />
                 <substring text="${jwrestling-lib.dist.jar}" start="${length.dist}" end="${length.dist.jar}" property="jwrestling-lib.dist.jar"/>
-                <ant antfile="../../jWrestling/jWrestlingClient/build.xml" target="clean" inheritall="false" />
-                <ant antfile="../../jWrestling/jWrestlingClient/build.xml" target="jar" inheritall="false" />
+                <ant antfile="../../jWrestling/jWrestling/build.xml" target="clean" inheritall="false" />
+                <ant antfile="../../jWrestling/jWrestling/build.xml" target="jar" inheritall="false" />
                 <copy file="../../jWrestling/jWrestling/dist/${jwrestling-lib.dist.jar}" tofile="release/modules/ext/jWrestling/${jwrestling-lib.dist.jar}"/>
                 <!--Ignore the marauroa ad log4j jars, use the ones in the Marauroa library instead-->
                 <copy todir="release/modules/ext/jWrestling">
@@ -30,5 +30,11 @@
                 <fail message="Missing jWrestling"/>    
             </else>
         </if>
+    </target>
+    
+    <target name="update-lookup-lib">
+        <fileset id="finder" dir="${harness.dir}/.." includes="**/org-openide-util-lookup.jar" />
+        <pathconvert property="lookup-lib" refid="finder" />
+        <copy file="${lookup-lib}" tofile="../jWrestling/jWrestlingLibs/org-openide-util-lookup.jar"/>
     </target>
 </project>

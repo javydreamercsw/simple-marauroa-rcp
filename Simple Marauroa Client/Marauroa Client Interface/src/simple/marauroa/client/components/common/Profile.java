@@ -69,7 +69,7 @@ public class Profile {
 
     /**
      * Get host
-     * @return
+     * @return host string
      */
     public String getHost() {
         return host;
@@ -77,7 +77,7 @@ public class Profile {
 
     /**
      * Get Password
-     * @return
+     * @return password
      */
     public String getPassword() {
         return password;
@@ -85,7 +85,7 @@ public class Profile {
 
     /**
      * Get Port
-     * @return
+     * @return port
      */
     public int getPort() {
         return port;
@@ -93,7 +93,7 @@ public class Profile {
 
     /**
      * Get user
-     * @return
+     * @return user
      */
     public String getUser() {
         return user;

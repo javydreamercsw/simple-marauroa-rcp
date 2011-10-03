@@ -31,17 +31,5 @@
                 </if>
             </else>
         </if>
-        <if>
-            <available file="../../Simple Marauroa Java/Marauroa Monitor Extension/build.xml" type="file" />
-            <then>
-                <property file="../../Simple Marauroa Java/Marauroa Monitor Extension/nbproject/project.properties" prefix="monitor-lib"/>
-                <length string="${monitor-lib.dist.dir}" property="length.dist" />
-                <math result="length.dist" operand1="1" operation="+" operand2="${length.dist}" datatype="int"/>
-                <length string="${monitor-lib.dist.jar}" property="length.dist.jar" />
-                <substring text="${monitor-lib.dist.jar}" start="${length.dist}" end="${length.dist.jar}" property="monitor-lib.dist.jar" />
-                <ant antfile="../../Simple Marauroa Java/Marauroa Monitor Extension/build.xml" target="jar" inheritall="false" />
-                <copy file="../../Simple Marauroa Java/Marauroa Monitor Extension/dist/${monitor-lib.dist.jar}" tofile="release/modules/ext/${monitor-lib.dist.jar}"/>
-            </then>
-        </if>
     </target>
 </project>

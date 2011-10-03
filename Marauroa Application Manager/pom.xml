@@ -50,6 +50,10 @@
                 <source>./Application Monitor/src</source>
                 
                 <source>./Sound Manager/src</source>
+                
+                <source>./Marauroa Monitor Extension/src</source>
+                
+                <source>./Marauroa Zone Extension/src</source>
                 </sources>
                         </configuration>
                     </execution>

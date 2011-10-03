@@ -24,7 +24,7 @@ import simple.client.event.listener.RPEventNotifier;
 import simple.marauroa.application.api.IApplicationMonitor;
 import simple.marauroa.application.api.IMarauroaApplication;
 import simple.marauroa.application.core.MonitorService;
-import simple.server.core.event.MonitorEvent;
+import simple.server.extension.MonitorEvent;
 import simple.server.extension.MonitorExtension;
 
 /**

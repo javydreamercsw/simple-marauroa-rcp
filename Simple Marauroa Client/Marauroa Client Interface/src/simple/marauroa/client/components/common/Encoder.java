@@ -24,9 +24,9 @@ public class Encoder {
     }
 
     /**
-     *
-     * @param str
-     * @return
+     * Decode a string
+     * @param str String to decode
+     * @return decoded string
      */
     public String decode(String str) {
         try {
@@ -58,9 +58,9 @@ public class Encoder {
     }
 
     /**
-     *
-     * @param str
-     * @return
+     * Encode String
+     * @param str string to encode
+     * @return encoded string
      */
     public String encode(String str) {
         // create binary representationn of input string
