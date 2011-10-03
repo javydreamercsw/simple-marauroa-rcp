@@ -1,8 +1,7 @@
 package simple.marauroa.client;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -10,6 +9,7 @@ import javax.swing.UIManager;
 import marauroa.client.BannedAddressException;
 import marauroa.client.LoginFailedException;
 import marauroa.client.TimeoutException;
+import marauroa.client.extension.MarauroaClientExtension;
 import marauroa.common.game.*;
 import marauroa.common.net.InvalidVersionException;
 import marauroa.common.net.message.MessageS2CPerception;
@@ -18,15 +18,10 @@ import org.netbeans.api.progress.ProgressHandleFactory;
 import org.openide.DialogDisplayer;
 import org.openide.LifecycleManager;
 import org.openide.NotifyDescriptor;
-import org.openide.util.Exceptions;
-import org.openide.util.NbBundle;
-import org.openide.util.RequestProcessor;
-import org.openide.util.TaskListener;
+import org.openide.util.*;
 import org.openide.util.lookup.ServiceProvider;
-import org.xml.sax.SAXException;
 import simple.client.SimpleClient;
 import simple.client.action.update.ClientGameConfiguration;
-import simple.client.conf.ExtensionXMLLoader;
 import simple.client.event.listener.RPEventListener;
 import simple.marauroa.application.core.EventBus;
 import simple.marauroa.application.core.LookupRPObjectManager;
@@ -35,8 +30,9 @@ import simple.marauroa.client.components.common.MCITool;
 import static simple.server.core.action.WellKnownActionConstant.TARGET;
 import static simple.server.core.action.WellKnownActionConstant.TEXT;
 import simple.server.core.action.chat.ChatAction;
-import simple.server.core.event.*;
-import simple.server.extension.ZoneExtension;
+import simple.server.core.event.PrivateTextEvent;
+import simple.server.core.event.SimpleRPEvent;
+import simple.server.core.event.TextEvent;
 
 /**
  *
@@ -51,9 +47,6 @@ public class MarauroaSimpleClient extends SimpleClient implements
         IClientFramework {
 
     private boolean loginDone = false, profileReady = false;
-    private static ExtensionXMLLoader extensionLoader;
-    private static String confPath;
-    private static boolean extLoaded = false;
     protected String userName;
     private final int bufferSize = 10;
     private ArrayList<String> processedEvents = new ArrayList<String>(bufferSize);
@@ -80,7 +73,6 @@ public class MarauroaSimpleClient extends SimpleClient implements
      * When enabled zone is notified when a player enters/exit the zone.
      */
     private boolean chatNotifications = true;
-    private long perceptions = -2, refreshAmount = 500;
 
     public MarauroaSimpleClient() {
         super(LOG4J_PROPERTIES);
@@ -347,36 +339,6 @@ public class MarauroaSimpleClient extends SimpleClient implements
     }
 
     /**
-     * @return the confPath
-     */
-    public static String getConfPath() {
-        return confPath;
-    }
-
-    /**
-     * @param cP the confPath to set
-     */
-    public static void setConfPath(String cP) {
-        if (!extLoaded) {
-            confPath = cP;
-            logger.log(Level.FINE, "Loading extensions from: {0}", confPath);
-            if (extensionLoader == null) {
-                extensionLoader = new ExtensionXMLLoader();
-                try {
-                    extensionLoader.load(new URI(getConfPath()));
-                    extLoaded = true;
-                } catch (SAXException ex) {
-                    logger.log(Level.SEVERE, null, ex);
-                    Exceptions.printStackTrace(ex);
-                } catch (URISyntaxException ex) {
-                    logger.log(Level.SEVERE, null, ex);
-                    Exceptions.printStackTrace(ex);
-                }
-            }
-        }
-    }
-
-    /**
      * @param gameName the gameName to set
      */
     @Override
@@ -506,31 +468,31 @@ public class MarauroaSimpleClient extends SimpleClient implements
                 processedEvents.add(event.get(SimpleRPEvent.EVENT_ID));
                 //Publish the event to the bus so all listeners can react to it
                 //TODO: Remove hack while the interfaces are not part of Marauroa 
-                if (event.getName().equals(TextEvent.getRPClassName())) {
-                    logger.log(Level.FINE, TextEvent.getRPClassName());
+                if (event.getName().equals(TextEvent.RPCLASS_NAME)) {
+                    logger.log(Level.FINE, TextEvent.RPCLASS_NAME);
                     TextEvent textEvent = new TextEvent();
                     textEvent.fill(event);
                     EventBus.getDefault().publish(textEvent);
-                } else if (event.getName().equals(PrivateTextEvent.getRPClassName())) {
-                    logger.log(Level.FINE, PrivateTextEvent.getRPClassName());
+                } else if (event.getName().equals(PrivateTextEvent.RPCLASS_NAME)) {
+                    logger.log(Level.FINE, PrivateTextEvent.RPCLASS_NAME);
                     PrivateTextEvent privateTextEvent = new PrivateTextEvent();
                     privateTextEvent.fill(event);
                     EventBus.getDefault().publish(privateTextEvent);
-                } else if (event.getName().equals(ZoneEvent.getRPClassName())) {
-                    logger.log(Level.FINE, ZoneEvent.getRPClassName());
-                    ZoneEvent zoneEvent = new ZoneEvent();
-                    zoneEvent.fill(event);
-                    EventBus.getDefault().publish(zoneEvent);
-                } else if (event.getName().equals(MonitorEvent.getRPClassName())) {
-                    logger.log(Level.FINE, MonitorEvent.getRPClassName());
-                    MonitorEvent monitorEvent = new MonitorEvent();
-                    monitorEvent.fill(event);
-                    EventBus.getDefault().publish(monitorEvent);
+//                } else if (event.getName().equals(ZoneEvent.RPCLASS_NAME)) {
+//                    logger.log(Level.FINE, ZoneEvent.RPCLASS_NAME);
+//                    ZoneEvent zoneEvent = new ZoneEvent();
+//                    zoneEvent.fill(event);
+//                    EventBus.getDefault().publish(zoneEvent);
+//                } else if (event.getName().equals(MonitorEvent.RPCLASS_NAME)) {
+//                    logger.log(Level.FINE, MonitorEvent.RPCLASS_NAME);
+//                    MonitorEvent monitorEvent = new MonitorEvent();
+//                    monitorEvent.fill(event);
+//                    EventBus.getDefault().publish(monitorEvent);
                 } else {
-                    logger.log(Level.WARNING,
-                            "No specific way of handling event: {0}", event);
-                    //Non special events. If Interfaces are moved to Marauroa only this line will be needed
-                    EventBus.getDefault().publish(new SimpleRPEvent(event));
+                    RPEvent processed = extensionProcessEvent(event);
+                    if (processed != null) {
+                        EventBus.getDefault().publish(processed);
+                    }
                 }
             } else {
                 duplicateCounter++;
@@ -540,6 +502,18 @@ public class MarauroaSimpleClient extends SimpleClient implements
         } else {
             logger.warning("Received a null event from server.");
         }
+    }
+
+    private RPEvent extensionProcessEvent(RPEvent event) {
+        RPEvent processed = null;
+        for (Iterator<? extends MarauroaClientExtension> it = Lookup.getDefault().lookupAll(MarauroaClientExtension.class).iterator(); it.hasNext();) {
+            MarauroaClientExtension extension = it.next();
+            RPEvent processEvent = extension.processEvent(event);
+            if (processEvent != null) {
+                return processEvent;
+            }
+        }
+        return processed;
     }
 
     @Override
@@ -632,18 +606,6 @@ public class MarauroaSimpleClient extends SimpleClient implements
             if (getPlayerRPC() == null) {
                 setPlayerRPC(object);
             }
-        }
-        perceptions++;
-        if (perceptions >= refreshAmount || perceptions == -1) {
-            logger.fine("Requesting zone update...");
-            //Ask for a zone refresher.
-            //We don't get information about other zones in the perception.
-            RPAction action = new RPAction();
-            action.put("type", ZoneExtension.TYPE);
-            action.put(ZoneExtension.OPERATION, ZoneEvent.LISTZONES);
-            action.put(ZoneExtension.SEPARATOR, "#");
-            send(action);
-            perceptions = 0;
         }
         return true;
     }

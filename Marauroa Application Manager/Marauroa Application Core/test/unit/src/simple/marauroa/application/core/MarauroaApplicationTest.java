@@ -2,12 +2,8 @@ package simple.marauroa.application.core;
 
 import java.awt.Image;
 import java.io.IOException;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.*;
 import org.openide.util.Exceptions;
 
 /**
@@ -44,16 +40,6 @@ public class MarauroaApplicationTest {
         assertTrue(MarauroaApplication.validateName("x"));
         assertFalse(MarauroaApplication.validateName(null));
         assertFalse(MarauroaApplication.validateName(""));
-    }
-
-    /**
-     * Test of generateINI method, of class MarauroaApplication.
-     */
-    @Test
-    public void testGenerateINI() {
-        System.out.println("generateINI");
-        MarauroaApplication instance = new MarauroaApplicationImpl();
-        instance.generateINI();
     }
 
     /**

@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 OpenIDE-Module: simple.marauroa.application.core/0
-OpenIDE-Module-Implementation-Version: 1
+OpenIDE-Module-Implementation-Version: 2
 OpenIDE-Module-Install: simple/marauroa/application/core/Installer.class
 OpenIDE-Module-Layer: simple/marauroa/application/core/layer.xml
 OpenIDE-Module-Localizing-Bundle: simple/marauroa/application/core/Bundle.properties

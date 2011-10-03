@@ -79,11 +79,6 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
         return name != null && !name.isEmpty();
     }
 
-    @Override
-    public void generateINI() {
-        INIGenerator.showINI(this, loadINIConfiguration());
-    }
-
     /*
      * For adding custom properties, override this method caling super() 
      * then add your properties into the HashMap
@@ -442,6 +437,20 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
                 + getAppINIFileName();
     }
 
+    /*
+     * This method takes care of generating the INI file for the application.
+     * The INI file links Marauroa with the application by specifying the 
+     * following:
+     *  database_implementation: Class in charge of the database access
+     *  factory_implementation: Factory in charge of creating objects
+     *  gameserver_implementation: The application's server manage
+     *  world: The application's "world"
+     *  ruleprocessor: The application's Rule processor
+     * 
+     * Don't get fooled by the references to game. Marauroa can be used for 
+     * applications other than games.
+     * 
+     */
     protected void updateIniFile() throws IOException {
         OutputHandler.setStatus(NbBundle.getMessage(MarauroaApplication.class,
                 "application.create.ini.start"));
@@ -909,7 +918,7 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
                             libs.append(";");
                         }
                     }
-                    if(folder.getParentFile().getName().equals("lib")){
+                    if (folder.getParentFile().getName().equals("lib")) {
                         libs.append(folder.getParentFile().getName()).append(System.getProperty("file.separator"));
                     }
                     libs.append(folder.getName()).append(System.getProperty("file.separator")).append(lib.getName());

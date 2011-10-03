@@ -93,7 +93,6 @@ public class MarauroaApplicationNode extends BeanNode implements ApplicationStat
             SystemAction.get(DeleteAction.class),
             null,
             new AddRPZoneAction(),
-            new GenerateINIAction(),
             new StartServerAction(),
             new StopServerAction(),
             new ConnectAction(),
@@ -114,9 +113,6 @@ public class MarauroaApplicationNode extends BeanNode implements ApplicationStat
         for (int i = 0; i < actions.length; i++) {
             if (actions[i] != null && actions[i] instanceof AddRPZoneAction) {
                 actions[i].setEnabled(application.getStatus().contains(STATUS.CONNECTED));
-            }
-            if (actions[i] != null && actions[i] instanceof GenerateINIAction) {
-                actions[i].setEnabled(application != null && !application.hasINIFile());
             }
             if (actions[i] != null && actions[i] instanceof StartServerAction) {
                 actions[i].setEnabled(application.getStatus().contains(STATUS.STOPPED));
@@ -215,19 +211,6 @@ public class MarauroaApplicationNode extends BeanNode implements ApplicationStat
                     Exceptions.printStackTrace(ex);
                 }
             }
-        }
-    }
-
-    private class GenerateINIAction extends AbstractAction {
-
-        public GenerateINIAction() {
-            putValue(NAME, NbBundle.getMessage(MarauroaApplicationNode.class, "generate.ini"));
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent ae) {
-            IMarauroaApplication app = getLookup().lookup(IMarauroaApplication.class);
-            app.generateINI();
         }
     }
 
