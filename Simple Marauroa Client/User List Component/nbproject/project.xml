@@ -139,7 +139,9 @@
                     </test-dependency>
                 </test-type>
             </test-dependencies>
-            <public-packages/>
+            <public-packages>
+                <package>simple.marauroa.client.components.userlist</package>
+            </public-packages>
         </data>
     </configuration>
 </project>

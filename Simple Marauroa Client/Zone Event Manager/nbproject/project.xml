@@ -117,7 +117,10 @@
                     </run-dependency>
                 </dependency>
             </module-dependencies>
-            <public-packages/>
+            <public-packages>
+                <package>simple.marauroa.event.manager.zone</package>
+                <package>simple.marauroa.event.manager.zone.dialog</package>
+            </public-packages>
         </data>
     </configuration>
 </project>

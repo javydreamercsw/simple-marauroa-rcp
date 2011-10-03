@@ -335,7 +335,7 @@
             <property name="INPUT" value="${suite.dir}" />
             <property name="PROJECT_NAME" value="${app.title}" />
             <property name="PROJECT_NUMBER" value="${app.version}" />
-            <property name="OUTPUT_DIRECTORY" value="./doxygen" />
+            <property name="OUTPUT_DIRECTORY" value="${suite.dir}/doxygen" />
             <property name="OPTIMIZE_OUTPUT_JAVA" value="YES"/>
             <property name="EXTRACT_PRIVATE" value="YES"/>
             <property name="EXTRACT_STATIC" value="YES"/>

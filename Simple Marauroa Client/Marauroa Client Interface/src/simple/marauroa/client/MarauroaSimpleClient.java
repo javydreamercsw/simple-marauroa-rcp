@@ -433,7 +433,7 @@ public class MarauroaSimpleClient extends SimpleClient implements
     /**
      * Get account username
      *
-     * @return
+     * @return Account user name
      */
     @Override
     public String getAccountUsername() {
