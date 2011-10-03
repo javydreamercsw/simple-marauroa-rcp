@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: simple.server.extension.monitor/0
+OpenIDE-Module-Implementation-Version: 1
+OpenIDE-Module-Localizing-Bundle: simple/server/extension/monitor/Bundle.properties
+
