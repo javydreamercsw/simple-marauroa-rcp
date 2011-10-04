@@ -262,6 +262,7 @@ public final class LoginForm extends javax.swing.JPanel implements ILoginCompone
 
         passwordField.setText(org.openide.util.NbBundle.getMessage(LoginForm.class, "LoginForm.passwordField.text")); // NOI18N
 
+        saveLoginBox.setSelected(true);
         saveLoginBox.setText(org.openide.util.NbBundle.getMessage(LoginForm.class, "LoginForm.saveLoginBox.text")); // NOI18N
 
         savePasswordBox.setSelected(true);
@@ -284,7 +285,7 @@ public final class LoginForm extends javax.swing.JPanel implements ILoginCompone
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(passwordField, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE))
+                        .addComponent(passwordField))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
@@ -293,9 +294,9 @@ public final class LoginForm extends javax.swing.JPanel implements ILoginCompone
                             .addComponent(jLabel1))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(usernameField, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
-                            .addComponent(serverPortField, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
-                            .addComponent(serverField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE)
+                            .addComponent(usernameField)
+                            .addComponent(serverPortField)
+                            .addComponent(serverField, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(profilesComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
