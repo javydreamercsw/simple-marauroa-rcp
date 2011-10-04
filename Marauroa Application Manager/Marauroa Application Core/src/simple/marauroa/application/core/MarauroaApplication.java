@@ -80,8 +80,8 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
     }
 
     /*
-     * For adding custom properties, override this method caling super() 
-     * then add your properties into the HashMap
+     * For adding custom properties, override this method caling super() then
+     * add your properties into the HashMap
      */
     @Override
     public Properties loadINIConfiguration() {
@@ -98,10 +98,9 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
             if (defaultProperties != null) {
                 config.load(defaultProperties);
                 defaultProperties.close();
-                //Copy file as well
-                FileOutputStream out = new FileOutputStream(new File(getAppINIFilePath()));
-                config.store(out, "");
-                out.close();
+                try (FileOutputStream out = new FileOutputStream(new File(getAppINIFilePath()))) {
+                    config.store(out, "");
+                }
             }
         } catch (IOException ex) {
             logger.log(Level.SEVERE, null, ex);
@@ -147,11 +146,7 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
         process = new DefaultMarauroaProcess(this);
         try {
             process.execute();
-        } catch (ExecutionException ex) {
-            logger.log(Level.SEVERE, null, ex);
-            Exceptions.printStackTrace(ex);
-            return false;
-        } catch (InterruptedException ex) {
+        } catch (ExecutionException | InterruptedException ex) {
             logger.log(Level.SEVERE, null, ex);
             Exceptions.printStackTrace(ex);
             return false;
@@ -264,8 +259,10 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
         }
     }
 
-    /** 
-     * Checks to see if a specific port is available.  *  
+    /**
+     * Checks to see if a specific port is available.
+     *
+     *
      * @param port the port to check for availability
      * @return true if port is available
      */
@@ -439,17 +436,15 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
 
     /*
      * This method takes care of generating the INI file for the application.
-     * The INI file links Marauroa with the application by specifying the 
-     * following:
-     *  database_implementation: Class in charge of the database access
-     *  factory_implementation: Factory in charge of creating objects
-     *  gameserver_implementation: The application's server manage
-     *  world: The application's "world"
-     *  ruleprocessor: The application's Rule processor
-     * 
-     * Don't get fooled by the references to game. Marauroa can be used for 
+     * The INI file links Marauroa with the application by specifying the
+     * following: database_implementation: Class in charge of the database
+     * access factory_implementation: Factory in charge of creating objects
+     * gameserver_implementation: The application's server manage world: The
+     * application's "world" ruleprocessor: The application's Rule processor
+     *
+     * Don't get fooled by the references to game. Marauroa can be used for
      * applications other than games.
-     * 
+     *
      */
     protected void updateIniFile() throws IOException {
         OutputHandler.setStatus(NbBundle.getMessage(MarauroaApplication.class,
@@ -468,7 +463,10 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
                     //Not a predefined property store in a group of their own
                     custom.put(ce.getKey().toString(), ce.getValue().toString());
                 } else {
-                    if (!props.containsKey(ce.getKey().toString())) {
+                    //Only overwrite the server version property
+                    if (ce.getKey().toString().equals(ConfigurationElement.SERVER_VERSION.getName())) {
+                        props.put(ce.getKey().toString(), ConfigurationElement.SERVER_VERSION.getValue().toString());
+                    } else if (!props.containsKey(ce.getKey().toString())) {
                         props.put(ce.getKey().toString(), ce.getValue().toString());
                     }
                 }
@@ -489,100 +487,98 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
                 props.put("e", rsakey.getE().toString());
                 props.put("d", rsakey.getD().toString());
             }
-            //For some reason this deletes the file
-            BufferedWriter writer = new BufferedWriter(new FileWriter(ini));
-            //Now output in desired order and format
-            writer.write("#Generated .ini file for " + getName() + " on " + new Date());
-            writer.newLine();
-            writer.newLine();
-            writer.write("#Configurable Section");
-            writer.newLine();
-            writer.newLine();
-            //Use defaults
-            outputDBProperties(writer);
-            writer.write("#Location of the logging configuration");
-            writer.newLine();
-            writer.write(getProperty(ConfigurationElement.LOG4J));
-            writer.newLine();
-            writer.newLine();
-            writer.write("#Unless you want this on a different place leave it unchanged.");
-            writer.newLine();
-            writer.write(getProperty(ConfigurationElement.STATS));
-            writer.newLine();
-            writer.newLine();
-            writer.write("#End Configurable Section. Modify the following properties at your own risk!");
-            writer.newLine();
-            writer.newLine();
-            writer.write(getProperty(ConfigurationElement.DATABASE));
-            writer.newLine();
-            writer.newLine();
-            writer.write(getProperty(ConfigurationElement.FACTORY));
-            writer.newLine();
-            writer.newLine();
-            writer.write(getProperty(ConfigurationElement.UNIVERSE));
-            writer.newLine();
-            writer.newLine();
-            writer.write(getProperty(ConfigurationElement.RULE_PROCESSOR));
-            writer.newLine();
-            writer.newLine();
-            writer.write(getProperty(ConfigurationElement.CLIENT_OBJECT));
-            writer.newLine();
-            writer.newLine();
-            writer.write(getProperty(ConfigurationElement.SERVER_TYPE));
-            writer.newLine();
-            writer.newLine();
-            writer.write(getProperty(ConfigurationElement.SERVER_NAME));
-            writer.newLine();
-            writer.newLine();
-            writer.write(getProperty(ConfigurationElement.SERVER_VERSION));
-            writer.newLine();
-            writer.newLine();
-            writer.write(getProperty(ConfigurationElement.SERVER_WELCOME));
-            writer.newLine();
-            writer.newLine();
-            writer.write(getProperty(ConfigurationElement.SERVER_CONTACT));
-            writer.newLine();
-            writer.newLine();
-            writer.write("#System account credentials!");
-            writer.newLine();
-            writer.write(getProperty(ConfigurationElement.SYSTEM_PASSWORD));
-            writer.newLine();
-            writer.newLine();
-            writer.write(getProperty(ConfigurationElement.SYSTEM_EMAIL));
-            writer.newLine();
-            writer.newLine();
-            writer.write(getProperty(ConfigurationElement.SYSTEM_NAME));
-            writer.newLine();
-            writer.newLine();
-            writer.write(getProperty(ConfigurationElement.TCP_PORT));
-            writer.newLine();
-            writer.newLine();
-            writer.write(getProperty(ConfigurationElement.TURN_LENGTH));
-            writer.newLine();
-            writer.newLine();
-            writer.write("#Server key. Never change it!");
-            writer.newLine();
-            writer.write("n = " + props.get("n").toString());
-            writer.newLine();
-            writer.newLine();
-            writer.write("e = " + props.get("e").toString());
-            writer.newLine();
-            writer.newLine();
-            writer.write("d = " + props.get("d").toString());
-            writer.newLine();
-            writer.newLine();
-            writer.write("#Custom properties");
-            writer.newLine();
-            for (Entry e : custom.entrySet()) {
-                writer.write(e.getKey().toString() + " = " + e.getValue().toString());
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(ini))) {
+                writer.write("#Generated .ini file for " + getName() + " on " + new Date());
                 writer.newLine();
                 writer.newLine();
+                writer.write("#Configurable Section");
+                writer.newLine();
+                writer.newLine();
+                //Use defaults
+                outputDBProperties(writer);
+                writer.write("#Location of the logging configuration");
+                writer.newLine();
+                writer.write(getProperty(ConfigurationElement.LOG4J));
+                writer.newLine();
+                writer.newLine();
+                writer.write("#Unless you want this on a different place leave it unchanged.");
+                writer.newLine();
+                writer.write(getProperty(ConfigurationElement.STATS));
+                writer.newLine();
+                writer.newLine();
+                writer.write("#End Configurable Section. Modify the following properties at your own risk!");
+                writer.newLine();
+                writer.newLine();
+                writer.write(getProperty(ConfigurationElement.DATABASE));
+                writer.newLine();
+                writer.newLine();
+                writer.write(getProperty(ConfigurationElement.FACTORY));
+                writer.newLine();
+                writer.newLine();
+                writer.write(getProperty(ConfigurationElement.UNIVERSE));
+                writer.newLine();
+                writer.newLine();
+                writer.write(getProperty(ConfigurationElement.RULE_PROCESSOR));
+                writer.newLine();
+                writer.newLine();
+                writer.write(getProperty(ConfigurationElement.CLIENT_OBJECT));
+                writer.newLine();
+                writer.newLine();
+                writer.write(getProperty(ConfigurationElement.SERVER_TYPE));
+                writer.newLine();
+                writer.newLine();
+                writer.write(getProperty(ConfigurationElement.SERVER_NAME));
+                writer.newLine();
+                writer.newLine();
+                writer.write(getProperty(ConfigurationElement.SERVER_VERSION));
+                writer.newLine();
+                writer.newLine();
+                writer.write(getProperty(ConfigurationElement.SERVER_WELCOME));
+                writer.newLine();
+                writer.newLine();
+                writer.write(getProperty(ConfigurationElement.SERVER_CONTACT));
+                writer.newLine();
+                writer.newLine();
+                writer.write("#System account credentials!");
+                writer.newLine();
+                writer.write(getProperty(ConfigurationElement.SYSTEM_PASSWORD));
+                writer.newLine();
+                writer.newLine();
+                writer.write(getProperty(ConfigurationElement.SYSTEM_EMAIL));
+                writer.newLine();
+                writer.newLine();
+                writer.write(getProperty(ConfigurationElement.SYSTEM_NAME));
+                writer.newLine();
+                writer.newLine();
+                writer.write(getProperty(ConfigurationElement.TCP_PORT));
+                writer.newLine();
+                writer.newLine();
+                writer.write(getProperty(ConfigurationElement.TURN_LENGTH));
+                writer.newLine();
+                writer.newLine();
+                writer.write("#Server key. Never change it!");
+                writer.newLine();
+                writer.write("n = " + props.get("n").toString());
+                writer.newLine();
+                writer.newLine();
+                writer.write("e = " + props.get("e").toString());
+                writer.newLine();
+                writer.newLine();
+                writer.write("d = " + props.get("d").toString());
+                writer.newLine();
+                writer.newLine();
+                writer.write("#Custom properties");
+                writer.newLine();
+                for (Entry e : custom.entrySet()) {
+                    writer.write(e.getKey().toString() + " = " + e.getValue().toString());
+                    writer.newLine();
+                    writer.newLine();
+                }
+                writer.write("#Enabled extensions");
+                writer.newLine();
+                writer.write(getProperty(ConfigurationElement.SERVER_EXTENSION));
+                writer.flush();
             }
-            writer.write("#Enabled extensions");
-            writer.newLine();
-            writer.write(getProperty(ConfigurationElement.SERVER_EXTENSION));
-            writer.flush();
-            writer.close();
         }
         OutputHandler.setStatus(NbBundle.getMessage(
                 MarauroaApplication.class,
@@ -633,23 +629,21 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
                         commands, marauroad.getParentFile().getAbsolutePath());
                 try {
                     se.execute();
-                } catch (ExecutionException ex) {
-                    Exceptions.printStackTrace(ex);
-                } catch (InterruptedException ex) {
+                } catch (ExecutionException | InterruptedException ex) {
                     Exceptions.printStackTrace(ex);
                 }
             }
             //Populate the file
             FileWriter fstream = new FileWriter(marauroad);
-            BufferedWriter out = new BufferedWriter(fstream);
-            if (OSValidator.isUnix()) {
-                out.write("#!/bin/sh");
-                out.newLine();
+            try (BufferedWriter out = new BufferedWriter(fstream)) {
+                if (OSValidator.isUnix()) {
+                    out.write("#!/bin/sh");
+                    out.newLine();
+                }
+                out.write("java -cp ");
+                out.write("\"" + getLibraries() + "\" "
+                        + "marauroa.server.marauroad -c server.ini -l");
             }
-            out.write("java -cp ");
-            out.write("\"" + getLibraries() + "\" "
-                    + "marauroa.server.marauroad -c server.ini -l");
-            out.close();
         }
         OutputHandler.setStatus(NbBundle.getMessage(
                 MarauroaApplication.class,
@@ -814,26 +808,11 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
     public void update() {
         try {
             if (isRunning()) {
-                try {
-                    shutdown();
-                } catch (Exception ex) {
-                    logger.log(Level.SEVERE, null, ex);
-                    Exceptions.printStackTrace(ex);
-                }
+                shutdown();
             }
-            try {
-                updateLibs();
-            } catch (IOException ex) {
-                logger.log(Level.SEVERE, null, ex);
-                Exceptions.printStackTrace(ex);
-            }
+            updateLibs();
             //Copy extension libraries
-            try {
-                updateExtLibs();
-            } catch (IOException ex) {
-                logger.log(Level.SEVERE, null, ex);
-                Exceptions.printStackTrace(ex);
-            }
+            updateExtLibs();
             //Recreate script in case update lib added/removed libraries
             File script = new File(getScriptName());
             if (script.exists()) {
@@ -849,9 +828,13 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
                     + System.getProperty("file.separator")
                     + "log");
             log.mkdirs();
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             logger.log(Level.SEVERE, null, ex);
-            Exceptions.printStackTrace(ex);
+            DialogDisplayer.getDefault().notifyLater(
+                    new NotifyDescriptor.Message(NbBundle.getMessage(
+                    MarauroaApplication.class,
+                    "application.update.lib.error"),
+                    NotifyDescriptor.ERROR_MESSAGE));
         }
     }
 
