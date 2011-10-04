@@ -5,4 +5,22 @@
 <project name="simple.marauroa.application.api" default="netbeans" basedir=".">
     <description>Builds, tests, and runs the project simple.marauroa.application.api.</description>
     <import file="nbproject/build-impl.xml"/>
+    <import file="${suite.dir}/preparation.xml"/>
+    
+    <target name="init" depends="init-netbeans, init-hudson, harness.init">
+        <if>
+            <available file="../../Simple Marauroa Java/Simple-Server/build.ant.properties" type="file" />
+            <then>
+                <!--Update the server version-->
+                <property file="../../Simple Marauroa Java/Simple-Server/build.ant.properties" prefix="server-lib"/>
+                <replaceregexp file="src/simple/marauroa/application/api/ConfigurationElement.java"
+			match="server_version&quot;, ConfigElementType.STRING, &quot;??.*&quot;"
+			replace="server_version&quot;, ConfigElementType.STRING, &quot;${server-lib.version}&quot;"
+			byline="true"/>
+            </then>
+            <else>
+                <fail message="Unable to retrieve current server version!"/>
+            </else>
+        </if>
+    </target>
 </project>
