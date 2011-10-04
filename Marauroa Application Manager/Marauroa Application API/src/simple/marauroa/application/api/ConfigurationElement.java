@@ -19,7 +19,7 @@ public enum ConfigurationElement {
     "simple.server.core.engine.SimpleRPRuleProcessor"),
     JDBC_URL("jdbc_url", ConfigElementType.STRING,
     "jdbc:h2:file:data/marauroa;CREATE=TRUE;AUTO_SERVER=TRUE;"
-            + "DB_CLOSE_ON_EXIT=FALSE;LOCK_TIMEOUT=10000",
+    + "DB_CLOSE_ON_EXIT=FALSE;LOCK_TIMEOUT=10000",
     "jdbc:mysql://localhost:3306/marauroa"),
     JDBC_CLASS("jdbc_class", ConfigElementType.CLASS, "org.h2.Driver",
     "com.mysql.jdbc.Driver"),
@@ -34,7 +34,7 @@ public enum ConfigurationElement {
     TURN_LENGTH("turn_length", ConfigElementType.INT, "100"),
     SERVER_TYPE("server_typeGame", ConfigElementType.STRING, "Simple"),
     SERVER_NAME("server_name", ConfigElementType.STRING, "Simple"),
-    SERVER_VERSION("server_version", ConfigElementType.STRING, "0.02.03"),
+    SERVER_VERSION("server_version", ConfigElementType.STRING, "0.02.04"),
     SERVER_CONTACT("server_contact", ConfigElementType.STRING, "https://sourceforge.net/tracker/?group_id=325779&atid=1367795"),
     SERVER_WELCOME("server_welcome", ConfigElementType.STRING, "This release is EXPERIMENTAL."
     + "Remember to keep your password completely secret, never tell to another friend, "
@@ -134,7 +134,7 @@ public enum ConfigurationElement {
     public void setValue(Object value) {
         this.value = value;
     }
-    
+
     /**
      * @param value the value to set as alternate
      */
