@@ -7,9 +7,9 @@
     <import file="nbproject/build-impl.xml"/>
     <import file="${suite.dir}/preparation.xml"/>
     
-    <target name="init" depends="init-netbeans, init-hudson, harness.init, update-lookup-lib">
+    <target name="init" depends="init-netbeans, init-hudson, harness.init">
         <if>
-                <available file="../../Simple Marauroa Java/Simple-Server/build.xml" type="file" />
+            <available file="../../Simple Marauroa Java/Simple-Server/build.xml" type="file" />
             <then>
                 <property file="../../Simple Marauroa Java/Simple-Server/nbproject/project.properties" prefix="server-lib"/>
                 <length string="${server-lib.dist.dir}" property="length.dist" />
@@ -27,12 +27,5 @@
                 <copy file="${libs.MySQLDriver.classpath}" tofile="release/modules/ext/mysql-connector-java.jar"/>
             </then>
         </if>
-    </target>
-    
-    <target name="update-lookup-lib">
-        <echo>Updating org-openide-util-lookup.jar library</echo>
-        <fileset id="finder" dir="${harness.dir}/.." includes="**/org-openide-util-lookup.jar" />
-        <pathconvert property="lookup-lib" refid="finder" />
-        <copy file="${lookup-lib}" tofile="../../Simple Libs/org-openide-util-lookup.jar"/>
     </target>
 </project>

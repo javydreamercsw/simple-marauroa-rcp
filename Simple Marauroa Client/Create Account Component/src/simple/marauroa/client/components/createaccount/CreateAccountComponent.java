@@ -261,7 +261,7 @@ public class CreateAccountComponent extends javax.swing.JPanel {
             final String password = new String(passwordField.getPassword());
             final String email = emailField.getText();
             final String server = serverField.getText();
-            int port = Integer.parseInt(ClientGameConfiguration.get("DEFAULT_PORT"));
+            int port;
 
             // standalone check
             if (MCITool.getClient() == null) {
@@ -337,9 +337,7 @@ public class CreateAccountComponent extends javax.swing.JPanel {
                             NotifyDescriptor.OK_OPTION // default option is "Cancel"
                             ));
                     //TODO: Handle results like account already exists better
-                    return;
                 } else {
-
                     /*
                      * Print username returned by server, as server can
                      * modify it at will to match account names rules.
@@ -369,7 +367,6 @@ public class CreateAccountComponent extends javax.swing.JPanel {
                         null,
                         NotifyDescriptor.OK_OPTION // default option is "Cancel"
                         ));
-                return;
             } catch (TimeoutException e) {
                 setEnabled(true);
                 ph.finish();
@@ -383,7 +380,6 @@ public class CreateAccountComponent extends javax.swing.JPanel {
                         null,
                         NotifyDescriptor.OK_OPTION // default option is "Cancel"
                         ));
-                return;
             } catch (BannedAddressException e) {
                 setEnabled(true);
                 ph.finish();
@@ -397,7 +393,6 @@ public class CreateAccountComponent extends javax.swing.JPanel {
                         null,
                         NotifyDescriptor.OK_OPTION // default option is "Cancel"
                         ));
-                return;
             }
         }
     }

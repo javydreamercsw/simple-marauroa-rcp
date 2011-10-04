@@ -14,7 +14,7 @@ import simple.client.event.listener.RPEventListener;
  *
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
-public interface IClientFramework extends Runnable{
+public interface IClientFramework extends Runnable {
 
     /**
      * Get account username
@@ -37,12 +37,14 @@ public interface IClientFramework extends Runnable{
 
     /**
      * Set Account username
+     *
      * @param username
      */
     void setAccountUsername(String username);
 
     /**
      * Set Game name
+     *
      * @param gameName the gameName to set
      */
     void setGameName(String gameName);
@@ -112,8 +114,9 @@ public interface IClientFramework extends Runnable{
     public String getLogPropertiesPath();
 
     /**
-     * Client main loop. This just exposing the Marauroa's ClientFramework 
+     * Client main loop. This just exposing the Marauroa's ClientFramework
      * method to make everything work.
+     *
      * @param delay delay
      * @return true if new messages were received.
      */
@@ -121,6 +124,7 @@ public interface IClientFramework extends Runnable{
 
     /**
      * Connect to the server
+     *
      * @param host IP/server name of the host
      * @param username user name to login with
      * @param password password for the user name
@@ -132,8 +136,9 @@ public interface IClientFramework extends Runnable{
 
     /**
      * Send private text
-     * @param mess      Message to send
-     * @param target    Message's target
+     *
+     * @param mess Message to send
+     * @param target Message's target
      */
     public void sendPrivateText(String mess, String target);
 
@@ -141,31 +146,40 @@ public interface IClientFramework extends Runnable{
      * Logic to start additional modules after the login was successful.
      */
     public void startModules();
-    
+
     /**
      * Check if chat notifications is enabled
+     *
      * @return true if enabled
      */
     public boolean isChatNotifications();
-    
+
     /**
      * Set chat notifications
+     *
      * @param chatNotifications true to enable
      */
     public void setChatNotifications(boolean chatNotifications);
-    
+
     /**
      * Get an RPObject by its id as know by the client
-     * 
+     *
      * @param id Id to look for
      * @return RPObject with that id or null if not found
      */
     public RPObject getFromWorld(RPObject.ID id);
-    
+
     /**
      * Add RPEvent listener
+     *
      * @param event
      * @param l
      */
     public void addRPEventListener(RPEvent event, RPEventListener l);
+
+    /**
+     * Disconnect from server
+     *
+     */
+    public void close();
 }
