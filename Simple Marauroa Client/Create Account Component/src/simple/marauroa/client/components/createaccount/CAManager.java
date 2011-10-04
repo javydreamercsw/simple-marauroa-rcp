@@ -1,6 +1,5 @@
 package simple.marauroa.client.components.createaccount;
 
-import simple.marauroa.client.components.api.ICAManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -11,6 +10,7 @@ import org.openide.LifecycleManager;
 import org.openide.NotifyDescriptor;
 import org.openide.util.Exceptions;
 import org.openide.util.lookup.ServiceProvider;
+import simple.marauroa.client.components.api.ICAManager;
 import simple.marauroa.client.components.common.MCITool;
 
 /**

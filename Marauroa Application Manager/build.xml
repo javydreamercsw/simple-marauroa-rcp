@@ -44,7 +44,7 @@
         </if>
     </target>
     
-    <target name="build" depends="init-netbeans, init-hudson, check-dev-environent, build-brand, suite.build"/>
+    <target name="build" depends="init-netbeans, init-hudson, check-dev-environent, build-brand, update-lookup-lib, suite.build"/>
         
     <target name="build-brand" depends="pre-init, -init">
         <copy file="${app.icon}" tofile="resources/${app.name}.ico"/>
@@ -592,5 +592,11 @@
     
     <target name="module-fix-dependencies">
         <ant antfile= "${suite.dir}/versions.xml" target="fix"/>
+    </target>
+    
+    <target name="update-lookup-lib">
+        <fileset id="finder" dir="${harness.dir}/.." includes="**/org-openide-util-lookup.jar" />
+        <pathconvert property="lookup-lib" refid="finder" />
+        <copy file="${lookup-lib}" tofile="../../Simple Libs/org-openide-util-lookup.jar"/>
     </target>
 </project>

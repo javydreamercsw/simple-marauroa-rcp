@@ -1,10 +1,8 @@
 package simple.marauroa.application.core;
 
-import marauroa.common.game.RPClass;
 import marauroa.common.game.RPObject;
 import static org.junit.Assert.assertTrue;
-import org.junit.*;
-import simple.server.core.entity.Entity;
+import org.junit.Test;
 
 /**
  *
@@ -13,25 +11,6 @@ import simple.server.core.entity.Entity;
 public class LookupRPObjectManagerTest {
 
     public LookupRPObjectManagerTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-        if (!RPClass.hasRPClass("entity")) {
-            Entity.generateRPClass();
-        }
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
-
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
     }
 
     /**

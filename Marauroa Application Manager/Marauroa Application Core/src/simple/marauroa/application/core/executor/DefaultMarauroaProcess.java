@@ -119,9 +119,7 @@ public class DefaultMarauroaProcess implements IMarauroaProcess {
                     }
                 }, 5000, 5000);
                 taskResult = task.get();
-            } catch (InterruptedException ex) {
-                Exceptions.printStackTrace(ex);
-            } catch (ExecutionException ex) {
+            } catch (    InterruptedException | ExecutionException ex) {
                 Exceptions.printStackTrace(ex);
             } catch (CancellationException ex) {
                 //Do nothing. The user just cancelled it.
