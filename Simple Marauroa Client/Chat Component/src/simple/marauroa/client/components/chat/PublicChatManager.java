@@ -6,14 +6,12 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import marauroa.common.game.RPEvent;
-import org.jivesoftware.smack.util.ReaderListener;
 import org.openide.util.lookup.ServiceProvider;
 import simple.client.EventLine;
 import simple.common.NotificationType;
 import simple.marauroa.client.components.api.IPublicChatComponent;
 import simple.marauroa.client.components.common.MCITool;
 import simple.server.core.event.TextEvent;
-import simple.server.core.event.api.IPublicChatEvent;
 
 /**
  * Manages the chat aspect of an application.
@@ -21,7 +19,7 @@ import simple.server.core.event.api.IPublicChatEvent;
  * @author Javier A. Ortiz Bultrón <javier.ortiz.78@gmail.com>
  */
 @ServiceProvider(service = IPublicChatComponent.class)
-public class PublicChatManager implements IPublicChatComponent, ReaderListener {
+public class PublicChatManager implements IPublicChatComponent{
 
     private final String chat = "Chat";
     private final String priv = "Private-";
@@ -78,6 +76,7 @@ public class PublicChatManager implements IPublicChatComponent, ReaderListener {
 
     /**
      * Insert text
+     *
      * @param text
      * @param type
      */
@@ -120,12 +119,12 @@ public class PublicChatManager implements IPublicChatComponent, ReaderListener {
     }
 
     @Override
-    public void notify(IPublicChatEvent event) {
+    public void onRPEventReceived(RPEvent event) throws Exception {
         if (event != null) {
             logger.log(Level.FINE, "Got notified of event: {0}", event);
             TextEvent textEvent = new TextEvent();
             textEvent.fill((RPEvent) event);
-            MCITool.getPublicChatManager().addLine((textEvent.get("from") == null ? "System" : textEvent.get("from")),
+            addLine((textEvent.get("from") == null ? "System" : textEvent.get("from")),
                     textEvent.get("text"), NotificationType.NORMAL);
         }
     }

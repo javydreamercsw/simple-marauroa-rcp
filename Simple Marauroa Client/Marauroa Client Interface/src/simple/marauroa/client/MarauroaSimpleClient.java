@@ -1,7 +1,5 @@
 package simple.marauroa.client;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -9,7 +7,6 @@ import javax.swing.UIManager;
 import marauroa.client.BannedAddressException;
 import marauroa.client.LoginFailedException;
 import marauroa.client.TimeoutException;
-import marauroa.client.extension.MarauroaClientExtension;
 import marauroa.common.game.*;
 import marauroa.common.net.InvalidVersionException;
 import marauroa.common.net.message.MessageS2CPerception;
@@ -18,7 +15,10 @@ import org.netbeans.api.progress.ProgressHandleFactory;
 import org.openide.DialogDisplayer;
 import org.openide.LifecycleManager;
 import org.openide.NotifyDescriptor;
-import org.openide.util.*;
+import org.openide.util.Exceptions;
+import org.openide.util.NbBundle;
+import org.openide.util.RequestProcessor;
+import org.openide.util.TaskListener;
 import org.openide.util.lookup.ServiceProvider;
 import simple.client.SimpleClient;
 import simple.client.action.update.ClientGameConfiguration;
@@ -29,9 +29,6 @@ import simple.marauroa.client.components.api.IClientFramework;
 import simple.marauroa.client.components.common.MCITool;
 import simple.server.core.action.WellKnownActionConstant;
 import simple.server.core.action.chat.ChatAction;
-import simple.server.core.event.PrivateTextEvent;
-import simple.server.core.event.SimpleRPEvent;
-import simple.server.core.event.TextEvent;
 
 /**
  *
@@ -48,7 +45,6 @@ public class MarauroaSimpleClient extends SimpleClient implements
     private boolean loginDone = false, profileReady = false;
     protected String userName;
     private final int bufferSize = 10;
-    private ArrayList<String> processedEvents = new ArrayList<String>(bufferSize);
     private static final Logger logger =
             Logger.getLogger(MarauroaSimpleClient.class.getSimpleName());
     /**
@@ -67,7 +63,6 @@ public class MarauroaSimpleClient extends SimpleClient implements
             "Talking with server");
     private RequestProcessor.Task theTask = null;
     private boolean running = false;
-    private int duplicateCounter = 0;
     /**
      * When enabled zone is notified when a player enters/exit the zone.
      */
@@ -177,12 +172,12 @@ public class MarauroaSimpleClient extends SimpleClient implements
             try {
                 connect(host, Integer.parseInt(port));
                 ph.progress("Connected", 1);
-                logger.log(Level.INFO, "Logging as: {0} with pass: {1}",
+                logger.log(Level.FINE, "Logging as: {0} with pass: {1}",
                         new Object[]{userName,
-                            (logger.isLoggable(Level.INFO) ? password : "*******")});
+                            (logger.isLoggable(Level.FINEST) ? password : "*******")});
                 login(userName, password);
                 ph.progress("Logged in", 2);
-                logger.info("Log in successful!");
+                logger.fine("Log in successful!");
             } catch (Exception e) {
                 logger.info("Trying to create account, it might not exist...");
                 createAccount();
@@ -463,52 +458,6 @@ public class MarauroaSimpleClient extends SimpleClient implements
     }
 
     @Override
-    public void processEvent(RPEvent event) {
-        if (event != null) {
-            if (!processedEvents.contains(event.get(SimpleRPEvent.EVENT_ID))) {
-                logger.log(Level.FINE, "Received event: {0} from server", event);
-                processedEvents.add(event.get(SimpleRPEvent.EVENT_ID));
-                //Publish the event to the bus so all listeners can react to it
-                //TODO: Remove hack while the interfaces are not part of Marauroa 
-                if (event.getName().equals(TextEvent.RPCLASS_NAME)) {
-                    logger.log(Level.FINE, TextEvent.RPCLASS_NAME);
-                    TextEvent textEvent = new TextEvent();
-                    textEvent.fill(event);
-                    EventBus.getDefault().publish(textEvent);
-                } else if (event.getName().equals(PrivateTextEvent.RPCLASS_NAME)) {
-                    logger.log(Level.FINE, PrivateTextEvent.RPCLASS_NAME);
-                    PrivateTextEvent privateTextEvent = new PrivateTextEvent();
-                    privateTextEvent.fill(event);
-                    EventBus.getDefault().publish(privateTextEvent);
-                } else {
-                    RPEvent processed = extensionProcessEvent(event);
-                    if (processed != null) {
-                        EventBus.getDefault().publish(processed);
-                    }
-                }
-            } else {
-                duplicateCounter++;
-                logger.log(Level.FINE, "Ignoring duplicated event: {0}. "
-                        + "{1} duplicates so far!", new Object[]{event, duplicateCounter});
-            }
-        } else {
-            logger.warning("Received a null event from server.");
-        }
-    }
-
-    private RPEvent extensionProcessEvent(RPEvent event) {
-        RPEvent processed = null;
-        for (Iterator<? extends MarauroaClientExtension> it = Lookup.getDefault().lookupAll(MarauroaClientExtension.class).iterator(); it.hasNext();) {
-            MarauroaClientExtension extension = it.next();
-            RPEvent processEvent = extension.processEvent(event);
-            if (processEvent != null) {
-                return processEvent;
-            }
-        }
-        return processed;
-    }
-
-    @Override
     public void startModules() {
         //To be extended in clients if needed
     }
@@ -548,30 +497,10 @@ public class MarauroaSimpleClient extends SimpleClient implements
     }
 
     @Override
-    public boolean onModifiedAdded(RPObject object, RPObject changes) {
-        if (object != null) {
-            if (itsMe(object)) {
-                processEvents(changes);
-            }
-        }
-        return true;
-    }
-
-    private boolean itsMe(RPObject object) {
-        if (getPlayerRPC() != null && (object.get("id") == null
-                ? getPlayerRPC().get("id") == null : object.get("id").equals(getPlayerRPC().get("id")))) {
-            return true;
-        }
-        return false;
-    }
-
-    @Override
     public boolean onMyRPObject(RPObject added, RPObject deleted) {
         RPObject.ID id = null;
         if (added != null) {
             id = added.getID();
-            //Process Events
-            processEvents(added);
         }
         if (deleted != null) {
             id = deleted.getID();
@@ -612,7 +541,7 @@ public class MarauroaSimpleClient extends SimpleClient implements
     }
 
     @Override
-    public void addRPEventListener(Class<? extends RPEvent> event, RPEventListener l) {
+    public void addRPEventListener(RPEvent event, RPEventListener l) {
         getUserContext().registerRPEventListener(event, l);
     }
 }

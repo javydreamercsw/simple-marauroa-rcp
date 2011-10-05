@@ -1,7 +1,6 @@
 package simple.marauroa.client.components.api;
 
-import simple.marauroa.application.core.EventBusListener;
-import simple.server.core.event.api.IZoneEvent;
+import simple.client.event.listener.RPEventListener;
 
 /**
  * This is a component that handles the zone addition and removal from the
@@ -10,7 +9,7 @@ import simple.server.core.event.api.IZoneEvent;
  *
  * @author Javier A. Ortiz <javier.ortiz.78@gmail.com>
  */
-public interface IZoneListManager extends EventBusListener<IZoneEvent>{
+public interface IZoneListManager extends RPEventListener{
 
     /**
      * Add a zone

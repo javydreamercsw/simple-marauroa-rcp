@@ -51,7 +51,7 @@ public final class MonitorClient extends SimpleClient implements
         state = ClientState.CHAT;
         rpobjDispatcher = new RPObjectChangeDispatcher(
                 Lookup.getDefault().lookup(IGameObjects.class), getUserContext());
-        RPEventNotifier.get().notifyAtEvent(MonitorEvent.class, MonitorClient.this);
+        RPEventNotifier.get().notifyAtEvent(new MonitorEvent(), MonitorClient.this);
         PerceptionToObject pto = new PerceptionToObject();
         pto.setObjectFactory(new ObjectFactory());
         dispatch.register(pto);

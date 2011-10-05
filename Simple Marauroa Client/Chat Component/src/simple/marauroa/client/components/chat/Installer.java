@@ -1,26 +1,23 @@
 package simple.marauroa.client.components.chat;
 
+import java.util.logging.Logger;
 import org.openide.modules.ModuleInstall;
-import simple.marauroa.application.core.EventBus;
+import org.openide.util.Lookup;
+import simple.client.entity.IUserContext;
 import simple.marauroa.client.components.common.MCITool;
-import simple.server.core.event.api.IPrivateChatEvent;
-import simple.server.core.event.api.IPublicChatEvent;
+import simple.server.core.event.PrivateTextEvent;
+import simple.server.core.event.TextEvent;
 
 public class Installer extends ModuleInstall {
 
-    @Override
-    public void restored() {
-        //Register PublicChatManager to receive Public Chat related events
-        EventBus.getDefault().subscribe(IPublicChatEvent.class, MCITool.getPublicChatManager());
-        //Register PrivateChatManager to receive Private Chat related events
-        EventBus.getDefault().subscribe(IPrivateChatEvent.class, MCITool.getPrivateChatManager());
-    }
+    private static final Logger logger =
+            Logger.getLogger(Installer.class.getCanonicalName());
 
     @Override
-    public void close() {
-        //Unregister PublicChatManager
-        EventBus.getDefault().unsubscribe(IPublicChatEvent.class, MCITool.getPublicChatManager());
-        //Unregister PrivateChatManager
-        EventBus.getDefault().unsubscribe(IPrivateChatEvent.class, MCITool.getPrivateChatManager());
+    public void restored() {
+        logger.info("Listening for chat");
+        Lookup.getDefault().lookup(IUserContext.class).registerRPEventListener(new TextEvent(), MCITool.getPublicChatManager());
+
+        Lookup.getDefault().lookup(IUserContext.class).registerRPEventListener(new PrivateTextEvent(), MCITool.getPrivateChatManager());
     }
 }
