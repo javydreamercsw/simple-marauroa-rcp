@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 import marauroa.client.ClientFramework;
 import marauroa.common.game.IRPZone;
 import marauroa.common.game.RPAction;
+import marauroa.common.game.RPEvent;
 import org.openide.util.NbBundle;
 import org.openide.util.Utilities;
 import org.openide.util.lookup.ServiceProvider;
@@ -24,7 +25,6 @@ import simple.marauroa.client.components.api.actions.ZoneListAction;
 import simple.marauroa.client.components.common.MCITool;
 import simple.marauroa.event.manager.zone.dialog.ZoneDialog;
 import simple.server.core.engine.SimpleRPZone;
-import simple.server.core.event.api.IZoneEvent;
 import simple.server.extension.ZoneEvent;
 import simple.server.extension.ZoneExtension;
 
@@ -42,24 +42,24 @@ public class ZoneEventManager implements IZoneListManager, IZoneListActionProvid
     private static ZoneListTopComponent instance;
     private ZoneDialog zd;
 
-    private void processAdd(IZoneEvent event) {
+    private void processAdd(ZoneEvent event) {
         logger.log(Level.FINE, "Adding zone: {0}", event.get(ZoneEvent.FIELD));
         addZone(event.get(ZoneEvent.FIELD)
                 + (event.get(ZoneEvent.DESC) == null ? "" : ": " + event.get(ZoneEvent.DESC)));
     }
 
-    private void processUpdate(IZoneEvent event) {
+    private void processUpdate(ZoneEvent event) {
         logger.log(Level.FINE, "Updating zone: {0}", event.get(ZoneEvent.FIELD));
         updateZone(event.get(ZoneEvent.FIELD),
                 event.get(ZoneEvent.DESC));
     }
 
-    private void processRemove(IZoneEvent event) {
+    private void processRemove(ZoneEvent event) {
         logger.log(Level.FINE, "Removing zone: {0}", event.get(ZoneEvent.FIELD));
         removeZone(event.get(ZoneEvent.FIELD));
     }
 
-    private void processListZones(IZoneEvent event) {
+    private void processListZones(ZoneEvent event) {
         StringTokenizer st = new StringTokenizer(event.get(ZoneEvent.FIELD), "#");
         while (st.hasMoreTokens()) {
             String token = st.nextToken();
@@ -68,39 +68,9 @@ public class ZoneEventManager implements IZoneListManager, IZoneListActionProvid
         }
     }
 
-    private void processNeedPass(IZoneEvent event) {
+    private void processNeedPass(ZoneEvent event) {
         //TODO: Fully implement
         MCITool.getZoneListManager().requestPassword();
-    }
-
-    @Override
-    public void notify(IZoneEvent event) {
-        if (event != null && event.getName().equals(ZoneEvent.RPCLASS_NAME)) {
-            logger.log(Level.INFO, "Got Zone Event: {0}", event);
-            //Default Zone Event
-            switch (event.getInt(ZoneEvent.ACTION)) {
-                case ZoneEvent.ADD:
-                    processAdd(event);
-                    break;
-                case ZoneEvent.UPDATE:
-                    processUpdate(event);
-                    break;
-                case ZoneEvent.REMOVE:
-                    processRemove(event);
-                    break;
-                case ZoneEvent.LISTZONES:
-                    processListZones(event);
-                    break;
-                case ZoneEvent.NEEDPASS:
-                    processNeedPass(event);
-                    break;
-                default:
-            }
-        } else if (event != null) {
-            logger.log(Level.WARNING,
-                    "Received the following event, "
-                    + "but don't know how to handle it. \n{0}", event);
-        }
     }
 
     protected static ZoneListTopComponent getInstance() {
@@ -198,6 +168,38 @@ public class ZoneEventManager implements IZoneListManager, IZoneListActionProvid
         actions.add(new DeleteZoneAction());
         actions.add(new JoinZoneAction());
         return actions;
+    }
+
+    @Override
+    public void onRPEventReceived(RPEvent eventIn) throws Exception {
+        if (eventIn != null && eventIn.getName().equals(ZoneEvent.RPCLASS_NAME)) {
+            ZoneEvent event = new ZoneEvent();
+            event.fill(eventIn);
+            logger.log(Level.INFO, "Got Zone Event: {0}", event);
+            //Default Zone Event
+            switch (event.getInt(ZoneEvent.ACTION)) {
+                case ZoneEvent.ADD:
+                    processAdd(event);
+                    break;
+                case ZoneEvent.UPDATE:
+                    processUpdate(event);
+                    break;
+                case ZoneEvent.REMOVE:
+                    processRemove(event);
+                    break;
+                case ZoneEvent.LISTZONES:
+                    processListZones(event);
+                    break;
+                case ZoneEvent.NEEDPASS:
+                    processNeedPass(event);
+                    break;
+                default:
+            }
+        } else if (eventIn != null) {
+            logger.log(Level.WARNING,
+                    "Received the following event, "
+                    + "but don't know how to handle it. \n{0}", eventIn);
+        }
     }
 
     private class JoinZoneAction extends ZoneListAction {

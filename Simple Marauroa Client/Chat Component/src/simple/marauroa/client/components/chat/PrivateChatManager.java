@@ -14,17 +14,14 @@ import org.openide.util.lookup.ServiceProviders;
 import simple.client.EventLine;
 import simple.common.NotificationType;
 import simple.marauroa.application.core.EventBus;
-import simple.marauroa.application.core.EventBusListener;
 import simple.marauroa.application.core.tool.Tool;
 import simple.marauroa.client.components.api.IPrivateChatManager;
 import simple.marauroa.client.components.api.IUserListActionProvider;
 import simple.marauroa.client.components.api.actions.UserListAction;
 import simple.marauroa.client.components.chat.dialog.PrivateChatDialog;
 import simple.marauroa.client.components.common.MCITool;
-import static simple.server.core.action.WellKnownActionConstant.FROM;
-import static simple.server.core.action.WellKnownActionConstant.TEXT;
+import simple.server.core.action.WellKnownActionConstant;
 import simple.server.core.event.PrivateTextEvent;
-import simple.server.core.event.api.IPrivateChatEvent;
 
 /**
  *
@@ -33,22 +30,10 @@ import simple.server.core.event.api.IPrivateChatEvent;
 @ServiceProviders({
     @ServiceProvider(service = IPrivateChatManager.class),
     @ServiceProvider(service = IUserListActionProvider.class)})
-public class PrivateChatManager implements IPrivateChatManager,
-        IUserListActionProvider, EventBusListener<IPrivateChatEvent> {
+public class PrivateChatManager implements IPrivateChatManager, IUserListActionProvider {
 
     private static final Logger logger =
             Logger.getLogger(PrivateChatManager.class.getSimpleName());
-
-    @Override
-    public void notify(IPrivateChatEvent event) {
-        if (event != null) {
-            logger.log(Level.FINE, "Got notified of event: {0}", event);
-            PrivateTextEvent pTextEvent = new PrivateTextEvent();
-            pTextEvent.fill((RPEvent) event);
-            MCITool.getPublicChatManager().addLine((pTextEvent.get(FROM) == null ? "System" : pTextEvent.get(FROM)),
-                    pTextEvent.get(TEXT), NotificationType.PRIVMSG);
-        }
-    }
 
     @Override
     public void addLine(String header, String line, NotificationType type) {
@@ -109,6 +94,19 @@ public class PrivateChatManager implements IPrivateChatManager,
         ArrayList<UserListAction> actions = new ArrayList<UserListAction>();
         actions.add(new StartPrivateChatAction());
         return actions;
+    }
+
+    @Override
+    public void onRPEventReceived(RPEvent event) throws Exception {
+        if (event != null) {
+            logger.log(Level.FINE, "Got notified of event: {0}", event);
+            PrivateTextEvent pTextEvent = new PrivateTextEvent();
+            pTextEvent.fill((RPEvent) event);
+            MCITool.getPublicChatManager().addLine(
+                    (pTextEvent.get(WellKnownActionConstant.FROM) == null
+                    ? "System" : pTextEvent.get(WellKnownActionConstant.FROM)),
+                    pTextEvent.get(WellKnownActionConstant.TEXT), NotificationType.PRIVMSG);
+        }
     }
 
     private class StartPrivateChatAction extends UserListAction {

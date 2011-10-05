@@ -1,12 +1,10 @@
 package simple.marauroa.client.components.api;
 
-import simple.marauroa.application.core.EventBusListener;
-import simple.server.core.event.api.IPrivateChatEvent;
+import simple.client.event.listener.RPEventListener;
 
 /**
  *
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
-public interface IPrivateChatManager extends 
-        EventBusListener<IPrivateChatEvent>, IChatInterface {
+public interface IPrivateChatManager extends IChatInterface, RPEventListener {
 }

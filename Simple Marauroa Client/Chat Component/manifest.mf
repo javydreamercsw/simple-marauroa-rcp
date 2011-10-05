@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 OpenIDE-Module: simple.marauroa.client.components.chat/0
-OpenIDE-Module-Implementation-Version: 1
+OpenIDE-Module-Implementation-Version: 2
 OpenIDE-Module-Install: simple/marauroa/client/components/chat/Installer.class
 OpenIDE-Module-Localizing-Bundle: simple/marauroa/client/components/chat/Bundle.properties
 
