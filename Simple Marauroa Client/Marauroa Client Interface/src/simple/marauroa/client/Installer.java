@@ -41,10 +41,12 @@ public class Installer extends ModuleInstall {
                     startLogSystem();
                     //Check for valid profiles
                     MCITool.getLoginManager().checkProfiles();
-                    //Show login screen
-                    MCITool.getLoginManager().displayLoginManager();
-                    //Wait for the login process to finish
-                    MCITool.getLoginManager().waitUntilDone();
+                    while (MCITool.getLoginManager().attemptLogin()) {
+                        //Show login screen
+                        MCITool.getLoginManager().displayLoginManager();
+                        //Wait for the login process to finish
+                        MCITool.getLoginManager().waitUntilDone();
+                    }
                     //Now start client specific modules
                     MCITool.getClient().startModules();
                 } catch (Exception e) {

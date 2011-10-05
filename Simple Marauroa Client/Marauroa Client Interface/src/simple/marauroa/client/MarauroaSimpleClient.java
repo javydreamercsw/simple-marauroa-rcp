@@ -27,8 +27,7 @@ import simple.marauroa.application.core.EventBus;
 import simple.marauroa.application.core.LookupRPObjectManager;
 import simple.marauroa.client.components.api.IClientFramework;
 import simple.marauroa.client.components.common.MCITool;
-import static simple.server.core.action.WellKnownActionConstant.TARGET;
-import static simple.server.core.action.WellKnownActionConstant.TEXT;
+import simple.server.core.action.WellKnownActionConstant;
 import simple.server.core.action.chat.ChatAction;
 import simple.server.core.event.PrivateTextEvent;
 import simple.server.core.event.SimpleRPEvent;
@@ -83,7 +82,10 @@ public class MarauroaSimpleClient extends SimpleClient implements
                     "invalid.client.setup"),
                     NotifyDescriptor.ERROR_MESSAGE));
             LifecycleManager.getDefault().exit();
+        } else {
+            configRelativeTo = getClass();
         }
+        ClientGameConfiguration.setRelativeTo(configRelativeTo);
         gameName = ClientGameConfiguration.get("GAME_NAME");
         versionNumber = ClientGameConfiguration.get("GAME_VERSION");
         /**
@@ -152,25 +154,14 @@ public class MarauroaSimpleClient extends SimpleClient implements
     protected void onPerception(MessageS2CPerception message) {
         try {
             super.onPerception(message);
-            if (logger.isLoggable(Level.FINE)) {
-                logger.log(Level.FINE, "Received perception {0}", message.getPerceptionTimestamp());
-                int i = message.getPerceptionTimestamp();
-
-                sendMessage("Hi");
-                if (i % 50 == 0) {
-                    sendMessage("Hi");
-                } else if (i % 100 == 0) {
-                    sendMessage("How are you?");
+            if (logger.isLoggable(Level.FINEST)) {
+                logger.log(Level.FINEST, "<World contents ------------------------------------->");
+                int j = 0;
+                for (RPObject object : world.getWorldObjects().values()) {
+                    j++;
+                    logger.log(Level.FINEST, "{0}. {1}", new Object[]{j, object});
                 }
-                if (logger.isLoggable(Level.FINEST)) {
-                    logger.log(Level.FINEST, "<World contents ------------------------------------->");
-                    int j = 0;
-                    for (RPObject object : world.getWorldObjects().values()) {
-                        j++;
-                        logger.log(Level.FINEST, "{0}. {1}", new Object[]{j, object});
-                    }
-                    logger.log(Level.FINEST, "</World contents ------------------------------------->");
-                }
+                logger.log(Level.FINEST, "</World contents ------------------------------------->");
             }
         } catch (Exception ex) {
             logger.log(Level.WARNING, null, ex);
@@ -186,107 +177,21 @@ public class MarauroaSimpleClient extends SimpleClient implements
             try {
                 connect(host, Integer.parseInt(port));
                 ph.progress("Connected", 1);
-                logger.log(Level.FINE, "Logging as: {0} with pass: {1}",
+                logger.log(Level.INFO, "Logging as: {0} with pass: {1}",
                         new Object[]{userName,
-                            (logger.isLoggable(Level.FINEST) ? password : "*******")});
+                            (logger.isLoggable(Level.INFO) ? password : "*******")});
                 login(userName, password);
                 ph.progress("Logged in", 2);
+                logger.info("Log in successful!");
             } catch (Exception e) {
-                try {
-                    logger.log(Level.FINE, "Creating account and logging in to continue....");
-                    AccountResult result = createAccount(userName, password, host);
-                    if (!result.failed()) {
-                        logger.log(Level.FINE, "Logging as: {0} with pass: {1}",
-                                new Object[]{userName,
-                                    (logger.isLoggable(Level.FINEST) ? password : "*******")});
-                        login(userName, password);
-                        ph.progress("Logged in", 2);
-                    } else {
-                        logger.log(Level.SEVERE, "Unable to create account: {0}.\n{1}",
-                                new Object[]{userName, result.getResult()});
-                        DialogDisplayer.getDefault().notify(new NotifyDescriptor(
-                                "Unable to create account: " + userName + ".\n"
-                                + result == null ? "" : result.getResult(),
-                                "Account creation failed", // title of the dialog
-                                NotifyDescriptor.PLAIN_MESSAGE,
-                                NotifyDescriptor.ERROR_MESSAGE,
-                                null,
-                                NotifyDescriptor.OK_OPTION // default option is "Cancel"
-                                ));
-                        //Don't exit, let them retry.
-                        ph.finish();
-                    }
-                } catch (LoginFailedException ex) {
-                    logger.log(Level.SEVERE, null, ex);
-                    DialogDisplayer.getDefault().notify(new NotifyDescriptor(e.getMessage(),
-                            "Login failed", // title of the dialog
-                            NotifyDescriptor.PLAIN_MESSAGE,
-                            NotifyDescriptor.ERROR_MESSAGE,
-                            null,
-                            NotifyDescriptor.OK_OPTION // default option is "Cancel"
-                            ));
-                    //Don't exit, let them retry.
-                    ph.finish();
-                    return;
-                } catch (TimeoutException ex) {
-                    logger.log(Level.SEVERE, null, ex);
-                    DialogDisplayer.getDefault().notify(new NotifyDescriptor(
-                            "Server is not available right now. The server may be "
-                            + "down or, if you are using a custom server, you may "
-                            + "have entered its name and port number incorrectly.",
-                            "Error Logging In", // title of the dialog
-                            NotifyDescriptor.PLAIN_MESSAGE,
-                            NotifyDescriptor.ERROR_MESSAGE,
-                            null,
-                            NotifyDescriptor.OK_OPTION // default option is "Cancel"
-                            ));
-                    exit();
-                } catch (InvalidVersionException ex) {
-                    logger.log(Level.SEVERE, null, ex);
-                    DialogDisplayer.getDefault().notify(new NotifyDescriptor(
-                            "You are running an incompatible version of "
-                            + ClientGameConfiguration.get("GAME_NAME")
-                            + ". Please update",
-                            "Invalid version", // title of the dialog
-                            NotifyDescriptor.PLAIN_MESSAGE,
-                            NotifyDescriptor.ERROR_MESSAGE,
-                            null,
-                            NotifyDescriptor.OK_OPTION // default option is "Cancel"
-                            ));
-                    exit();
-                } catch (BannedAddressException ex) {
-                    logger.log(Level.SEVERE, null, ex);
-                    DialogDisplayer.getDefault().notify(new NotifyDescriptor(
-                            "You IP is banned. If you think this is not right. "
-                            + "Please send a Support request to "
-                            + ClientGameConfiguration.get("SUPPORT"),
-                            "IP Banned", // title of the dialog
-                            NotifyDescriptor.PLAIN_MESSAGE,
-                            NotifyDescriptor.ERROR_MESSAGE,
-                            null,
-                            NotifyDescriptor.OK_OPTION // default option is "Cancel"
-                            ));
-                    //Don't exit, let them retry.
-                    return;
-                } catch (Exception ex) {
-                    logger.log(Level.SEVERE, null, ex);
-                    DialogDisplayer.getDefault().notify(new NotifyDescriptor(
-                            "Make sure the target server is correct and available."
-                            + "Please send a Support request to "
-                            + ClientGameConfiguration.get("SUPPORT"),
-                            "Unexpected error", // title of the dialog
-                            NotifyDescriptor.PLAIN_MESSAGE,
-                            NotifyDescriptor.ERROR_MESSAGE,
-                            null,
-                            NotifyDescriptor.OK_OPTION // default option is "Cancel"
-                            ));
-                }
+                logger.info("Trying to create account, it might not exist...");
+                createAccount();
             }
             MCITool.getClient().setAccountUsername(userName);
             ph.progress("Processing", 3);
+            MCITool.getLoginManager().setAttemptLogin(false);
             MCITool.getClient().setLoginDone(true);
             ph.progress("Done!", 4);
-
             ph.switchToIndeterminate();
             ph.progress("Connected to server");
             ph.finish();
@@ -313,6 +218,103 @@ public class MarauroaSimpleClient extends SimpleClient implements
         }
     }
 
+    private void createAccount() {
+        try {
+            logger.log(Level.INFO, "Creating account and logging in to continue....");
+            AccountResult result = createAccount(userName, password, host);
+            if (!result.failed()) {
+                logger.log(Level.INFO, "Logging as: {0} with pass: {1}",
+                        new Object[]{userName,
+                            (logger.isLoggable(Level.FINEST) ? password : "*******")});
+                login(userName, password);
+                ph.progress("Logged in", 2);
+            } else {
+                logger.log(Level.SEVERE, "Unable to create account: {0}.\n{1}",
+                        new Object[]{userName, result.getResult()});
+                DialogDisplayer.getDefault().notify(new NotifyDescriptor(
+                        "Unable to create account: " + userName + ".\n"
+                        + result == null ? "" : result.getResult(),
+                        "Account creation failed", // title of the dialog
+                        NotifyDescriptor.PLAIN_MESSAGE,
+                        NotifyDescriptor.ERROR_MESSAGE,
+                        null,
+                        NotifyDescriptor.OK_OPTION // default option is "Cancel"
+                        ));
+                exit();
+            }
+        } catch (LoginFailedException ex) {
+            logger.log(Level.SEVERE, null, ex);
+            DialogDisplayer.getDefault().notify(new NotifyDescriptor(ex.getMessage(),
+                    "Login failed", // title of the dialog
+                    NotifyDescriptor.PLAIN_MESSAGE,
+                    NotifyDescriptor.ERROR_MESSAGE,
+                    null,
+                    NotifyDescriptor.OK_OPTION // default option is "Cancel"
+                    ));
+            //Don't exit, let them retry
+            ph.finish();
+            MCITool.getClient().setLoginDone(true);
+        } catch (TimeoutException ex) {
+            logger.log(Level.SEVERE, null, ex);
+            DialogDisplayer.getDefault().notify(new NotifyDescriptor(
+                    "Server is not available right now. The server may be "
+                    + "down or, if you are using a custom server, you may "
+                    + "have entered its name and port number incorrectly.",
+                    "Error Logging In", // title of the dialog
+                    NotifyDescriptor.PLAIN_MESSAGE,
+                    NotifyDescriptor.ERROR_MESSAGE,
+                    null,
+                    NotifyDescriptor.OK_OPTION // default option is "Cancel"
+                    ));
+            //Don't exit, let them retry
+            ph.finish();
+            MCITool.getClient().setLoginDone(true);
+        } catch (InvalidVersionException ex) {
+            logger.log(Level.SEVERE, null, ex);
+            DialogDisplayer.getDefault().notify(new NotifyDescriptor(
+                    "You are running an incompatible version of "
+                    + ClientGameConfiguration.get("GAME_NAME")
+                    + ". Please update",
+                    "Invalid version", // title of the dialog
+                    NotifyDescriptor.PLAIN_MESSAGE,
+                    NotifyDescriptor.ERROR_MESSAGE,
+                    null,
+                    NotifyDescriptor.OK_OPTION // default option is "Cancel"
+                    ));
+            exit();
+        } catch (BannedAddressException ex) {
+            logger.log(Level.SEVERE, null, ex);
+            DialogDisplayer.getDefault().notify(new NotifyDescriptor(
+                    "You IP is banned. If you think this is not right. "
+                    + "Please send a Support request to "
+                    + ClientGameConfiguration.get("SUPPORT"),
+                    "IP Banned", // title of the dialog
+                    NotifyDescriptor.PLAIN_MESSAGE,
+                    NotifyDescriptor.ERROR_MESSAGE,
+                    null,
+                    NotifyDescriptor.OK_OPTION // default option is "Cancel"
+                    ));
+            //Don't exit, let them retry
+            ph.finish();
+            MCITool.getClient().setLoginDone(true);
+        } catch (Exception ex) {
+            logger.log(Level.SEVERE, null, ex);
+            DialogDisplayer.getDefault().notify(new NotifyDescriptor(
+                    "Make sure the target server is correct and available."
+                    + "Please send a Support request to "
+                    + ClientGameConfiguration.get("SUPPORT"),
+                    "Unexpected error", // title of the dialog
+                    NotifyDescriptor.PLAIN_MESSAGE,
+                    NotifyDescriptor.ERROR_MESSAGE,
+                    null,
+                    NotifyDescriptor.OK_OPTION // default option is "Cancel"
+                    ));
+            //Don't exit, let them retry
+            ph.finish();
+            MCITool.getClient().setLoginDone(true);
+        }
+    }
+
     private void exit() {
         ph.finish();
         MCITool.getClient().setLoginDone(true);
@@ -324,7 +326,7 @@ public class MarauroaSimpleClient extends SimpleClient implements
         RPAction action;
         action = new RPAction();
         action.put("type", ChatAction._CHAT);
-        action.put(TEXT, text);
+        action.put(WellKnownActionConstant.TEXT, text);
         send(action);
     }
 
@@ -455,8 +457,8 @@ public class MarauroaSimpleClient extends SimpleClient implements
         RPAction action;
         action = new RPAction();
         action.put("type", ChatAction._PRIVATE_CHAT);
-        action.put(TARGET, target);
-        action.put(TEXT, mess);
+        action.put(WellKnownActionConstant.TARGET, target);
+        action.put(WellKnownActionConstant.TEXT, mess);
         send(action);
     }
 
@@ -478,16 +480,6 @@ public class MarauroaSimpleClient extends SimpleClient implements
                     PrivateTextEvent privateTextEvent = new PrivateTextEvent();
                     privateTextEvent.fill(event);
                     EventBus.getDefault().publish(privateTextEvent);
-//                } else if (event.getName().equals(ZoneEvent.RPCLASS_NAME)) {
-//                    logger.log(Level.FINE, ZoneEvent.RPCLASS_NAME);
-//                    ZoneEvent zoneEvent = new ZoneEvent();
-//                    zoneEvent.fill(event);
-//                    EventBus.getDefault().publish(zoneEvent);
-//                } else if (event.getName().equals(MonitorEvent.RPCLASS_NAME)) {
-//                    logger.log(Level.FINE, MonitorEvent.RPCLASS_NAME);
-//                    MonitorEvent monitorEvent = new MonitorEvent();
-//                    monitorEvent.fill(event);
-//                    EventBus.getDefault().publish(monitorEvent);
                 } else {
                     RPEvent processed = extensionProcessEvent(event);
                     if (processed != null) {
@@ -565,15 +557,6 @@ public class MarauroaSimpleClient extends SimpleClient implements
         return true;
     }
 
-    private void processEvents(RPObject object) {
-        //Process Events
-        if (!object.events().isEmpty()) {
-            for (RPEvent event : object.events()) {
-                processEvent(event);
-            }
-        }
-    }
-
     private boolean itsMe(RPObject object) {
         if (getPlayerRPC() != null && (object.get("id") == null
                 ? getPlayerRPC().get("id") == null : object.get("id").equals(getPlayerRPC().get("id")))) {
@@ -592,9 +575,6 @@ public class MarauroaSimpleClient extends SimpleClient implements
         }
         if (deleted != null) {
             id = deleted.getID();
-            logger.log(Level.FINE, "Do something with deleted: {0}", deleted);
-            if (!deleted.events().isEmpty()) {
-            }
         }
         if (id == null) {
             // Unchanged.
@@ -632,7 +612,7 @@ public class MarauroaSimpleClient extends SimpleClient implements
     }
 
     @Override
-    public void addRPEventListener(RPEvent event, RPEventListener l) {
+    public void addRPEventListener(Class<? extends RPEvent> event, RPEventListener l) {
         getUserContext().registerRPEventListener(event, l);
     }
 }
