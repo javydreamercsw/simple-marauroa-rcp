@@ -597,6 +597,6 @@
     <target name="update-lookup-lib">
         <fileset id="finder" dir="${harness.dir}/.." includes="**/org-openide-util-lookup.jar" />
         <pathconvert property="lookup-lib" refid="finder" />
-        <copy file="${lookup-lib}" tofile="../../Simple Libs/org-openide-util-lookup.jar"/>
+        <copy file="${lookup-lib}" tofile="../Simple Libs/org-openide-util-lookup.jar"/>
     </target>
 </project>
