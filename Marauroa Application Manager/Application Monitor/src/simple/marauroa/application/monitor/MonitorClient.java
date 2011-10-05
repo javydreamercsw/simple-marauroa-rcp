@@ -21,6 +21,7 @@ import org.openide.util.NbBundle;
 import simple.client.*;
 import simple.client.event.listener.RPEventListener;
 import simple.client.event.listener.RPEventNotifier;
+import simple.client.gui.IGameObjects;
 import simple.marauroa.application.api.IApplicationMonitor;
 import simple.marauroa.application.api.IMarauroaApplication;
 import simple.marauroa.application.core.MonitorService;
@@ -48,7 +49,8 @@ public final class MonitorClient extends SimpleClient implements
         super(LOG4J_PROPERTIES);
         setApplication(app);
         state = ClientState.CHAT;
-        rpobjDispatcher = new RPObjectChangeDispatcher(gameObjects, getUserContext());
+        rpobjDispatcher = new RPObjectChangeDispatcher(
+                Lookup.getDefault().lookup(IGameObjects.class), getUserContext());
         RPEventNotifier.get().notifyAtEvent(MonitorEvent.class, MonitorClient.this);
         PerceptionToObject pto = new PerceptionToObject();
         pto.setObjectFactory(new ObjectFactory());

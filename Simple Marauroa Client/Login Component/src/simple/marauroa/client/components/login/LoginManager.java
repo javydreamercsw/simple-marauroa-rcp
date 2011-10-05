@@ -28,6 +28,7 @@ public class LoginManager implements ILoginManager {
 
     private LoginForm form;
     protected ProfileList profiles = new ProfileList();
+    boolean login = true;
 
     @Override
     public void displayLoginManager() {
@@ -184,10 +185,10 @@ public class LoginManager implements ILoginManager {
             try {
                 Thread.yield();
                 Thread.sleep(1000);
-                if(form != null && !form.isVisible()){
+                if (form != null && !form.isVisible()) {
                     /*
-                     * For some reason the form is not visible but were are 
-                     * not ready yet. Sow the screen again.
+                     * For some reason the form is not visible but were are not
+                     * ready yet. Show the screen again.
                      */
                     form.setVisible(true);
                     break;
@@ -196,5 +197,15 @@ public class LoginManager implements ILoginManager {
                 Exceptions.printStackTrace(ex);
             }
         }
+    }
+
+    @Override
+    public void setAttemptLogin(boolean retry) {
+        this.login = retry;
+    }
+
+    @Override
+    public boolean attemptLogin() {
+        return login;
     }
 }

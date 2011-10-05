@@ -112,9 +112,6 @@ public class DefaultMarauroaProcess implements IMarauroaProcess {
                             app.setStatus(STATUS.STOPPED);
                             //The user needs to reconnect.
                             timer.cancel();
-                        } else {
-                            Logger.getLogger(DefaultMarauroaProcess.class.getSimpleName()).debug(
-                                    "Everything fine with the task. Check again later...");
                         }
                     }
                 }, 5000, 5000);
