@@ -175,7 +175,7 @@ public interface IClientFramework extends Runnable {
      * @param event
      * @param l
      */
-    public void addRPEventListener(RPEvent event, RPEventListener l);
+    public void addRPEventListener(Class<? extends RPEvent> event, RPEventListener l);
 
     /**
      * Disconnect from server
