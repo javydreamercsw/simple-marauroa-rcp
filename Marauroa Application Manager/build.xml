@@ -7,7 +7,7 @@
     <import file="nbproject/build-impl.xml"/>
     <import file="preparation.xml"/>
     <property name="ant-contrib-filename" value="ant-contrib-1.0b3.jar" />
-    <taskdef name="doxygen" classname="org.doxygen.tools.DoxygenTask" classpath="../tools/doxygen/ant_doxygen.jar" />
+    <taskdef name="doxygen" classname="org.doxygen.tools.DoxygenTask" classpath="../Simple Libs/tools/doxygen/ant_doxygen.jar" />
     
     <scriptdef name="substring" language="javascript">
         <attribute name="text" />
@@ -254,7 +254,7 @@
 	<!-- Windows-only target that replaces the icon for the launcher exe with our own icon. -->
     <target name="replaceWindowsLauncherIcon" if="isWindows" description="Replace the icon for the Windows launcher exe">
         <echo message="Replacing icon of Windows launcher executable."/>
-        <exec executable="../tools/ReplaceVistaIcon.exe" resolveexecutable="true">
+        <exec executable="../Simple Libs/tools/ReplaceVistaIcon.exe" resolveexecutable="true">
             <arg line="build/launcher/bin/${app.name}.exe resources/${app.name}.ico"/>
         </exec>
     </target>
@@ -279,12 +279,12 @@
     </target>
     
     <target name="use-izpack">
-        <property name="izpack.dir" location="../tools/IzPack"/>
+        <property name="izpack.dir" location="../Simple Libs/tools/IzPack"/>
         <property name="exeName" value="${app.title}-Setup"/>
         <property name="izpack-installer" value="${exeName}.jar"/>
         <taskdef name="izpack" classpath="${izpack.dir}/lib/compiler.jar"
              classname="com.izforge.izpack.ant.IzPackTask"/>
-        <property name="launch4j.dir" location="../tools/launch4j" />
+        <property name="launch4j.dir" location="Simple Libs/tools/launch4j" />
         <echo message="Makes the installer using IzPack into ${izpack-installer}"/>
         <echo file="${suite.dir}/shortcutSpec.xml"><![CDATA[<shortcuts>
     <skipIfNotSupported/>
@@ -371,7 +371,7 @@
     <target name="check-dev-environent" depends="init-netbeans,init-hudson">
         <taskdef resource="net/sourceforge/ant4hg/taskdefs/antlib.xml">
             <classpath>
-                <pathelement location="../tools/ant4hg-V0.07.jar"/>
+                <pathelement location="../Simple Libs/tools/ant4hg-V0.07.jar"/>
             </classpath>
         </taskdef>
         <!--Simple Marauroa Java Project-->
@@ -387,7 +387,7 @@
     </target>
 
     <target name="create-doxygen-docs">
-        <doxygen doxygenPath="${suite.dir}/../tools/doxygen/doxygen.exe" >
+        <doxygen doxygenPath="${suite.dir}/../Simple Libs/tools/doxygen/doxygen.exe" >
             <property name="INPUT" value="${suite.dir}" />
             <property name="PROJECT_NAME" value="${app.title}" />
             <property name="PROJECT_NUMBER" value="${app.version}" />
@@ -491,7 +491,7 @@
         </taskdef>
         <taskdef name="stringutil" classname="ise.antelope.tasks.StringUtilTask">
             <classpath>
-                <pathelement location="${suite.dir}/../tools/AntelopeTasks_3.5.3.jar"/>
+                <pathelement location="${suite.dir}/../Simple Libs/tools/AntelopeTasks_3.5.3.jar"/>
             </classpath>
         </taskdef>
         <echo>Create the ant script...</echo>
