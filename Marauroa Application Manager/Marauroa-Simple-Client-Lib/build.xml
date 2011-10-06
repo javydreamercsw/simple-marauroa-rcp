@@ -21,7 +21,7 @@
         <!--Update the project's metadata-->
         <xmltask source="nbproject/project.xml" dest="nbproject/project.xml">
             <replace path="/project/configuration/data/class-path-extension/runtime-relative-path/text()" 
-            withText="ext/extensions/${extension-lib.dist.jar}"/>
+            withText="ext/${extension-lib.dist.jar}"/>
             <replace path="/project/configuration/data/class-path-extension/binary-origin/text()" 
             withText="${original.project.dir}/dist/${extension-lib.dist.jar}"/>
         </xmltask>
@@ -31,7 +31,7 @@
         <ant dir="${original.project.dir}" usenativebasedir="true"
          target="jar" inheritall="false" inheritrefs="false"/>
         <echo message="Done building ${original.project.dir}"/>
-        <copy todir="../build/cluster/modules/ext/extension" file="${original.project.jar}"/>
+        <copy todir="../build/cluster/modules/ext" file="${original.project.jar}"/>
     </target>
 
     <target name="clean" depends="projectized-common.clean">
