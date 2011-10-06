@@ -1,0 +1,27 @@
+<launch4jConfig>
+        <dontWrapJar>false</dontWrapJar>
+        <headerType>gui</headerType>
+        <jar>Marauroa Server Manager-Setup.jar</jar>
+        <outfile>Marauroa Server Manager-Setup.exe</outfile>
+    <errTitle/>
+    <cmdLine/>
+    <chdir/>
+    <priority>normal</priority>
+    <downloadUrl>http://java.com/download</downloadUrl>
+    <supportUrl/>
+    <customProcName>false</customProcName>
+    <stayAlive>false</stayAlive>
+    <manifest/>
+    <icon>nizpack.ico</icon>
+    <singleInstance>
+        <mutexName>NIzPack</mutexName>
+        <windowTitle/>
+    </singleInstance>
+    <jre>
+        <path/>
+        <minVersion>1.6.0</minVersion>
+        <maxVersion/>
+        <jdkPreference>jreOnly</jdkPreference>
+    </jre>
+</launch4jConfig>
+        
