@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: simple.server.extension.dimension
+OpenIDE-Module-Localizing-Bundle: simple/server/extension/dimension/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+
