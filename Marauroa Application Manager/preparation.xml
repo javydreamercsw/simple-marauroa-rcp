@@ -145,6 +145,15 @@
                 <isset property="Hudson"/>
             </not>
         </condition>
+        <property name="xmltasks-loc" value="${lib.dir}/xmltask.jar"/>
+        <available file="${xmltasks-loc}" property="xmltasks.present"/>
+        <fail unless="xmltasks.present" message="The xmltasks jar doesn't exist at: ${xmltasks-loc}, can't build. Check your settings!" />
+        <taskdef name="xmltask" 
+            classname="com.oopsconsultancy.xmltask.ant.XmlTask">
+            <classpath>
+                <pathelement location="${xmltasks-loc}"/>
+            </classpath>
+        </taskdef>
     </target>
 
     <target name="getAntContribJar">
