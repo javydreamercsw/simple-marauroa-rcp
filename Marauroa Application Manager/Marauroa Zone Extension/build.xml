@@ -7,9 +7,9 @@
     <import file="nbproject/build-impl.xml"/>
     <import file="${suite.dir}/preparation.xml"/>
     
-    <target name="init" depends="init-netbeans, init-hudson, harness.init">
+    <target name="initx" depends="init-netbeans, init-hudson, harness.init">
         <if>
-                <available file="../../Simple Marauroa Java/Zone Extension/build.xml" type="file" />
+            <available file="../../Simple Marauroa Java/Zone Extension/build.xml" type="file" />
             <then>
                 <property file="../../Simple Marauroa Java/Zone Extension/nbproject/project.properties" prefix="extension-lib"/>
                 <length string="${extension-lib.dist.dir}" property="length.dist" />
@@ -21,5 +21,31 @@
                 <copy file="../../Simple Marauroa Java/Zone Extension/dist/${extension-lib.dist.jar}" tofile="release/modules/ext/extensions/${extension-lib.dist.jar}"/>
             </then>
         </if>
+    </target>
+    
+    <property name="original.project.dir" value="../../Simple Marauroa Java/Zone Extension"/>
+
+    <target name="release" depends="init-netbeans, init-hudson">
+        <property file="../../Simple Marauroa Java/Zone Extension/nbproject/project.properties" prefix="extension-lib"/>
+        <length string="${extension-lib.dist.dir}" property="length.dist" />
+        <math result="length.dist" operand1="1" operation="+" operand2="${length.dist}" datatype="int"/>
+        <length string="${extension-lib.dist.jar}" property="length.dist.jar" />
+        <substring text="${extension-lib.dist.jar}" start="${length.dist}" end="${length.dist.jar}" property="extension-lib.dist.jar" />
+        <property name="original.project.jar"
+          value="${original.project.dir}/dist/${extension-lib.dist.jar}"/>
+        <echo message="Building ${original.project.dir}"/>
+        <ant dir="${original.project.dir}" usenativebasedir="true"
+         target="jar" inheritall="false" inheritrefs="false"/>
+        <echo message="Done building ${original.project.dir}"/>
+
+        <copy todir="${cluster}/modules/ext/extension" file="${original.project.jar}"/>
+    </target>
+
+
+    <target name="clean" depends="projectized-common.clean">
+        <echo message="Cleaning ${original.project.dir}"/>
+        <ant dir="${original.project.dir}" usenativebasedir="true"
+         target="clean" inheritall="false" inheritrefs="false"/>
+        <echo message="Done cleaning ${original.project.dir}"/>
     </target>
 </project>
