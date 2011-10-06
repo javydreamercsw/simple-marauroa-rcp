@@ -16,14 +16,14 @@
         <substring text="${extension-lib.dist.jar}" start="${length.dist}" end="${length.dist.jar}" property="extension-lib.dist.jar" />
         <!--Update the module's property file-->
         <propertyfile file="nbproject/project.properties">
-            <entry key="extra.module.files" value="modules/ext/extensions/${extension-lib.dist.jar}.jar"/>
+            <entry key="extra.module.files" value="modules/ext/extensions/${extension-lib.dist.jar}"/>
         </propertyfile>
         <!--Update the project's metadata-->
         <xmltask source="nbproject/project.xml" dest="nbproject/project.xml">
             <replace path="/project/configuration/data/class-path-extension/runtime-relative-path/text()" 
-            withText="ext/extensions/${extension-lib.dist.jar}.jar"/>
+            withText="ext/extensions/${extension-lib.dist.jar}"/>
             <replace path="/project/configuration/data/class-path-extension/binary-origin/text()" 
-            withText="${original.project.dir}/dist/${extension-lib.dist.jar}.jar"/>
+            withText="${original.project.dir}/dist/${extension-lib.dist.jar}"/>
         </xmltask>
         <property name="original.project.jar"
           value="${original.project.dir}/dist/${extension-lib.dist.jar}"/>
