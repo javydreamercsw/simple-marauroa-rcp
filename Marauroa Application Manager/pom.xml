@@ -54,6 +54,8 @@
                 <source>./Marauroa Monitor Extension/src</source>
                 
                 <source>./Marauroa Zone Extension/src</source>
+                
+                <source>./Dimension Extension/src</source>
                 </sources>
                         </configuration>
                     </execution>

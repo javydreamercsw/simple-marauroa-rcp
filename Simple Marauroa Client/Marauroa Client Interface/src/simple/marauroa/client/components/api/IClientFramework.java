@@ -5,10 +5,12 @@ import marauroa.client.BannedAddressException;
 import marauroa.client.LoginFailedException;
 import marauroa.client.TimeoutException;
 import marauroa.common.game.AccountResult;
+import marauroa.common.game.RPAction;
 import marauroa.common.game.RPEvent;
 import marauroa.common.game.RPObject;
 import marauroa.common.net.InvalidVersionException;
 import simple.client.event.listener.RPEventListener;
+import simple.common.game.ClientObjectInterface;
 
 /**
  *
@@ -31,7 +33,7 @@ public interface IClientFramework extends Runnable {
     /*
      * Get the ClientObject representing the player on the server
      */
-    RPObject getPlayerRPC();
+    ClientObjectInterface getPlayerRPC();
 
     void sendMessage(String text);
 
@@ -182,4 +184,10 @@ public interface IClientFramework extends Runnable {
      *
      */
     public void close();
+    
+    /**
+     * Send action to server
+     * @param action action to send
+     */
+    public void send(RPAction action);
 }

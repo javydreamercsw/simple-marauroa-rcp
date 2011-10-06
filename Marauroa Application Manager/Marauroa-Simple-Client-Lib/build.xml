@@ -6,20 +6,38 @@
     <description>Builds, tests, and runs the project simple.marauroa.client.lib.</description>
     <import file="nbproject/build-impl.xml"/>
     <import file="${suite.dir}/preparation.xml"/>
-    
-    <target name="init" depends="init-netbeans, init-hudson, harness.init">
-        <if>
-            <available file="../../Simple Marauroa Java/Simple-Client/build.xml" type="file" />
-            <then>
-                <property file="../../Simple Marauroa Java/Simple-Client/nbproject/project.properties" prefix="client-lib"/>
-                <length string="${client-lib.dist.dir}" property="length.dist" />
-                <length string="${client-lib.dist.jar}" property="length.dist.jar" />
-                <substring text="${client-lib.dist.jar}" start="${length.dist}" end="${length.dist.jar}" property="client-lib.dist.jar" />
-                <ant antfile="../../Simple Marauroa Java/Simple-Client/build.xml" target="clean" inheritall="false" />
-                <ant antfile="../../Simple Marauroa Java/Simple-Client/build.xml" target="jar" inheritall="false" />
-                <copy file="../../Simple Marauroa Java/Simple-Client/dist/${client-lib.dist.jar}" tofile="release/modules/ext/${client-lib.dist.jar}"/>
-                <antcall target="harness.init"/>
-            </then>
-        </if>
+    <property name="original.project.dir" value="../../Simple Marauroa Java/Simple-Client"/>
+
+    <target name="release" depends="init-netbeans, init-hudson">
+        <property file="${original.project.dir}/nbproject/project.properties" prefix="extension-lib"/>
+        <length string="${extension-lib.dist.dir}" property="length.dist" />
+        <math result="length.dist" operand1="1" operation="+" operand2="${length.dist}" datatype="int"/>
+        <length string="${extension-lib.dist.jar}" property="length.dist.jar" />
+        <substring text="${extension-lib.dist.jar}" start="${length.dist}" end="${length.dist.jar}" property="extension-lib.dist.jar" />
+        <!--Update the module's property file-->
+        <propertyfile file="nbproject/project.properties">
+            <entry key="extra.module.files" value="modules/ext/extensions/${extension-lib.dist.jar}"/>
+        </propertyfile>
+        <!--Update the project's metadata-->
+        <xmltask source="nbproject/project.xml" dest="nbproject/project.xml">
+            <replace path="/project/configuration/data/class-path-extension/runtime-relative-path/text()" 
+            withText="ext/extensions/${extension-lib.dist.jar}"/>
+            <replace path="/project/configuration/data/class-path-extension/binary-origin/text()" 
+            withText="${original.project.dir}/dist/${extension-lib.dist.jar}"/>
+        </xmltask>
+        <property name="original.project.jar"
+          value="${original.project.dir}/dist/${extension-lib.dist.jar}"/>
+        <echo message="Building ${original.project.dir}"/>
+        <ant dir="${original.project.dir}" usenativebasedir="true"
+         target="jar" inheritall="false" inheritrefs="false"/>
+        <echo message="Done building ${original.project.dir}"/>
+        <copy todir="../build/cluster/modules/ext/extension" file="${original.project.jar}"/>
+    </target>
+
+    <target name="clean" depends="projectized-common.clean">
+        <echo message="Cleaning ${original.project.dir}"/>
+        <ant dir="${original.project.dir}" usenativebasedir="true"
+         target="clean" inheritall="false" inheritrefs="false"/>
+        <echo message="Done cleaning ${original.project.dir}"/>
     </target>
 </project>
