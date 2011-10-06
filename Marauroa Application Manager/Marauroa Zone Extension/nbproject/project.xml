@@ -47,7 +47,7 @@
                 <package>simple.server.extension</package>
             </public-packages>
             <class-path-extension>
-                <runtime-relative-path>ext/extensions/Zone_Extension.jar</runtime-relative-path>
+                <runtime-relative-path>ext/extension/Zone_Extension.jar</runtime-relative-path>
                 <binary-origin>../../Simple Marauroa Java/Zone Extension/dist/Zone_Extension.jar</binary-origin>
             </class-path-extension>
         </data>

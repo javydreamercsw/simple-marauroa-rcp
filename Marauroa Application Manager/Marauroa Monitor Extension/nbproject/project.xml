@@ -10,7 +10,7 @@
                 <package>simple.server.extension</package>
             </public-packages>
             <class-path-extension>
-                <runtime-relative-path>ext/extensions/MarauroaMonitorExtension.jar</runtime-relative-path>
+                <runtime-relative-path>ext/extension/MarauroaMonitorExtension.jar</runtime-relative-path>
                 <binary-origin>../../Simple Marauroa Java/Marauroa Monitor Extension/dist/MarauroaMonitorExtension.jar</binary-origin>
             </class-path-extension>
         </data>

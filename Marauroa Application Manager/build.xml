@@ -44,7 +44,11 @@
         </if>
     </target>
     
-    <target name="build" depends="init-netbeans, init-hudson, check-dev-environent, build-brand, update-lookup-lib, suite.build"/>
+    <target name="build" depends="init-netbeans, init-hudson, check-dev-environent, build-brand, update-lookup-lib">
+        <!--Copy the Netbeans supported MySQL library as well-->
+        <copy file="${libs.MySQLDriver.classpath}" tofile="build/cluster/modules/ext/mysql-connector-java.jar"/>
+        <antcall target="suite.build"/>
+    </target>
         
     <target name="build-brand" depends="pre-init, -init">
         <copy file="${app.icon}" tofile="resources/${app.name}.ico"/>

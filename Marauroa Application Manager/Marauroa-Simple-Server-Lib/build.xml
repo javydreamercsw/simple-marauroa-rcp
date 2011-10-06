@@ -21,9 +21,9 @@
         </propertyfile>
         <!--Update the project's metadata-->
         <xmltask source="nbproject/project.xml" dest="nbproject/project.xml">
-            <replace path="/project/configuration/data/class-path-extension/runtime-relative-path/text()" 
+            <replace path="/project/configuration/data[1]/class-path-extension/runtime-relative-path/text()" 
             withText="ext/${extension-lib.dist.jar}"/>
-            <replace path="/project/configuration/data/class-path-extension/binary-origin/text()" 
+            <replace path="/project/configuration/data[1]/class-path-extension/binary-origin/text()" 
             withText="${original.project.dir}/dist/${extension-lib.dist.jar}"/>
         </xmltask>
         <property name="original.project.jar"
@@ -37,8 +37,6 @@
         <copy todir="../build/cluster/modules/ext">
             <fileset dir="../../Simple Marauroa Java/Simple-Server/dist/lib" excludes="marauroa*.jar, log4j*.jar, mysql*.jar"/>
         </copy>
-                <!--Copy the Netbeans supported MySQL library as well-->
-        <copy file="${libs.MySQLDriver.classpath}" tofile="../build/cluster/modules/ext/mysql-connector-java.jar"/>
     </target>
 
     <target name="clean" depends="projectized-common.clean">

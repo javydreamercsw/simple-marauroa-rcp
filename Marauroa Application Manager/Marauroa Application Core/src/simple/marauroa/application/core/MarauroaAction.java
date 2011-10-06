@@ -4,6 +4,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Icon;
 import marauroa.common.game.RPObject;
 import org.openide.util.Utilities;
+import simple.common.game.ClientObjectInterface;
 
 /**
  *
@@ -39,7 +40,7 @@ public abstract class MarauroaAction extends AbstractAction implements Comparabl
         return position - otherPosition;
     }
 
-    protected boolean isMe(RPObject object) {
-        return Utilities.actionsGlobalContext().lookup(RPObject.class).get("name").equals(object.get("name"));
+    protected boolean isMe(ClientObjectInterface object) {
+        return Utilities.actionsGlobalContext().lookup(RPObject.class).get("name").equals(object.getName());
     }
 }
