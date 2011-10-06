@@ -15,14 +15,12 @@ import org.netbeans.api.progress.ProgressHandleFactory;
 import org.openide.DialogDisplayer;
 import org.openide.LifecycleManager;
 import org.openide.NotifyDescriptor;
-import org.openide.util.Exceptions;
-import org.openide.util.NbBundle;
-import org.openide.util.RequestProcessor;
-import org.openide.util.TaskListener;
+import org.openide.util.*;
 import org.openide.util.lookup.ServiceProvider;
 import simple.client.SimpleClient;
 import simple.client.action.update.ClientGameConfiguration;
 import simple.client.event.listener.RPEventListener;
+import simple.common.game.ClientObjectInterface;
 import simple.marauroa.application.core.EventBus;
 import simple.marauroa.application.core.LookupRPObjectManager;
 import simple.marauroa.client.components.api.IClientFramework;
@@ -44,7 +42,6 @@ public class MarauroaSimpleClient extends SimpleClient implements
 
     private boolean loginDone = false, profileReady = false;
     protected String userName;
-    private final int bufferSize = 10;
     private static final Logger logger =
             Logger.getLogger(MarauroaSimpleClient.class.getSimpleName());
     /**
@@ -513,7 +510,7 @@ public class MarauroaSimpleClient extends SimpleClient implements
         RPObject object = world.getWorldObjects().get(id);
         if (object != null) {
             if (getPlayerRPC() == null) {
-                setPlayerRPC(object);
+                setPlayerRPC(Lookup.getDefault().lookup(ClientObjectInterface.class).create(object));
             }
         }
         return true;

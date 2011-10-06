@@ -34,7 +34,6 @@
         <copy todir="../build/cluster/modules/ext/extension" file="${original.project.jar}"/>
     </target>
 
-
     <target name="clean" depends="projectized-common.clean">
         <echo message="Cleaning ${original.project.dir}"/>
         <ant dir="${original.project.dir}" usenativebasedir="true"
