@@ -102,19 +102,15 @@
             </public-packages>
             <class-path-extension>
                 <runtime-relative-path>ext/marauroa-simple-server.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/marauroa-simple-server.jar</binary-origin>
+                <binary-origin>../../Simple Marauroa Java/Simple-Server/dist/marauroa-simple-server.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/h2.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/h2.jar</binary-origin>
+                <binary-origin>../../Simple Libs/h2.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/jsqlparser.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jsqlparser.jar</binary-origin>
-            </class-path-extension>
-            <class-path-extension>
-                <runtime-relative-path>ext/mysql-connector-java.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/mysql-connector-java.jar</binary-origin>
+                <binary-origin>../../Simple Libs/jsqlparser.jar</binary-origin>
             </class-path-extension>
         </data>
     </configuration>

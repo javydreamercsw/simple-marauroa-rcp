@@ -15,6 +15,6 @@ public class PrivateChatMonitor implements ReaderListener {
     @Override
     public void read(String read) {
         MCITool.getClient().sendPrivateText(read.replaceAll("\n", ""),
-                MCITool.getClient().getPlayerRPC().get("name"));
+                MCITool.getClient().getPlayerRPC().getName());
     }
 }

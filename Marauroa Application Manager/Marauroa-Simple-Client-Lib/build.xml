@@ -16,7 +16,7 @@
         <substring text="${extension-lib.dist.jar}" start="${length.dist}" end="${length.dist.jar}" property="extension-lib.dist.jar" />
         <!--Update the module's property file-->
         <propertyfile file="nbproject/project.properties">
-            <entry key="extra.module.files" value="modules/ext/extensions/${extension-lib.dist.jar}"/>
+            <entry key="extra.module.files" value="modules/ext/${extension-lib.dist.jar}"/>
         </propertyfile>
         <!--Update the project's metadata-->
         <xmltask source="nbproject/project.xml" dest="nbproject/project.xml">

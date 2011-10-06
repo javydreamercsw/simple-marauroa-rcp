@@ -48,7 +48,7 @@
             </public-packages>
             <class-path-extension>
                 <runtime-relative-path>ext/marauroa-simple-client.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/marauroa-simple-client.jar</binary-origin>
+                <binary-origin>../../Simple Marauroa Java/Simple-Client/dist/marauroa-simple-client.jar</binary-origin>
             </class-path-extension>
         </data>
     </configuration>

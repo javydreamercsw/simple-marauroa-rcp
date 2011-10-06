@@ -56,6 +56,8 @@
                 <source>./Marauroa Zone Extension/src</source>
                 
                 <source>./Dimension Extension/src</source>
+                
+                <source>./Challenge Extension/src</source>
                 </sources>
                         </configuration>
                     </execution>
