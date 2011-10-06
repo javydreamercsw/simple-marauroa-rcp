@@ -1,0 +1,162 @@
+Marauroa is built for extension and attempts to be generic enough to accomodate any application you might come up with. Right now the Marauroa core uses [http://en.wikipedia.org/wiki/Reflection_(computer_programming) reflection] to instantiate some of its parts at run time by reading implementation classes from a property file. Although it does work it leaves way too much into the developer to make it work and is not enforced by the framework (when compared to using an interface) I do prefer another approach, using [http://wiki.netbeans.org/AboutLookup Lookup]. This is borrowed from NetBeans platform but works great on plain java projects as well.
+== Lookup==
+Lookup is useful for many things like: 
+*Self registration
+*Singleton Pattern
+*Modularity
+*Extension
+In Simple marauroa it is used for the following:
+*Register RPClasses (including order in which they are registered)
+*Register events
+*Modify Object declaration
+==Creating an Extension ==
+Creating an extension is a straight forward process:
+*Create the code (of course)
+*Generate a jar file
+*Place the jar in the class path of the server
+
+No more ini file modifications or stuff like that. Now let's go into details.
+=== Creating the Code===
+#Create a Java Project.
+#Create a package named simple.server.extension (this is optional but this is the way I do it).
+#Create the classes used by your extension. 
+An extension can provide all interfases or just one. It can be as simple or as complex as you want. See below for details.
+====Creating a custom RPEvent====
+You can learn more about RPEvents [http://java.net/projects/jwrestling/pages/RPEvent here].
+*Make sure class extends SimpleRPEvent or extends RPEvent and implements IRPEvent.
+**Extending SimpleRPEvent only adds an event ID attribute which is an [http://en.wikipedia.org/wiki/Universally_unique_identifier Universally unique identifier (UUID)]
+*Make sure to add this previous to the class declaration: <pre name="Java">@ServiceProvider(service = IRPEvent.class)</pre> This will register the RPEvent in the [http://wiki.netbeans.org/AboutLookup Lookup] and then later the Server will call its generateRPClass() method during initialization to actually register it within Marauroa.
+====Creating the Extension====
+*Make sure class extends SimpleServerExtension or implements MarauroaServerExtension. Extending SimpleServerExtension will avoid you having to implement all methods defined in MarauroaServerExtension. SimpleServerExtension has a do nothing implementation for all of them so you only override the ones you need to.
+*Make sure to add this previous to the class declaration: <pre name="Java">@ServiceProvider(service = MarauroaServerExtension.class)</pre> This will register theExtension in the [http://wiki.netbeans.org/AboutLookup Lookup] and then later the Server will initialize during initialization to actually register it within Marauroa.
+*Make sure to include everything required for the extension initialization in a parameterless constructor for the extension.
+Here are the contents of MarauroaServerExtension as of the time of writing this wiki page:
+<pre name="java">
+package simple.server.extension;
+
+import marauroa.common.game.*;
+import simple.common.game.ClientObjectInterface;
+
+public interface MarauroaServerExtension {
+
+    /**
+     * Action to perform
+     *
+     * @param player Player requesting the action
+     * @param action Action details
+     */
+    public abstract void onAction(RPObject player, RPAction action);
+
+    /**
+     * Query the extension to plug in any action when an object is added to a
+     * zone.
+     *
+     * @param object Added object
+     * @return potentially modified object
+     */
+    public RPObject onRPObjectAddToZone(RPObject object);
+
+    /**
+     * Query the extension to plug in any action when an object is removed from
+     * a zone.
+     *
+     * @param object Removed object
+     * @return potentially modified object
+     */
+    public RPObject onRPObjectRemoveFromZone(RPObject object);
+
+    /**
+     * Query the extension to plug in any changes to the perception of an
+     * object.
+     *
+     * @param object Object to potentially modify the perception
+     * @param type
+     */
+    public void getPerception(RPObject object, byte type, Perception p);
+
+    /**
+     * Plug into the definition of the client class
+     *
+     * @param client
+     */
+    public void modifyClientObjectDefinition(RPClass client);
+
+    /**
+     * Plug into the definition of the root RPClass. The root class is
+     * considered the base class from all others inherit attributes from. Use
+     * this for attributes that will be common among all entities in the
+     * application. Use modifyClientObjectDefinition for attributes only to be
+     * common among client objects.
+     *
+     * @param root
+     */
+    public void modifyRootRPClassDefinition(RPClass root);
+
+    /**
+     * Action to perform after the world is initialized (all classes are
+     * defined)
+     */
+    public void afterWorldInit();
+
+    /**
+     * Update the database. Register/Update DAO's here as well
+     */
+    public void updateDatabase();
+
+    /**
+     * Query the extension to plug in any changes to the perception of an
+     * object. This is called after the normal perceptions are sent.
+     *
+     * @param object Object to potentially modify the perception
+     */
+    public boolean updateMonitor(RPObject object, Perception perception);
+
+    /**
+     * When zone is added
+     *
+     * @param zone Zone added
+     */
+    public void onAddRPZone(IRPZone zone);
+
+    /**
+     * When zone is removed
+     *
+     * @param zone Zone removed
+     */
+    public void onRemoveRPZone(IRPZone zone);
+
+    /**
+     * Client object update. This initializes attributes on the object. Useful
+     * when adding new attributes to existing objects so they get populated with
+     * valid initial values.
+     */
+    public void clientObjectUpdate(ClientObjectInterface client);
+
+    /**
+     * Root RPClass object update. This initializes attributes on the object.
+     * Useful when adding new attributes to existing objects so they get
+     * populated with valid initial values.
+     */
+    public void rootRPClassUpdate(RPObject entity);
+}
+</pre>
+
+They should be self explanatory but there are few worth describing further:
+*modifyClientObjectDefinition: This is really powerfull as it allows the extension to modify the ClientObject during initialization. For example you need to do this if you are introducing a new RPEvent with the extension so the Client Object can actually use it. Just do something like this:
+<pre name="java">
+@Override
+    public void modifyClientObjectDefinition(RPClass player) {
+        player.addRPEvent(<RPEvent unique name>, Definition.VOLATILE);
+    }
+</pre>
+*modifyRootRPClassDefinition: This is really powerfull as it allows the extension to modify the root RPClass during initialization. This is for adding attributes that would be shared among all entities in the application. The root class is considered the base class from all others inherit attributes from. Use this for attributes that will be common among all entities in the application. Use modifyClientObjectDefinition for attributes only to be common among client objects. Just do something like this:
+<pre name="java">
+@Override
+    public void modifyRootRPClassDefinition(RPClass root) {
+       root.addAttribute(<attribute name>,<Definition Type>, <flags (optional)>);
+    }
+</pre>
+
+The RPEvent unique name is a string that should be unique within the Marauroa context. If there is more than one with the same name it'll result in a run time exception.
+==  Tutoria l==
+See detailed tutorials [[ExtensionTutorials|here]].
