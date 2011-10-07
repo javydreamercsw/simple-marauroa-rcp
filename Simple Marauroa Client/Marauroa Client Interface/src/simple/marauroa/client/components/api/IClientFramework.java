@@ -19,6 +19,11 @@ import simple.common.game.ClientObjectInterface;
 public interface IClientFramework extends Runnable {
 
     /**
+     * Initialize
+     */
+    public void init();
+
+    /**
      * Get account username
      *
      * @return Account user name
@@ -184,9 +189,10 @@ public interface IClientFramework extends Runnable {
      *
      */
     public void close();
-    
+
     /**
      * Send action to server
+     *
      * @param action action to send
      */
     public void send(RPAction action);

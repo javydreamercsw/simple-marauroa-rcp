@@ -15,7 +15,10 @@ import org.netbeans.api.progress.ProgressHandleFactory;
 import org.openide.DialogDisplayer;
 import org.openide.LifecycleManager;
 import org.openide.NotifyDescriptor;
-import org.openide.util.*;
+import org.openide.util.Exceptions;
+import org.openide.util.Lookup;
+import org.openide.util.RequestProcessor;
+import org.openide.util.TaskListener;
 import org.openide.util.lookup.ServiceProvider;
 import simple.client.SimpleClient;
 import simple.client.action.update.ClientGameConfiguration;
@@ -48,7 +51,6 @@ public class MarauroaSimpleClient extends SimpleClient implements
      * default folder
      */
     private static String APPLICATION_FOLDER;
-    protected Class configRelativeTo;
     private String character;
     private String password;
     private String port;
@@ -67,17 +69,12 @@ public class MarauroaSimpleClient extends SimpleClient implements
 
     public MarauroaSimpleClient() {
         super(LOG4J_PROPERTIES);
-        if (configRelativeTo == null && !getClass().equals(MarauroaSimpleClient.class)) {
-            DialogDisplayer.getDefault().notify(
-                    new NotifyDescriptor.Message(NbBundle.getMessage(
-                    MarauroaSimpleClient.class,
-                    "invalid.client.setup"),
-                    NotifyDescriptor.ERROR_MESSAGE));
-            LifecycleManager.getDefault().exit();
-        } else {
-            configRelativeTo = getClass();
-        }
-        ClientGameConfiguration.setRelativeTo(configRelativeTo);
+    }
+
+    @Override
+    public void init() {
+        //Initialize Client Configuration
+        ClientGameConfiguration.setRelativeTo(getClass());
         gameName = ClientGameConfiguration.get("GAME_NAME");
         versionNumber = ClientGameConfiguration.get("GAME_VERSION");
         /**

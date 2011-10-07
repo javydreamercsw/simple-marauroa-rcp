@@ -12,7 +12,6 @@ import org.openide.modules.ModuleInstall;
 import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 import org.openide.windows.WindowManager;
-import simple.client.action.update.ClientGameConfiguration;
 import simple.marauroa.application.core.MarauroaApplicationRepository;
 import simple.marauroa.client.components.common.MCITool;
 
@@ -28,8 +27,7 @@ public class Installer extends ModuleInstall {
             @Override
             public void run() {
                 try {
-                    //Initialize Client Configuration
-                    ClientGameConfiguration.setRelativeTo(MarauroaSimpleClient.class);
+                    MCITool.getClient().init();
                     MarauroaApplicationRepository.get();
                     /**
                      * We set the main game folder to the game name

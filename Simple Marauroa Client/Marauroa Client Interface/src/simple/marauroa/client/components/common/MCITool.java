@@ -1,5 +1,6 @@
 package simple.marauroa.client.components.common;
 
+import java.util.Iterator;
 import org.openide.util.Lookup;
 import simple.client.EventLine;
 import simple.marauroa.client.components.api.*;
@@ -34,7 +35,11 @@ public class MCITool {
      * @return client implementation
      */
     public static IClientFramework getClient() {
-        return Lookup.getDefault().lookup(IClientFramework.class);
+        IClientFramework client=null;
+        for (Iterator<? extends IClientFramework> it = Lookup.getDefault().lookupAll(IClientFramework.class).iterator(); it.hasNext();) {
+            client = it.next();
+        }
+        return client;
     }
 
     /**
