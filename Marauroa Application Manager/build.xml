@@ -51,8 +51,13 @@
     </target>
         
     <target name="build-brand" depends="pre-init, -init">
-        <copy file="${app.icon}" tofile="resources/${app.name}.ico"/>
-        <copy file="${app.icon}" tofile="resources/${app.name}.gif"/>
+        <if>
+            <isset property="app.icon"/>
+            <then>
+                <copy file="${app.icon}" tofile="resources/${app.name}.ico"/>
+                <copy file="${app.icon}" tofile="resources/${app.name}.gif"/>
+            </then>
+        </if>
         <!--Update the current version in branding Bundle files-->
         <propertyfile file="${basedir}/branding/core/core.jar/org/netbeans/core/startup/Bundle.properties">
             <entry  key="currentVersion" value="${app.title} ${app.version}"/>
@@ -73,10 +78,13 @@
 			byline="true"/>
             </sequential>
         </for>
-        <!--TODO: Uncomment when the Splash screen is created 
-        <copy file="${suite.dir}/resources/Splash.png" 
+        <if>
+            <available file="${suite.dir}/resources/Splash.png"/>
+            <then>
+                <copy file="${suite.dir}/resources/Splash.png" 
         tofile="${suite.dir}/branding/modules/ext/updater.jar/org/netbeans/updater/resources/updatersplash.gif"/>
-        -->
+            </then>
+        </if>
         <!--Create pom.xml-->
         <echo file="${suite.dir}/pom.xml"><![CDATA[<project>
     <modelVersion>4.0.0</modelVersion>
