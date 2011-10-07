@@ -6,7 +6,6 @@
     <property file="nbproject/project.properties"/>
     <property file="nbproject/platform.properties"/>
     <property name="platform.dir" value="../netbeans/"/>
-    <echo>${lib.dir}</echo>
     <property name="lib.dir" value="${suite.dir}/../Simple Libs/tools"/>
        
     <target name="update-platform" depends="init-netbeans">
