@@ -101,17 +101,47 @@ public class LoginManager implements ILoginManager {
          */
         profiles = loadProfiles();
         if (profiles.isEmpty()) {
-            //TODO: If user cancels the system hangs for ever
-            DialogDisplayer.getDefault().notify(new NotifyDescriptor(
-                    "No profiles were detected in your computer.\n"
-                    + "Please create a profile in order to continue.",
-                    "No profiles found", // title of the dialog
-                    NotifyDescriptor.WARNING_MESSAGE,
-                    NotifyDescriptor.INFORMATION_MESSAGE,
-                    null,
-                    null));
-            MCITool.getCAManager().displayCAManager();
-            MCITool.getCAManager().waitUntilDone();
+            JButton ok = new JButton();
+            ok.setText(org.openide.util.NbBundle.getMessage(LoginManager.class,
+                    "Profiles.okButton.text"));
+            JButton cancel = new JButton();
+            cancel.setText(org.openide.util.NbBundle.getMessage(LoginManager.class,
+                    "Profiles.cancelButton.text"));
+
+            cancel.addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(ActionEvent arg0) {
+                    exit();
+                }
+            });
+
+            ok.addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(ActionEvent arg0) {
+                    MCITool.getCAManager().displayCAManager();
+                    MCITool.getCAManager().waitUntilDone();
+                }
+            });
+
+            NotifyDescriptor nd = new NotifyDescriptor.Confirmation(form, 
+                    org.openide.util.NbBundle.getMessage(LoginManager.class,
+                    "Profiles.noprofiles.title"));
+            nd.setOptions(new Object[]{ok, cancel});
+            nd.addPropertyChangeListener(new PropertyChangeListener() {
+
+                @Override
+                public void propertyChange(PropertyChangeEvent evt) {
+                    if (NotifyDescriptor.CLOSED_OPTION.equals(evt.getNewValue())) {
+                        exit();
+                    }
+                }
+            });
+            nd.setMessage(org.openide.util.NbBundle.getMessage(LoginManager.class,
+                    "Profiles.noprofiles.text"));
+
+            DialogDisplayer.getDefault().notify(nd);
         }
     }
 
