@@ -9,22 +9,25 @@ import simple.client.event.listener.RPEventListener;
  *
  * @author Javier A. Ortiz <javier.ortiz.78@gmail.com>
  */
-public interface IZoneListManager extends RPEventListener{
+public interface IZoneListManager extends RPEventListener, IClientComponent {
 
     /**
      * Add a zone
-     * @param zone 
+     *
+     * @param zone
      */
     public void addZone(String zone);
-    
+
     /**
      * Remove a zone
-     * @param zone 
+     *
+     * @param zone
      */
     public void removeZone(String zone);
 
     /**
      * Update zone description
+     *
      * @param zone Zone to modify
      * @param modified New description
      */

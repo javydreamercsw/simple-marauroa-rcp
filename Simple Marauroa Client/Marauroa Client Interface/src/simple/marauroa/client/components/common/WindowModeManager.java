@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.openide.util.Lookup;
 import org.openide.windows.Mode;
 import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
@@ -33,18 +34,19 @@ public class WindowModeManager {
 
     /**
      * Allows to change the location of a {@link TopComponent} programmatically
+     *
      * @param component
-     * @param mode 
+     * @param mode
      */
     public static void changeMode(TopComponent component, String mode) {
         Mode newMode = WindowManager.getDefault().findMode(mode);
         if (newMode != null) {
             newMode.dockInto(component);
-            if(!component.isShowing()){
+            if (!component.isShowing()) {
                 component.setVisible(true);
             }
-        }else{
-            logger.log(Level.WARNING, 
+        } else {
+            logger.log(Level.WARNING,
                     "Unable to change location of: {0}. Mode: {1} "
                     + "is not registered.", new Object[]{component, mode});
             logger.warning(getModeList());

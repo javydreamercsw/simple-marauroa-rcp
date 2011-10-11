@@ -18,6 +18,7 @@ import javax.swing.event.ChangeListener;
 import marauroa.common.io.Persistence;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
+import org.openide.windows.TopComponent;
 import simple.client.action.update.ClientGameConfiguration;
 import simple.marauroa.client.components.api.ILoginComponent;
 import simple.marauroa.client.components.common.MCITool;
@@ -87,6 +88,11 @@ public final class LoginForm extends javax.swing.JPanel implements ILoginCompone
     public boolean close() {
         setVisible(false);
         return true;
+    }
+
+    @Override
+    public TopComponent getComponent() {
+        return null;
     }
 
     /**

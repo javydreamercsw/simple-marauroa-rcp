@@ -73,7 +73,8 @@ public class ZoneEventManager implements IZoneListManager, IZoneListActionProvid
         MCITool.getZoneListManager().requestPassword();
     }
 
-    protected static ZoneListTopComponent getInstance() {
+    @Override
+    public ZoneListTopComponent getComponent() {
         if (instance == null) {
             for (TopComponent tc : TopComponent.getRegistry().getOpened()) {
                 if (tc instanceof ZoneListTopComponent) {
@@ -157,7 +158,7 @@ public class ZoneEventManager implements IZoneListManager, IZoneListActionProvid
 
     @Override
     public void requestPassword() {
-        getInstance().requestPassword();
+        getComponent().requestPassword();
     }
 
     @Override
@@ -202,6 +203,16 @@ public class ZoneEventManager implements IZoneListManager, IZoneListActionProvid
         }
     }
 
+    @Override
+    public void open() {
+        getComponent().open();
+    }
+
+    @Override
+    public boolean close() {
+        return getComponent().close();
+    }
+
     private class JoinZoneAction extends ZoneListAction {
 
         public JoinZoneAction() {
@@ -218,7 +229,7 @@ public class ZoneEventManager implements IZoneListManager, IZoneListActionProvid
             action.put(ZoneExtension.OPERATION, ZoneEvent.JOIN);
             ((ClientFramework) MCITool.getClient()).send(action);
             //Need to clear the player list
-            if(MCITool.getUserListManager()!= null){
+            if (MCITool.getUserListManager() != null) {
                 MCITool.getUserListManager().clearList();
             }
         }

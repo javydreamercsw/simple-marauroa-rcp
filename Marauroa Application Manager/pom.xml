@@ -58,6 +58,8 @@
                 <source>./Dimension Extension/src</source>
                 
                 <source>./Challenge Extension/src</source>
+                
+                <source>./Card Game Extension/src</source>
                 </sources>
                         </configuration>
                     </execution>
