@@ -15,7 +15,8 @@ public class UserListManager implements IUserListManager {
 
     private static UserListTopComponent instance;
 
-    protected UserListTopComponent getInstance() {
+    @Override
+    public UserListTopComponent getComponent() {
         if (instance == null) {
             for (TopComponent tc : TopComponent.getRegistry().getOpened()) {
                 if (tc instanceof UserListTopComponent) {
@@ -29,19 +30,19 @@ public class UserListManager implements IUserListManager {
 
     @Override
     public void open() {
-        getInstance().open();
+        getComponent().open();
     }
 
     @Override
     public boolean close() {
-        boolean res = getInstance().close();
+        boolean res = getComponent().close();
         instance = null;
         return res;
     }
 
     @Override
     public void notify(RPObject object) {
-        getInstance().update();
+        getComponent().update();
     }
 
     @Override

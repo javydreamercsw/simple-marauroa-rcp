@@ -538,4 +538,9 @@ public class MarauroaSimpleClient extends SimpleClient implements
     public void addRPEventListener(RPEvent event, RPEventListener l) {
         getUserContext().registerRPEventListener(event, l);
     }
+
+    @Override
+    public void changeScreen(int screen) {
+        //Do nothing by default
+    }
 }

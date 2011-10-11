@@ -11,6 +11,7 @@ import marauroa.common.game.RPObject;
 import org.openide.util.NbBundle;
 import org.openide.util.lookup.ServiceProvider;
 import org.openide.util.lookup.ServiceProviders;
+import org.openide.windows.TopComponent;
 import simple.client.EventLine;
 import simple.common.NotificationType;
 import simple.marauroa.application.core.EventBus;
@@ -107,6 +108,11 @@ public class PrivateChatManager implements IPrivateChatManager, IUserListActionP
                     ? "System" : pTextEvent.get(WellKnownActionConstant.FROM)),
                     pTextEvent.get(WellKnownActionConstant.TEXT), NotificationType.PRIVMSG);
         }
+    }
+
+    @Override
+    public TopComponent getComponent() {
+        return null;
     }
 
     private class StartPrivateChatAction extends UserListAction {

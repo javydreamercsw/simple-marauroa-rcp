@@ -196,4 +196,11 @@ public interface IClientFramework extends Runnable {
      * @param action action to send
      */
     public void send(RPAction action);
+
+    /**
+     * Change screen in client
+     *
+     * @param screen Screen number id
+     */
+    public void changeScreen(int screen);
 }

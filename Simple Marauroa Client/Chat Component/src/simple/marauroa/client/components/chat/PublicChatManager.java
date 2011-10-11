@@ -7,6 +7,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import marauroa.common.game.RPEvent;
 import org.openide.util.lookup.ServiceProvider;
+import org.openide.windows.TopComponent;
 import simple.client.EventLine;
 import simple.common.NotificationType;
 import simple.marauroa.client.components.api.IPublicChatComponent;
@@ -19,7 +20,7 @@ import simple.server.core.event.TextEvent;
  * @author Javier A. Ortiz Bultrón <javier.ortiz.78@gmail.com>
  */
 @ServiceProvider(service = IPublicChatComponent.class)
-public class PublicChatManager implements IPublicChatComponent{
+public class PublicChatManager implements IPublicChatComponent {
 
     private final String chat = "Chat";
     private final String priv = "Private-";
@@ -104,6 +105,9 @@ public class PublicChatManager implements IPublicChatComponent{
 
     @Override
     public void open() {
+        if (!OutputHandler.has(getNormalOutputName())) {
+            OutputHandler.output(getNormalOutputName(), "");
+        }
     }
 
     @Override
@@ -127,5 +131,10 @@ public class PublicChatManager implements IPublicChatComponent{
             addLine((textEvent.get("from") == null ? "System" : textEvent.get("from")),
                     textEvent.get("text"), NotificationType.NORMAL);
         }
+    }
+
+    @Override
+    public TopComponent getComponent() {
+        return null;
     }
 }
