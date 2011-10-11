@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: simple.marauroa.client.extension.cardgame/0
+OpenIDE-Module-Implementation-Version: 1
+OpenIDE-Module-Localizing-Bundle: simple/marauroa/client/extension/cardgame/Bundle.properties
+
