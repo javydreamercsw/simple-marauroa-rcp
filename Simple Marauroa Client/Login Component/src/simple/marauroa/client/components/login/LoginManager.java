@@ -73,7 +73,9 @@ public class LoginManager implements ILoginManager {
             }
         });
 
-        NotifyDescriptor nd = new NotifyDescriptor.Confirmation(form, "Login");
+        NotifyDescriptor nd = new NotifyDescriptor.Confirmation(form,
+                org.openide.util.NbBundle.getMessage(LoginManager.class,
+                "window.title"));
         nd.setOptions(new Object[]{ok, create, cancel});
         nd.addPropertyChangeListener(new PropertyChangeListener() {
 
@@ -125,7 +127,7 @@ public class LoginManager implements ILoginManager {
                 }
             });
 
-            NotifyDescriptor nd = new NotifyDescriptor.Confirmation(form, 
+            NotifyDescriptor nd = new NotifyDescriptor.Confirmation(form,
                     org.openide.util.NbBundle.getMessage(LoginManager.class,
                     "Profiles.noprofiles.title"));
             nd.setOptions(new Object[]{ok, cancel});
@@ -165,8 +167,11 @@ public class LoginManager implements ILoginManager {
                 profilesFile.createNewFile();
             } catch (IOException ex) {
                 DialogDisplayer.getDefault().notify(new NotifyDescriptor(
-                        "An error occurred while creating the profile file.",
-                        "Error creating profile file", // title of the dialog
+                        org.openide.util.NbBundle.getMessage(LoginManager.class,
+                        "Profiles.creation.error.message") + "\n"
+                        + ex.getLocalizedMessage(),
+                        org.openide.util.NbBundle.getMessage(LoginManager.class,
+                        "Profiles.creation.error.title"), // title of the dialog
                         NotifyDescriptor.PLAIN_MESSAGE,
                         NotifyDescriptor.ERROR_MESSAGE,
                         null,
@@ -175,8 +180,11 @@ public class LoginManager implements ILoginManager {
             }
         } catch (IOException ioex) {
             DialogDisplayer.getDefault().notify(new NotifyDescriptor(
-                    "An error occurred while loading your login information",
-                    "Error Loading Login Information", // title of the dialog
+                    org.openide.util.NbBundle.getMessage(LoginManager.class,
+                    "Login.loading.error.message") + "\n"
+                    + ioex.getLocalizedMessage(),
+                    org.openide.util.NbBundle.getMessage(LoginManager.class,
+                    "Login.loading.error.title"), // title of the dialog
                     NotifyDescriptor.PLAIN_MESSAGE,
                     NotifyDescriptor.WARNING_MESSAGE,
                     null,
