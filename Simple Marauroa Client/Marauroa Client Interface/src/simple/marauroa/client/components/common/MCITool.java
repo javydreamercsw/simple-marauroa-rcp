@@ -23,6 +23,11 @@ public class MCITool {
         return instance;
     }
 
+    /**
+     * Output to the chat component
+     *
+     * @param el
+     */
     public static void outputInChatComponent(EventLine el) {
         IPublicChatComponent app = Lookup.getDefault().lookup(IPublicChatComponent.class);
         if (app != null) {
@@ -32,10 +37,11 @@ public class MCITool {
 
     /**
      * Get client implementation
+     *
      * @return client implementation
      */
     public static IClientFramework getClient() {
-        IClientFramework client=null;
+        IClientFramework client = null;
         for (Iterator<? extends IClientFramework> it = Lookup.getDefault().lookupAll(IClientFramework.class).iterator(); it.hasNext();) {
             client = it.next();
         }
@@ -44,14 +50,16 @@ public class MCITool {
 
     /**
      * Get public chat implementation
+     *
      * @return chat implementation
      */
     public static IPublicChatComponent getPublicChatManager() {
         return Lookup.getDefault().lookup(IPublicChatComponent.class);
     }
-    
+
     /**
      * Get private chat implementation
+     *
      * @return chat implementation
      */
     public static IPrivateChatManager getPrivateChatManager() {
@@ -60,6 +68,7 @@ public class MCITool {
 
     /**
      * Get login implementation
+     *
      * @return login implementation
      */
     public static ILoginManager getLoginManager() {
@@ -68,16 +77,27 @@ public class MCITool {
 
     /**
      * Get create account implementation
+     *
      * @return account implementation
      */
     public static ICAManager getCAManager() {
         return Lookup.getDefault().lookup(ICAManager.class);
     }
 
+    /**
+     * Get the User List implementation
+     *
+     * @return User List implementation
+     */
     public static IUserListManager getUserListManager() {
         return Lookup.getDefault().lookup(IUserListManager.class);
     }
-    
+
+    /**
+     * Get the Zone List implementation
+     *
+     * @return Zone List implementation
+     */
     public static IZoneListManager getZoneListManager() {
         return Lookup.getDefault().lookup(IZoneListManager.class);
     }
