@@ -1,5 +1,5 @@
 syntax: glob
-netbeans/*
+^.netbeans$
 */dist/*
 */build/*
 */private/*
@@ -8,7 +8,7 @@ netbeans/*
 */log*.txt
 **/keystore/*
 **/jWrestling/*
-marauroa/*
+^.marauroa$
 **/doxygen/*
 Marauroa NB/*
 **/pom.xml
