@@ -1,5 +1,4 @@
 syntax: glob
-^.netbeans$
 */dist/*
 */build/*
 */private/*
@@ -8,8 +7,10 @@ syntax: glob
 */log*.txt
 **/keystore/*
 **/jWrestling/*
-^.marauroa$
 **/doxygen/*
 Marauroa NB/*
 **/pom.xml
 Marauroa Application Manager/D20/*
+syntax: regexp
+^netbeans$
+^marauroa$
