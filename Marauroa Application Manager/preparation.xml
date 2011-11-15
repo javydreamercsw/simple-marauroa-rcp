@@ -27,6 +27,7 @@
                 <expand-module module="@{cur}"/>
             </sequential>
         </for>
+        <echo>Remember to define the custom Platform "Marauroa NetBeans Platform" pointing to the contents of the netbeans folder</echo>
     </target>
 
     <target name="update-env" depends="init-netbeans, init-hudson" description="Update the Netbeans core modules used to compile/run OIT">
@@ -72,7 +73,6 @@
                     <unzip src="@{module}.zip" dest="@{module}"/>
                 </then>
             </if>
-            
         </sequential>
     </macrodef>
 
