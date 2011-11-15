@@ -388,12 +388,12 @@
         </taskdef>
         <!--Simple Marauroa Java Project-->
         <update-or-clone 
-        url="https://hg.java.net/hg/simple-marauroa-java~repository"
+        url="https://bitbucket.org/javydreamercsw/simple-marauroa-java"
         path="${suite.dir}/../Simple Marauroa Java"
         repo="hg"/>
         <!--jWrestling Project-->
         <update-or-clone 
-        url="https://hg.java.net/hg/jwrestling~code"
+        url="https://bitbucket.org/javydreamercsw/jwrestling"
         path="${suite.dir}/../jWrestling"
         repo="hg"/>
     </target>
