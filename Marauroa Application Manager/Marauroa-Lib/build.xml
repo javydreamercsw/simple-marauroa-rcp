@@ -28,14 +28,14 @@
                     <property file="../../Simple Marauroa Java/Simple-Server/nbproject/project.properties" prefix="server-lib"/>
                         <!--Copy the Marauroa Related files-->
                     <ant antfile="../../Simple Marauroa Java/Simple-Server/build.xml" target="jar" inheritall="false" />
-                    <copy file="../${server-lib.file.reference.marauroa.jar}" tofile="release/modules/ext/Marauroa.jar"/>
-                    <copy file="../${server-lib.file.reference.log4j.jar}" tofile="release/modules/ext/log4j.jar"/>
+                    <copy file="${server-lib.file.reference.marauroa.jar}" tofile="release/modules/ext/Marauroa.jar"/>
+                    <copy file="${server-lib.file.reference.log4j.jar}" tofile="release/modules/ext/log4j.jar"/>
                 </then>
             </elseif>
             <else>
                 <!-- Just copy from Simple Libs -->
-                <copy file="../Simple Libs/marauroa.jar" tofile="release/modules/ext/Marauroa.jar"/>
-                <copy file="../Simple Libs/log4j.jar" tofile="release/modules/ext/log4j.jar"/>
+                <copy file="../../Simple Libs/marauroa.jar" tofile="release/modules/ext/Marauroa.jar"/>
+                <copy file="../../Simple Libs/log4j.jar" tofile="release/modules/ext/log4j.jar"/>
             </else>
         </if>
     </target>
