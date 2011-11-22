@@ -54,6 +54,14 @@ public class DefaultImageManager implements ImageManager {
                 height = img.getHeight();
             }
         }
+        for (BufferedImage img : getTextLayers()) {
+            if (img.getWidth() > width) {
+                width = img.getWidth();
+            }
+            if (img.getHeight() > height) {
+                height = img.getHeight();
+            }
+        }
         return new Dimension(width, height);
     }
 
