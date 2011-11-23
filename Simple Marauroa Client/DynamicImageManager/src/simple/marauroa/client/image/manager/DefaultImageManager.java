@@ -12,6 +12,7 @@ import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import javax.imageio.ImageIO;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -46,7 +47,8 @@ public class DefaultImageManager implements ImageManager {
 
     private Dimension getMaxSize() {
         int width = 0, height = 0;
-        for (BufferedImage img : getLayers()) {
+        for (Iterator<BufferedImage> it = getLayers().iterator(); it.hasNext();) {
+            BufferedImage img = it.next();
             if (img.getWidth() > width) {
                 width = img.getWidth();
             }
@@ -54,7 +56,8 @@ public class DefaultImageManager implements ImageManager {
                 height = img.getHeight();
             }
         }
-        for (BufferedImage img : getTextLayers()) {
+        for (Iterator<BufferedImage> it = getTextLayers().iterator(); it.hasNext();) {
+            BufferedImage img = it.next();
             if (img.getWidth() > width) {
                 width = img.getWidth();
             }
