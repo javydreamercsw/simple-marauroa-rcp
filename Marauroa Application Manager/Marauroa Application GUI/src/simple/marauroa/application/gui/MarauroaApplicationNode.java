@@ -137,12 +137,12 @@ public class MarauroaApplicationNode extends BeanNode implements ApplicationStat
     @Override
     public void statusChanged() {
         //Update the actions in case something external changed the app status
-        Logger.getLogger(MarauroaApplicationNode.class.getSimpleName()).info(
+        Logger.getLogger(MarauroaApplicationNode.class.getSimpleName()).fine(
                     "Updating node actions due to status change...");
         actions = getActions(true);
         MonitorService service = Lookup.getDefault().lookup(MonitorService.class);
         if (service != null && application.getStatus().contains(STATUS.DISCONNECTED)) {
-            Logger.getLogger(MarauroaApplicationNode.class.getSimpleName()).info(
+            Logger.getLogger(MarauroaApplicationNode.class.getSimpleName()).fine(
                     "Removing monitor...");
             //Stop any monitors we have on this application
             service.removeMonitor(application.getName());
