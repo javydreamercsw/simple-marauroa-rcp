@@ -23,7 +23,7 @@ public interface IChatInterface extends IClientComponent, ReaderListener {
     void addLine(String header, String line, NotificationType type);
 
     /**
-     *
+     * Add a line of text
      * @param line
      * Event line to output
      */
