@@ -11,6 +11,7 @@ syntax: glob
 Marauroa NB/*
 **/pom.xml
 Marauroa Application Manager/D20/*
+Marauroa-Project*
 syntax: regexp
 ^netbeans$
 ^marauroa$
