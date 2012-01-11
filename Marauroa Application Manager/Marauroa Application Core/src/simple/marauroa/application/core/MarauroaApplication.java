@@ -49,7 +49,7 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
     private String host = "localhost";
     private boolean exists;
     EnumMap<ConfigurationElement, Properties> properties =
-            new EnumMap<>(ConfigurationElement.class);
+            new EnumMap<ConfigurationElement, Properties>(ConfigurationElement.class);
     //Populate the ini file
     private Properties props = new Properties(), custom = new Properties();
     private static final Logger logger = Logger.getLogger(MarauroaApplication.class.getSimpleName());
@@ -57,7 +57,7 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
      * A map of zones and its contents
      */
     private HashMap<String, ArrayList<RPObject>> contents =
-            new HashMap<>();
+            new HashMap<String, ArrayList<RPObject>>();
     private Class relativeToClass = getClass();
 
     public MarauroaApplication(String name) {
