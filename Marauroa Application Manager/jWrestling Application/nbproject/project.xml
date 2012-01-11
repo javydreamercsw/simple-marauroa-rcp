@@ -42,14 +42,6 @@
                     </run-dependency>
                 </dependency>
                 <dependency>
-                    <code-name-base>simple.server.extension.cardgame</code-name-base>
-                    <build-prerequisite/>
-                    <compile-dependency/>
-                    <run-dependency>
-                        <specification-version>1.0</specification-version>
-                    </run-dependency>
-                </dependency>
-                <dependency>
                     <code-name-base>simple.server.lib</code-name-base>
                     <build-prerequisite/>
                     <compile-dependency/>
@@ -61,33 +53,6 @@
             </module-dependencies>
             <public-packages>
                 <package>games.jwrestling.application</package>
-                <package>games.jwrestling.common</package>
-                <package>games.jwrestling.common.game</package>
-                <package>games.jwrestling.core.game.object</package>
-                <package>games.jwrestling.core.game.object.location</package>
-                <package>games.jwrestling.core.game.object.match</package>
-                <package>games.jwrestling.core.game.object.modifier</package>
-                <package>games.jwrestling.core.game.object.modifier.bodydamage</package>
-                <package>games.jwrestling.core.game.object.module</package>
-                <package>games.jwrestling.core.game.object.moveclass</package>
-                <package>games.jwrestling.core.game.object.movetype</package>
-                <package>games.jwrestling.core.game.object.page</package>
-                <package>games.jwrestling.core.game.object.page.edition.first.Momentum</package>
-                <package>games.jwrestling.core.game.object.page.edition.first.Move</package>
-                <package>games.jwrestling.core.game.object.page.edition.first.SS</package>
-                <package>games.jwrestling.core.game.object.page.edition.first.Special</package>
-                <package>games.jwrestling.core.game.object.specialtype</package>
-                <package>games.jwrestling.core.game.object.tools</package>
-                <package>games.jwrestling.core.game.object.tools.html</package>
-                <package>games.jwrestling.event</package>
-                <package>games.jwrestling.server.core.action</package>
-                <package>games.jwrestling.server.core.action.admin</package>
-                <package>games.jwrestling.server.core.action.chat</package>
-                <package>games.jwrestling.server.core.engine</package>
-                <package>games.jwrestling.server.entity.player</package>
-                <package>games.jwrestling.server.extension</package>
-                <package>games.jwrestling.server.extension.match</package>
-                <package>games.jwrestling.server.game.db</package>
             </public-packages>
             <class-path-extension>
                 <runtime-relative-path>ext/jWrestling/jarscan.jar</runtime-relative-path>
