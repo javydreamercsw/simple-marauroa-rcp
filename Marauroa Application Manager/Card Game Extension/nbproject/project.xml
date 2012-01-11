@@ -27,6 +27,7 @@
             </module-dependencies>
             <public-packages>
                 <package>simple.server.extension</package>
+                <package>simple.server.extension.impl</package>
             </public-packages>
             <class-path-extension>
                 <runtime-relative-path>ext/extension/Card_Game_Extension.jar</runtime-relative-path>
