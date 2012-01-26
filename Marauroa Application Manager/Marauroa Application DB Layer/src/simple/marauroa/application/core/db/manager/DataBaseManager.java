@@ -262,7 +262,7 @@ public final class DataBaseManager implements EventBusListener<IMarauroaApplicat
      * Load applications already on file system
      */
     public static void loadApplications() {
-        File path = null;
+        File path;
         //Load from database
         for (Application app : DataBaseManager.getApplications()) {
             //Check if the application path exists

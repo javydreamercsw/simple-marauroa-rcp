@@ -12,6 +12,8 @@ Marauroa NB/*
 **/pom.xml
 Marauroa Application Manager/D20/*
 Marauroa-Project*
+Marauroa Application Manager/netbeans*
+Marauroa Application Manager/DB
+Marauroa Application Manager/Persistence
 syntax: regexp
-^netbeans$
 ^marauroa$
