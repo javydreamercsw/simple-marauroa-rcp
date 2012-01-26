@@ -6,7 +6,6 @@
     <description>Builds the module suite Marauroa Server Manager.</description>
     <import file="nbproject/build-impl.xml"/>
     <import file="preparation.xml"/>
-    <property name="ant-contrib-filename" value="ant-contrib-1.0b3.jar" />
     <taskdef name="doxygen" classname="org.doxygen.tools.DoxygenTask" classpath="../Simple Libs/tools/doxygen/ant_doxygen.jar" />
     
     <scriptdef name="substring" language="javascript">
@@ -37,7 +36,7 @@
             <then>
                 <tstamp prefix="build"/>
                 <propertyfile file="${basedir}/nbproject/project.properties"
-        comment="Updated by build script">
+                              comment="Updated by build script">
                     <entry key="app.version" value="${BUILD_TAG}${BUILD_ID} SVN Rev: ${SVN_REVISION}" />
                 </propertyfile>
             </then>
@@ -73,16 +72,16 @@
             <fileset dir="branding/" includes="**/*_*.properties"/>
             <sequential>
                 <replaceregexp file="@{file}"
-			match="[0-9]+\.[0-9]+"
-			replace="${app.version}"
-			byline="true"/>
+                               match="[0-9]+\.[0-9]+"
+                               replace="${app.version}"
+                               byline="true"/>
             </sequential>
         </for>
         <if>
             <available file="${suite.dir}/resources/Splash.png"/>
             <then>
                 <copy file="${suite.dir}/resources/Splash.png" 
-        tofile="${suite.dir}/branding/modules/ext/updater.jar/org/netbeans/updater/resources/updatersplash.gif"/>
+                      tofile="${suite.dir}/branding/modules/ext/updater.jar/org/netbeans/updater/resources/updatersplash.gif"/>
             </then>
         </if>
         <!--Create pom.xml-->
@@ -295,7 +294,7 @@
         <property name="exeName" value="${app.title}-Setup"/>
         <property name="izpack-installer" value="${exeName}.jar"/>
         <taskdef name="izpack" classpath="${izpack.dir}/lib/compiler.jar"
-             classname="com.izforge.izpack.ant.IzPackTask"/>
+                 classname="com.izforge.izpack.ant.IzPackTask"/>
         <property name="launch4j.dir" location="Simple Libs/tools/launch4j" />
         <echo message="Makes the installer using IzPack into ${izpack-installer}"/>
         <echo file="${suite.dir}/shortcutSpec.xml"><![CDATA[<shortcuts>
@@ -317,13 +316,13 @@
             <replacefilter token="$APP-NAME" value="${app.name}" />
         </replace>
         <izpack input="${basedir}/nizpack.xml"
-            output="${basedir}/${izpack-installer}"
-            installerType="standard"
-            basedir="${basedir}"
-            izPackDir="${izpack.dir}/"/>
+                output="${basedir}/${izpack-installer}"
+                installerType="standard"
+                basedir="${basedir}"
+                izPackDir="${izpack.dir}/"/>
         <!--Launch 4J task-->
         <taskdef name="launch4j" classname="net.sf.launch4j.ant.Launch4jTask"
-             classpath="${launch4j.dir}/launch4j.jar:${launch4j.dir}/lib/xstream.jar" />
+                 classpath="${launch4j.dir}/launch4j.jar:${launch4j.dir}/lib/xstream.jar" />
         <antcall target="create-launch4j-installer"/>
         <echo message="Cleaning and finalizing release..." />
         <delete dir="${nbdist-app.dir}"/>
@@ -388,14 +387,14 @@
         </taskdef>
         <!--Simple Marauroa Java Project-->
         <update-or-clone 
-        url="https://bitbucket.org/javydreamercsw/simple-marauroa-java"
-        path="${suite.dir}/../Simple Marauroa Java"
-        repo="hg"/>
+            url="https://bitbucket.org/javydreamercsw/simple-marauroa-java"
+            path="${suite.dir}/../Simple Marauroa Java"
+            repo="hg"/>
         <!--jWrestling Project-->
         <update-or-clone 
-        url="https://bitbucket.org/javydreamercsw/jwrestling"
-        path="${suite.dir}/../jWrestling"
-        repo="hg"/>
+            url="https://bitbucket.org/javydreamercsw/jwrestling"
+            path="${suite.dir}/../jWrestling"
+            repo="hg"/>
     </target>
 
     <target name="create-doxygen-docs">
@@ -463,7 +462,7 @@
                                 <echo>Creating Source zip for Module @{cur}</echo>
                                 <delete file="${suite.dir}/dist/@{cur} ${@{cur}.general.info.partnumber}.zip"/>
                                 <zip destfile="${suite.dir}/dist/@{cur} ${@{cur}.general.info.partnumber}.zip"
-                                basedir="@{cur}" update="false" excludes="build/**"/>
+                                     basedir="@{cur}" update="false" excludes="build/**"/>
                             </then>
                         </if>
                     </then>
@@ -528,18 +527,18 @@
                     <then>
                         <length string="${@{cur}.OpenIDE-Module}" property="@{cur}.length.dist" />
                         <stringutil string="${@{cur}.OpenIDE-Module}" 
-                        property="@{cur}.OpenIDE-Module.indexOf">
+                                    property="@{cur}.OpenIDE-Module.indexOf">
                             <indexof string="/"/>
                         </stringutil>
                         <math result="@{cur}.after" operand1="1" operation="+" 
-                        operand2="${@{cur}.OpenIDE-Module.indexOf}" datatype="int"/>
+                              operand2="${@{cur}.OpenIDE-Module.indexOf}" datatype="int"/>
                         <substring text="${@{cur}.OpenIDE-Module}" 
-                        start="${@{cur}.after}" 
-                        end="${@{cur}.length.dist}" 
-                        property="@{cur}.release-version" />
+                                   start="${@{cur}.after}" 
+                                   end="${@{cur}.length.dist}" 
+                                   property="@{cur}.release-version" />
                         <substring text="${@{cur}.OpenIDE-Module}" start="0" 
-                        end="${@{cur}.OpenIDE-Module.indexOf}" 
-                        property="@{cur}.OpenIDE-Module" />
+                                   end="${@{cur}.OpenIDE-Module.indexOf}" 
+                                   property="@{cur}.OpenIDE-Module" />
                     </then>
                 </if>
                 <property file="@{cur}/nbproject/project.properties" prefix="@{cur}."/>

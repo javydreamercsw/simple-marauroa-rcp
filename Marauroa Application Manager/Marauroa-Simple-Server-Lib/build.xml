@@ -9,7 +9,7 @@
     
     <property name="original.project.dir" value="../../Simple Marauroa Java/Simple-Server"/>
 
-    <target name="release" depends="init-netbeans, init-hudson">
+    <target name="netbeans" depends="init-netbeans, init-hudson">
         <property file="${original.project.dir}/nbproject/project.properties" prefix="extension-lib"/>
         <length string="${extension-lib.dist.dir}" property="length.dist" />
         <math result="length.dist" operand1="1" operation="+" operand2="${length.dist}" datatype="int"/>
@@ -37,6 +37,7 @@
         <copy todir="../build/cluster/modules/ext">
             <fileset dir="../../Simple Marauroa Java/Simple-Server/dist/lib" excludes="marauroa*.jar, log4j*.jar, mysql*.jar"/>
         </copy>
+        <antcall target="projectized-common.netbeans"/>
     </target>
 
     <target name="clean" depends="projectized-common.clean">

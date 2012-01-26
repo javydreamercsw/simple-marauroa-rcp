@@ -7,124 +7,25 @@
     <property file="nbproject/platform.properties"/>
     <property name="platform.dir" value="../netbeans/"/>
     <property name="lib.dir" value="${suite.dir}/../Simple Libs/tools"/>
-       
-    <target name="update-platform" depends="init-netbeans">
-        <delete includeemptydirs="true">
-            <fileset dir="${platform.dir}" includes="**/*"/>
-        </delete>
-        <mkdir dir="${platform.dir}"/>
-        <for list="${cluster.path}" delimiter=":" param="cur" trim="true">
-            <sequential>
-                <add-core-module module="@{cur}"/>
-            </sequential>
-        </for>
-    </target>
 
-    <target name="unzip-compilation-env" depends="init-netbeans, init-hudson">
+    <target name="unzip-custom-clusters" depends="init-netbeans, init-hudson">
         <!--Hudson needs to run this task first as it gets the core modules as zip from version control-->
-        <for list="${cluster.path}" delimiter=":" param="cur" trim="true">
-            <sequential>
-                <expand-module module="@{cur}"/>
-            </sequential>
-        </for>
-        <echo>Remember to define the custom Platform "Marauroa NetBeans Platform" pointing to the contents of the netbeans folder</echo>
+        <for param="file"> 
+            <path> 
+                <fileset dir="../netbeans"> 
+                    <include name="*.zip"/> 
+                </fileset> 
+            </path> 
+            <sequential> 
+                <propertyregex override="yes" 
+                               property="zipname"  input="@{file}" 
+                               regexp=".*[\\/]([^\\/]*)\.zip" replace="\1"/>
+                <delete dir="${nbplatform.active.dir}/${zipname}" failonerror="false"/>
+                <mkdir dir="${nbplatform.active.dir}/${zipname}"/> 
+                <unzip dest="${nbplatform.active.dir}/${zipname}" src="@{file}"/> 
+            </sequential> 
+        </for> 
     </target>
-
-    <target name="update-env" depends="init-netbeans, init-hudson" description="Update the Netbeans core modules used to compile/run OIT">
-        <!--Make sure that any recently added module using the IDE is also included.
-        Fix it to the properformat.-->
-        <mkdir dir="${platform.dir}"/>
-        <propertyregex property="cluster.path"
-               input="${cluster.path}"
-               regexp="nbplatform.active.dir"
-               replace="platform.base"
-               global="true"
-               override="true"/>
-        <replaceregexp file="nbproject/platform.properties"
-                       match="nbplatform.active.dir"
-                       replace="platform.base"
-                       byline="true"
-                       flags="g,s"/>
-        <pathconvert pathsep="\;" property="folders_temp">
-            <dirset dir="${platform.dir}">
-                <include name="*/**"/>
-                <!--ignore svn and cvs files-->
-                <include name="**/.svn"/>
-                <include name="**/.svn/**"/>
-                <include name="**/CVS"/>
-                <include name="**/CVS/**"/>
-                <!--Exclude the root folder-->
-                <exclude name="${platform.dir}"/>
-            </dirset>
-        </pathconvert>
-        <antcall target="update-platform"/>
-        <antcall target="unzip-compilation-env"/>
-    </target>
-
-    <macrodef name="expand-module">
-        <attribute name="module"/>
-        <sequential>
-            <if>
-                <not>
-                    <contains string="@{module}" substring="build"/>
-                </not>
-                <then>
-                    <delete dir="@{module}"/>
-                    <unzip src="@{module}.zip" dest="@{module}"/>
-                </then>
-            </if>
-        </sequential>
-    </macrodef>
-
-    <macrodef name="add-core-module">
-        <attribute name="module"/>
-        <sequential>
-            <if>
-                <equals arg1="@{module}" arg2="${platform.dir}nb-plugins"/>
-                <then>
-                    <echo>Adding custom module @{module}</echo>
-                    <available file="@{module}" type="dir" property="@{module}.customdir.exists"/>
-                    <if>
-                        <equals arg1="${@{module}.customdir.exists}" arg2="true"/>
-                        <then>
-                            <echo>Adding custom module @{module}</echo>
-                            <zip destfile="@{module}.zip" basedir="@{module}" update="true"/>
-                        </then>
-                        <else>
-                            <fail message="Error adding module @{module}."/>
-                        </else>
-                    </if>
-                </then>
-                <elseif>
-                    <contains string="@{module}" substring="build"/>
-                    <then>
-                        <echo>Adding project/suite @{module}</echo>
-                        <available file="@{module}" type="dir" property="@{module}.customdir.exists"/>
-                        <if>
-                            <equals arg1="${@{module}.customdir.exists}" arg2="true"/>
-                            <then>
-                                <echo>Make sure to add the token dependency for @{module}</echo>
-                            </then>
-                            <else>
-                                <fail message="Error adding module @{module}."/>
-                            </else>
-                        </if>
-                    </then>
-                </elseif>
-                <else>
-                    <length string="@{module}" property="@{module}.length.module" />
-                    <substring text="@{module}" start="12" end="${@{module}.length.module}" property="new.module"/>
-                    <echo>Adding netbeans core module ${new.module}</echo>
-                    <mkdir dir="${platform.dir}${new.module}/"/>
-                    <delete file="${platform.dir}${new.module}.zip"/>
-                    <delete includeemptydirs="true">
-                        <fileset dir="${platform.dir}${new.module}/" includes="**/.*" defaultexcludes="false"/>
-                    </delete>
-                    <zip destfile="${platform.dir}${new.module}.zip" basedir="${netbeans.home}\..\${new.module}" update="true"/>
-                </else>
-            </if>
-        </sequential>
-    </macrodef>
     
     <scriptdef name="substring" language="javascript">
         <attribute name="text" />
@@ -149,7 +50,7 @@
         <available file="${xmltasks-loc}" property="xmltasks.present"/>
         <fail unless="xmltasks.present" message="The xmltasks jar doesn't exist at: ${xmltasks-loc}, can't build. Check your settings!" />
         <taskdef name="xmltask" 
-            classname="com.oopsconsultancy.xmltask.ant.XmlTask">
+                 classname="com.oopsconsultancy.xmltask.ant.XmlTask">
             <classpath>
                 <pathelement location="${xmltasks-loc}"/>
             </classpath>
@@ -255,8 +156,7 @@
                         </else>
                     </if>
                 </else>
-            </if>
-                        
+            </if>   
         </sequential>
     </macrodef>  
 </project>
