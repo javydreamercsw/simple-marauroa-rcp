@@ -98,9 +98,8 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
             if (defaultProperties != null) {
                 config.load(defaultProperties);
                 defaultProperties.close();
-                try (FileOutputStream out = new FileOutputStream(new File(getAppINIFilePath()))) {
-                    config.store(out, "");
-                }
+                FileOutputStream out = new FileOutputStream(new File(getAppINIFilePath()));
+                config.store(out, "");
             }
         } catch (IOException ex) {
             logger.log(Level.SEVERE, null, ex);
@@ -146,7 +145,11 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
         process = new DefaultMarauroaProcess(this);
         try {
             process.execute();
-        } catch (ExecutionException | InterruptedException ex) {
+        } catch (ExecutionException ex) {
+            logger.log(Level.SEVERE, null, ex);
+            Exceptions.printStackTrace(ex);
+            return false;
+        } catch (InterruptedException ex) {
             logger.log(Level.SEVERE, null, ex);
             Exceptions.printStackTrace(ex);
             return false;
@@ -487,98 +490,97 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
                 props.put("e", rsakey.getE().toString());
                 props.put("d", rsakey.getD().toString());
             }
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(ini))) {
-                writer.write("#Generated .ini file for " + getName() + " on " + new Date());
+            BufferedWriter writer = new BufferedWriter(new FileWriter(ini));
+            writer.write("#Generated .ini file for " + getName() + " on " + new Date());
+            writer.newLine();
+            writer.newLine();
+            writer.write("#Configurable Section");
+            writer.newLine();
+            writer.newLine();
+            //Use defaults
+            outputDBProperties(writer);
+            writer.write("#Location of the logging configuration");
+            writer.newLine();
+            writer.write(getProperty(ConfigurationElement.LOG4J));
+            writer.newLine();
+            writer.newLine();
+            writer.write("#Unless you want this on a different place leave it unchanged.");
+            writer.newLine();
+            writer.write(getProperty(ConfigurationElement.STATS));
+            writer.newLine();
+            writer.newLine();
+            writer.write("#End Configurable Section. Modify the following properties at your own risk!");
+            writer.newLine();
+            writer.newLine();
+            writer.write(getProperty(ConfigurationElement.DATABASE));
+            writer.newLine();
+            writer.newLine();
+            writer.write(getProperty(ConfigurationElement.FACTORY));
+            writer.newLine();
+            writer.newLine();
+            writer.write(getProperty(ConfigurationElement.UNIVERSE));
+            writer.newLine();
+            writer.newLine();
+            writer.write(getProperty(ConfigurationElement.RULE_PROCESSOR));
+            writer.newLine();
+            writer.newLine();
+            writer.write(getProperty(ConfigurationElement.CLIENT_OBJECT));
+            writer.newLine();
+            writer.newLine();
+            writer.write(getProperty(ConfigurationElement.SERVER_TYPE));
+            writer.newLine();
+            writer.newLine();
+            writer.write(getProperty(ConfigurationElement.SERVER_NAME));
+            writer.newLine();
+            writer.newLine();
+            writer.write(getProperty(ConfigurationElement.SERVER_VERSION));
+            writer.newLine();
+            writer.newLine();
+            writer.write(getProperty(ConfigurationElement.SERVER_WELCOME));
+            writer.newLine();
+            writer.newLine();
+            writer.write(getProperty(ConfigurationElement.SERVER_CONTACT));
+            writer.newLine();
+            writer.newLine();
+            writer.write("#System account credentials!");
+            writer.newLine();
+            writer.write(getProperty(ConfigurationElement.SYSTEM_PASSWORD));
+            writer.newLine();
+            writer.newLine();
+            writer.write(getProperty(ConfigurationElement.SYSTEM_EMAIL));
+            writer.newLine();
+            writer.newLine();
+            writer.write(getProperty(ConfigurationElement.SYSTEM_NAME));
+            writer.newLine();
+            writer.newLine();
+            writer.write(getProperty(ConfigurationElement.TCP_PORT));
+            writer.newLine();
+            writer.newLine();
+            writer.write(getProperty(ConfigurationElement.TURN_LENGTH));
+            writer.newLine();
+            writer.newLine();
+            writer.write("#Server key. Never change it!");
+            writer.newLine();
+            writer.write("n = " + props.get("n").toString());
+            writer.newLine();
+            writer.newLine();
+            writer.write("e = " + props.get("e").toString());
+            writer.newLine();
+            writer.newLine();
+            writer.write("d = " + props.get("d").toString());
+            writer.newLine();
+            writer.newLine();
+            writer.write("#Custom properties");
+            writer.newLine();
+            for (Entry e : custom.entrySet()) {
+                writer.write(e.getKey().toString() + " = " + e.getValue().toString());
                 writer.newLine();
                 writer.newLine();
-                writer.write("#Configurable Section");
-                writer.newLine();
-                writer.newLine();
-                //Use defaults
-                outputDBProperties(writer);
-                writer.write("#Location of the logging configuration");
-                writer.newLine();
-                writer.write(getProperty(ConfigurationElement.LOG4J));
-                writer.newLine();
-                writer.newLine();
-                writer.write("#Unless you want this on a different place leave it unchanged.");
-                writer.newLine();
-                writer.write(getProperty(ConfigurationElement.STATS));
-                writer.newLine();
-                writer.newLine();
-                writer.write("#End Configurable Section. Modify the following properties at your own risk!");
-                writer.newLine();
-                writer.newLine();
-                writer.write(getProperty(ConfigurationElement.DATABASE));
-                writer.newLine();
-                writer.newLine();
-                writer.write(getProperty(ConfigurationElement.FACTORY));
-                writer.newLine();
-                writer.newLine();
-                writer.write(getProperty(ConfigurationElement.UNIVERSE));
-                writer.newLine();
-                writer.newLine();
-                writer.write(getProperty(ConfigurationElement.RULE_PROCESSOR));
-                writer.newLine();
-                writer.newLine();
-                writer.write(getProperty(ConfigurationElement.CLIENT_OBJECT));
-                writer.newLine();
-                writer.newLine();
-                writer.write(getProperty(ConfigurationElement.SERVER_TYPE));
-                writer.newLine();
-                writer.newLine();
-                writer.write(getProperty(ConfigurationElement.SERVER_NAME));
-                writer.newLine();
-                writer.newLine();
-                writer.write(getProperty(ConfigurationElement.SERVER_VERSION));
-                writer.newLine();
-                writer.newLine();
-                writer.write(getProperty(ConfigurationElement.SERVER_WELCOME));
-                writer.newLine();
-                writer.newLine();
-                writer.write(getProperty(ConfigurationElement.SERVER_CONTACT));
-                writer.newLine();
-                writer.newLine();
-                writer.write("#System account credentials!");
-                writer.newLine();
-                writer.write(getProperty(ConfigurationElement.SYSTEM_PASSWORD));
-                writer.newLine();
-                writer.newLine();
-                writer.write(getProperty(ConfigurationElement.SYSTEM_EMAIL));
-                writer.newLine();
-                writer.newLine();
-                writer.write(getProperty(ConfigurationElement.SYSTEM_NAME));
-                writer.newLine();
-                writer.newLine();
-                writer.write(getProperty(ConfigurationElement.TCP_PORT));
-                writer.newLine();
-                writer.newLine();
-                writer.write(getProperty(ConfigurationElement.TURN_LENGTH));
-                writer.newLine();
-                writer.newLine();
-                writer.write("#Server key. Never change it!");
-                writer.newLine();
-                writer.write("n = " + props.get("n").toString());
-                writer.newLine();
-                writer.newLine();
-                writer.write("e = " + props.get("e").toString());
-                writer.newLine();
-                writer.newLine();
-                writer.write("d = " + props.get("d").toString());
-                writer.newLine();
-                writer.newLine();
-                writer.write("#Custom properties");
-                writer.newLine();
-                for (Entry e : custom.entrySet()) {
-                    writer.write(e.getKey().toString() + " = " + e.getValue().toString());
-                    writer.newLine();
-                    writer.newLine();
-                }
-                writer.write("#Enabled extensions");
-                writer.newLine();
-                writer.write(getProperty(ConfigurationElement.SERVER_EXTENSION));
-                writer.flush();
             }
+            writer.write("#Enabled extensions");
+            writer.newLine();
+            writer.write(getProperty(ConfigurationElement.SERVER_EXTENSION));
+            writer.flush();
         }
         OutputHandler.setStatus(NbBundle.getMessage(
                 MarauroaApplication.class,
@@ -629,21 +631,22 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
                         commands, marauroad.getParentFile().getAbsolutePath());
                 try {
                     se.execute();
-                } catch (ExecutionException | InterruptedException ex) {
+                } catch (InterruptedException ex) {
+                    Exceptions.printStackTrace(ex);
+                } catch (ExecutionException ex) {
                     Exceptions.printStackTrace(ex);
                 }
             }
             //Populate the file
             FileWriter fstream = new FileWriter(marauroad);
-            try (BufferedWriter out = new BufferedWriter(fstream)) {
-                if (OSValidator.isUnix()) {
-                    out.write("#!/bin/sh");
-                    out.newLine();
-                }
-                out.write("java -cp ");
-                out.write("\"" + getLibraries() + "\" "
-                        + "marauroa.server.marauroad -c server.ini -l");
+            BufferedWriter out = new BufferedWriter(fstream);
+            if (OSValidator.isUnix()) {
+                out.write("#!/bin/sh");
+                out.newLine();
             }
+            out.write("java -cp ");
+            out.write("\"" + getLibraries() + "\" "
+                    + "marauroa.server.marauroad -c server.ini -l");
         }
         OutputHandler.setStatus(NbBundle.getMessage(
                 MarauroaApplication.class,

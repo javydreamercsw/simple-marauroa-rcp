@@ -51,7 +51,8 @@
                 <download-platform url="${autoupdate.catalog.@{url}}"/>
             </sequential>
         </for>
-        <autoupdate todir="${nbplatform.active.dir}">
+        <mkdir dir="${nbplatform.active.dir}/extra"/>
+        <autoupdate todir="${nbplatform.active.dir}/extra">
             <nbms dir="../netbeans">
                 <include name="*.nbm"/>
             </nbms>

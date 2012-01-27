@@ -44,10 +44,15 @@
     </target>
 
 
-    <target name="clean" depends="projectized-common.clean">
-        <echo message="Cleaning ${original.project.dir}"/>
-        <ant dir="${original.project.dir}" usenativebasedir="true"
+    <target name="clean" depends="projectized-common.clean, init-netbeans, init-hudson">
+        <if>
+            <available file="${original.project.dir}/build.xml" type="file" />
+            <then>
+                <echo message="Cleaning ${original.project.dir}"/>
+                <ant dir="${original.project.dir}" usenativebasedir="true"
              target="clean" inheritall="false" inheritrefs="false"/>
-        <echo message="Done cleaning ${original.project.dir}"/>
+                <echo message="Done cleaning ${original.project.dir}"/>
+            </then>
+        </if>
     </target>
 </project>
