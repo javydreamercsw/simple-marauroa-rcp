@@ -29,11 +29,11 @@
         <property name="original.project.jar"
                   value="${original.project.dir}/dist/${extension-lib.dist.jar}"/>
         <echo message="Building ${original.project.dir}"/>
-        <ant dir="${original.project.dir}" useNativeBasedir="true"
-        inheritall="false" inheritrefs="false" target="jar"/>
+        <ant dir="${original.project.dir}" useNativeBasedir="true" target="jar"/>
         <echo message="Done building ${original.project.dir}"/>
-        <!--Ignore the marauroa ad log4j jars, use the ones in the Marauroa library instead-->
-        <copy todir="release/modules/ext/jWrestling">
+        <!--Ignore the marauroa and log4j jars, use the ones in the Marauroa library instead-->
+        <mkdir dir="release/modules/ext/jWrestling/lib"/>
+        <copy todir="release/modules/ext/jWrestling/lib">
             <fileset dir="${original.project.dir}dist/lib" excludes="*marauroa*.jar, log4j*.jar, mysql*.jar, h2*.jar, swing-layout*.jar"/>
         </copy>
         <!--Copy the server.ini file to use as default-->
