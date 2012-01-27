@@ -45,7 +45,12 @@
     
     <target name="build" depends="init-netbeans, init-hudson, check-dev-environent, build-brand, update-lookup-lib">
         <!--Copy the Netbeans supported MySQL library as well-->
-        <copy file="${libs.MySQLDriver.classpath}" tofile="build/cluster/modules/ext/mysql-connector-java.jar"/>
+        <if>
+            <isset property="app.icon"/>
+            <then>
+                <copy file="${libs.MySQLDriver.classpath}" tofile="build/cluster/modules/ext/mysql-connector-java.jar"/>
+            </then>
+        </if>
         <antcall target="suite.build"/>
     </target>
         
