@@ -51,16 +51,12 @@
                 <download-platform url="${autoupdate.catalog.@{url}}"/>
             </sequential>
         </for>
-        <!--Install custom modules doesn't work due to bug: http://netbeans.org/bugzilla/show_bug.cgi?id=207773-->
-        <autoupdate installdir="${nbplatform.active.dir}">
+        <autoupdate todir="${nbplatform.active.dir}">
             <nbms dir="../netbeans">
                 <include name="*.nbm"/>
             </nbms>
+            <modules includes=".+"/>
         </autoupdate>
-        <!--Workaround-->
-        <delete dir="${nbplatform.active.dir}/extra"/>
-        <mkdir dir="${nbplatform.active.dir}/extra"/>
-        <unzip src="../netbeans/extra.zip" dest="${nbplatform.active.dir}/extra"/>
     </target>
     
     <macrodef name="download-platform">
