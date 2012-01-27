@@ -7,14 +7,17 @@
     <import file="nbproject/build-impl.xml"/>
     <import file="${suite.dir}/preparation.xml"/>
     
-    <target name="init" depends="init-netbeans, init-hudson, harness.init">
+    <property name="original.project.dir" value="../../marauroa/"/>
+    <property name="original.project.dir2" value="../../Simple Marauroa Java/Simple-Server/"/>
+
+    <target name="release" depends="init-netbeans, init-hudson">
         <if>
-            <available file="../../marauroa/build.xml" type="file" />
+            <available file="${original.project.dir}/build.xml" type="file" />
             <then>
-                <!--Copy the Marauroa Related files-->
-                <property file="../../marauroa/build.ant.properties" prefix="marauroa-lib"/>
-                <ant antfile="../../marauroa/build.xml" target="clean" inheritall="false" />
-                <ant antfile="../../marauroa/build.xml" target="jar" inheritall="false" />
+                <property file="${original.project.dir}build.ant.properties" prefix="marauroa-lib"/>
+                <ant dir="${original.project.dir}" usenativebasedir="true"
+                     target="jar" inheritall="false" inheritrefs="false"/>
+                <echo message="Done building ${original.project.dir}"/>
                 <copy file="../../marauroa/build-archive/marauroa.jar" tofile="release/modules/ext/Marauroa.jar"/>
                 <copy file="../../marauroa/build-archive/marauroa.jar" tofile="../jWrestling/jWrestling Libs/marauroa.jar"/>
                 <copy file="../../marauroa/build-archive/marauroa.jar" tofile="../../Simple Libs/marauroa.jar"/>
@@ -22,21 +25,29 @@
                 <copy file="../../marauroa/libs/log4j.jar" tofile="release/modules/ext/log4j.jar"/>
             </then>
             <elseif>
-                <!-- Use the ones from java projects -->
-                <available file="../../Simple Marauroa Java/Simple-Server/build.xml" type="file" />
+            <!-- Use the ones from java projects -->
+                <available file="${original.project.dir2}build.xml" type="file" />
                 <then>
-                    <property file="../../Simple Marauroa Java/Simple-Server/nbproject/project.properties" prefix="server-lib"/>
+                    <property file="${original.project.dir}nbproject/project.properties" prefix="server-lib"/>
                     <!--Copy the Marauroa Related files-->
-                    <ant antfile="../../Simple Marauroa Java/Simple-Server/build.xml" target="jar" useNativeBasedir="true"/>
+                    <ant antfile="${original.project.dir2}build.xml" target="jar" useNativeBasedir="true"/>
                     <copy file="${server-lib.file.reference.marauroa.jar}" tofile="release/modules/ext/Marauroa.jar"/>
                     <copy file="${server-lib.file.reference.log4j.jar}" tofile="release/modules/ext/log4j.jar"/>
                 </then>
             </elseif>
             <else>
-                <!-- Just copy from Simple Libs -->
+            <!-- Just copy from Simple Libs -->
                 <copy file="../../Simple Libs/marauroa.jar" tofile="release/modules/ext/Marauroa.jar"/>
                 <copy file="../../Simple Libs/log4j.jar" tofile="release/modules/ext/log4j.jar"/>
             </else>
         </if>
+    </target>
+
+
+    <target name="clean" depends="projectized-common.clean">
+        <echo message="Cleaning ${original.project.dir}"/>
+        <ant dir="${original.project.dir}" usenativebasedir="true"
+             target="clean" inheritall="false" inheritrefs="false"/>
+        <echo message="Done cleaning ${original.project.dir}"/>
     </target>
 </project>
