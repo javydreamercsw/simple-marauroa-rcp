@@ -102,10 +102,6 @@
                 <package>simple.marauroa.application.core.db.controller.exceptions</package>
                 <package>simple.marauroa.application.core.db.manager</package>
             </public-packages>
-            <class-path-extension>
-                <runtime-relative-path>ext/Persistence.jar</runtime-relative-path>
-                <binary-origin>../Persistence/dist/Persistence.jar</binary-origin>
-            </class-path-extension>
         </data>
     </configuration>
 </project>
