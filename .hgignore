@@ -15,5 +15,7 @@ Marauroa-Project*
 Marauroa Application Manager/netbeans*
 Marauroa Application Manager/DB
 Marauroa Application Manager/Persistence
+netbeans*
+Marauroa Application Manager/versions.xml
 syntax: regexp
 ^marauroa$

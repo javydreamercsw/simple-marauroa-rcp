@@ -158,5 +158,9 @@
                 </else>
             </if>   
         </sequential>
-    </macrodef>  
+    </macrodef>
+    
+    <target name="module-fix-dependencies">
+        <ant antfile= "${suite.dir}/versions.xml" target="fix"/>
+    </target>
 </project>
