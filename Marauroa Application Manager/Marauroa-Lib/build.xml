@@ -18,11 +18,11 @@
                 <ant dir="${original.project.dir}" usenativebasedir="true"
                      target="jar" inheritall="false" inheritrefs="false"/>
                 <echo message="Done building ${original.project.dir}"/>
-                <copy file="../../marauroa/build-archive/marauroa.jar" tofile="release/modules/ext/Marauroa.jar"/>
-                <copy file="../../marauroa/build-archive/marauroa.jar" tofile="../jWrestling/jWrestling Libs/marauroa.jar"/>
-                <copy file="../../marauroa/build-archive/marauroa.jar" tofile="../../Simple Libs/marauroa.jar"/>
-                <copy file="../../marauroa/build-archive/marauroa-client-only-${marauroa-lib.version}.jar" tofile="../../Simple Libs/marauroa-client.jar"/>
-                <copy file="../../marauroa/libs/log4j.jar" tofile="release/modules/ext/log4j.jar"/>
+                <copy file="${original.project.dir}build-archive/marauroa.jar" tofile="release/modules/ext/Marauroa.jar"/>
+                <copy file="${original.project.dir}build-archive/marauroa.jar" tofile="../jWrestling/jWrestling Libs/marauroa.jar"/>
+                <copy file="${original.project.dir}build-archive/marauroa.jar" tofile="../../Simple Libs/marauroa.jar"/>
+                <copy file="${original.project.dir}build-archive/marauroa-client-only-${marauroa-lib.version}.jar" tofile="../../Simple Libs/marauroa-client.jar"/>
+                <copy file="${original.project.dir}libs/log4j.jar" tofile="release/modules/ext/log4j.jar"/>
             </then>
             <elseif>
             <!-- Use the ones from java projects -->
@@ -30,9 +30,9 @@
                 <then>
                     <property file="${original.project.dir2}nbproject/project.properties" prefix="server-lib"/>
                     <!--Copy the Marauroa Related files-->
-                    <ant antfile="${original.project.dir2}build.xml" target="jar"/>
-                    <copy file="${server-lib.file.reference.marauroa.jar}" tofile="release/modules/ext/Marauroa.jar"/>
-                    <copy file="${server-lib.file.reference.log4j.jar}" tofile="release/modules/ext/log4j.jar"/>
+                    <ant antfile="${original.project.dir2}build.xml" target="jar" inheritAll="false"/>
+                    <copy file="${original.project.dir2}../lib/marauroa.jar" tofile="release/modules/ext/Marauroa.jar"/>
+                    <copy file="${original.project.dir2}../lib/log4j.jar" tofile="release/modules/ext/log4j.jar"/>
                 </then>
             </elseif>
             <else>
