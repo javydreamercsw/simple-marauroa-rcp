@@ -26,8 +26,8 @@
                 <available file="../../Simple Marauroa Java/Simple-Server/build.xml" type="file" />
                 <then>
                     <property file="../../Simple Marauroa Java/Simple-Server/nbproject/project.properties" prefix="server-lib"/>
-                        <!--Copy the Marauroa Related files-->
-                    <ant antfile="../../Simple Marauroa Java/Simple-Server/build.xml" target="jar" inheritall="false" />
+                    <!--Copy the Marauroa Related files-->
+                    <ant antfile="../../Simple Marauroa Java/Simple-Server/build.xml" target="jar" useNativeBasedir="true"/>
                     <copy file="${server-lib.file.reference.marauroa.jar}" tofile="release/modules/ext/Marauroa.jar"/>
                     <copy file="${server-lib.file.reference.log4j.jar}" tofile="release/modules/ext/log4j.jar"/>
                 </then>
