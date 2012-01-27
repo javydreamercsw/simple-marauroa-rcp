@@ -29,8 +29,8 @@
         <property name="original.project.jar"
                   value="${original.project.dir}/dist/${extension-lib.dist.jar}"/>
         <echo message="Building ${original.project.dir}"/>
-        <ant dir="${original.project.dir}" usenativebasedir="true"
-             target="jar" inheritall="false" inheritrefs="false"/>
+        <ant dir="${original.project.dir}" useNativeBasedir="true"
+        inheritall="false" inheritrefs="false" target="jar"/>
         <echo message="Done building ${original.project.dir}"/>
         <!--Ignore the marauroa ad log4j jars, use the ones in the Marauroa library instead-->
         <copy todir="release/modules/ext/jWrestling">
