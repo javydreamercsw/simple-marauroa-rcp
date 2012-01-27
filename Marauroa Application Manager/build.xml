@@ -46,7 +46,10 @@
     <target name="build" depends="init-netbeans, init-hudson, check-dev-environent, build-brand, update-lookup-lib">
         <!--Copy the Netbeans supported MySQL library as well-->
         <if>
-            <isset property="libs.MySQLDriver.classpath"/>
+            <and>
+                <isset property="libs.MySQLDriver.classpath"/>
+                <available file="${libs.MySQLDriver.classpath}"/>
+            </and>
             <then>
                 <copy file="${libs.MySQLDriver.classpath}" tofile="build/cluster/modules/ext/mysql-connector-java.jar"/>
             </then>
@@ -604,10 +607,6 @@
         <echo>Fixing module dependencies...Done!</echo>
         <delete file="versions.xml"/>
         <echo>Fixing dependencies for suite...Done!</echo>
-    </target>
-    
-    <target name="module-fix-dependencies">
-        <ant antfile= "${suite.dir}/versions.xml" target="fix"/>
     </target>
     
     <target name="update-lookup-lib">
