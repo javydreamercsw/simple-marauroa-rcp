@@ -558,28 +558,23 @@
                     <then>
                         <echo file="versions.xml" append="true"><![CDATA[
                 <replace codenamebase="]]>${@{cur}.OpenIDE-Module}<![CDATA[" addcompiletime="true">
-                    <module codenamebase="]]>${@{cur}.OpenIDE-Module}
-                        </echo>
+                    <module codenamebase="]]>${@{cur}.OpenIDE-Module}</echo>
                         <if>
                             <isset property="@{cur}.spec.version.base"/>
                             <then>
-                                <echo file="versions.xml" append="true"><![CDATA[" spec="]]>${@{cur}.spec.version.base}<![CDATA["]]>
-                                </echo>
+                                <echo file="versions.xml" append="true"><![CDATA[" spec="]]>${@{cur}.spec.version.base}<![CDATA["]]></echo>
                             </then>
                             <else>
-                                <echo file="versions.xml" append="true"><![CDATA[/>]]>
-                                </echo>
+                                <echo file="versions.xml" append="true"><![CDATA[/>]]></echo>
                             </else>
                         </if>
                         <if>
                             <isset property="@{cur}.release-version"/>
                             <then>
-                                <echo file="versions.xml" append="true"><![CDATA[ release="]]>${@{cur}.release-version}<![CDATA["/>]]>
-                                </echo>
+                                <echo file="versions.xml" append="true"><![CDATA[ release="]]>${@{cur}.release-version}<![CDATA["/>]]></echo>
                             </then>
                             <else>
-                                <echo file="versions.xml" append="true"><![CDATA[/>]]>
-                                </echo>
+                                <echo file="versions.xml" append="true"><![CDATA[/>]]></echo>
                             </else>
                         </if>
                         <echo file="versions.xml" append="true"><![CDATA[
