@@ -82,7 +82,7 @@ public class CentralLookup extends AbstractLookup {
     }
     
     private void displayLookupContents(Class template) {
-        Collection<? extends Class> result = EventBus.getDefault().getCentralLookup().lookupAll(template);
+        Collection result = EventBus.getDefault().getCentralLookup().lookupAll(template);
         logger.log(Level.INFO, "{0} {1} in lookup.",
                 new Object[]{result.size(), template.getSimpleName()});
         for (Object o : result) {
