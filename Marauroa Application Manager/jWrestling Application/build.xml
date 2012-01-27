@@ -34,10 +34,10 @@
         <echo message="Done building ${original.project.dir}"/>
         <!--Ignore the marauroa ad log4j jars, use the ones in the Marauroa library instead-->
         <copy todir="release/modules/ext/jWrestling">
-            <fileset dir="../../jWrestling/jWrestling/dist/lib" excludes="*marauroa*.jar, log4j*.jar, mysql*.jar, h2*.jar, swing-layout*.jar"/>
+            <fileset dir="${original.project.dir}dist/lib" excludes="*marauroa*.jar, log4j*.jar, mysql*.jar, h2*.jar, swing-layout*.jar"/>
         </copy>
         <!--Copy the server.ini file to use as default-->
-        <copy file="../../jWrestling/jWrestling/server.ini" tofile="src/games/jwrestling/application/default.ini"/>
+        <copy file="${original.project.dir}server.ini" tofile="src/games/jwrestling/application/default.ini"/>
         <antcall target="projectized-common.netbeans"/>
     </target>
 
