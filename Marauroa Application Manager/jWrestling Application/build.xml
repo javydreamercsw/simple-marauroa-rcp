@@ -9,7 +9,7 @@
     
     <property name="original.project.dir" value="../../jWrestling/jWrestling/"/>
 
-    <target name="release" depends="init-netbeans, init-hudson">
+    <target name="netbeans" depends="init-netbeans, init-hudson">
         <property file="${original.project.dir}/nbproject/project.properties" prefix="extension-lib"/>
         <length string="${extension-lib.dist.dir}" property="length.dist" />
         <math result="length.dist" operand1="1" operation="+" operand2="${length.dist}" datatype="int"/>
@@ -38,6 +38,7 @@
         </copy>
         <!--Copy the server.ini file to use as default-->
         <copy file="../../jWrestling/jWrestling/server.ini" tofile="src/games/jwrestling/application/default.ini"/>
+        <antcall target="projectized-common.netbeans"/>
     </target>
 
 
