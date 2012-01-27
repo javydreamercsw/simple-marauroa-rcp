@@ -7,34 +7,44 @@
     <import file="nbproject/build-impl.xml"/>
     <import file="${suite.dir}/preparation.xml"/>
     
-    <target name="init" depends="init-netbeans, init-hudson, harness.init, update-lookup-lib">
-        <if>
-            <available file="../../jWrestling/jWrestling/build.xml" type="file" />
-            <then>
-                <property file="../../jWrestling/jWrestling/nbproject/project.properties" prefix="jwrestling-lib"/>
-                <length string="${jwrestling-lib.dist.dir}" property="length.dist" />
-                <math result="length.dist" operand1="1" operation="+" operand2="${length.dist}" datatype="int"/>
-                <length string="${jwrestling-lib.dist.jar}" property="length.dist.jar" />
-                <substring text="${jwrestling-lib.dist.jar}" start="${length.dist}" end="${length.dist.jar}" property="jwrestling-lib.dist.jar"/>
-                <ant antfile="../../jWrestling/jWrestling/build.xml" target="clean" inheritall="false" />
-                <ant antfile="../../jWrestling/jWrestling/build.xml" target="jar" inheritall="false" />
-                <copy file="../../jWrestling/jWrestling/dist/${jwrestling-lib.dist.jar}" tofile="release/modules/ext/jWrestling/${jwrestling-lib.dist.jar}"/>
-                <!--Ignore the marauroa ad log4j jars, use the ones in the Marauroa library instead-->
-                <copy todir="release/modules/ext/jWrestling">
-                    <fileset dir="../../jWrestling/jWrestling/dist/lib" excludes="*marauroa*.jar, log4j*.jar, mysql*.jar, h2*.jar, swing-layout*.jar"/>
-                </copy>
-                <!--Copy the server.ini file to use as default-->
-                <copy file="../../jWrestling/jWrestling/server.ini" tofile="src/games/jwrestling/application/default.ini"/>
-            </then>
-            <else>
-                <fail message="Missing jWrestling"/>    
-            </else>
-        </if>
+    <property name="original.project.dir" value="../../jWrestling/jWrestling/"/>
+
+    <target name="release" depends="init-netbeans, init-hudson">
+        <property file="${original.project.dir}/nbproject/project.properties" prefix="extension-lib"/>
+        <length string="${extension-lib.dist.dir}" property="length.dist" />
+        <math result="length.dist" operand1="1" operation="+" operand2="${length.dist}" datatype="int"/>
+        <length string="${extension-lib.dist.jar}" property="length.dist.jar" />
+        <substring text="${extension-lib.dist.jar}" start="${length.dist}" end="${length.dist.jar}" property="extension-lib.dist.jar" />
+        <!--Update the module's property file-->
+        <propertyfile file="nbproject/project.properties">
+            <entry key="extra.module.files" value="modules/ext/jWrestling/${extension-lib.dist.jar}"/>
+        </propertyfile>
+        <!--Update the project's metadata-->
+        <xmltask source="nbproject/project.xml" dest="nbproject/project.xml">
+            <replace path="/project/configuration/data/class-path-extension/runtime-relative-path/text()" 
+                     withText="ext/extension/${extension-lib.dist.jar}"/>
+            <replace path="/project/configuration/data/class-path-extension/binary-origin/text()" 
+                     withText="${original.project.dir}/dist/${extension-lib.dist.jar}"/>
+        </xmltask>
+        <property name="original.project.jar"
+                  value="${original.project.dir}/dist/${extension-lib.dist.jar}"/>
+        <echo message="Building ${original.project.dir}"/>
+        <ant dir="${original.project.dir}" usenativebasedir="true"
+             target="jar" inheritall="false" inheritrefs="false"/>
+        <echo message="Done building ${original.project.dir}"/>
+        <!--Ignore the marauroa ad log4j jars, use the ones in the Marauroa library instead-->
+        <copy todir="release/modules/ext/jWrestling">
+            <fileset dir="../../jWrestling/jWrestling/dist/lib" excludes="*marauroa*.jar, log4j*.jar, mysql*.jar, h2*.jar, swing-layout*.jar"/>
+        </copy>
+        <!--Copy the server.ini file to use as default-->
+        <copy file="../../jWrestling/jWrestling/server.ini" tofile="src/games/jwrestling/application/default.ini"/>
     </target>
-    
-    <target name="update-lookup-lib">
-        <fileset id="finder" dir="${harness.dir}/.." includes="**/org-openide-util-lookup.jar" />
-        <pathconvert property="lookup-lib" refid="finder" />
-        <copy file="${lookup-lib}" tofile="../jWrestling/jWrestlingLibs/org-openide-util-lookup.jar"/>
+
+
+    <target name="clean" depends="projectized-common.clean">
+        <echo message="Cleaning ${original.project.dir}"/>
+        <ant dir="${original.project.dir}" usenativebasedir="true"
+             target="clean" inheritall="false" inheritrefs="false"/>
+        <echo message="Done cleaning ${original.project.dir}"/>
     </target>
 </project>
