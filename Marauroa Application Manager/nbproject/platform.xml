@@ -1,18 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="platform" default="download" basedir="..">
     <import file="../preparation.xml"/>
-    <condition property="download.required">
+    <condition property="download.enabled">
         <and>
-            <not>
-                <available file="${harness.dir}/suite.xml"/>
-            </not>
             <isset property="bootstrap.url"/>
             <isset property="autoupdate.catalog.url"/>
         </and>
     </condition>
     
-    <target name="download" depends="init-netbeans, init-hudson">
+    <condition property="download.harness.required">
+        <and>
+            <not>
+                <available file="${harness.dir}/suite.xml"/>
+            </not>
+            <isset property="download.enabled"/>
+        </and>
+    </condition>
+    
+    <target name="download-harness" if="download.harness.required">
         <mkdir dir="${harness.dir}"/>
+        <autoupdate installdir="${nbplatform.active.dir}" updatecenter="${autoupdate.catalog.url}">
+            <modules includes="org[.]netbeans[.]modules[.]apisupport[.]harness" clusters="harness"/>
+        </autoupdate>
+    </target>
+    
+    <target name="download" depends="init-netbeans, init-hudson" if="download.enabled">
         <pathconvert pathsep="|" property="download.clusters">
             <mapper type="flatten"/>
             <path path="${cluster.path}"/>
@@ -28,27 +40,32 @@
         <propertyselector property="urls" match="urls.autoupdate.catalog\.(.*)" select="\1"/>
 
         <property file="nbproject/platform.properties"/>
+        <echo message="Downloading clusters ${download.clusters}"/>
+        <property name="tasks.jar" location="${java.io.tmpdir}/tasks.jar"/>
+        <get src="${bootstrap.url}" dest="${tasks.jar}" usetimestamp="true" verbose="true"/>
+        <taskdef name="autoupdate" classname="org.netbeans.nbbuild.AutoUpdate" classpath="${tasks.jar}"/>
+        <antcall target="download-harness"/>
         <for list="${urls}" param="url">
             <sequential>
                 <echo message="Attempting to download plug-ins from ${autoupdate.catalog.@{url}}" />
                 <download-platform url="${autoupdate.catalog.@{url}}"/>
             </sequential>
         </for>
-        <!--Install custom modules-->
+        <!--Install custom modules doesn't work due to bug: http://netbeans.org/bugzilla/show_bug.cgi?id=207773-->
         <autoupdate installdir="${nbplatform.active.dir}">
             <nbms dir="../netbeans">
                 <include name="*.nbm"/>
             </nbms>
         </autoupdate>
+        <!--Workaround-->
+        <delete dir="${nbplatform.active.dir}/extra"/>
+        <mkdir dir="${nbplatform.active.dir}/extra"/>
+        <unzip src="../netbeans/extra.zip" dest="${nbplatform.active.dir}/extra"/>
     </target>
     
     <macrodef name="download-platform">
         <attribute name="url"/>
         <sequential>
-            <echo message="Downloading clusters ${download.clusters}"/>
-            <property name="tasks.jar" location="${java.io.tmpdir}/tasks.jar"/>
-            <get src="${bootstrap.url}" dest="${tasks.jar}" usetimestamp="true" verbose="true"/>
-            <taskdef name="autoupdate" classname="org.netbeans.nbbuild.AutoUpdate" classpath="${tasks.jar}"/>
             <autoupdate installdir="${nbplatform.active.dir}" updatecenter="@{url}">
                 <modules includes="${module.includes}.*" clusters="${download.clusters}"/>
                 <modules includes="org[.]netbeans[.]modules[.]apisupport[.]harness" clusters="harness"/>
