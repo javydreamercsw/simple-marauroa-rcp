@@ -35,7 +35,7 @@
         <!--Ignore the marauroa and log4j jars, use the ones in the Marauroa library instead-->
         <mkdir dir="release/modules/ext/jWrestling/lib"/>
         <copy todir="release/modules/ext/jWrestling/lib">
-            <fileset dir="${original.project.dir}dist/lib" excludes="*marauroa*.jar, log4j*.jar, mysql*.jar, h2*.jar, swing-layout*.jar"/>
+            <fileset dir="${original.project.dir}dist/lib" excludes="*marauroa*.jar, log4j*.jar, mysql*.jar, h2*.jar, swing*.jar"/>
         </copy>
         <!--Copy the server.ini file to use as default-->
         <copy file="${original.project.dir}server.ini" tofile="src/games/jwrestling/application/default.ini"/>
