@@ -89,24 +89,20 @@
                 <package>games.jwrestling.server.game.db</package>
             </public-packages>
             <class-path-extension>
-                <runtime-relative-path>ext/jWrestling/jarscan.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jWrestling/jarscan.jar</binary-origin>
+                <runtime-relative-path>ext/jWrestling/lib/jarscan.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jWrestling/lib/jarscan.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/jWrestling/jsqlparser.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jWrestling/jsqlparser.jar</binary-origin>
+                <runtime-relative-path>ext/jWrestling/lib/jsqlparser.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jWrestling/lib/jsqlparser.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/jWrestling/JaNaG.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jWrestling/JaNaG.jar</binary-origin>
+                <runtime-relative-path>ext/jWrestling/lib/JaNaG.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jWrestling/lib/JaNaG.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/jWrestling/jacksum.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jWrestling/jacksum.jar</binary-origin>
-            </class-path-extension>
-            <class-path-extension>
-                <runtime-relative-path>ext/jWrestling/swing-layout-1.0.4.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/jWrestling/swing-layout-1.0.4.jar</binary-origin>
+                <runtime-relative-path>ext/jWrestling/lib/jacksum.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jWrestling/lib/jacksum.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/jWrestling/jwrestling-server.jar</runtime-relative-path>
