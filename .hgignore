@@ -21,5 +21,6 @@ Simple Libs/marauroa.jar
 Simple Libs/marauroa-client.jar
 Simple Libs/MarauroaMonitorExtension.jar
 Marauroa Application Manager/Marauroa-Lib/release/modules/ext/Marauroa.jar
+**/pmd.xml
 syntax: regexp
 ^marauroa$
