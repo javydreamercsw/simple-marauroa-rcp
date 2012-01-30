@@ -5,4 +5,5 @@
 <project name="eclipselink" default="netbeans" basedir=".">
     <description>Builds, tests, and runs the project eclipselink.</description>
     <import file="nbproject/build-impl.xml"/>
+    <import file="../preparation.xml"/>
 </project>
