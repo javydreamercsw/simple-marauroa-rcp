@@ -208,11 +208,23 @@
             <description>Core Files</description>
             <file targetdir="$INSTALL_PATH" src="dist/]]>${app.name}<![CDATA[/bin"/>
             <file targetdir="$INSTALL_PATH" src="dist/]]>${app.name}<![CDATA[/etc"/>
-            <file targetdir="$INSTALL_PATH" src="dist/]]>${app.name}<![CDATA[/extra"/>
-            <file targetdir="$INSTALL_PATH" src="dist/]]>${app.name}<![CDATA[/harness"/>
-            <file targetdir="$INSTALL_PATH" src="dist/]]>${app.name}<![CDATA[/ide"/>
-            <file targetdir="$INSTALL_PATH" src="dist/]]>${app.name}<![CDATA[/nb"/>
-            <file targetdir="$INSTALL_PATH" src="dist/]]>${app.name}<![CDATA[/platform"/>
+            <file targetdir="$INSTALL_PATH" src="dist/]]>${app.name}<![CDATA[/]]>${app.name}<![CDATA["/>]]>
+        </echo>
+        <pathconvert pathsep="|" property="used.clusters">
+            <mapper type="flatten"/>
+            <path path="${cluster.path}"/>
+        </pathconvert>
+        <for list="${used.clusters}" delimiter="|" param="cur" trim="true">
+            <sequential>
+                <echo file="${suite.dir}/nizpack.xml" append="true"><![CDATA[<file targetdir="$INSTALL_PATH" src="dist/]]>${app.name}<![CDATA[/]]>@{cur}<![CDATA["/>]]>
+                </echo>
+            </sequential>
+        </for>
+        <echo file="${suite.dir}/nizpack.xml" append="true"><![CDATA[</pack>
+        </packs>
+        </installation>]]>
+        </echo>
+        <!--<echo file="${suite.dir}/nizpack.xml" append="true"><![CDATA[
             <file targetdir="$INSTALL_PATH/]]>${app.name}<![CDATA[/config/Modules/" src="dist/]]>${app.name}<![CDATA[/]]>${app.name}<![CDATA[/config/Modules/marauroa-lib.xml"/>
             <file targetdir="$INSTALL_PATH/]]>${app.name}<![CDATA[/config/Modules/" src="dist/]]>${app.name}<![CDATA[/]]>${app.name}<![CDATA[/config/Modules/simple-marauroa-application-api.xml"/>
             <file targetdir="$INSTALL_PATH/]]>${app.name}<![CDATA[/config/Modules/" src="dist/]]>${app.name}<![CDATA[/]]>${app.name}<![CDATA[/config/Modules/simple-marauroa-application-core.xml"/>
@@ -250,15 +262,15 @@
             <description>jWrestling plugin</description>
             <file targetdir="$INSTALL_PATH/]]>${app.name}<![CDATA[/modules" src="dist/]]>${app.name}<![CDATA[/]]>${app.name}<![CDATA[/modules/games-jwrestling-application.jar"/>
             <file targetdir="$INSTALL_PATH/]]>${app.name}<![CDATA[/config/Modules/" src="dist/]]>${app.name}<![CDATA[/]]>${app.name}<![CDATA[/config/Modules/games-jwrestling-application.xml"/>
-            <!--<file targetdir="$INSTALL_PATH/]]>${app.name}<![CDATA[/modules/docs" src="dist/]]>${app.name}<![CDATA[/]]>${app.name}<![CDATA[/modules/docs/games-jwrestling-application.jar"/>-->
+            <file targetdir="$INSTALL_PATH/]]>${app.name}<![CDATA[/modules/docs" src="dist/]]>${app.name}<![CDATA[/]]>${app.name}<![CDATA[/modules/docs/games-jwrestling-application.jar"/>
             <file targetdir="$INSTALL_PATH/]]>${app.name}<![CDATA[/update_tracking" src="dist/]]>${app.name}<![CDATA[/]]>${app.name}<![CDATA[/update_tracking/games-jwrestling-application.xml"/>
         </pack>
     </packs>
 </installation>]]>
-        </echo>
+        </echo>-->
         <antcall target="suite.branding"/>
     </target>
-
+    
     <target name="build-zip" depends="suite.build-zip">
         <unzip src="${dist.dir}/${app.name}.zip" dest="${dist.dir}"/>
         <replace file="${dist.dir}/${app.name}/etc/${app.name}.conf">
@@ -303,7 +315,7 @@
         <property name="izpack-installer" value="${exeName}.jar"/>
         <taskdef name="izpack" classpath="${izpack.dir}/lib/compiler.jar"
                  classname="com.izforge.izpack.ant.IzPackTask"/>
-        <property name="launch4j.dir" location="Simple Libs/tools/launch4j" />
+        <property name="launch4j.dir" location="../Simple Libs/tools/launch4j"/>
         <echo message="Makes the installer using IzPack into ${izpack-installer}"/>
         <echo file="${suite.dir}/shortcutSpec.xml"><![CDATA[<shortcuts>
     <skipIfNotSupported/>
@@ -558,23 +570,28 @@
                     <then>
                         <echo file="versions.xml" append="true"><![CDATA[
                 <replace codenamebase="]]>${@{cur}.OpenIDE-Module}<![CDATA[" addcompiletime="true">
-                    <module codenamebase="]]>${@{cur}.OpenIDE-Module}</echo>
+                    <module codenamebase="]]>${@{cur}.OpenIDE-Module}
+                        </echo>
                         <if>
                             <isset property="@{cur}.spec.version.base"/>
                             <then>
-                                <echo file="versions.xml" append="true"><![CDATA[" spec="]]>${@{cur}.spec.version.base}<![CDATA["]]></echo>
+                                <echo file="versions.xml" append="true"><![CDATA[" spec="]]>${@{cur}.spec.version.base}<![CDATA["]]>
+                                </echo>
                             </then>
                             <else>
-                                <echo file="versions.xml" append="true"><![CDATA[/>]]></echo>
+                                <echo file="versions.xml" append="true"><![CDATA[/>]]>
+                                </echo>
                             </else>
                         </if>
                         <if>
                             <isset property="@{cur}.release-version"/>
                             <then>
-                                <echo file="versions.xml" append="true"><![CDATA[ release="]]>${@{cur}.release-version}<![CDATA["/>]]></echo>
+                                <echo file="versions.xml" append="true"><![CDATA[ release="]]>${@{cur}.release-version}<![CDATA["/>]]>
+                                </echo>
                             </then>
                             <else>
-                                <echo file="versions.xml" append="true"><![CDATA[/>]]></echo>
+                                <echo file="versions.xml" append="true"><![CDATA[/>]]>
+                                </echo>
                             </else>
                         </if>
                         <echo file="versions.xml" append="true"><![CDATA[
@@ -608,5 +625,17 @@
         <fileset id="finder" dir="${harness.dir}/.." includes="**/org-openide-util-lookup.jar" />
         <pathconvert property="lookup-lib" refid="finder" />
         <copy file="${lookup-lib}" tofile="../Simple Libs/org-openide-util-lookup.jar"/>
+    </target>
+    
+    <target name="smart-izpack" depends="init-netbeans, init-hudson">
+        <pathconvert pathsep="|" property="used.modules">
+            <mapper type="flatten"/>
+            <path path="${modules}"/>
+        </pathconvert>
+        <for list="${used.modules}" delimiter="|" param="cur" trim="true">
+            <sequential>
+                <echo>@{cur}</echo>
+            </sequential>
+        </for>
     </target>
 </project>
