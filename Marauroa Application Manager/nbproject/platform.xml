@@ -24,7 +24,7 @@
         </autoupdate>
     </target>
     
-    <target name="download" depends="init-netbeans, init-hudson" if="download.enabled">
+    <target name="download" depends="-init-netbeans, -init-hudson" if="download.enabled">
         <pathconvert pathsep="|" property="download.clusters">
             <mapper type="flatten"/>
             <path path="${cluster.path}"/>

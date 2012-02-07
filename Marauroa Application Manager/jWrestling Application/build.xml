@@ -9,7 +9,7 @@
     
     <property name="original.project.dir" value="../../jWrestling/jWrestling/"/>
 
-    <target name="netbeans" depends="init-netbeans, init-hudson, projectized-common.netbeans">
+    <target name="netbeans" depends="-init-netbeans, -init-hudson, projectized-common.netbeans">
         <property file="${original.project.dir}/nbproject/project.properties" prefix="extension-lib"/>
         <length string="${extension-lib.dist.dir}" property="length.dist" />
         <math result="length.dist" operand1="1" operation="+" operand2="${length.dist}" datatype="int"/>

@@ -9,7 +9,7 @@
     
     <!--<property name="original.project.dir" value="../Persistence"/>-->
 
-    <target name="netbeans" depends="init-netbeans, init-hudson">
+    <target name="netbeans" depends="-init-netbeans, -init-hudson">
         <if>
             <isset property="original.project.dir"/>
             <then>
@@ -41,7 +41,7 @@
         <antcall target="projectized-common.netbeans"/>
     </target>
 
-    <target name="clean" depends="projectized-common.clean, init-netbeans, init-hudson">
+    <target name="clean" depends="projectized-common.clean, -init-netbeans, -init-hudson">
         <if>
             <isset property="original.project.dir"/>
             <then>

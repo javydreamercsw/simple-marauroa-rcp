@@ -10,7 +10,7 @@
     <property name="original.project.dir" value="../../marauroa/"/>
     <property name="original.project.dir2" value="../../Simple Marauroa Java/Simple-Server/"/>
 
-    <target name="netbeans" depends="init-netbeans, init-hudson, projectized-common.netbeans">
+    <target name="netbeans" depends="-init-netbeans, -init-hudson, projectized-common.netbeans">
         <if>
             <available file="${original.project.dir}/build.xml" type="file" />
             <then>
@@ -44,7 +44,7 @@
     </target>
 
 
-    <target name="clean" depends="projectized-common.clean, init-netbeans, init-hudson">
+    <target name="clean" depends="projectized-common.clean, -init-netbeans, -init-hudson">
         <if>
             <available file="${original.project.dir}/build.xml" type="file" />
             <then>

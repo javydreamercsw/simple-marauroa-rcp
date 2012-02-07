@@ -30,7 +30,7 @@
         <antcall target="replaceWindowsLauncherIcon"/>
     </target>
    
-    <target name="pre-init" depends="init-netbeans, init-hudson">
+    <target name="pre-init" depends="-init-netbeans, -init-hudson">
         <if>              
             <isset property="Hudson"/>
             <then>
@@ -43,7 +43,7 @@
         </if>
     </target>
     
-    <target name="build" depends="init-netbeans, init-hudson, check-dev-environent, build-brand, update-lookup-lib">
+    <target name="build" depends="-init-netbeans, -init-hudson, check-dev-environent, build-brand, update-lookup-lib">
         <!--Copy the Netbeans supported MySQL library as well-->
         <if>
             <and>
@@ -271,6 +271,17 @@
         <antcall target="suite.branding"/>
     </target>
     
+    <target name="x" depends="">     
+        <foreach target="loop" param="loop.param">        
+            <dirset dir="${src.dir}" />     
+        </foreach>  
+    </target>  
+    <target name="loop">     
+        <echo message="${loop.param}"/>  
+        <basename property="dir.name" file="${loop.param}"/>  
+        <echo message="${dir.name}"/>  
+    </target>  
+
     <target name="build-zip" depends="suite.build-zip">
         <unzip src="${dist.dir}/${app.name}.zip" dest="${dist.dir}"/>
         <replace file="${dist.dir}/${app.name}/etc/${app.name}.conf">
@@ -290,7 +301,7 @@
         </exec>
     </target>
 
-    <target name="build-installer" description="Create Installer" depends="init-netbeans, init-hudson, build-brand">
+    <target name="build-installer" description="Create Installer" depends="-init-netbeans, -init-hudson, build-brand">
         <echo message="Setting property and task for installer creation" />
         <property name="nbdist.dir" value="dist"/>
         <property name="nbdist-app.dir" value="${nbdist.dir}/${app.name}"/>
@@ -306,10 +317,10 @@
             <replacefilter token="/dev" value="/${app.version}" />
             <replacefilter token="-J-Xms24m -J-Xmx64m" value="${run.args.extra}" />
         </replace>    
-        <antcall target="use-izpack"/>
+        <antcall target="-use-izpack"/>
     </target>
     
-    <target name="use-izpack">
+    <target name="-use-izpack">
         <property name="izpack.dir" location="../Simple Libs/tools/IzPack"/>
         <property name="exeName" value="${app.title}-Setup"/>
         <property name="izpack-installer" value="${exeName}.jar"/>
@@ -386,7 +397,7 @@
         <launch4j configFile="${app.title}.xml"/>
     </target>
 
-    <target name="nbms" depends="init-netbeans,init-hudson">
+    <target name="nbms" depends="-init-netbeans,-init-hudson">
         <!--Update keystore info in projects-->
         <antcall target="update-keystore-info"/>
         <!--Create/Update keystore-->
@@ -399,7 +410,7 @@
         <antcall target="suite.nbms"/>
     </target>
     
-    <target name="check-dev-environent" depends="init-netbeans,init-hudson">
+    <target name="check-dev-environent" depends="-init-netbeans,-init-hudson">
         <taskdef resource="net/sourceforge/ant4hg/taskdefs/antlib.xml">
             <classpath>
                 <pathelement location="../Simple Libs/tools/ant4hg-V0.07.jar"/>
@@ -437,7 +448,7 @@
         </doxygen>
     </target>
 
-    <target name="source-distribution" description="Create Source Distribution (All suite)" depends="init-netbeans, init-hudson">
+    <target name="source-distribution" description="Create Source Distribution (All suite)" depends="-init-netbeans, -init-hudson">
         <echo>Create Source zip (skiping the netbeans folder with the platform)</echo>
         <delete file="${suite.dir}/dist/${app.version}.zip"/>
         <zip destfile="${suite.dir}/dist/${app.version}.zip" basedir="../" update="true">
@@ -464,7 +475,7 @@
         <echo> Source distribution file available at ${suite.dir}/dist/${app.version}.zip</echo>
     </target>
 
-    <target name="module-source-distribution" description="Create Source Distribution for each separated module" depends="-init, init-netbeans, init-hudson">
+    <target name="module-source-distribution" description="Create Source Distribution for each separated module" depends="-init, -init-netbeans, -init-hudson">
         <for list="${modules}" delimiter=":" param="cur" trim="true">
             <sequential>
                 <property file="@{cur}/manifest.mf" prefix="@{cur}"/>
@@ -492,7 +503,7 @@
         <echo>Source distribution file available at ${suite.dir}/dist/</echo>
     </target>
     
-    <target name="update-keystore-info" depends="init-netbeans, init-hudson">
+    <target name="update-keystore-info" depends="-init-netbeans, -init-hudson">
         <for list="${modules}" delimiter=":" param="cur" trim="true">
             <sequential>
                 <echo>Uptading module: @{cur}...</echo>
@@ -512,7 +523,7 @@
         </for>
     </target>
     
-    <target name="fix-dependencies" depends="init-netbeans, init-hudson" description="Removes unused compilation dependencies on other modules.">
+    <target name="fix-dependencies" depends="-init-netbeans, -init-hudson" description="Removes unused compilation dependencies on other modules.">
         <echo>Fixing dependencies for suite...</echo>
         <!--Define custom task-->
         <taskdef resource="org/netbeans/nbbuild/taskdefs.properties">
@@ -627,7 +638,7 @@
         <copy file="${lookup-lib}" tofile="../Simple Libs/org-openide-util-lookup.jar"/>
     </target>
     
-    <target name="smart-izpack" depends="init-netbeans, init-hudson">
+    <target name="smart-izpack" depends="-init-netbeans, -init-hudson">
         <pathconvert pathsep="|" property="used.modules">
             <mapper type="flatten"/>
             <path path="${modules}"/>
