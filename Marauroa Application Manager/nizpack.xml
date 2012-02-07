@@ -60,51 +60,12 @@
             <description>Core Files</description>
             <file targetdir="$INSTALL_PATH" src="dist/marauroa_server_manager/bin"/>
             <file targetdir="$INSTALL_PATH" src="dist/marauroa_server_manager/etc"/>
-            <file targetdir="$INSTALL_PATH" src="dist/marauroa_server_manager/extra"/>
-            <file targetdir="$INSTALL_PATH" src="dist/marauroa_server_manager/harness"/>
-            <file targetdir="$INSTALL_PATH" src="dist/marauroa_server_manager/ide"/>
-            <file targetdir="$INSTALL_PATH" src="dist/marauroa_server_manager/nb"/>
-            <file targetdir="$INSTALL_PATH" src="dist/marauroa_server_manager/platform"/>
-            <file targetdir="$INSTALL_PATH/marauroa_server_manager/config/Modules/" src="dist/marauroa_server_manager/marauroa_server_manager/config/Modules/marauroa-lib.xml"/>
-            <file targetdir="$INSTALL_PATH/marauroa_server_manager/config/Modules/" src="dist/marauroa_server_manager/marauroa_server_manager/config/Modules/simple-marauroa-application-api.xml"/>
-            <file targetdir="$INSTALL_PATH/marauroa_server_manager/config/Modules/" src="dist/marauroa_server_manager/marauroa_server_manager/config/Modules/simple-marauroa-application-core.xml"/>
-            <file targetdir="$INSTALL_PATH/marauroa_server_manager/config/Modules/" src="dist/marauroa_server_manager/marauroa_server_manager/config/Modules/simple-marauroa-application-core-db.xml"/>
-            <file targetdir="$INSTALL_PATH/marauroa_server_manager/config/Modules/" src="dist/marauroa_server_manager/marauroa_server_manager/config/Modules/simple-marauroa-application-gui.xml"/>
-            <file targetdir="$INSTALL_PATH/marauroa_server_manager/config/Modules/" src="dist/marauroa_server_manager/marauroa_server_manager/config/Modules/eclipselink.xml"/>
-            <file targetdir="$INSTALL_PATH/marauroa_server_manager/config/Modules/" src="dist/marauroa_server_manager/marauroa_server_manager/config/Modules/simple-marauroa-application-monitor.xml"/>
-            <file targetdir="$INSTALL_PATH/marauroa_server_manager/config/Modules/" src="dist/marauroa_server_manager/marauroa_server_manager/config/Modules/simple-marauroa-client-lib.xml"/>
-            <file targetdir="$INSTALL_PATH/marauroa_server_manager/config/Modules/" src="dist/marauroa_server_manager/marauroa_server_manager/config/Modules/simple-server-lib.xml"/>
-            <file targetdir="$INSTALL_PATH/marauroa_server_manager/core" src="dist/marauroa_server_manager/marauroa_server_manager/core"/>
-            <file targetdir="$INSTALL_PATH/marauroa_server_manager/core/locale" src="dist/marauroa_server_manager/marauroa_server_manager/core/locale/core_marauroa_server_manager.jar"/>
-            <file targetdir="$INSTALL_PATH/marauroa_server_manager/update_tracking" src="dist/marauroa_server_manager/marauroa_server_manager/update_tracking/marauroa-lib.xml"/>
-            <file targetdir="$INSTALL_PATH/marauroa_server_manager/update_tracking" src="dist/marauroa_server_manager/marauroa_server_manager/update_tracking/simple-marauroa-application-api.xml"/>
-            <file targetdir="$INSTALL_PATH/marauroa_server_manager/update_tracking" src="dist/marauroa_server_manager/marauroa_server_manager/update_tracking/simple-marauroa-application-core.xml"/>
-            <file targetdir="$INSTALL_PATH/marauroa_server_manager/update_tracking" src="dist/marauroa_server_manager/marauroa_server_manager/update_tracking/simple-marauroa-application-core-db.xml"/>
-            <file targetdir="$INSTALL_PATH/marauroa_server_manager/update_tracking" src="dist/marauroa_server_manager/marauroa_server_manager/update_tracking/simple-marauroa-application-gui.xml"/>
-            <file targetdir="$INSTALL_PATH/marauroa_server_manager/update_tracking" src="dist/marauroa_server_manager/marauroa_server_manager/update_tracking/eclipselink.xml"/>
-            <file targetdir="$INSTALL_PATH/marauroa_server_manager/update_tracking" src="dist/marauroa_server_manager/marauroa_server_manager/update_tracking/simple-marauroa-application-monitor.xml"/>
-            <file targetdir="$INSTALL_PATH/marauroa_server_manager/update_tracking" src="dist/marauroa_server_manager/marauroa_server_manager/update_tracking/simple-marauroa-client-lib.xml"/>
-            <file targetdir="$INSTALL_PATH/marauroa_server_manager/update_tracking" src="dist/marauroa_server_manager/marauroa_server_manager/update_tracking/simple-server-lib.xml"/>
-            <file targetdir="$INSTALL_PATH/marauroa_server_manager/modules" src="dist/marauroa_server_manager/marauroa_server_manager/modules/ext"/>
-            <file targetdir="$INSTALL_PATH/marauroa_server_manager/modules" src="dist/marauroa_server_manager/marauroa_server_manager/modules/locale"/>
-            <file targetdir="$INSTALL_PATH/marauroa_server_manager/modules" src="dist/marauroa_server_manager/marauroa_server_manager/modules/marauroa-lib.jar"/>
-            <file targetdir="$INSTALL_PATH/marauroa_server_manager/modules" src="dist/marauroa_server_manager/marauroa_server_manager/modules/simple-marauroa-application-api.jar"/>
-            <file targetdir="$INSTALL_PATH/marauroa_server_manager/modules" src="dist/marauroa_server_manager/marauroa_server_manager/modules/simple-marauroa-application-core.jar"/>
-            <file targetdir="$INSTALL_PATH/marauroa_server_manager/modules" src="dist/marauroa_server_manager/marauroa_server_manager/modules/simple-marauroa-application-core-db.jar"/>
-            <file targetdir="$INSTALL_PATH/marauroa_server_manager/modules" src="dist/marauroa_server_manager/marauroa_server_manager/modules/simple-marauroa-application-gui.jar"/>
-            <file targetdir="$INSTALL_PATH/marauroa_server_manager/modules" src="dist/marauroa_server_manager/marauroa_server_manager/modules/eclipselink.jar"/>
-            <file targetdir="$INSTALL_PATH/marauroa_server_manager/modules" src="dist/marauroa_server_manager/marauroa_server_manager/modules/simple-marauroa-application-monitor.jar"/>
-            <file targetdir="$INSTALL_PATH/marauroa_server_manager/modules" src="dist/marauroa_server_manager/marauroa_server_manager/modules/simple-marauroa-client-lib.jar"/>
-            <file targetdir="$INSTALL_PATH/marauroa_server_manager/modules" src="dist/marauroa_server_manager/marauroa_server_manager/modules/simple-server-lib.jar"/>
-            <file targetdir="$INSTALL_PATH/marauroa_server_manager/" src="dist/marauroa_server_manager/marauroa_server_manager/resources"/>
-        </pack>
-        <pack name="jWrestling" preselected="no" installGroups="marauroa_server_manager" required="no" hidden="false">
-            <description>jWrestling plugin</description>
-            <file targetdir="$INSTALL_PATH/marauroa_server_manager/modules" src="dist/marauroa_server_manager/marauroa_server_manager/modules/games-jwrestling-application.jar"/>
-            <file targetdir="$INSTALL_PATH/marauroa_server_manager/config/Modules/" src="dist/marauroa_server_manager/marauroa_server_manager/config/Modules/games-jwrestling-application.xml"/>
-            <!--<file targetdir="$INSTALL_PATH/marauroa_server_manager/modules/docs" src="dist/marauroa_server_manager/marauroa_server_manager/modules/docs/games-jwrestling-application.jar"/>-->
-            <file targetdir="$INSTALL_PATH/marauroa_server_manager/update_tracking" src="dist/marauroa_server_manager/marauroa_server_manager/update_tracking/games-jwrestling-application.xml"/>
-        </pack>
-    </packs>
-</installation>
-        
+            <file targetdir="$INSTALL_PATH" src="dist/marauroa_server_manager/marauroa_server_manager"/>
+        <file targetdir="$INSTALL_PATH" src="dist/marauroa_server_manager/extra"/>
+                <file targetdir="$INSTALL_PATH" src="dist/marauroa_server_manager/ide"/>
+                <file targetdir="$INSTALL_PATH" src="dist/marauroa_server_manager/nb"/>
+                <file targetdir="$INSTALL_PATH" src="dist/marauroa_server_manager/platform"/>
+                <file targetdir="$INSTALL_PATH" src="dist/marauroa_server_manager/sappy"/>
+                </pack>
+        </packs>
+        </installation>

@@ -51,6 +51,7 @@
                 <download-platform url="${autoupdate.catalog.@{url}}"/>
             </sequential>
         </for>
+        <echo>Installing plug-ins from ../netbeans</echo>
         <mkdir dir="${nbplatform.active.dir}/extra"/>
         <autoupdate todir="${nbplatform.active.dir}/extra">
             <nbms dir="../netbeans">
