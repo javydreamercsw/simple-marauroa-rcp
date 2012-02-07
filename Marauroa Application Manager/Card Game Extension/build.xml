@@ -9,7 +9,7 @@
 
     <property name="original.project.dir" value="../../Simple Marauroa Java/Card Game Extension"/>
 
-    <target name="release" depends="init-netbeans, init-hudson">
+    <target name="release" depends="-init-netbeans, -init-hudson">
         <property file="${original.project.dir}/nbproject/project.properties" prefix="extension-lib"/>
         <length string="${extension-lib.dist.dir}" property="length.dist" />
         <math result="length.dist" operand1="1" operation="+" operand2="${length.dist}" datatype="int"/>
