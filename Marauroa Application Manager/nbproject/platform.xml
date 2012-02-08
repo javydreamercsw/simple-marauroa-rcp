@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="platform" default="download" basedir="..">
     <import file="../preparation.xml"/>
+    
+    <fileset dir="${nbplatform.active.dir}" id="platform.path"/>
+    <pathconvert refid="platform.path"
+                 property="platform.notempty"
+                 setonempty="false"/>
+                 
     <condition property="download.enabled">
         <and>
             <isset property="bootstrap.url"/>
             <isset property="autoupdate.catalog.url"/>
+            <not>
+                <isset property="platform.notempty"/>
+            </not>
         </and>
     </condition>
     
