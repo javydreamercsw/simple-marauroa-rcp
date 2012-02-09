@@ -12,7 +12,7 @@
         <available file="../../Simple Libs" type="dir"/>
     </condition>
 
-    <target name="unzip-custom-clusters" depends="--init-netbeans, --init-hudson">
+    <target name="unzip-custom-clusters" depends="-init-netbeans, -init-hudson">
         <!--Hudson needs to run this task first as it gets the core modules as zip from version control-->
         <for param="file"> 
             <path> 
@@ -69,7 +69,7 @@
         <basename property="ant-contrib-filename" file="${ant-contrib-jar}"/>
     </target>
 
-    <target name="--init-netbeans" depends="check-env" if="isNetbeans">
+    <target name="-init-netbeans" depends="check-env" if="isNetbeans">
         <echo>Configuring ant-contrib for Netbeans use...</echo>
         <property name="ant-contrib-loc" value="${lib.dir}/${ant-contrib-filename}"/>
         <available file="${ant-contrib-loc}" property="ant-contrib.present"/>
@@ -82,7 +82,7 @@
         </taskdef>
     </target>
 
-    <target name="--init-hudson" depends="check-env" unless="isNetbeans">
+    <target name="-init-hudson" depends="check-env" unless="isNetbeans">
         <echo>Configuring ant-contrib for Hudson use...</echo>
         <!--Import Hudson environment variables-->
         <property environment="env"/>

@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>simple.marauroa.rcp.server</groupId>
     <artifactId>MSM</artifactId>
-    <version>0.1</version>
+    <version>${app.version}</version>
     <packaging>pom</packaging>
     <name>Marauroa Server Manager</name>
     <build>
