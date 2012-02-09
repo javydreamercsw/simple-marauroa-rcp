@@ -37,24 +37,11 @@
     </condition>
     
     <target name="build-launchers" depends="suite.build-launchers">
-		<!-- Replace the icon for the Windows launcher exe. -->
+	<!-- Replace the icon for the Windows launcher exe. -->
         <antcall target="replaceWindowsLauncherIcon"/>
     </target>
-   
-    <target name="pre-init" depends="-init-netbeans, -init-hudson">
-        <if>              
-            <isset property="Hudson"/>
-            <then>
-                <tstamp prefix="build"/>
-                <propertyfile file="${basedir}/nbproject/project.properties"
-                              comment="Updated by build script">
-                    <entry key="app.version" value="${BUILD_TAG}${BUILD_ID} SVN Rev: ${SVN_REVISION}" />
-                </propertyfile>
-            </then>
-        </if>
-    </target>
     
-    <target name="build" depends="-init-netbeans, -init-hudson, check-dev-environent, build-brand, update-lookup-lib">
+    <target name="-build" depends="-init-netbeans, -init-hudson, check-dev-environent, -build-brand, update-lookup-lib">
         <!--Copy the Netbeans supported MySQL library as well-->
         <if>
             <and>
@@ -68,7 +55,7 @@
         <antcall target="suite.build"/>
     </target>
 
-    <target name="build-brand" depends="-init-netbeans, -init-hudson">
+    <target name="-build-brand" depends="-init-netbeans, -init-hudson">
         <if>
             <isset property="app.icon"/>
             <then>
@@ -169,15 +156,15 @@
         <delete dir="${dist.dir}/${app.name}"/>
     </target>
 
-	<!-- Windows-only target that replaces the icon for the launcher exe with our own icon. -->
-    <target name="replaceWindowsLauncherIcon" if="isWindows" description="Replace the icon for the Windows launcher exe">
+    <!-- Windows-only target that replaces the icon for the launcher exe with our own icon. -->
+    <target name="-replaceWindowsLauncherIcon" if="isWindows" description="Replace the icon for the Windows launcher exe">
         <echo message="Replacing icon of Windows launcher executable."/>
         <exec executable="../Simple Libs/tools/ReplaceVistaIcon.exe" resolveexecutable="true">
             <arg line="build/launcher/bin/${app.name}.exe resources/${app.name}.ico"/>
         </exec>
     </target>
 
-    <target name="build-installer" description="Create Installer" depends="-init-netbeans, -init-hudson, build-brand">
+    <target name="build-installer" description="Create Installer" depends="-init-netbeans, -init-hudson, -replaceWindowsLauncherIcon, -build-brand">
         <echo message="Setting property and task for installer creation" />
         <property name="nbdist.dir" value="dist"/>
         <property name="nbdist-app.dir" value="${nbdist.dir}/${app.name}"/>
@@ -603,24 +590,20 @@
                     <then>
                         <echo file="versions.xml" append="true"><![CDATA[
                 <replace codenamebase="]]>${@{cur}.OpenIDE-Module}<![CDATA[" addcompiletime="true">
-                    <module codenamebase="]]>${@{cur}.OpenIDE-Module}
-                        </echo>
+                    <module codenamebase="]]>${@{cur}.OpenIDE-Module}</echo>
                         <if>
                             <isset property="@{cur}.spec.version.base"/>
                             <then>
-                                <echo file="versions.xml" append="true"><![CDATA[" spec="]]>${@{cur}.spec.version.base}<![CDATA["]]>
-                                </echo>
+                                <echo file="versions.xml" append="true"><![CDATA[" spec="]]>${@{cur}.spec.version.base}<![CDATA["]]></echo>
                             </then>
                             <else>
-                                <echo file="versions.xml" append="true"><![CDATA[/>]]>
-                                </echo>
+                                <echo file="versions.xml" append="true"><![CDATA[/>]]></echo>
                             </else>
                         </if>
                         <if>
                             <isset property="@{cur}.release-version"/>
                             <then>
-                                <echo file="versions.xml" append="true"><![CDATA[ release="]]>${@{cur}.release-version}<![CDATA["/>]]>
-                                </echo>
+                                <echo file="versions.xml" append="true"><![CDATA[ release="]]>${@{cur}.release-version}<![CDATA["/>]]></echo>
                             </then>
                             <else>
                                 <echo file="versions.xml" append="true"><![CDATA[/>]]>
