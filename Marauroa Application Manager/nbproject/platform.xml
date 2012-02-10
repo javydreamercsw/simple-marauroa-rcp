@@ -2,7 +2,7 @@
 <project name="platform" default="download" basedir="..">
     <import file="../preparation.xml"/>
     
-    <fileset dir="${nbplatform.active.dir}" id="platform.path"/>
+    <fileset dir="${nbplatform.custom.netbeans.dest.dir}" id="platform.path"/>
     <pathconvert refid="platform.path"
                  property="platform.notempty"
                  setonempty="false"/>
