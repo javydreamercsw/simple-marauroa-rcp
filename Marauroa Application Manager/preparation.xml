@@ -11,25 +11,6 @@
     <condition property="simple.libs.exists">
         <available file="../../Simple Libs" type="dir"/>
     </condition>
-
-    <target name="unzip-custom-clusters" depends="-init-netbeans, -init-hudson">
-        <!--Hudson needs to run this task first as it gets the core modules as zip from version control-->
-        <for param="file"> 
-            <path> 
-                <fileset dir="../netbeans"> 
-                    <include name="*.zip"/> 
-                </fileset> 
-            </path> 
-            <sequential> 
-                <propertyregex override="yes" 
-                               property="zipname"  input="@{file}" 
-                               regexp=".*[\\/]([^\\/]*)\.zip" replace="\1"/>
-                <delete dir="${nbplatform.active.dir}/${zipname}" failonerror="false"/>
-                <mkdir dir="${nbplatform.active.dir}/${zipname}"/> 
-                <unzip dest="${nbplatform.active.dir}/${zipname}" src="@{file}"/> 
-            </sequential> 
-        </for> 
-    </target>
     
     <scriptdef name="substring" language="javascript">
         <attribute name="text" />
@@ -44,7 +25,7 @@
      ]]>
     </scriptdef>
 
-    <target name="check-env" depends="getAntContribJar">
+    <target name="-check-env" depends="-getAntContribJar">
         <condition property="isNetbeans">
             <not>
                 <isset property="Hudson"/>
@@ -61,7 +42,7 @@
         </taskdef>
     </target>
 
-    <target name="getAntContribJar">
+    <target name="-getAntContribJar">
         <fileset id="ant-contrib-jar" dir="${lib.dir}">
             <include name="ant-contrib-*.jar" />
         </fileset>
@@ -69,7 +50,7 @@
         <basename property="ant-contrib-filename" file="${ant-contrib-jar}"/>
     </target>
 
-    <target name="-init-netbeans" depends="check-env" if="isNetbeans">
+    <target name="-init-netbeans" depends="-check-env" if="isNetbeans">
         <echo>Configuring ant-contrib for Netbeans use...</echo>
         <property name="ant-contrib-loc" value="${lib.dir}/${ant-contrib-filename}"/>
         <available file="${ant-contrib-loc}" property="ant-contrib.present"/>
@@ -82,7 +63,7 @@
         </taskdef>
     </target>
 
-    <target name="-init-hudson" depends="check-env" unless="isNetbeans">
+    <target name="-init-hudson" depends="-check-env" unless="isNetbeans">
         <echo>Configuring ant-contrib for Hudson use...</echo>
         <!--Import Hudson environment variables-->
         <property environment="env"/>

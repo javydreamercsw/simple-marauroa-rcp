@@ -6,6 +6,7 @@
     <description>Builds the module suite Marauroa Server Manager.</description>
     <import file="nbproject/build-impl.xml"/>
     <import file="preparation.xml"/>
+    <property file="nbproject/project.properties"/>
     <taskdef name="doxygen" classname="org.doxygen.tools.DoxygenTask" classpath="../Simple Libs/tools/doxygen/ant_doxygen.jar" />
     
     <scriptdef name="substring" language="javascript">
@@ -38,10 +39,10 @@
     
     <target name="build-launchers" depends="suite.build-launchers">
 	<!-- Replace the icon for the Windows launcher exe. -->
-        <antcall target="replaceWindowsLauncherIcon"/>
+        <antcall target="-replaceWindowsLauncherIcon"/>
     </target>
     
-    <target name="-build" depends="-init-netbeans, -init-hudson, check-dev-environent, -build-brand, update-lookup-lib">
+    <target name="build" depends="-init-netbeans, -init-hudson, -check-dev-environent, -build-brand, -update-lookup-lib">
         <!--Copy the Netbeans supported MySQL library as well-->
         <if>
             <and>
@@ -363,7 +364,7 @@
         <!--Launch 4J task-->
         <taskdef name="launch4j" classname="net.sf.launch4j.ant.Launch4jTask"
                  classpath="${launch4j.dir}/launch4j.jar:${launch4j.dir}/lib/xstream.jar" />
-        <antcall target="create-launch4j-installer"/>
+        <antcall target="-create-launch4j-installer"/>
         <echo message="Cleaning and finalizing release..." />
         <delete dir="${nbdist-app.dir}"/>
         <delete file="${izpack-installer}"/>
@@ -372,7 +373,7 @@
         <delete file="nizpack.xml"/>
     </target>
     
-    <target name="create-launch4j-installer">
+    <target name="-create-launch4j-installer">
         <delete>
             <fileset dir="." includes="*.exe"/>
         </delete>
@@ -408,7 +409,7 @@
 
     <target name="nbms" depends="-init-netbeans,-init-hudson">
         <!--Update keystore info in projects-->
-        <antcall target="update-keystore-info"/>
+        <antcall target="-update-keystore-info"/>
         <!--Create/Update keystore-->
         <delete file="${keystore.location}${keystore.name}"/>
         <mkdir dir="${keystore.location}"/>
@@ -419,7 +420,7 @@
         <antcall target="suite.nbms"/>
     </target>
     
-    <target name="check-dev-environent" depends="-init-netbeans,-init-hudson">
+    <target name="-check-dev-environent" depends="-init-netbeans,-init-hudson">
         <taskdef resource="net/sourceforge/ant4hg/taskdefs/antlib.xml">
             <classpath>
                 <pathelement location="../Simple Libs/tools/ant4hg-V0.07.jar"/>
@@ -512,7 +513,7 @@
         <echo>Source distribution file available at ${suite.dir}/dist/</echo>
     </target>
     
-    <target name="update-keystore-info" depends="-init-netbeans, -init-hudson">
+    <target name="-update-keystore-info" depends="-init-netbeans, -init-hudson">
         <for list="${modules}" delimiter=":" param="cur" trim="true">
             <sequential>
                 <echo>Uptading module: @{cur}...</echo>
@@ -637,7 +638,7 @@
         <echo>Fixing dependencies for suite...Done!</echo>
     </target>
     
-    <target name="update-lookup-lib">
+    <target name="-update-lookup-lib">
         <fileset id="finder" dir="${harness.dir}/.." includes="**/org-openide-util-lookup.jar" />
         <pathconvert property="lookup-lib" refid="finder" />
         <copy file="${lookup-lib}" tofile="../Simple Libs/org-openide-util-lookup.jar"/>

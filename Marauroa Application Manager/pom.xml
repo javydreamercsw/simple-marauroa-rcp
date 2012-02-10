@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>simple.marauroa.rcp.server</groupId>
     <artifactId>MSM</artifactId>
-    <version>${app.version}</version>
+    <version>0.01</version>
     <packaging>pom</packaging>
     <name>Marauroa Server Manager</name>
     <build>
@@ -29,7 +29,7 @@
                         <configuration>
                             <sources>
         
-                <source>./eclipselink/src</source>
+                <source>./Eclipselink/src</source>
                 
                 <source>./Marauroa Application API/src</source>
                 
