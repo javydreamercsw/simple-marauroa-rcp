@@ -10,10 +10,10 @@
     <taskdef name="doxygen" classname="org.doxygen.tools.DoxygenTask" classpath="../Simple Libs/tools/doxygen/ant_doxygen.jar" />
     
     <scriptdef name="substring" language="javascript">
-        <attribute name="text" />
-        <attribute name="start" />
-        <attribute name="end" />
-        <attribute name="property" />
+        <attribute name="text"/>
+        <attribute name="start"/>
+        <attribute name="end"/>
+        <attribute name="property"/>
      <![CDATA[
        var text = attributes.get("text");
        var start = attributes.get("start");
