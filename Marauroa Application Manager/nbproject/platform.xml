@@ -3,6 +3,7 @@
     <import file="../preparation.xml"/>
     
     <fileset dir="${nbplatform.custom.netbeans.dest.dir}" id="platform.path"/>
+    <mkdir dir="${nbplatform.custom.netbeans.dest.dir}"/>
     <pathconvert refid="platform.path"
                  property="platform.notempty"
                  setonempty="false"/>
