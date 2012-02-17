@@ -41,8 +41,8 @@
 	<!-- Replace the icon for the Windows launcher exe. -->
         <antcall target="-replaceWindowsLauncherIcon"/>
     </target>
-    
-    <target name="build" depends="-init-netbeans, -init-hudson, -check-dev-environent, -build-brand, -update-lookup-lib">
+
+    <target name="branding" depends="-init-netbeans, -init-hudson, -check-dev-environent, -update-lookup-lib">
         <!--Copy the Netbeans supported MySQL library as well-->
         <if>
             <and>
@@ -53,10 +53,6 @@
                 <copy file="${libs.MySQLDriver.classpath}" tofile="build/cluster/modules/ext/mysql-connector-java.jar"/>
             </then>
         </if>
-        <antcall target="suite.build"/>
-    </target>
-
-    <target name="-build-brand" depends="-init-netbeans, -init-hudson">
         <if>
             <isset property="app.icon"/>
             <then>
@@ -144,6 +140,7 @@
 </properties>
 </project>]]>
         </echo>
+        <antcall target="suite.branding"/>
     </target>
 
     <target name="build-zip" depends="suite.build-zip">
@@ -165,7 +162,7 @@
         </exec>
     </target>
 
-    <target name="build-installer" description="Create Installer" depends="-init-netbeans, -init-hudson, -replaceWindowsLauncherIcon, -build-brand">
+    <target name="build-installer" description="Create Installer" depends="-init-netbeans, -init-hudson, -replaceWindowsLauncherIcon, branding">
         <echo message="Setting property and task for installer creation" />
         <property name="nbdist.dir" value="dist"/>
         <property name="nbdist-app.dir" value="${nbdist.dir}/${app.name}"/>
