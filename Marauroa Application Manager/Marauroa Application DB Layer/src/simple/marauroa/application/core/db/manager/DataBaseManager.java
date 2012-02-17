@@ -232,8 +232,8 @@ public final class DataBaseManager implements EventBusListener<IMarauroaApplicat
         Logger.getLogger(DataBaseManager.class.getSimpleName()).log(Level.FINE,
                 "Looking for application type: {0}", app.getClass().getSimpleName());
         parameters.clear();
-        parameters.put("class1", app.getClass().getCanonicalName());
-        return (List<ApplicationType>) DataBaseManager.namedQuery("ApplicationType.findByClass1", parameters);
+        parameters.put("typeClass", app.getClass().getCanonicalName());
+        return (List<ApplicationType>) DataBaseManager.namedQuery("ApplicationType.findByTypeClass", parameters);
     }
 
     public static List<Application> getApplications() {
