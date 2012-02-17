@@ -27,7 +27,6 @@ import simple.marauroa.application.core.db.ApplicationPK;
 import simple.marauroa.application.core.db.ApplicationType;
 import simple.marauroa.application.core.db.controller.ApplicationJpaController;
 import simple.marauroa.application.core.db.controller.ApplicationTypeJpaController;
-import simple.marauroa.application.core.db.controller.exceptions.IllegalOrphanException;
 import simple.marauroa.application.core.db.controller.exceptions.NonexistentEntityException;
 import simple.marauroa.application.core.db.controller.exceptions.PreexistingEntityException;
 
@@ -202,8 +201,8 @@ public final class DataBaseManager implements EventBusListener<IMarauroaApplicat
                         "Adding application : {0}", app.getName());
                 Application newApp = new Application(newAppPK, true, app.getVersion());
                 newApp.setName(app.getName());
-                newApp.setPath(getApplicationPath() + app.getName());
-                newApp.setApplicationType1(type);
+                newApp.setApplicationPath(getApplicationPath() + app.getName());
+                newApp.setApplicationType(type);
                 newApp.setVersion(app.getVersion());
                 new ApplicationJpaController(getEntityManagerFactory()).create(newApp);
             } catch (PreexistingEntityException ex) {
@@ -251,9 +250,7 @@ public final class DataBaseManager implements EventBusListener<IMarauroaApplicat
     public static void deleteApplicationType(ApplicationType appType) {
         try {
             new ApplicationTypeJpaController(getEntityManagerFactory()).destroy(appType.getId());
-        } catch (IllegalOrphanException ex) {
-            Exceptions.printStackTrace(ex);
-        } catch (NonexistentEntityException ex) {
+        }catch (NonexistentEntityException ex) {
             Exceptions.printStackTrace(ex);
         }
     }
@@ -266,9 +263,9 @@ public final class DataBaseManager implements EventBusListener<IMarauroaApplicat
         //Load from database
         for (Application app : DataBaseManager.getApplications()) {
             //Check if the application path exists
-            path = new File(app.getPath());
+            path = new File(app.getApplicationPath());
             Logger.getLogger(DataBaseManager.class.getSimpleName()).log(Level.FINE,
-                    "Looking for application path at: {0}", app.getPath());
+                    "Looking for application path at: {0}", app.getApplicationPath());
             if (!path.exists()) {
                 NotifyDescriptor nd = new NotifyDescriptor.Confirmation(
                         "<html><font size=+1 color=red>"
@@ -373,11 +370,11 @@ public final class DataBaseManager implements EventBusListener<IMarauroaApplicat
     }
 
     protected static IMarauroaApplication getMarauroaApplication(Application app) {
-        IMarauroaApplicationProvider provider = getProviderForClass(app.getApplicationType1().getClass1());
+        IMarauroaApplicationProvider provider = getProviderForClass(app.getApplicationType().getTypeClass());
         if (provider != null) {
             return provider.convertToIMarauroaApplication(
-                    app.getApplicationType1().getClass1(),
-                    app.getName(), app.getVersion(), app.getPath());
+                    app.getApplicationType().getTypeClass(),
+                    app.getName(), app.getVersion(), app.getApplicationPath());
         } else {
             return null;
         }
