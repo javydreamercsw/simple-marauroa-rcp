@@ -7,6 +7,15 @@
             <suite-component/>
             <module-dependencies>
                 <dependency>
+                    <code-name-base>eclipselink</code-name-base>
+                    <build-prerequisite/>
+                    <compile-dependency/>
+                    <run-dependency>
+                        <release-version>2</release-version>
+                        <specification-version>3</specification-version>
+                    </run-dependency>
+                </dependency>
+                <dependency>
                     <code-name-base>marauroa.lib</code-name-base>
                     <build-prerequisite/>
                     <compile-dependency/>

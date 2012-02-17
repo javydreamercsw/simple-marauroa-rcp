@@ -15,6 +15,15 @@
                         <specification-version>8</specification-version>
                     </run-dependency>
                 </dependency>
+                <dependency>
+                    <code-name-base>simple.server.lib</code-name-base>
+                    <build-prerequisite/>
+                    <compile-dependency/>
+                    <run-dependency>
+                        <release-version>0-1</release-version>
+                        <specification-version>0.2</specification-version>
+                    </run-dependency>
+                </dependency>
             </module-dependencies>
             <public-packages>
                 <package>simple.server.extension</package>
