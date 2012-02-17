@@ -27,6 +27,7 @@ import simple.marauroa.application.core.db.ApplicationPK;
 import simple.marauroa.application.core.db.ApplicationType;
 import simple.marauroa.application.core.db.controller.ApplicationJpaController;
 import simple.marauroa.application.core.db.controller.ApplicationTypeJpaController;
+import simple.marauroa.application.core.db.controller.exceptions.IllegalOrphanException;
 import simple.marauroa.application.core.db.controller.exceptions.NonexistentEntityException;
 import simple.marauroa.application.core.db.controller.exceptions.PreexistingEntityException;
 
@@ -250,7 +251,9 @@ public final class DataBaseManager implements EventBusListener<IMarauroaApplicat
     public static void deleteApplicationType(ApplicationType appType) {
         try {
             new ApplicationTypeJpaController(getEntityManagerFactory()).destroy(appType.getId());
-        }catch (NonexistentEntityException ex) {
+        } catch (IllegalOrphanException ex) {
+            Exceptions.printStackTrace(ex);
+        } catch (NonexistentEntityException ex) {
             Exceptions.printStackTrace(ex);
         }
     }
