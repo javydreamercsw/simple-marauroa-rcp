@@ -25,14 +25,15 @@ import javax.xml.bind.annotation.XmlTransient;
 public class ApplicationType implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Basic(optional = false)
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     private Integer id;
     @Basic(optional = false)
-    @Column(name = "name")
+    @Column(name = "name", nullable = false, length = 45)
     private String name;
     @Basic(optional = false)
-    @Column(name = "typeClass")
+    @Column(name = "typeClass", nullable = false, length = 255)
     private String typeClass;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "applicationType")
     private List<Application> applicationList;

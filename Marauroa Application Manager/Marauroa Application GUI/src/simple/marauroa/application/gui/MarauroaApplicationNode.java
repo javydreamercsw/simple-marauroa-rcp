@@ -28,6 +28,7 @@ import simple.marauroa.application.core.MarauroaApplicationRepository;
 import simple.marauroa.application.core.MonitorService;
 import simple.marauroa.application.core.tool.Tool;
 import simple.marauroa.application.gui.dialog.AddRPZoneDialog;
+import simple.marauroa.application.gui.dialog.PluginConfigurationDialog;
 
 /**
  * Represents a MarauroaApplication element within the system
@@ -37,6 +38,7 @@ import simple.marauroa.application.gui.dialog.AddRPZoneDialog;
 public class MarauroaApplicationNode extends BeanNode implements ApplicationStatusChangeListener {
 
     private AddRPZoneDialog dialog = null;
+    private PluginConfigurationDialog configDialog=null;
     private final PropertyChangeSupport supp = new PropertyChangeSupport(this);
     private IMarauroaApplication application;
     private Action[] actions;
@@ -92,11 +94,13 @@ public class MarauroaApplicationNode extends BeanNode implements ApplicationStat
         actions = new Action[]{
             SystemAction.get(DeleteAction.class),
             null,
+            new ConfigureAction(),
             new AddRPZoneAction(),
             new StartServerAction(),
             new StopServerAction(),
             new ConnectAction(),
             new DisconnectAction(),
+            null,
             new DeleteServerAction()};
         updateActionsState(actions);
         return actions;
@@ -130,6 +134,9 @@ public class MarauroaApplicationNode extends BeanNode implements ApplicationStat
             }
             if (actions[i] != null && actions[i] instanceof DeleteServerAction) {
                 actions[i].setEnabled(!application.getStatus().contains(STATUS.STARTED));
+            }
+            if (actions[i] != null && actions[i] instanceof ConfigureAction) {
+                actions[i].setEnabled(true);
             }
         }
     }
@@ -169,6 +176,23 @@ public class MarauroaApplicationNode extends BeanNode implements ApplicationStat
             }
             dialog.setLocationRelativeTo(null);
             dialog.setVisible(true);
+        }
+    }
+    
+    private class ConfigureAction extends AbstractAction {
+
+        public ConfigureAction() {
+            putValue(NAME, NbBundle.getMessage(MarauroaApplicationNode.class, "configure"));
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            if (configDialog == null) {
+                configDialog = new PluginConfigurationDialog(new JFrame(),
+                        getLookup().lookup(IMarauroaApplication.class));
+            }
+            configDialog.setLocationRelativeTo(null);
+            configDialog.setVisible(true);
         }
     }
 

@@ -5,9 +5,7 @@
 package simple.marauroa.application.core.db;
 
 import java.io.Serializable;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import javax.persistence.*;
 
 /**
  *
@@ -15,7 +13,9 @@ import javax.persistence.Embeddable;
  */
 @Embeddable
 public class ApplicationPK implements Serializable {
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Basic(optional = false)
+    @Column(name = "id", nullable = false)
     private int id;
     @Basic(optional = false)
     @Column(name = "application_type")
