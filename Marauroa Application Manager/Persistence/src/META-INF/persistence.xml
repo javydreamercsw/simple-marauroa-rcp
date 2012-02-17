@@ -7,7 +7,7 @@
         <class>simple.marauroa.application.core.db.ServerPlugin</class>
         <shared-cache-mode>ALL</shared-cache-mode>
         <properties>
-            <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/marauroa_app_manager"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/.Marauroa-Server-Manager/data/marauroa_app_manager"/>
             <property name="javax.persistence.jdbc.password" value="mam"/>
             <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
             <property name="javax.persistence.jdbc.user" value="mam_user"/>
