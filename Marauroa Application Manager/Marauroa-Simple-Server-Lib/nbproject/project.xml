@@ -89,7 +89,7 @@
                 <package>simple.server.util</package>
             </public-packages>
             <class-path-extension>
-                <runtime-relative-path>ext/marauroa-simple-server.jar</runtime-relative-path>
+                <runtime-relative-path>ext/extension/marauroa-simple-server.jar</runtime-relative-path>
                 <binary-origin>../../Simple Marauroa Java/Simple-Server/dist/marauroa-simple-server.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>

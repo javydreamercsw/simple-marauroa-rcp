@@ -5,5 +5,5 @@
 <project name="simple.marauroa.application.gui" default="netbeans" basedir=".">
     <description>Builds, tests, and runs the project simple.marauroa.application.gui.</description>
     <import file="nbproject/build-impl.xml"/>
-    <import file="${suite.dir}/preparation.xml"/>
+    <import file="${suite.dir}/project.common.xml"/>
 </project>

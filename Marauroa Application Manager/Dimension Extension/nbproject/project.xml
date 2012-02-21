@@ -30,7 +30,7 @@
             </public-packages>
             <class-path-extension>
                 <runtime-relative-path>ext/extension/Dimension_Extension.jar</runtime-relative-path>
-                <binary-origin>../../Simple Marauroa Java/Challenge Extension/dist/Dimension_Extension.jar</binary-origin>
+                <binary-origin>../../Simple Marauroa Java/Dimension Extension/dist/Dimension_Extension.jar</binary-origin>
             </class-path-extension>
         </data>
     </configuration>

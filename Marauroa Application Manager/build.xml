@@ -153,6 +153,8 @@
         <zip destfile="${dist.dir}/${app.name}.zip" basedir="${dist.dir}"/>
         <delete dir="${dist.dir}/${app.name}"/>
     </target>
+    
+    <target name="clean" depends="suite.clean"/>
 
     <!-- Windows-only target that replaces the icon for the launcher exe with our own icon. -->
     <target name="-replaceWindowsLauncherIcon" if="isWindows" description="Replace the icon for the Windows launcher exe">
