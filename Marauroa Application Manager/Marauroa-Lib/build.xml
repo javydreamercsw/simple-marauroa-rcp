@@ -5,7 +5,7 @@
 <project name="marauroa.lib" default="netbeans" basedir=".">
     <description>Builds, tests, and runs the project marauroa.lib.</description>
     <import file="nbproject/build-impl.xml"/>
-    <import file="${suite.dir}/preparation.xml"/>
+    <import file="${suite.dir}/project.common.xml"/>
     
     <property name="original.project.dir" value="../../marauroa/"/>
     <property name="original.project.dir2" value="../../Simple Marauroa Java/Simple-Server/"/>
@@ -25,7 +25,7 @@
                 <copy file="${original.project.dir}libs/log4j.jar" tofile="release/modules/ext/log4j.jar"/>
             </then>
             <elseif>
-            <!-- Use the ones from java projects -->
+                <!-- Use the ones from java projects -->
                 <available file="${original.project.dir2}build.xml" type="file" />
                 <then>
                     <property file="${original.project.dir2}nbproject/project.properties" prefix="server-lib"/>
@@ -36,23 +36,14 @@
                 </then>
             </elseif>
             <else>
-            <!-- Just copy from Simple Libs -->
+                <!-- Just copy from Simple Libs -->
                 <copy file="../../Simple Libs/marauroa.jar" tofile="release/modules/ext/Marauroa.jar"/>
                 <copy file="../../Simple Libs/log4j.jar" tofile="release/modules/ext/log4j.jar"/>
             </else>
         </if>
     </target>
-
-
-    <target name="clean" depends="projectized-common.clean, -init-netbeans, -init-hudson">
-        <if>
-            <available file="${original.project.dir}/build.xml" type="file" />
-            <then>
-                <echo message="Cleaning ${original.project.dir}"/>
-                <ant dir="${original.project.dir}" usenativebasedir="true"
-             target="clean" inheritall="false" inheritrefs="false"/>
-                <echo message="Done cleaning ${original.project.dir}"/>
-            </then>
-        </if>
+    
+    <target name="clean">
+        <antcall target="MCP.clean"/>
     </target>
 </project>

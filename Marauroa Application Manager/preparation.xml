@@ -145,7 +145,7 @@
                             <fail message="Repository @{repo} not supported!"/>
                         </else>
                     </if>
-                </else>
+                        </else>
             </if>   
         </sequential>
     </macrodef>
@@ -154,7 +154,7 @@
         <ant antfile= "${suite.dir}/versions.xml" target="fix"/>
     </target>
     
-     <!-- iterate finds all build files, excluding this one and invokes the named target -->
+    <!-- iterate finds all build files, excluding this one and invokes the named target -->
     <macrodef name="iterate">
         <attribute name="target"/>
         <sequential>

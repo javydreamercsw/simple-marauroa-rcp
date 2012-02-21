@@ -5,7 +5,7 @@
 <project name="games.jwrestling.application" default="netbeans" basedir=".">
     <description>Builds, tests, and runs the project games.jwrestling.application.</description>
     <import file="nbproject/build-impl.xml"/>
-    <import file="${suite.dir}/preparation.xml"/>
+    <import file="${suite.dir}/project.common.xml"/>
     
     <property name="original.project.dir" value="../../jWrestling/jWrestling/"/>
 
