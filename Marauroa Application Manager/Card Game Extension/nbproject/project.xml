@@ -34,10 +34,6 @@
                 <package>simple.server.extension.card</package>
             </public-packages>
             <class-path-extension>
-                <runtime-relative-path>ext/extension/Card_Game_Interface.jar</runtime-relative-path>
-                <binary-origin>../../Simple Marauroa Java/Card Game Interface/dist/Card_Game_Interface.jar</binary-origin>
-            </class-path-extension>
-            <class-path-extension>
                 <runtime-relative-path>ext/extension/Card_Game_Extension.jar</runtime-relative-path>
                 <binary-origin>../../Simple Marauroa Java/Card Game Extension/dist/Card_Game_Extension.jar</binary-origin>
             </class-path-extension>
