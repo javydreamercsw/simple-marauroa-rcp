@@ -15,6 +15,15 @@
                         <specification-version>8</specification-version>
                     </run-dependency>
                 </dependency>
+                <dependency>
+                    <code-name-base>org.h2</code-name-base>
+                    <build-prerequisite/>
+                    <compile-dependency/>
+                    <run-dependency>
+                        <release-version>1</release-version>
+                        <specification-version>3</specification-version>
+                    </run-dependency>
+                </dependency>
             </module-dependencies>
             <public-packages>
                 <package>net.sf.jsqlparser</package>
@@ -34,36 +43,6 @@
                 <package>net.sf.jsqlparser.statement.truncate</package>
                 <package>net.sf.jsqlparser.statement.update</package>
                 <package>net.sf.jsqlparser.util.deparser</package>
-                <package>org.h2</package>
-                <package>org.h2.api</package>
-                <package>org.h2.bnf</package>
-                <package>org.h2.command</package>
-                <package>org.h2.command.ddl</package>
-                <package>org.h2.command.dml</package>
-                <package>org.h2.compress</package>
-                <package>org.h2.constant</package>
-                <package>org.h2.constraint</package>
-                <package>org.h2.engine</package>
-                <package>org.h2.expression</package>
-                <package>org.h2.fulltext</package>
-                <package>org.h2.index</package>
-                <package>org.h2.jdbc</package>
-                <package>org.h2.jdbcx</package>
-                <package>org.h2.jmx</package>
-                <package>org.h2.message</package>
-                <package>org.h2.result</package>
-                <package>org.h2.schema</package>
-                <package>org.h2.security</package>
-                <package>org.h2.server</package>
-                <package>org.h2.server.pg</package>
-                <package>org.h2.server.web</package>
-                <package>org.h2.store</package>
-                <package>org.h2.store.fs</package>
-                <package>org.h2.table</package>
-                <package>org.h2.tools</package>
-                <package>org.h2.upgrade</package>
-                <package>org.h2.util</package>
-                <package>org.h2.value</package>
                 <package>simple.common</package>
                 <package>simple.common.filter</package>
                 <package>simple.common.game</package>
@@ -91,10 +70,6 @@
             <class-path-extension>
                 <runtime-relative-path>ext/extension/marauroa-simple-server.jar</runtime-relative-path>
                 <binary-origin>../../Simple Marauroa Java/Simple-Server/dist/marauroa-simple-server.jar</binary-origin>
-            </class-path-extension>
-            <class-path-extension>
-                <runtime-relative-path>ext/h2.jar</runtime-relative-path>
-                <binary-origin>../../Simple Libs/h2.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/jsqlparser.jar</runtime-relative-path>

@@ -60,6 +60,8 @@
                 <source>./Challenge Extension/src</source>
                 
                 <source>./Card Game Extension/src</source>
+                
+                <source>./H2 Database Driver/src</source>
                 </sources>
                         </configuration>
                     </execution>
