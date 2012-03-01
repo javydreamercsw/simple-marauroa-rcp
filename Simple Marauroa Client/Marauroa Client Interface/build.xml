@@ -7,7 +7,7 @@
     <import file="nbproject/build-impl.xml"/>
     <import file="${suite.dir}/../Marauroa Application Manager/preparation.xml"/>
     
-    <target name="init" depends="init-netbeans, init-hudson, harness.init">
+    <target name="init" depends="-init-netbeans, -init-hudson, harness.init">
     <!--Update with information from Marauroa Simple Server project-->
         <if>
             <available file="${marauroa.simple.server.project.path}/build.xml" type="file" />
