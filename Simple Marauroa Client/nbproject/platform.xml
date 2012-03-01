@@ -1,10 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="platform" default="download" basedir="..">
     <import file="../../Marauroa Application Manager/preparation.xml"/>
+    
+    <fileset dir="${nbplatform.custom.netbeans.dest.dir}" id="platform.path"/>
+    <mkdir dir="${nbplatform.custom.netbeans.dest.dir}"/>
+    <pathconvert refid="platform.path"
+                 property="platform.notempty"
+                 setonempty="false"/>
+                 
     <condition property="download.enabled">
         <and>
             <isset property="bootstrap.url"/>
             <isset property="autoupdate.catalog.url"/>
+            <not>
+                <isset property="platform.notempty"/>
+            </not>
         </and>
     </condition>
     
@@ -24,7 +34,7 @@
         </autoupdate>
     </target>
     
-    <target name="download" depends="init-netbeans, init-hudson" if="download.enabled">
+    <target name="download" depends="-init-netbeans, -init-hudson" if="download.enabled">
         <pathconvert pathsep="|" property="download.clusters">
             <mapper type="flatten"/>
             <path path="${cluster.path}"/>
@@ -51,16 +61,14 @@
                 <download-platform url="${autoupdate.catalog.@{url}}"/>
             </sequential>
         </for>
-        <!--Install custom modules doesn't work due to bug: http://netbeans.org/bugzilla/show_bug.cgi?id=207773-->
-        <autoupdate installdir="${nbplatform.active.dir}">
+        <echo>Installing plug-ins from ../netbeans</echo>
+        <mkdir dir="${nbplatform.active.dir}/extra"/>
+        <autoupdate todir="${nbplatform.active.dir}/extra">
             <nbms dir="../netbeans">
                 <include name="*.nbm"/>
             </nbms>
+            <modules includes=".+"/>
         </autoupdate>
-        <!--Workaround-->
-        <delete dir="${nbplatform.active.dir}/extra"/>
-        <mkdir dir="${nbplatform.active.dir}/extra"/>
-        <unzip src="../netbeans/extra.zip" dest="${nbplatform.active.dir}/extra"/>
     </target>
     
     <macrodef name="download-platform">

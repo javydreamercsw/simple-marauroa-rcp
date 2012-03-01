@@ -31,7 +31,7 @@
         <antcall target="replaceWindowsLauncherIcon"/>
     </target>
    
-    <target name="pre-init" depends="init-netbeans, init-hudson">
+    <target name="pre-init" depends="-init-netbeans, -init-hudson">
         <if>              
             <isset property="Hudson"/>
             <then>
@@ -44,7 +44,7 @@
         </if>
     </target>
     
-    <target name="build" depends="init-netbeans, init-hudson, build-brand, suite.build"/>
+    <target name="build" depends="-init-netbeans, -init-hudson, build-brand, suite.build"/>
         
     <target name="build-brand" depends="pre-init, -init">
         <copy file="${app.icon}" tofile="resources/${app.name}.ico"/>
@@ -220,7 +220,7 @@
         </exec>
     </target>
 
-    <target name="build-installer" depends="init-netbeans, init-hudson, build-brand">
+    <target name="build-installer" depends="-init-netbeans, -init-hudson, build-brand">
         <echo message="Setting property and task for installer creation" />
         <property name="nbdist.dir" value="dist"/>
         <property name="nbdist-app.dir" value="${nbdist.dir}/${app.name}"/>
@@ -317,7 +317,7 @@
         <launch4j configFile="${app.title}.xml"/>
     </target>
 
-    <target name="nbms" depends="init-netbeans,init-hudson">
+    <target name="nbms" depends="-init-netbeans,-init-hudson">
         <!--Update keystore info in projects-->
         <antcall target="update-keystore-info"/>
         <!--Create/Update keystore-->
@@ -350,7 +350,7 @@
         </doxygen>
     </target>
 
-    <target name="source-distribution" description="Create Source Distribution (All suite)" depends="init-netbeans, init-hudson">
+    <target name="source-distribution" description="Create Source Distribution (All suite)" depends="-init-netbeans, -init-hudson">
         <echo>Create Source zip (skiping the netbeans folder with the platform)</echo>
         <delete file="${suite.dir}/dist/${app.version}.zip"/>
         <zip destfile="${suite.dir}/dist/${app.version}.zip" basedir="../" update="true">
@@ -377,7 +377,7 @@
         <echo> Source distribution file available at ${suite.dir}/dist/${app.version}.zip</echo>
     </target>
 
-    <target name="module-source-distribution" description="Create Source Distribution for each separated module" depends="-init, init-netbeans, init-hudson">
+    <target name="module-source-distribution" description="Create Source Distribution for each separated module" depends="-init, -init-netbeans, -init-hudson">
         <for list="${modules}" delimiter=":" param="cur" trim="true">
             <sequential>
                 <property file="@{cur}/manifest.mf" prefix="@{cur}"/>
@@ -405,7 +405,7 @@
         <echo>Source distribution file available at ${suite.dir}/dist/</echo>
     </target>
     
-    <target name="update-keystore-info" depends="init-netbeans, init-hudson">
+    <target name="update-keystore-info" depends="-init-netbeans, -init-hudson">
         <for list="${modules}" delimiter=":" param="cur" trim="true">
             <sequential>
                 <echo>Uptading module: @{cur}...</echo>
