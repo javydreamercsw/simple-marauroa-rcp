@@ -20,11 +20,11 @@ public class PrivateChatDialog extends javax.swing.JDialog {
     }
 
     @Override
-    public void setVisible(boolean b) {
-        if (b) {
+    public void setVisible(boolean visible) {
+        if (visible) {
             message.setText("");
         }
-        super.setVisible(b);
+        super.setVisible(visible);
     }
 
     /**
