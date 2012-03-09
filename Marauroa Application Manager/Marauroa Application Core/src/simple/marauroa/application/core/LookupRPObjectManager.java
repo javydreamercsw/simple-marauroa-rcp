@@ -1,5 +1,7 @@
 package simple.marauroa.application.core;
 
+import org.dreamer.event.bus.CentralLookup;
+import org.dreamer.event.bus.EventBus;
 import marauroa.common.game.RPObject;
 
 /**

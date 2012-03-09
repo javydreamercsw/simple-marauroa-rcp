@@ -1,4 +1,4 @@
-package simple.marauroa.application.core;
+package org.dreamer.event.bus;
 
 /**
  * This code is adapted from OpenBlueSky project. For some reason I'm unable to
@@ -7,6 +7,7 @@ package simple.marauroa.application.core;
  *
  * @author Javier A. Ortiz Bultrón <javier.ortiz.78@gmail.com>
  */
+import org.dreamer.event.bus.EventBusListener;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;

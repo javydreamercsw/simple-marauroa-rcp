@@ -1,5 +1,7 @@
 package simple.marauroa.application.core;
 
+import org.dreamer.event.bus.EventBusListener;
+import org.dreamer.event.bus.EventBus;
 import java.util.Collection;
 import static org.junit.Assert.*;
 import org.junit.*;

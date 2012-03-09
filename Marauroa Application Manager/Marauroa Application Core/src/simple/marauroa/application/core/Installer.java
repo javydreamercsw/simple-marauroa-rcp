@@ -2,6 +2,7 @@ package simple.marauroa.application.core;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.dreamer.event.bus.EventBus;
 import org.openide.modules.ModuleInstall;
 import org.openide.util.Exceptions;
 import simple.marauroa.application.api.IMarauroaApplication;
