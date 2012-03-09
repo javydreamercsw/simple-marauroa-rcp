@@ -1,4 +1,4 @@
-package simple.marauroa.application.core;
+package org.dreamer.event.bus;
 
 import java.util.Collection;
 import java.util.HashMap;

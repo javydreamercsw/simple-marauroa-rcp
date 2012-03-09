@@ -1,5 +1,6 @@
-package simple.marauroa.application.core;
+package org.dreamer.event.bus;
 
+import org.dreamer.event.bus.EventBus;
 import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;

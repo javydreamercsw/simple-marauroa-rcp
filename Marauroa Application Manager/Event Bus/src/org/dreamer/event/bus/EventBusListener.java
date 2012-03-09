@@ -1,4 +1,4 @@
-package simple.marauroa.application.core;
+package org.dreamer.event.bus;
 
 /**
  * This code is taken from OpenBlueSky project. For some reason I'm unable to 

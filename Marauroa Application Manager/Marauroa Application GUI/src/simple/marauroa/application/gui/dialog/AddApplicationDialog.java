@@ -8,6 +8,7 @@ package simple.marauroa.application.gui.dialog;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.dreamer.event.bus.EventBus;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
 import org.openide.DialogDisplayer;
@@ -17,7 +18,6 @@ import simple.marauroa.application.api.IAddApplicationDialogProvider;
 import simple.marauroa.application.api.IDataBase;
 import simple.marauroa.application.api.IMarauroaApplication;
 import simple.marauroa.application.api.IMarauroaApplicationProvider;
-import simple.marauroa.application.core.EventBus;
 import simple.marauroa.application.core.MarauroaApplication;
 import simple.marauroa.application.core.MarauroaApplicationRepository;
 

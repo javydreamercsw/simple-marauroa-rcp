@@ -4,6 +4,7 @@ package simple.marauroa.application.gui;
 import java.awt.BorderLayout;
 import java.util.Collection;
 import javax.swing.JComponent;
+import org.dreamer.event.bus.EventBus;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -14,7 +15,6 @@ import org.openide.util.lookup.Lookups;
 import org.openide.windows.TopComponent;
 import simple.marauroa.application.api.IDiagramManager;
 import simple.marauroa.application.api.IMarauroaApplication;
-import simple.marauroa.application.core.EventBus;
 
 /**
  * Top component which displays something.

@@ -1,5 +1,6 @@
 package simple.marauroa.application.core;
 
+import org.dreamer.event.bus.CentralLookup;
 import static org.junit.Assert.assertTrue;
 import org.junit.*;
 

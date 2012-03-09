@@ -9,6 +9,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ActionMap;
 import javax.swing.text.DefaultEditorKit;
+import org.dreamer.event.bus.EventBus;
+import org.dreamer.event.bus.EventBusListener;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -20,8 +22,6 @@ import org.openide.util.Exceptions;
 import org.openide.util.NbBundle.Messages;
 import org.openide.windows.TopComponent;
 import simple.marauroa.application.api.IMarauroaApplication;
-import simple.marauroa.application.core.EventBus;
-import simple.marauroa.application.core.EventBusListener;
 
 /**
  * Top component which displays something.
