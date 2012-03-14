@@ -7,7 +7,6 @@ package org.dreamer.event.bus;
  *
  * @author Javier A. Ortiz Bultrón <javier.ortiz.78@gmail.com>
  */
-import org.dreamer.event.bus.EventBusListener;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
