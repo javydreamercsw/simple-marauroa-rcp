@@ -1,5 +1,0 @@
-Manifest-Version: 1.0
-OpenIDE-Module: org.dreamer.event.bus/0
-OpenIDE-Module-Implementation-Version: 1
-OpenIDE-Module-Localizing-Bundle: org/dreamer/event/bus/Bundle.properties
-

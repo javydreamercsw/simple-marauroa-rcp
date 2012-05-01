@@ -6,7 +6,14 @@ package simple.marauroa.application.core.db;
 
 import java.io.Serializable;
 import java.util.List;
-import javax.persistence.*;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -15,7 +22,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Javier A. Ortiz Bultrón <javier.ortiz.78@gmail.com>
  */
 @Entity
-@Table(name = "server_plugin", catalog = "marauroa_app_manager", schema = "")
+@Table(name = "server_plugin")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "ServerPlugin.findAll", query = "SELECT s FROM ServerPlugin s"),
@@ -26,10 +33,13 @@ public class ServerPlugin implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
+    @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
+    @Column(name = "name")
     private String name;
     @Basic(optional = false)
+    @Column(name = "pluginPath")
     private String pluginPath;
     @ManyToMany(mappedBy = "serverPluginList")
     private List<Application> applicationList;

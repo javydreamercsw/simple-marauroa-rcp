@@ -5,8 +5,9 @@ import java.util.List;
 import org.openide.nodes.ChildFactory;
 import org.openide.nodes.Node;
 import org.openide.util.Exceptions;
+import org.openide.util.Lookup;
+import simple.marauroa.application.api.IDataBase;
 import simple.marauroa.application.api.IMarauroaApplication;
-import simple.marauroa.application.core.MarauroaApplicationRepository;
 
 /**
  *
@@ -16,7 +17,7 @@ public class MarauroaAppChildFactory extends ChildFactory<IMarauroaApplication> 
 
     @Override
     protected boolean createKeys(List<IMarauroaApplication> toPopulate) {
-        toPopulate.addAll(MarauroaApplicationRepository.getIMarauroaApplications());
+        toPopulate.addAll(Lookup.getDefault().lookup(IDataBase.class).getIMarauroaApplications());
         return true;
     }
 

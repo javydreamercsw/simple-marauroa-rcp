@@ -2,9 +2,9 @@ package simple.marauroa.application.core;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.dreamer.event.bus.EventBus;
 import org.openide.modules.ModuleInstall;
 import org.openide.util.Exceptions;
+import org.openide.util.Lookup;
 import simple.marauroa.application.api.IMarauroaApplication;
 
 /**
@@ -17,10 +17,9 @@ public class Installer extends ModuleInstall {
     public void restored() {
         //This covers all the scenarios you can exit the JVM except Windows Manager (for some reason)
         Runtime.getRuntime().addShutdownHook(new Thread() {
-
             @Override
             public void run() {
-                for (IMarauroaApplication app : EventBus.getDefault().lookupAll(IMarauroaApplication.class)) {
+                for (IMarauroaApplication app : Lookup.getDefault().lookupAll(IMarauroaApplication.class)) {
                     if (app.isRunning()) {
                         try {
                             Logger.getLogger(Installer.class.getName()).log(Level.WARNING,

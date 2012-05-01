@@ -8,7 +8,6 @@ package simple.marauroa.application.gui.dialog;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.dreamer.event.bus.EventBus;
 import org.netbeans.api.progress.ProgressHandle;
 import org.netbeans.api.progress.ProgressHandleFactory;
 import org.openide.DialogDisplayer;
@@ -19,7 +18,6 @@ import simple.marauroa.application.api.IDataBase;
 import simple.marauroa.application.api.IMarauroaApplication;
 import simple.marauroa.application.api.IMarauroaApplicationProvider;
 import simple.marauroa.application.core.MarauroaApplication;
-import simple.marauroa.application.core.MarauroaApplicationRepository;
 
 /**
  *
@@ -30,7 +28,6 @@ public class AddApplicationDialog extends javax.swing.JDialog {
     private final ArrayList<IMarauroaApplication> applications =
             new ArrayList<IMarauroaApplication>();
     private final static RequestProcessor RP = new RequestProcessor("Adding application", 1, true);
-    private final static Logger LOG = Logger.getLogger(AddApplicationDialog.class.getName());
 
     /**
      * Creates new form AddApplicationDialog
@@ -158,7 +155,6 @@ public class AddApplicationDialog extends javax.swing.JDialog {
                                         + System.getProperty("file.separator")
                                         + newInstance.getName());
                             }
-                            EventBus.getDefault().add(newInstance);
                             //Add to database
                             Lookup.getDefault().lookup(IDataBase.class).addApplication(newInstance);
                             setVisible(false);
@@ -232,7 +228,7 @@ public class AddApplicationDialog extends javax.swing.JDialog {
             }
             options.setModel(new javax.swing.AbstractListModel() {
 
-                final Object[] objects = MarauroaApplicationRepository.getIMarauroaApplications().toArray();
+                final Object[] objects = Lookup.getDefault().lookup(IDataBase.class).getIMarauroaApplications().toArray();
 
                 @Override
                 public int getSize() {
