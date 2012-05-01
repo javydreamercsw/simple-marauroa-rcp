@@ -1,5 +1,6 @@
 package simple.marauroa.application.core.db.manager;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import org.openide.util.Exceptions;
@@ -54,5 +55,10 @@ public class DatabaseTool implements IDataBase {
         }else{
             return null;
         }
+    }
+
+    @Override
+    public Collection<? extends IMarauroaApplication> getIMarauroaApplications() {
+        return DataBaseManager.getMarauroaApplications();
     }
 }

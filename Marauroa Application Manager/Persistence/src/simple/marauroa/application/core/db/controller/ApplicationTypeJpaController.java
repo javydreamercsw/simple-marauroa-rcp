@@ -17,7 +17,6 @@ import javax.persistence.EntityManagerFactory;
 import simple.marauroa.application.core.db.ApplicationType;
 import simple.marauroa.application.core.db.controller.exceptions.IllegalOrphanException;
 import simple.marauroa.application.core.db.controller.exceptions.NonexistentEntityException;
-import simple.marauroa.application.core.db.controller.exceptions.PreexistingEntityException;
 
 /**
  *
@@ -34,7 +33,7 @@ public class ApplicationTypeJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(ApplicationType applicationType) throws PreexistingEntityException, Exception {
+    public void create(ApplicationType applicationType) {
         if (applicationType.getApplicationList() == null) {
             applicationType.setApplicationList(new ArrayList<Application>());
         }
@@ -59,11 +58,6 @@ public class ApplicationTypeJpaController implements Serializable {
                 }
             }
             em.getTransaction().commit();
-        } catch (Exception ex) {
-            if (findApplicationType(applicationType.getId()) != null) {
-                throw new PreexistingEntityException("ApplicationType " + applicationType + " already exists.", ex);
-            }
-            throw ex;
         } finally {
             if (em != null) {
                 em.close();

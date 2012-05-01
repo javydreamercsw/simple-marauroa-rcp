@@ -62,8 +62,6 @@
                 <source>./Card Game Extension/src</source>
                 
                 <source>./H2 Database Driver/src</source>
-                
-                <source>./Event Bus/src</source>
                 </sources>
                         </configuration>
                     </execution>

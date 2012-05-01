@@ -1,5 +1,7 @@
 package simple.marauroa.application.api;
 
+import java.util.Collection;
+
 /**
  *
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
@@ -31,4 +33,10 @@ public interface IDataBase {
      * @return IMarauroaApplication
      */
     public IMarauroaApplication getApplication(String name);
+    
+    /**
+     * Get the Marauroa applications
+     * @return List of applications
+     */
+    public Collection<? extends IMarauroaApplication> getIMarauroaApplications();
 }

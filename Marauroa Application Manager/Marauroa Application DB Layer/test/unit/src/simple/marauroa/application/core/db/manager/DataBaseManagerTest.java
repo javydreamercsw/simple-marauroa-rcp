@@ -2,12 +2,12 @@ package simple.marauroa.application.core.db.manager;
 
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openide.util.Exceptions;
 import simple.marauroa.application.core.DefaultMarauroaApplication;
-import static org.junit.Assert.*;
 import simple.marauroa.application.core.db.Application;
 import simple.marauroa.application.core.db.ApplicationType;
 import simple.marauroa.application.core.db.controller.exceptions.NonexistentEntityException;
@@ -67,16 +67,5 @@ public class DataBaseManagerTest {
             }
         }
         assertTrue(DataBaseManager.getApplications().isEmpty());
-    }
-
-    /**
-     * Test of loadApplications method, of class DataBaseManager.
-     */
-    @Test
-    public void testLoadApplications() {
-        System.out.println("loadApplications");
-        DataBaseManager.loadApplications();
-        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
     }
 }

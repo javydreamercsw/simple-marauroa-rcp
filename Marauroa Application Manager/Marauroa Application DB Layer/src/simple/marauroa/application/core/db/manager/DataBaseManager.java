@@ -1,6 +1,8 @@
 package simple.marauroa.application.core.db.manager;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -10,13 +12,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.*;
 import javax.swing.JDialog;
-import org.dreamer.event.bus.EventBus;
-import org.dreamer.event.bus.EventBusListener;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
+import org.openide.util.LookupEvent;
+import org.openide.util.LookupListener;
 import org.openide.util.NbBundle;
+import org.openide.util.Utilities;
 import simple.marauroa.application.api.IAddApplicationDialogProvider;
 import simple.marauroa.application.api.IMarauroaApplication;
 import simple.marauroa.application.api.IMarauroaApplicationProvider;
@@ -35,7 +38,7 @@ import simple.marauroa.application.core.db.controller.exceptions.PreexistingEnti
  *
  * @author Javier A. Ortiz Bultrón <javier.ortiz.78@gmail.com>
  */
-public final class DataBaseManager implements EventBusListener<IMarauroaApplication> {
+public final class DataBaseManager implements LookupListener {
 
     private static HashMap<String, String> parameters = new HashMap<String, String>();
     private static String puName = "Database_LayerPU";
@@ -46,6 +49,10 @@ public final class DataBaseManager implements EventBusListener<IMarauroaApplicat
             + "Applications" + System.getProperty("file.separator");
     private static HashMap<String, IMarauroaApplicationProvider> providers =
             new HashMap<String, IMarauroaApplicationProvider>();
+    private static boolean loaded=false;
+    private Lookup.Result<IMarauroaApplication> result =
+            Utilities.actionsGlobalContext().lookupResult(IMarauroaApplication.class);
+    private final static ArrayList<IMarauroaApplication> apps = new ArrayList<IMarauroaApplication>();
 
     /**
      * @return the properties
@@ -71,13 +78,15 @@ public final class DataBaseManager implements EventBusListener<IMarauroaApplicat
     private DataBaseManager(String pu) {
         puName = pu;
         emf = Persistence.createEntityManagerFactory(pu);
+        //Set up the listener stuff
+        result.allItems();
+        result.addLookupListener(DataBaseManager.this);
     }
 
     public static DataBaseManager get(String pu) {
         if (instance == null
                 || (instance != null && !instance.getPersistenceUnitName().equals(pu))) {
             instance = new DataBaseManager(pu);
-            EventBus.getDefault().subscribe(IMarauroaApplication.class, instance);
             getEntityManager();
             //SCR 2417: Store the new Persistence Name
             puName = pu;
@@ -89,10 +98,16 @@ public final class DataBaseManager implements EventBusListener<IMarauroaApplicat
         if (instance == null
                 || (instance != null && !instance.getPersistenceUnitName().equals(puName))) {
             instance = new DataBaseManager(puName);
-            EventBus.getDefault().subscribe(IMarauroaApplication.class, instance);
             getEntityManager();
         }
         return instance;
+    }
+
+    public static List<IMarauroaApplication> getMarauroaApplications() {
+        if(!loaded){
+            loadApplications();
+        }
+        return apps;
     }
 
     /**
@@ -261,114 +276,113 @@ public final class DataBaseManager implements EventBusListener<IMarauroaApplicat
     /*
      * Load applications already on file system
      */
-    public static void loadApplications() {
-        File path;
-        //Load from database
-        for (Application app : DataBaseManager.getApplications()) {
-            //Check if the application path exists
-            path = new File(app.getApplicationPath());
-            Logger.getLogger(DataBaseManager.class.getSimpleName()).log(Level.FINE,
-                    "Looking for application path at: {0}", app.getApplicationPath());
-            if (!path.exists()) {
-                NotifyDescriptor nd = new NotifyDescriptor.Confirmation(
-                        "<html><font size=+1 color=red>"
-                        + NbBundle.getMessage(
-                        MarauroaApplication.class,
-                        "acknowledge")
-                        + "</font><br>"
-                        + "<br>"
-                        + NbBundle.getMessage(
-                        MarauroaApplication.class,
-                        "application.dir.not.exists").replaceAll("%a", app.getName())
-                        + "<b><b>" + NbBundle.getMessage(
-                        MarauroaApplication.class,
-                        "application.dir.not.exists.fix") + "<br>"
-                        + "&nbsp;&nbsp;<b>" + NbBundle.getMessage(
-                        MarauroaApplication.class,
-                        "yes") + "</b> - to Correct<br>"
-                        + "&nbsp;&nbsp;<b>" + NbBundle.getMessage(
-                        MarauroaApplication.class,
-                        "no") + "</b> - to Delete<br>",
-                        NotifyDescriptor.YES_NO_OPTION);
-                Object result = DialogDisplayer.getDefault().notify(nd);
-                if (result == NotifyDescriptor.YES_OPTION) {
-                    IAddApplicationDialogProvider dialogProvider =
-                            Lookup.getDefault().lookup(IAddApplicationDialogProvider.class);
-                    JDialog dialog = dialogProvider.getDialog();
-                    dialogProvider.setApplicationName(app.getName());
-                    dialogProvider.setEditableApplicationName(false);
-                    dialogProvider.setIgnoreFolderCreation(true);
-                    dialog.setLocationRelativeTo(null);
-                    dialog.setVisible(true);
-                } else if (result == NotifyDescriptor.NO_OPTION) {
-                    try {
-                        //Delete!
-                        deleteApplication(app);
-                        //Delete the folder as well
-                        MarauroaApplicationRepository.deleteFolder(path);
-                    } catch (NonexistentEntityException ex) {
-                        Exceptions.printStackTrace(ex);
+    private static void loadApplications() {
+        if (!loaded) {
+            File path;
+            //Load from database 
+            for (Application app : DataBaseManager.getApplications()) {
+                //Check if the application path exists
+                path = new File(app.getApplicationPath());
+                Logger.getLogger(DataBaseManager.class.getSimpleName()).log(Level.FINE,
+                        "Looking for application path at: {0}", app.getApplicationPath());
+                if (!path.exists()) {
+                    NotifyDescriptor nd = new NotifyDescriptor.Confirmation(
+                            "<html><font size=+1 color=red>"
+                            + NbBundle.getMessage(
+                            MarauroaApplication.class,
+                            "acknowledge")
+                            + "</font><br>"
+                            + "<br>"
+                            + NbBundle.getMessage(
+                            MarauroaApplication.class,
+                            "application.dir.not.exists").replaceAll("%a", app.getName())
+                            + "<b><b>" + NbBundle.getMessage(
+                            MarauroaApplication.class,
+                            "application.dir.not.exists.fix") + "<br>"
+                            + "&nbsp;&nbsp;<b>" + NbBundle.getMessage(
+                            MarauroaApplication.class,
+                            "yes") + "</b> - to Correct<br>"
+                            + "&nbsp;&nbsp;<b>" + NbBundle.getMessage(
+                            MarauroaApplication.class,
+                            "no") + "</b> - to Delete<br>",
+                            NotifyDescriptor.YES_NO_OPTION);
+                    Object result = DialogDisplayer.getDefault().notify(nd);
+                    if (result == NotifyDescriptor.YES_OPTION) {
+                        IAddApplicationDialogProvider dialogProvider =
+                                Lookup.getDefault().lookup(IAddApplicationDialogProvider.class);
+                        JDialog dialog = dialogProvider.getDialog();
+                        dialogProvider.setApplicationName(app.getName());
+                        dialogProvider.setEditableApplicationName(false);
+                        dialogProvider.setIgnoreFolderCreation(true);
+                        dialog.setLocationRelativeTo(null);
+                        dialog.setVisible(true);
+                    } else if (result == NotifyDescriptor.NO_OPTION) {
+                        try {
+                            //Delete!
+                            deleteApplication(app);
+                            //Delete the folder as well
+                            MarauroaApplicationRepository.deleteFolder(path);
+                        } catch (NonexistentEntityException ex) {
+                            Exceptions.printStackTrace(ex);
+                        }
                     }
                 }
-            } else {
-                IMarauroaApplication application = getMarauroaApplication(app);
-                if (application != null) {
-                    //Notify the EventBus, the listeners will take care of the rest
-                    EventBus.getDefault().add(application);
-                }
+                apps.add(getMarauroaApplication(app));
             }
-        }
-        //Now look in the file system
-        path = new File(MarauroaApplication.workingDir + "Applications");
-        if (path.exists()) {
-            for (File temp : path.listFiles()) {
-                //We are looking for directories only
-                if (temp.isDirectory()) {
-                    //Check if it is on the database
-                    if (!DataBaseManager.applicationExists(temp.getName())) {
-                        NotifyDescriptor nd = new NotifyDescriptor.Confirmation(
-                                "<html><font size=+1 color=red>"
-                                + NbBundle.getMessage(
-                                MarauroaApplication.class,
-                                "acknowledge")
-                                + "</font><br>"
-                                + "<br>"
-                                + NbBundle.getMessage(
-                                MarauroaApplication.class,
-                                "application.found.orphan.directory").replaceAll("%d",
-                                temp.toURI().getPath()) + "<br>"
-                                + "<b><b>" + NbBundle.getMessage(
-                                MarauroaApplication.class,
-                                "application.dir.not.exists.fix") + "<br>"
-                                + "&nbsp;&nbsp;<b>" + NbBundle.getMessage(
-                                MarauroaApplication.class,
-                                "yes") + "</b> - to Correct<br>"
-                                + "&nbsp;&nbsp;<b>" + NbBundle.getMessage(
-                                MarauroaApplication.class,
-                                "no") + "</b> - to Delete<br>",
-                                NotifyDescriptor.YES_NO_OPTION);
-                        Object result = DialogDisplayer.getDefault().notify(nd);
-                        if (result == NotifyDescriptor.YES_OPTION) {
-                            IAddApplicationDialogProvider dialogProvider =
-                                    Lookup.getDefault().lookup(IAddApplicationDialogProvider.class);
-                            JDialog dialog = dialogProvider.getDialog();
-                            dialogProvider.setApplicationName(temp.getName());
-                            dialogProvider.setEditableApplicationName(false);
-                            dialogProvider.setIgnoreFolderCreation(false);
-                            dialog.setLocationRelativeTo(null);
-                            dialog.setVisible(true);
-                        } else if (result == NotifyDescriptor.NO_OPTION) {
-                            //Delete the folder as well
-                            MarauroaApplicationRepository.deleteFolder(temp);
+            //Now look in the file system
+            path = new File(MarauroaApplication.workingDir + "Applications");
+            if (path.exists()) {
+                for (File temp : path.listFiles()) {
+                    //We are looking for directories only
+                    if (temp.isDirectory()) {
+                        //Check if it is on the database
+                        if (!DataBaseManager.applicationExists(temp.getName())) {
+                            NotifyDescriptor nd = new NotifyDescriptor.Confirmation(
+                                    "<html><font size=+1 color=red>"
+                                    + NbBundle.getMessage(
+                                    MarauroaApplication.class,
+                                    "acknowledge")
+                                    + "</font><br>"
+                                    + "<br>"
+                                    + NbBundle.getMessage(
+                                    MarauroaApplication.class,
+                                    "application.found.orphan.directory").replaceAll("%d",
+                                    temp.toURI().getPath()) + "<br>"
+                                    + "<b><b>" + NbBundle.getMessage(
+                                    MarauroaApplication.class,
+                                    "application.dir.not.exists.fix") + "<br>"
+                                    + "&nbsp;&nbsp;<b>" + NbBundle.getMessage(
+                                    MarauroaApplication.class,
+                                    "yes") + "</b> - to Correct<br>"
+                                    + "&nbsp;&nbsp;<b>" + NbBundle.getMessage(
+                                    MarauroaApplication.class,
+                                    "no") + "</b> - to Delete<br>",
+                                    NotifyDescriptor.YES_NO_OPTION);
+                            Object result = DialogDisplayer.getDefault().notify(nd);
+                            if (result == NotifyDescriptor.YES_OPTION) {
+                                IAddApplicationDialogProvider dialogProvider =
+                                        Lookup.getDefault().lookup(IAddApplicationDialogProvider.class);
+                                JDialog dialog = dialogProvider.getDialog();
+                                dialogProvider.setApplicationName(temp.getName());
+                                dialogProvider.setEditableApplicationName(false);
+                                dialogProvider.setIgnoreFolderCreation(false);
+                                dialog.setLocationRelativeTo(null);
+                                dialog.setVisible(true);
+                            } else if (result == NotifyDescriptor.NO_OPTION) {
+                                //Delete the folder as well
+                                MarauroaApplicationRepository.deleteFolder(temp);
+                            }
                         }
                     }
                 }
             }
-        }
-        //Update applications as well
-        for (IMarauroaApplication app :
-                EventBus.getDefault().lookupAll(IMarauroaApplication.class)) {
-            app.update();
+            synchronized(apps){
+            for (Iterator<? extends IMarauroaApplication> it = apps.iterator(); it.hasNext();) {
+                IMarauroaApplication app = it.next();
+                app.update();
+            }
+            }
+            loaded = true;
         }
     }
 
@@ -397,11 +411,23 @@ public final class DataBaseManager implements EventBusListener<IMarauroaApplicat
     }
 
     @Override
-    public void notify(IMarauroaApplication app) {
+    public void resultChanged(LookupEvent le) {
         //Check to see if the application is registered, 
         //if not register it in the database
-        if (app != null) {
-            DataBaseManager.addApplication(app);
+        Lookup.Result res = (Lookup.Result) le.getSource();
+        Collection instances = res.allInstances();
+
+        if (!instances.isEmpty()) {
+            Iterator it = instances.iterator();
+            while (it.hasNext()) {
+                Object item = it.next();
+                if (item instanceof IMarauroaApplication) {
+                    IMarauroaApplication app = (IMarauroaApplication) item;
+                    if (app != null) {
+                        DataBaseManager.addApplication(app);
+                    }
+                }
+            }
         }
     }
 }
