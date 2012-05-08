@@ -9,7 +9,7 @@ import marauroa.common.game.RPObject;
 import org.openide.nodes.ChildFactory;
 import org.openide.nodes.Node;
 import org.openide.util.Exceptions;
-import simple.marauroa.application.core.EventBus;
+import org.openide.util.Lookup;
 
 /**
  *
@@ -19,7 +19,6 @@ public class ClientRPObjectChildFactory extends ChildFactory<RPObject> {
 
     static final Comparator<RPObject> NAME_ORDER =
             new Comparator<RPObject>() {
-
                 @Override
                 public int compare(RPObject e1, RPObject e2) {
                     return e1.get("name").compareTo(e2.get("name"));
@@ -29,7 +28,7 @@ public class ClientRPObjectChildFactory extends ChildFactory<RPObject> {
     @Override
     protected boolean createKeys(List<RPObject> list) {
         for (Iterator<? extends RPObject> it =
-                EventBus.getDefault().lookupAll(RPObject.class).iterator(); it.hasNext();) {
+                Lookup.getDefault().lookupAll(RPObject.class).iterator(); it.hasNext();) {
             RPObject object = it.next();
             list.add(object);
             Collections.sort(list, NAME_ORDER);

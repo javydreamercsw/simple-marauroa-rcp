@@ -8,10 +8,12 @@ import org.openide.awt.ActionReference;
 import org.openide.explorer.ExplorerManager;
 import org.openide.explorer.ExplorerUtils;
 import org.openide.explorer.view.ListView;
+import org.openide.util.Lookup;
+import org.openide.util.LookupEvent;
+import org.openide.util.LookupListener;
 import org.openide.util.NbBundle;
+import org.openide.util.Utilities;
 import org.openide.windows.TopComponent;
-import simple.marauroa.application.core.EventBus;
-import simple.marauroa.application.core.EventBusListener;
 import simple.marauroa.application.core.tool.Tool;
 import simple.marauroa.event.manager.zone.dialog.ZoneDialog;
 
@@ -31,11 +33,12 @@ persistenceType = TopComponent.PERSISTENCE_NEVER)
 @TopComponent.OpenActionRegistration(displayName = "#CTL_ZoneListAction",
 preferredID = "ZoneListTopComponent")
 public final class ZoneListTopComponent extends TopComponent
-        implements ExplorerManager.Provider, EventBusListener<IRPZone> {
+        implements ExplorerManager.Provider, LookupListener {
 
     private final ExplorerManager mgr = new ExplorerManager();
     final ArrayList<String> zones = new ArrayList<String>();
     private ZoneDialog crd = null;
+    private Lookup.Result<IRPZone> result = Utilities.actionsGlobalContext().lookupResult(IRPZone.class);
 
     public ZoneListTopComponent() {
         initComponents();
@@ -43,6 +46,9 @@ public final class ZoneListTopComponent extends TopComponent
         setToolTipText(NbBundle.getMessage(ZoneListTopComponent.class, "HINT_ZoneListTopComponent"));
         putClientProperty(TopComponent.PROP_MAXIMIZATION_DISABLED, Boolean.TRUE);
         putClientProperty(TopComponent.PROP_SLIDING_DISABLED, Boolean.TRUE);
+        //Set up the listener stuff
+        result.allItems();
+        result.addLookupListener(ZoneListTopComponent.this);
         associateLookup(ExplorerUtils.createLookup(mgr, getActionMap()));
         mgr.setRootContext(new ClientRootNode(new ClientRPZoneChildFactory()));
     }
@@ -74,20 +80,9 @@ public final class ZoneListTopComponent extends TopComponent
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane zoneList;
     // End of variables declaration//GEN-END:variables
-
-    @Override
-    public void componentOpened() {
-        EventBus.getDefault().subscribe(IRPZone.class, this);
-    }
-
-    @Override
-    public void componentClosed() {
-        EventBus.getDefault().unsubscribe(IRPZone.class, this);
-    }
 
     void writeProperties(java.util.Properties p) {
         // better to version settings since initial version as advocated at
@@ -123,13 +118,13 @@ public final class ZoneListTopComponent extends TopComponent
         return mgr;
     }
 
-    @Override
-    public void notify(IRPZone object) {
-        update();
-    }
-
     public void update() {
         //Update on any change. The factory will take care of everything
         ((ClientRootNode) mgr.getRootContext()).refresh();
+    }
+
+    @Override
+    public void resultChanged(LookupEvent le) {
+        update();
     }
 }

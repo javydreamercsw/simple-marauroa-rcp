@@ -8,13 +8,13 @@ import java.util.logging.Logger;
 import javax.swing.JFrame;
 import marauroa.common.game.RPEvent;
 import marauroa.common.game.RPObject;
+import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.openide.util.lookup.ServiceProvider;
 import org.openide.util.lookup.ServiceProviders;
 import org.openide.windows.TopComponent;
 import simple.client.EventLine;
 import simple.common.NotificationType;
-import simple.marauroa.application.core.EventBus;
 import simple.marauroa.application.core.tool.Tool;
 import simple.marauroa.client.components.api.IPrivateChatManager;
 import simple.marauroa.client.components.api.IUserListActionProvider;
@@ -126,7 +126,7 @@ public class PrivateChatManager implements IPrivateChatManager, IUserListActionP
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            getDialog(EventBus.getDefault().lookup(RPObject.class).get("name")).setVisible(true);
+            getDialog(Lookup.getDefault().lookup(RPObject.class).get("name")).setVisible(true);
         }
 
         private PrivateChatDialog getDialog(String target) {

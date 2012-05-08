@@ -1,6 +1,5 @@
 package simple.marauroa.client.components.userlist;
 
-import marauroa.common.game.RPObject;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -9,7 +8,6 @@ import org.openide.explorer.ExplorerUtils;
 import org.openide.explorer.view.ListView;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
-import simple.marauroa.application.core.EventBusListener;
 
 /**
  * Top component which displays something.
@@ -26,7 +24,7 @@ persistenceType = TopComponent.PERSISTENCE_NEVER)
 @TopComponent.OpenActionRegistration(displayName = "#CTL_UserListAction",
 preferredID = "UserListTopComponent")
 public final class UserListTopComponent extends TopComponent
-        implements ExplorerManager.Provider, EventBusListener<RPObject> {
+        implements ExplorerManager.Provider{
 
     private final ExplorerManager mgr = new ExplorerManager();
 
@@ -85,11 +83,6 @@ public final class UserListTopComponent extends TopComponent
     @Override
     public ExplorerManager getExplorerManager() {
         return mgr;
-    }
-
-    @Override
-    public void notify(RPObject object) {
-        update();
     }
 
     public void update() {
