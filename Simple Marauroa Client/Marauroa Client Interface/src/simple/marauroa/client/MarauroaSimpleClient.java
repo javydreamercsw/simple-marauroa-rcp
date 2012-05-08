@@ -1,5 +1,6 @@
 package simple.marauroa.client;
 
+import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,13 +20,13 @@ import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.RequestProcessor;
 import org.openide.util.TaskListener;
+import org.openide.util.lookup.AbstractLookup;
+import org.openide.util.lookup.InstanceContent;
 import org.openide.util.lookup.ServiceProvider;
 import simple.client.SimpleClient;
 import simple.client.action.update.ClientGameConfiguration;
 import simple.client.event.listener.RPEventListener;
 import simple.common.game.ClientObjectInterface;
-import simple.marauroa.application.core.EventBus;
-import simple.marauroa.application.core.LookupRPObjectManager;
 import simple.marauroa.client.components.api.IClientFramework;
 import simple.marauroa.client.components.common.MCITool;
 import simple.server.core.action.WellKnownActionConstant;
@@ -41,7 +42,7 @@ import simple.server.core.action.chat.ChatAction;
  */
 @ServiceProvider(service = IClientFramework.class)
 public class MarauroaSimpleClient extends SimpleClient implements
-        IClientFramework {
+        IClientFramework, Lookup.Provider {
 
     private boolean loginDone = false, profileReady = false;
     protected String userName;
@@ -66,6 +67,8 @@ public class MarauroaSimpleClient extends SimpleClient implements
      * When enabled zone is notified when a player enters/exit the zone.
      */
     private boolean chatNotifications = true;
+    private InstanceContent content = new InstanceContent();
+    private Lookup dynamicLookup = new AbstractLookup(content);
 
     public MarauroaSimpleClient() {
         super(LOG4J_PROPERTIES);
@@ -84,9 +87,6 @@ public class MarauroaSimpleClient extends SimpleClient implements
                 + System.getProperty("file.separator")
                 + "." + gameName + System.getProperty("file.separator");
         startSwingLookAndFeel();
-        if (logger.isLoggable(Level.FINE)) {
-            EventBus.getDefault().getCentralLookup().setShowContents(true);
-        }
     }
 
     @Override
@@ -222,7 +222,7 @@ public class MarauroaSimpleClient extends SimpleClient implements
                         new Object[]{userName, result.getResult()});
                 DialogDisplayer.getDefault().notify(new NotifyDescriptor(
                         "Unable to create account: " + userName + ".\n"
-                        + result == null ? "" : result.getResult(),
+                        + result.getResult(),
                         "Account creation failed", // title of the dialog
                         NotifyDescriptor.PLAIN_MESSAGE,
                         NotifyDescriptor.ERROR_MESSAGE,
@@ -398,7 +398,7 @@ public class MarauroaSimpleClient extends SimpleClient implements
      */
     private static void startSwingLookAndFeel() {
         try {
-            if (System.getProperty("os.name", "").toLowerCase().indexOf("windows") > -1) {
+            if (System.getProperty("os.name", "").toLowerCase(Locale.getDefault()).indexOf("windows") > -1) {
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             }
         } catch (Exception e) {
@@ -421,7 +421,6 @@ public class MarauroaSimpleClient extends SimpleClient implements
             theTask = RP.create(this); //the task is not started yet
 
             theTask.addTaskListener(new TaskListener() {
-
                 @Override
                 public void taskFinished(org.openide.util.Task task) {
                     if (running) {
@@ -469,13 +468,14 @@ public class MarauroaSimpleClient extends SimpleClient implements
             logger.log(Level.FINE, "onAdded object: {0}", object.toAttributeString());
             if (object.getInt("id") > 0) {
                 //Check the lookup to see if its already there
-                for (RPObject player : EventBus.getDefault().lookupAll(RPObject.class)) {
+                for (RPObject player : dynamicLookup.lookupAll(RPObject.class)) {
                     if (player.get("name").equals(object.get("name"))) {
-                        EventBus.getDefault().getCentralLookup().remove(player);
+                        content.remove(player);
+                        break;
                     }
                 }
                 //Add it to the lookup
-                EventBus.getDefault().getCentralLookup().add(object);
+                content.add(object);
             }
         }
         return true;
@@ -483,9 +483,18 @@ public class MarauroaSimpleClient extends SimpleClient implements
 
     @Override
     public boolean onDeleted(RPObject object) {
-        logger.log(Level.FINE, "onDeleted object: {0}", object);
         if (object != null) {
-            LookupRPObjectManager.remove(object);
+            logger.log(Level.FINE, "onDeleted object: {0}", object);
+            if (object.getInt("id") > 0) {
+                //Check the lookup to see if its already there
+                for (RPObject player : dynamicLookup.lookupAll(RPObject.class)) {
+                    if (player.get("name").equals(object.get("name"))) {
+                        //Remove it
+                        content.remove(player);
+                        break;
+                    }
+                }
+            }
         }
         return true;
     }
@@ -542,5 +551,27 @@ public class MarauroaSimpleClient extends SimpleClient implements
     @Override
     public void changeScreen(int screen) {
         //Do nothing by default
+    }
+
+    @Override
+    public Lookup getLookup() {
+        return dynamicLookup;
+    }
+
+    @Override
+    public void clearObjectFromLookup(Class c) {
+        for(Object object:getLookup().lookupAll(c)){
+            content.remove(object);
+        }
+    }
+
+    @Override
+    public void addToLookup(Object object) {
+        content.add(object);
+    }
+
+    @Override
+    public void removeFromLookup(Object object) {
+        content.remove(object);
     }
 }

@@ -11,14 +11,15 @@ import marauroa.client.ClientFramework;
 import marauroa.common.game.IRPZone;
 import marauroa.common.game.RPAction;
 import marauroa.common.game.RPEvent;
+import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
 import org.openide.util.Utilities;
 import org.openide.util.lookup.ServiceProvider;
 import org.openide.util.lookup.ServiceProviders;
 import org.openide.windows.TopComponent;
-import simple.marauroa.application.core.EventBus;
 import simple.marauroa.application.core.Zone;
 import simple.marauroa.application.core.tool.Tool;
+import simple.marauroa.client.components.api.IClientFramework;
 import simple.marauroa.client.components.api.IZoneListActionProvider;
 import simple.marauroa.client.components.api.IZoneListManager;
 import simple.marauroa.client.components.api.actions.ZoneListAction;
@@ -115,7 +116,7 @@ public class ZoneEventManager implements IZoneListManager, IZoneListActionProvid
         if (desc != null) {
             newZone.setDescription(desc);
         }
-        EventBus.getDefault().add(newZone);
+        Lookup.getDefault().lookup(IClientFramework.class).addToLookup(newZone);
     }
 
     @Override
@@ -128,7 +129,7 @@ public class ZoneEventManager implements IZoneListManager, IZoneListActionProvid
                 zoneName = zoneName.substring(0, zoneName.indexOf(':'));
             }
             if (zoneName.equals(zone)) {
-                EventBus.getDefault().remove(z);
+                Lookup.getDefault().lookup(IClientFramework.class).removeFromLookup(z);
             }
         }
     }
@@ -146,8 +147,8 @@ public class ZoneEventManager implements IZoneListManager, IZoneListActionProvid
                 if (z instanceof SimpleRPZone) {
                     ((SimpleRPZone) z).setDescription(modified);
                     IRPZone copy = z;
-                    EventBus.getDefault().remove(z);
-                    EventBus.getDefault().add((Zone) copy);
+                    Lookup.getDefault().lookup(IClientFramework.class).removeFromLookup(z);
+                    Lookup.getDefault().lookup(IClientFramework.class).addToLookup((Zone) copy);
                     break;
                 } else {
                     logger.warning("Zone is not an instance of SimpleRPZone.");

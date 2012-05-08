@@ -9,7 +9,7 @@ import marauroa.common.game.IRPZone;
 import org.openide.nodes.ChildFactory;
 import org.openide.nodes.Node;
 import org.openide.util.Exceptions;
-import simple.marauroa.application.core.EventBus;
+import org.openide.util.Lookup;
 import simple.marauroa.application.core.Zone;
 
 /**
@@ -20,7 +20,6 @@ public class ClientRPZoneChildFactory extends ChildFactory<Zone> {
 
     static final Comparator<IRPZone> NAME_ORDER =
             new Comparator<IRPZone>() {
-
                 @Override
                 public int compare(IRPZone z1, IRPZone z2) {
                     return z1.getID().toString().compareTo(z2.getID().toString());
@@ -30,7 +29,7 @@ public class ClientRPZoneChildFactory extends ChildFactory<Zone> {
     @Override
     protected boolean createKeys(List<Zone> list) {
         for (Iterator<? extends Zone> it =
-                EventBus.getDefault().lookupAll(Zone.class).iterator(); it.hasNext();) {
+                Lookup.getDefault().lookupAll(Zone.class).iterator(); it.hasNext();) {
             Zone zone = it.next();
             list.add(zone);
             Collections.sort(list, NAME_ORDER);

@@ -1,10 +1,14 @@
 package simple.marauroa.client.components.userlist;
 
 import marauroa.common.game.RPObject;
+import org.openide.util.Lookup;
+import org.openide.util.LookupEvent;
+import org.openide.util.Utilities;
 import org.openide.util.lookup.ServiceProvider;
 import org.openide.windows.TopComponent;
-import simple.marauroa.application.core.EventBus;
+import simple.marauroa.client.components.api.IClientFramework;
 import simple.marauroa.client.components.api.IUserListManager;
+import simple.server.core.entity.clientobject.ClientObject;
 
 /**
  *
@@ -14,6 +18,7 @@ import simple.marauroa.client.components.api.IUserListManager;
 public class UserListManager implements IUserListManager {
 
     private static UserListTopComponent instance;
+    private Lookup.Result<ClientObject> result = Utilities.actionsGlobalContext().lookupResult(ClientObject.class);
 
     @Override
     public UserListTopComponent getComponent() {
@@ -24,6 +29,9 @@ public class UserListManager implements IUserListManager {
                     break;
                 }
             }
+            //Set up the listener stuff
+            result.allItems();
+            result.addLookupListener(UserListManager.this);
         }
         return instance;
     }
@@ -41,14 +49,12 @@ public class UserListManager implements IUserListManager {
     }
 
     @Override
-    public void notify(RPObject object) {
-        getComponent().update();
+    public void clearList() {
+        Lookup.getDefault().lookup(IClientFramework.class).clearObjectFromLookup(ClientObject.class);
     }
 
     @Override
-    public void clearList() {
-        for (RPObject player : EventBus.getDefault().lookupAll(RPObject.class)) {
-            EventBus.getDefault().getCentralLookup().remove(player);
-        }
+    public void resultChanged(LookupEvent le) {
+        getComponent().update();
     }
 }

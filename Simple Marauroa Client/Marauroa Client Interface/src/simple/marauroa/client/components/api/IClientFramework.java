@@ -203,4 +203,25 @@ public interface IClientFramework extends Runnable {
      * @param screen Screen number id
      */
     public void changeScreen(int screen);
+
+    /**
+     * Clear all instances from the lookup of the specified class
+     *
+     * @param c Class of objects to remove
+     */
+    public void clearObjectFromLookup(Class c);
+
+    /**
+     * Add an object to the component's Lookup
+     *
+     * @param object Object to add
+     */
+    public void addToLookup(Object object);
+
+    /**
+     * Remove an object from the component's Lookup
+     *
+     * @param object Object to remove
+     */
+    public void removeFromLookup(Object object);
 }
