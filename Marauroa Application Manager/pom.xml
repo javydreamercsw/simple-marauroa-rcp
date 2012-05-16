@@ -62,10 +62,6 @@
                 <source>./Card Game Extension/src</source>
                 
                 <source>./H2 Database Driver/src</source>
-                
-                <source>./OpenMap/src</source>
-                
-                <source>./Map Component/src</source>
                 </sources>
                         </configuration>
                     </execution>

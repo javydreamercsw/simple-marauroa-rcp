@@ -4,5 +4,7 @@ OpenIDE-Module-Implementation-Version: 2
 OpenIDE-Module-Install: simple/marauroa/application/core/Installer.class
 OpenIDE-Module-Layer: simple/marauroa/application/core/layer.xml
 OpenIDE-Module-Localizing-Bundle: simple/marauroa/application/core/Bundle.properties
-OpenIDE-Module-Requires: org.openide.windows.WindowManager
+OpenIDE-Module-Requires: 
+  cnb.org.netbeans.modules.editor.mimelookup.impl,
+  org.openide.windows.WindowManager
 
