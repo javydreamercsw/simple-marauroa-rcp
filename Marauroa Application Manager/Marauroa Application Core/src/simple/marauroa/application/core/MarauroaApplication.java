@@ -734,7 +734,11 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
                 + System.getProperty("file.separator") + getName());
         if (folder != null && folder.exists()) {
             assert folder.isDirectory();
-            jars.addAll(Arrays.asList(folder.listFiles()));
+            for (File file : folder.listFiles()) {
+                if (file.isFile()) {
+                    jars.add(file);
+                }
+            }
         }
         return jars;
     }
