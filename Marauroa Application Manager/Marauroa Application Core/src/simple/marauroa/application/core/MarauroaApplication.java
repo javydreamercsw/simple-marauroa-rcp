@@ -421,10 +421,12 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
         MarauroaApplicationRepository.deleteFolder(dir);
         //Copy the required jars
         copyCoreJarsToDir(dir.getAbsolutePath(), false);
-        //Copy application specific jars as well
-        for (File customLib : getApplicationJars()) {
-            copyFile(customLib, new File(dir.getAbsolutePath()
-                    + System.getProperty("file.separator") + customLib.getName()));
+        for (Iterator<File> it = getApplicationJars().iterator(); it.hasNext();) {
+            File customLib = it.next();
+            if (customLib.isFile()) {
+                copyFile(customLib, new File(dir.getAbsolutePath()
+                        + System.getProperty("file.separator") + customLib.getName()));
+            }
         }
         OutputHandler.setStatus(NbBundle.getMessage(
                 MarauroaApplication.class,
@@ -696,6 +698,14 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
         if (!destFile.getParentFile().exists()) {
             //Make sure the new path exists
             destFile.getParentFile().mkdirs();
+        }
+        if (!sourceFile.exists()) {
+            throw new IOException("Source file: "
+                    + sourceFile.getAbsolutePath() + " doesn't exist!");
+        }
+        if (!sourceFile.canRead()) {
+            throw new IOException("Source file: "
+                    + sourceFile.getAbsolutePath() + " can't be read!");
         }
         FileChannel source = null;
         FileChannel destination = null;
