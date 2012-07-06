@@ -49,7 +49,7 @@ public final class DataBaseManager implements LookupListener {
             + "Applications" + System.getProperty("file.separator");
     private static HashMap<String, IMarauroaApplicationProvider> providers =
             new HashMap<String, IMarauroaApplicationProvider>();
-    private static boolean loaded=false;
+    private static boolean loaded = false;
     private Lookup.Result<IMarauroaApplication> result =
             Utilities.actionsGlobalContext().lookupResult(IMarauroaApplication.class);
     private final static ArrayList<IMarauroaApplication> apps = new ArrayList<IMarauroaApplication>();
@@ -104,8 +104,19 @@ public final class DataBaseManager implements LookupListener {
     }
 
     public static List<IMarauroaApplication> getMarauroaApplications() {
-        if(!loaded){
+        if (!loaded) {
             loadApplications();
+        }
+        synchronized (apps) {
+            apps.clear();
+            for (Iterator<Application> it = getApplications().iterator(); it.hasNext();) {
+                Application app = it.next();
+                apps.add(getMarauroaApplication(app));
+            }
+            for (Iterator<? extends IMarauroaApplication> it = apps.iterator(); it.hasNext();) {
+                IMarauroaApplication app = it.next();
+                app.update();
+            }
         }
         return apps;
     }
@@ -327,7 +338,6 @@ public final class DataBaseManager implements LookupListener {
                         }
                     }
                 }
-                apps.add(getMarauroaApplication(app));
             }
             //Now look in the file system
             path = new File(MarauroaApplication.workingDir + "Applications");
@@ -375,12 +385,6 @@ public final class DataBaseManager implements LookupListener {
                         }
                     }
                 }
-            }
-            synchronized(apps){
-            for (Iterator<? extends IMarauroaApplication> it = apps.iterator(); it.hasNext();) {
-                IMarauroaApplication app = it.next();
-                app.update();
-            }
             }
             loaded = true;
         }

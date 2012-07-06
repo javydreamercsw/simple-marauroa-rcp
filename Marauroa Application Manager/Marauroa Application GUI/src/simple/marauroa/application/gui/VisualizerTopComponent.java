@@ -5,8 +5,6 @@ import java.awt.BorderLayout;
 import java.util.Collection;
 import javax.swing.JComponent;
 import org.netbeans.api.settings.ConvertAsProperties;
-import org.openide.awt.ActionID;
-import org.openide.awt.ActionReference;
 import org.openide.explorer.view.BeanTreeView;
 import org.openide.util.*;
 import org.openide.util.NbBundle.Messages;
@@ -24,8 +22,6 @@ autostore = false)
 //iconBase="SET/PATH/TO/ICON/HERE", 
 persistenceType = TopComponent.PERSISTENCE_ALWAYS)
 @TopComponent.Registration(mode = "editor", openAtStartup = true)
-@ActionID(category = "Window", id = "simple.marauroa.application.gui.VisualizerTopComponent")
-@ActionReference(path = "Menu/Window" /*, position = 333 */)
 @TopComponent.OpenActionRegistration(displayName = "#CTL_VisualizerAction",
 preferredID = "VisualizerTopComponent")
 public final class VisualizerTopComponent extends TopComponent

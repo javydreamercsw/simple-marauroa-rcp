@@ -38,7 +38,7 @@ import simple.marauroa.application.gui.dialog.PluginConfigurationDialog;
 public class MarauroaApplicationNode extends BeanNode implements ApplicationStatusChangeListener {
 
     private AddRPZoneDialog dialog = null;
-    private PluginConfigurationDialog configDialog=null;
+    private PluginConfigurationDialog configDialog = null;
     private final PropertyChangeSupport supp = new PropertyChangeSupport(this);
     private IMarauroaApplication application;
     private Action[] actions;
@@ -145,7 +145,7 @@ public class MarauroaApplicationNode extends BeanNode implements ApplicationStat
     public void statusChanged() {
         //Update the actions in case something external changed the app status
         Logger.getLogger(MarauroaApplicationNode.class.getSimpleName()).fine(
-                    "Updating node actions due to status change...");
+                "Updating node actions due to status change...");
         actions = getActions(true);
         MonitorService service = Lookup.getDefault().lookup(MonitorService.class);
         if (service != null && application.getStatus().contains(STATUS.DISCONNECTED)) {
@@ -178,7 +178,7 @@ public class MarauroaApplicationNode extends BeanNode implements ApplicationStat
             dialog.setVisible(true);
         }
     }
-    
+
     private class ConfigureAction extends AbstractAction {
 
         public ConfigureAction() {
