@@ -12,8 +12,6 @@ import java.util.logging.Logger;
 import javax.swing.ActionMap;
 import javax.swing.text.DefaultEditorKit;
 import org.netbeans.api.settings.ConvertAsProperties;
-import org.openide.awt.ActionID;
-import org.openide.awt.ActionReference;
 import org.openide.explorer.ExplorerManager;
 import org.openide.explorer.ExplorerUtils;
 import org.openide.explorer.view.BeanTreeView;
@@ -36,8 +34,6 @@ autostore = false)
 //iconBase="SET/PATH/TO/ICON/HERE", 
 persistenceType = TopComponent.PERSISTENCE_ALWAYS)
 @TopComponent.Registration(mode = "explorer", openAtStartup = true)
-@ActionID(category = "Window", id = "simple.marauroa.application.gui.ApplicationExplorerTopComponent")
-@ActionReference(path = "Menu/Window" /*, position = 333 */)
 @TopComponent.OpenActionRegistration(displayName = "#CTL_ApplicationExplorerAction",
 preferredID = "ApplicationExplorerTopComponent")
 public final class ApplicationExplorerTopComponent extends TopComponent
@@ -148,7 +144,7 @@ public final class ApplicationExplorerTopComponent extends TopComponent
         return explorerManager;
     }
 
-    private void update() throws IntrospectionException {
+    public void update() throws IntrospectionException {
         ((RootNode) getExplorerManager().getRootContext()).refresh();
     }
 

@@ -127,11 +127,11 @@ public class AddApplicationDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_cancelActionPerformed
 
     private void createActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createActionPerformed
+        setEnabled(false);
         if (options.getSelectedIndex() >= 0) {
             if (MarauroaApplication.validateName(appName.getText())) {
 
                 Runnable runnable = new Runnable() {
-
                     @Override
                     public void run() {
                         try {
@@ -157,7 +157,6 @@ public class AddApplicationDialog extends javax.swing.JDialog {
                             }
                             //Add to database
                             Lookup.getDefault().lookup(IDataBase.class).addApplication(newInstance);
-                            setVisible(false);
                         } catch (InstantiationException ex) {
                             Exceptions.printStackTrace(ex);
                             setVisible(false);
@@ -165,13 +164,13 @@ public class AddApplicationDialog extends javax.swing.JDialog {
                             Exceptions.printStackTrace(ex);
                             setVisible(false);
                         }
+                        setVisible(false);
                     }
                 };
                 final RequestProcessor.Task theTask = RP.create(runnable);
 
                 final ProgressHandle ph = ProgressHandleFactory.createHandle("Adding application", theTask);
                 theTask.addTaskListener(new TaskListener() {
-
                     @Override
                     public void taskFinished(org.openide.util.Task task) {
                         //make sure that we get rid of the ProgressHandle
@@ -227,7 +226,6 @@ public class AddApplicationDialog extends javax.swing.JDialog {
                 }
             }
             options.setModel(new javax.swing.AbstractListModel() {
-
                 final Object[] objects = Lookup.getDefault().lookup(IDataBase.class).getIMarauroaApplications().toArray();
 
                 @Override
