@@ -113,10 +113,6 @@ public final class DataBaseManager implements LookupListener {
                 Application app = it.next();
                 apps.add(getMarauroaApplication(app));
             }
-            for (Iterator<? extends IMarauroaApplication> it = apps.iterator(); it.hasNext();) {
-                IMarauroaApplication app = it.next();
-                app.update();
-            }
         }
         return apps;
     }
@@ -327,6 +323,9 @@ public final class DataBaseManager implements LookupListener {
                         dialogProvider.setIgnoreFolderCreation(true);
                         dialog.setLocationRelativeTo(null);
                         dialog.setVisible(true);
+                        if (app instanceof IMarauroaApplication) {
+                            ((IMarauroaApplication) app).update();
+                        }
                     } else if (result == NotifyDescriptor.NO_OPTION) {
                         try {
                             //Delete!
@@ -378,6 +377,9 @@ public final class DataBaseManager implements LookupListener {
                                 dialogProvider.setIgnoreFolderCreation(false);
                                 dialog.setLocationRelativeTo(null);
                                 dialog.setVisible(true);
+                                if (temp instanceof IMarauroaApplication) {
+                                    ((IMarauroaApplication) temp).update();
+                                }
                             } else if (result == NotifyDescriptor.NO_OPTION) {
                                 //Delete the folder as well
                                 MarauroaApplicationRepository.deleteFolder(temp);

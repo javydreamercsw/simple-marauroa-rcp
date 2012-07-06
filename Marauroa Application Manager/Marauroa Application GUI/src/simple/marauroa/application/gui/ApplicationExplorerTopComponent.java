@@ -159,21 +159,10 @@ public final class ApplicationExplorerTopComponent extends TopComponent
                 Object item = it.next();
                 if (item instanceof IMarauroaApplication) {
                     IMarauroaApplication application = (IMarauroaApplication) item;
-                    if (application != null) {
-                        Logger.getLogger(ApplicationExplorerTopComponent.class.getSimpleName()).log(Level.FINE,
-                                "A new Marauroa Application has been "
-                                + "registered: {0}", application.toStringForDisplay());
-                        try {
-                            update();
-                        } catch (IntrospectionException ex) {
-                            Exceptions.printStackTrace(ex);
-                        }
-                    } else {
-                        try {
-                            update();
-                        } catch (IntrospectionException ex) {
-                            Exceptions.printStackTrace(ex);
-                        }
+                    try {
+                        update();
+                    } catch (IntrospectionException ex) {
+                        Exceptions.printStackTrace(ex);
                     }
                 }
             }
