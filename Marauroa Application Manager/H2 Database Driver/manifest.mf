@@ -1,5 +1,7 @@
 Manifest-Version: 1.0
+Ant-Version: Apache Ant 1.8.3
+Created-By: 1.7.0_05-b05 (Oracle Corporation)
 OpenIDE-Module: org.h2/1
-OpenIDE-Module-Implementation-Version: 164
+OpenIDE-Module-Implementation-Version: 167
 OpenIDE-Module-Localizing-Bundle: org/h2/Bundle.properties
 
