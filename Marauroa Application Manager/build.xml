@@ -649,7 +649,7 @@
         <copy file="${lookup-lib}" tofile="../Simple Libs/org-openide-util-lookup.jar"/>
     </target>
     
-    <target name="-increase-versions" description="Increase implementation versions" depends="-init-netbeans, -init-hudson">
+    <target name="increase-versions" description="Increase implementation versions" depends="-check-dev-environent">
         <for list="${modules}" delimiter=":" param="cur" trim="true">
             <sequential>
                 <property file="@{cur}/manifest.mf" prefix="@{cur}"/>
@@ -669,9 +669,16 @@
                 </if>
             </sequential>
         </for>
+        <property name="message" value="&quot;Update versions for dailybuilds&quot;"/>
+        <hg cmd="commit" dir="." message="${message}">
+            <dirset dir="./">
+                <include name="**/*.mf"/>
+            </dirset>
+        </hg>
+        <hg cmd="push" dir="."/>
     </target>
     
-    <target name="publish" description="This will publish the release on Source Forge" depends="-increase-versions, nbms">
+    <target name="publish" description="This will publish the release on Source Forge" depends="increase-versions, nbms">
         <fail unless="sf.usr" message="Please define sf.usr in the nbproject/private/private.properties or pass as build parameter to ant"/>
         <fail unless="sf.pwd" message="Please define sf.pwd in the nbproject/private/private.properties or pass as build parameter to ant"/>
         <fail unless="sf.hst" message="Please define sf.pwd in the nbproject/private/private.properties or pass as build parameter to ant"/>
