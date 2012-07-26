@@ -3,7 +3,7 @@ Ant-Version: Apache Ant 1.8.3
 Created-By: 1.7.0_05-b05 (Oracle Corporation)
 AutoUpdate-Show-In-Client: true
 OpenIDE-Module: simple.marauroa.application.api/0
-OpenIDE-Module-Implementation-Version: 10
+OpenIDE-Module-Implementation-Version: 11
 OpenIDE-Module-Localizing-Bundle: simple/marauroa/application/api/Bund
  le.properties
 
