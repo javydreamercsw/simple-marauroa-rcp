@@ -7,6 +7,7 @@
     <import file="nbproject/build-impl.xml"/>
     <import file="preparation.xml"/>
     <property file="nbproject/project.properties"/>
+    <property file="nbproject/private/private.properties"/>
     <taskdef name="doxygen" classname="org.doxygen.tools.DoxygenTask" classpath="../Simple Libs/tools/doxygen/ant_doxygen.jar" />
     
     <scriptdef name="substring" language="javascript">
@@ -38,7 +39,7 @@
     </condition>
     
     <target name="build-launchers" depends="suite.build-launchers">
-	<!-- Replace the icon for the Windows launcher exe. -->
+        <!-- Replace the icon for the Windows launcher exe. -->
         <antcall target="-replaceWindowsLauncherIcon"/>
     </target>
 
@@ -590,20 +591,24 @@
                     <then>
                         <echo file="versions.xml" append="true"><![CDATA[
                 <replace codenamebase="]]>${@{cur}.OpenIDE-Module}<![CDATA[" addcompiletime="true">
-                    <module codenamebase="]]>${@{cur}.OpenIDE-Module}</echo>
+                    <module codenamebase="]]>${@{cur}.OpenIDE-Module}
+                        </echo>
                         <if>
                             <isset property="@{cur}.spec.version.base"/>
                             <then>
-                                <echo file="versions.xml" append="true"><![CDATA[" spec="]]>${@{cur}.spec.version.base}<![CDATA["]]></echo>
+                                <echo file="versions.xml" append="true"><![CDATA[" spec="]]>${@{cur}.spec.version.base}<![CDATA["]]>
+                                </echo>
                             </then>
                             <else>
-                                <echo file="versions.xml" append="true"><![CDATA[/>]]></echo>
+                                <echo file="versions.xml" append="true"><![CDATA[/>]]>
+                                </echo>
                             </else>
                         </if>
                         <if>
                             <isset property="@{cur}.release-version"/>
                             <then>
-                                <echo file="versions.xml" append="true"><![CDATA[ release="]]>${@{cur}.release-version}<![CDATA["/>]]></echo>
+                                <echo file="versions.xml" append="true"><![CDATA[ release="]]>${@{cur}.release-version}<![CDATA["/>]]>
+                                </echo>
                             </then>
                             <else>
                                 <echo file="versions.xml" append="true"><![CDATA[/>]]>
@@ -641,5 +646,45 @@
         <fileset id="finder" dir="${harness.dir}/.." includes="**/org-openide-util-lookup.jar" />
         <pathconvert property="lookup-lib" refid="finder" />
         <copy file="${lookup-lib}" tofile="../Simple Libs/org-openide-util-lookup.jar"/>
+    </target>
+    
+    <target name="-increase-versions" description="Increase implementation versions" depends="-init-netbeans, -init-hudson">
+        <for list="${modules}" delimiter=":" param="cur" trim="true">
+            <sequential>
+                <property file="@{cur}/manifest.mf" prefix="@{cur}"/>
+                <if>
+                    <isset property="@{cur}.OpenIDE-Module-Implementation-Version"/>
+                    <then>
+                        <math result="@{cur}.new" operand1="1" operation="+" 
+                              operand2="${@{cur}.OpenIDE-Module-Implementation-Version}" datatype="int"/>
+                        <echo>@{cur} implementation version = ${@{cur}.OpenIDE-Module-Implementation-Version} New value: ${@{cur}.new}</echo>
+                        <manifest file="@{cur}/manifest.mf" mode="update">
+                            <attribute name="OpenIDE-Module-Implementation-Version" value="${@{cur}.new}"/>
+                        </manifest>
+                    </then>
+                    <else>
+                        <fail message="Module @{cur} doesn't have an implementation version"/>
+                    </else>
+                </if>
+            </sequential>
+        </for>
+    </target>
+    
+    <target name="publish" description="This will publish the release on Source Forge" depends="-increase-versions, nbms">
+        <fail unless="sf.usr" message="Please define sf.usr in the nbproject/private/private.properties or pass as build parameter to ant"/>
+        <fail unless="sf.pwd" message="Please define sf.pwd in the nbproject/private/private.properties or pass as build parameter to ant"/>
+        <fail unless="sf.hst" message="Please define sf.pwd in the nbproject/private/private.properties or pass as build parameter to ant"/>
+        <fail unless="sf.server.path" message="Please define sf.server.path in the nbproject/private/private.properties or pass as build parameter to ant"/>
+        <fail unless="sf.project.name" message="Please define sf.project.name in the nbproject/private/private.properties or pass as build parameter to ant"/>
+        <echo>Publishing update center</echo>
+        <scp todir="${sf.usr},${sf.project.name}:${sf.pwd}@${sf.hst}:${sf.server.path}/" 
+             trust="true" 
+             sftp="true"
+             failonerror="true">
+            <fileset dir="${basedir}/build/updates">
+                <include name="**/*"/>
+            </fileset>
+        </scp>
+        <echo>Done!</echo>
     </target>
 </project>
