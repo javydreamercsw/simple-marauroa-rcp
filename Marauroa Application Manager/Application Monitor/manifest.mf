@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Ant-Version: Apache Ant 1.8.3
 Created-By: 1.7.0_05-b05 (Oracle Corporation)
 OpenIDE-Module: simple.marauroa.application.monitor/0
-OpenIDE-Module-Implementation-Version: 9
+OpenIDE-Module-Implementation-Version: 10
 OpenIDE-Module-Install: simple/marauroa/application/monitor/Installer.
  class
 OpenIDE-Module-Localizing-Bundle: simple/marauroa/application/monitor/
