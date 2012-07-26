@@ -317,92 +317,96 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
 
     @Override
     public boolean createAppDirectory() {
-        File appDir = new File(getAppDirPath());
-        if (Lookup.getDefault().lookup(IAddApplicationDialogProvider.class) != null
-                && !Lookup.getDefault().lookup(IAddApplicationDialogProvider.class).isFolderCreationIgnored()
-                && appDirExists()) {
-            DialogDisplayer.getDefault().notifyLater(
-                    new NotifyDescriptor.Message(NbBundle.getMessage(
-                    MarauroaApplication.class,
-                    "application.dir.exists").replaceAll("%d",
-                    appDir.toURI().getPath()),
-                    NotifyDescriptor.ERROR_MESSAGE));
-            return false;
-        } else {
-            boolean success = appDir.mkdirs();
-            if (!success) {
+        if (!appDirExists()) {
+            File appDir = new File(getAppDirPath());
+            if (Lookup.getDefault().lookup(IAddApplicationDialogProvider.class) != null
+                    && !Lookup.getDefault().lookup(IAddApplicationDialogProvider.class).isFolderCreationIgnored()
+                    && appDirExists()) {
                 DialogDisplayer.getDefault().notifyLater(
                         new NotifyDescriptor.Message(NbBundle.getMessage(
                         MarauroaApplication.class,
-                        "add.application.unable.create.dir").replaceAll("%d",
-                        getAppDirPath()),
+                        "application.dir.exists").replaceAll("%d",
+                        appDir.toURI().getPath()),
                         NotifyDescriptor.ERROR_MESSAGE));
+                return false;
             } else {
-                //Set to true when something goes wrong so we can cleanup
-                boolean rollback = false;
-                File log = new File(appDir.getAbsoluteFile()
-                        + System.getProperty("file.separator")
-                        + "log");
-                if (!log.mkdirs()) {
-                    Exceptions.printStackTrace(new Exception(
-                            "Unable to create log directory: "
-                            + log.getAbsolutePath()));
-                    rollback = true;
-                    success = false;
-                }
-                //Create server.ini file
-                try {
-                    if (success) {
-                        updateIniFile();
+                boolean success = appDir.mkdirs();
+                if (!success) {
+                    DialogDisplayer.getDefault().notifyLater(
+                            new NotifyDescriptor.Message(NbBundle.getMessage(
+                            MarauroaApplication.class,
+                            "add.application.unable.create.dir").replaceAll("%d",
+                            getAppDirPath()),
+                            NotifyDescriptor.ERROR_MESSAGE));
+                } else {
+                    //Set to true when something goes wrong so we can cleanup
+                    boolean rollback = false;
+                    File log = new File(appDir.getAbsoluteFile()
+                            + System.getProperty("file.separator")
+                            + "log");
+                    if (!log.mkdirs()) {
+                        Exceptions.printStackTrace(new Exception(
+                                "Unable to create log directory: "
+                                + log.getAbsolutePath()));
+                        rollback = true;
+                        success = false;
                     }
-                } catch (IOException ex) {
-                    Exceptions.printStackTrace(ex);
-                    rollback = true;
-                    success = false;
-                }
-                //Create libraries
-                try {
-                    if (success) {
-                        updateLibs();
-                    }
-                } catch (IOException ex) {
-                    Exceptions.printStackTrace(ex);
-                    rollback = true;
-                    success = false;
-                }
-                //Copy extension libraries
-                if (success) {
+                    //Create server.ini file
                     try {
-                        updateExtLibs();
+                        if (success) {
+                            updateIniFile();
+                        }
                     } catch (IOException ex) {
                         Exceptions.printStackTrace(ex);
                         rollback = true;
                         success = false;
                     }
-                }
-                //Create marauroad.bat file
-                try {
-                    if (success) {
-                        updateStartScript();
+                    //Create libraries
+                    try {
+                        if (success) {
+                            updateLibs();
+                        }
+                    } catch (IOException ex) {
+                        Exceptions.printStackTrace(ex);
+                        rollback = true;
+                        success = false;
                     }
-                } catch (IOException ex) {
-                    Exceptions.printStackTrace(ex);
-                    rollback = true;
-                    success = false;
+                    //Copy extension libraries
+                    if (success) {
+                        try {
+                            updateExtLibs();
+                        } catch (IOException ex) {
+                            Exceptions.printStackTrace(ex);
+                            rollback = true;
+                            success = false;
+                        }
+                    }
+                    //Create marauroad.bat file
+                    try {
+                        if (success) {
+                            updateStartScript();
+                        }
+                    } catch (IOException ex) {
+                        Exceptions.printStackTrace(ex);
+                        rollback = true;
+                        success = false;
+                    }
+                    if (!success) {
+                        rollback = true;
+                    }
+                    if (rollback) {
+                        //Just delete the application folder
+                        deleteAppDirectory();
+                    } else {
+                        //At this point everything is fine, register in manager
+                        logger.log(Level.INFO,
+                                "Created application directory at: {0}", getAppDirPath());
+                    }
                 }
-                if (!success) {
-                    rollback = true;
-                }
-                if (rollback) {
-                    //Just delete the application folder
-                    deleteAppDirectory();
-                } else {
-                    //At this point everything is fine, register in manager
-                    logger.log(Level.INFO,
-                            "Created application directory at: {0}", getAppDirPath());
-                }
+                return success;
             }
-            return success;
+        } else {
+            return true;
         }
     }
 

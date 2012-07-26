@@ -29,7 +29,7 @@
                         <configuration>
                             <sources>
         
-                <source>./Eclipselink/src</source>
+                <source>./eclipselink/src</source>
                 
                 <source>./Marauroa Application API/src</source>
                 
