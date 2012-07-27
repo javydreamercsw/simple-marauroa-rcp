@@ -650,6 +650,8 @@
     </target>
     
     <target name="increase-versions" description="Increase implementation versions" depends="-check-dev-environent">
+        <fail unless="hg.user" message="Please define hg.user in the nbproject/private/private.properties or pass as build parameter to ant"/>
+        <fail unless="hg.password" message="Please define hg.password in the nbproject/private/private.properties or pass as build parameter to ant"/>
         <for list="${modules}" delimiter=":" param="cur" trim="true">
             <sequential>
                 <property file="@{cur}/manifest.mf" prefix="@{cur}"/>
@@ -675,7 +677,9 @@
                 <include name="**/*.mf"/>
             </dirset>
         </hg>
-        <hg cmd="push" dir="."/>
+        <hg cmd="push" dir=".">
+            <auth user="${hg.user}" password="${hg.password}" />
+        </hg>
     </target>
     
     <target name="publish" description="This will publish the release on Source Forge" depends="increase-versions, nbms">
