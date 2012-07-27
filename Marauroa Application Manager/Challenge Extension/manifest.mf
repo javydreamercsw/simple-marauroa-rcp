@@ -1,5 +1,6 @@
 Manifest-Version: 1.0
 Ant-Version: Apache Ant 1.8.3
+AutoUpdate-Show-In-Client: true
 Created-By: 1.7.0_05-b05 (Oracle Corporation)
 OpenIDE-Module: simple.server.extension.challenge/0
 OpenIDE-Module-Implementation-Version: 21
