@@ -672,7 +672,7 @@
             </sequential>
         </for>
         <property name="message" value="&quot;Update versions for dailybuilds&quot;"/>
-        <hg cmd="commit" dir="." message="${message}">
+        <hg cmd="commit" dir="." message="${message}" user="${hg.user}">
             <dirset dir="./">
                 <include name="**/*.mf"/>
             </dirset>
