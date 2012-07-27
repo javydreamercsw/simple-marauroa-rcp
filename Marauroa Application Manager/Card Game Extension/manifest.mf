@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Ant-Version: Apache Ant 1.8.3
 Created-By: 1.7.0_05-b05 (Oracle Corporation)
 OpenIDE-Module: simple.server.extension.cardgame/0
-OpenIDE-Module-Implementation-Version: 17
+OpenIDE-Module-Implementation-Version: 18
 OpenIDE-Module-Localizing-Bundle: simple/server/extension/cardgame/Bun
  dle.properties
 
