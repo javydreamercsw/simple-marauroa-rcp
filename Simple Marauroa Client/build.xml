@@ -27,7 +27,7 @@
     </condition>
     
     <target name="build-launchers" depends="suite.build-launchers">
-		<!-- Replace the icon for the Windows launcher exe. -->
+        <!-- Replace the icon for the Windows launcher exe. -->
         <antcall target="replaceWindowsLauncherIcon"/>
     </target>
    
@@ -37,7 +37,7 @@
             <then>
                 <tstamp prefix="build"/>
                 <propertyfile file="${basedir}/nbproject/project.properties"
-        comment="Updated by build script">
+                              comment="Updated by build script">
                     <entry key="app.version" value="${BUILD_TAG}${BUILD_ID} SVN Rev: ${SVN_REVISION}" />
                 </propertyfile>
             </then>
@@ -64,9 +64,9 @@
             <fileset dir="branding/" includes="**/*_*.properties"/>
             <sequential>
                 <replaceregexp file="@{file}"
-			match="[0-9]+\.[0-9]+"
-			replace="${app.version}"
-			byline="true"/>
+                               match="[0-9]+\.[0-9]+"
+                               replace="${app.version}"
+                               byline="true"/>
             </sequential>
         </for>
         <!--TODO: Uncomment when the Splash screen is created 
@@ -212,7 +212,7 @@
         <delete dir="${dist.dir}/${app.name}"/>
     </target>
 
-	<!-- Windows-only target that replaces the icon for the launcher exe with our own icon. -->
+    <!-- Windows-only target that replaces the icon for the launcher exe with our own icon. -->
     <target name="replaceWindowsLauncherIcon" if="isWindows">
         <echo message="Replacing icon of Windows launcher executable."/>
         <exec executable="../Simple Libs/tools/ReplaceVistaIcon.exe" resolveexecutable="true">
@@ -244,7 +244,7 @@
         <property name="exeName" value="${app.title}-Setup"/>
         <property name="izpack-installer" value="${exeName}.jar"/>
         <taskdef name="izpack" classpath="${izpack.dir}/lib/compiler.jar"
-             classname="com.izforge.izpack.ant.IzPackTask"/>
+                 classname="com.izforge.izpack.ant.IzPackTask"/>
         <property name="launch4j.dir" location="../Simple Libs/tools/launch4j" />
         <echo message="Makes the installer using IzPack into ${izpack-installer}"/>
         <echo file="${suite.dir}/shortcutSpec.xml"><![CDATA[<shortcuts>
@@ -266,13 +266,13 @@
             <replacefilter token="$APP-NAME" value="${app.name}" />
         </replace>
         <izpack input="${basedir}/nizpack.xml"
-            output="${basedir}/${izpack-installer}"
-            installerType="standard"
-            basedir="${basedir}"
-            izPackDir="${izpack.dir}/"/>
+                output="${basedir}/${izpack-installer}"
+                installerType="standard"
+                basedir="${basedir}"
+                izPackDir="${izpack.dir}/"/>
         <!--Launch 4J task-->
         <taskdef name="launch4j" classname="net.sf.launch4j.ant.Launch4jTask"
-             classpath="${launch4j.dir}/launch4j.jar:${launch4j.dir}/lib/xstream.jar" />
+                 classpath="${launch4j.dir}/launch4j.jar:${launch4j.dir}/lib/xstream.jar" />
         <antcall target="replaceWindowsLauncherIcon"/>
         <antcall target="create-launch4j-installer"/>
         <echo message="Cleaning and finalizing release..." />
@@ -395,7 +395,7 @@
                                 <echo>Creating Source zip for Module @{cur}</echo>
                                 <delete file="${suite.dir}/dist/@{cur} ${@{cur}.general.info.partnumber}.zip"/>
                                 <zip destfile="${suite.dir}/dist/@{cur} ${@{cur}.general.info.partnumber}.zip"
-                                basedir="@{cur}" update="false" excludes="build/**"/>
+                                     basedir="@{cur}" update="false" excludes="build/**"/>
                             </then>
                         </if>
                     </then>
@@ -423,5 +423,111 @@
                 <echo>Done!</echo>
             </sequential>
         </for>
+    </target>
+    
+    <target name="fix-dependencies" depends="-init-netbeans, -init-hudson" description="Removes unused compilation dependencies on other modules.">
+        <echo>Fixing dependencies for suite...</echo>
+        <!--Define custom task-->
+        <taskdef resource="org/netbeans/nbbuild/taskdefs.properties">
+            <classpath>
+                <pathelement location="${harness.dir}/tasks.jar"/>
+            </classpath>
+        </taskdef>
+        <taskdef name="stringutil" classname="ise.antelope.tasks.StringUtilTask">
+            <classpath>
+                <pathelement location="${suite.dir}/../Simple Libs/tools/AntelopeTasks_3.5.3.jar"/>
+            </classpath>
+        </taskdef>
+        <echo>Create the ant script...</echo>
+        <!--Create the ant script-->
+        <echo file="versions.xml"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<project name="Fix Versions" basedir="." default="fix">
+    <taskdef resource="org/netbeans/nbbuild/taskdefs.properties">
+            <classpath>
+                <pathelement location="${harness.dir}/tasks.jar"/>
+            </classpath>
+    </taskdef>
+    <target name="fix">
+        <property name="build.compiler.deprecation" value="false" />
+        <fixdependencies antfile="../../build.xml" 
+                        buildtarget="netbeans" cleantarget="clean" failonerror="true" sanitycheck="false">]]>
+        </echo>
+        <for list="${modules}" delimiter=":" param="cur" trim="true">
+            <sequential>
+                <property file="@{cur}/manifest.mf" prefix="@{cur}"/>
+                <if>
+                    <contains string="${@{cur}.OpenIDE-Module}" substring="/"/>
+                    <then>
+                        <length string="${@{cur}.OpenIDE-Module}" property="@{cur}.length.dist" />
+                        <stringutil string="${@{cur}.OpenIDE-Module}" 
+                                    property="@{cur}.OpenIDE-Module.indexOf">
+                            <indexof string="/"/>
+                        </stringutil>
+                        <math result="@{cur}.after" operand1="1" operation="+" 
+                              operand2="${@{cur}.OpenIDE-Module.indexOf}" datatype="int"/>
+                        <substring text="${@{cur}.OpenIDE-Module}" 
+                                   start="${@{cur}.after}" 
+                                   end="${@{cur}.length.dist}" 
+                                   property="@{cur}.release-version" />
+                        <substring text="${@{cur}.OpenIDE-Module}" start="0" 
+                                   end="${@{cur}.OpenIDE-Module.indexOf}" 
+                                   property="@{cur}.OpenIDE-Module" />
+                    </then>
+                </if>
+                <property file="@{cur}/nbproject/project.properties" prefix="@{cur}."/>
+                <if>
+                    <or>
+                        <isset property="@{cur}.release-version"/>
+                        <isset property="@{cur}.spec.version.base"/>
+                    </or>
+                    <then>
+                        <echo file="versions.xml" append="true"><![CDATA[
+                <replace codenamebase="]]>${@{cur}.OpenIDE-Module}<![CDATA[" addcompiletime="true">
+                    <module codenamebase="]]>${@{cur}.OpenIDE-Module}</echo>
+                        <if>
+                            <isset property="@{cur}.spec.version.base"/>
+                            <then>
+                                <echo file="versions.xml" append="true"><![CDATA[" spec="]]>${@{cur}.spec.version.base}<![CDATA["]]></echo>
+                            </then>
+                            <else>
+                                <echo file="versions.xml" append="true"><![CDATA[/>]]></echo>
+                            </else>
+                        </if>
+                        <if>
+                            <isset property="@{cur}.release-version"/>
+                            <then>
+                                <echo file="versions.xml" append="true"><![CDATA[ release="]]>${@{cur}.release-version}<![CDATA["/>]]></echo>
+                            </then>
+                            <else>
+                                <echo file="versions.xml" append="true"><![CDATA[/>]]></echo>
+                            </else>
+                        </if>
+                        <echo file="versions.xml" append="true"><![CDATA[
+                </replace>]]></echo>
+                    </then>
+                </if>
+            </sequential>
+        </for>
+        <echo file="versions.xml" append="true"><![CDATA[
+            <fileset dir="nbproject" >
+                <include name="project.xml" />
+            </fileset>
+        </fixdependencies>
+    </target>
+</project>]]>
+        </echo>
+        <echo>Create the ant script...Done!</echo>
+        <!--Now update modules-->
+        <echo>Fixing module dependencies...</echo>
+        <property name="build.compiler.deprecation" value="false" />
+        <subant target="module-fix-dependencies">
+            <fileset dir="." excludes="*netbeans*/**">
+                <include name="**/build.xml"/>
+                <exclude name="build.xml"/>
+            </fileset>
+        </subant>
+        <echo>Fixing module dependencies...Done!</echo>
+        <delete file="versions.xml"/>
+        <echo>Fixing dependencies for suite...Done!</echo>
     </target>
 </project>

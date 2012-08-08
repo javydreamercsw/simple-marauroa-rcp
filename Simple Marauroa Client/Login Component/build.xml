@@ -5,4 +5,5 @@
 <project name="simple.marauroa.client.components.login" default="netbeans" basedir=".">
     <description>Builds, tests, and runs the project simple.marauroa.client.components.login.</description>
     <import file="nbproject/build-impl.xml"/>
+    <import file="../project.common.xml"/>
 </project>
