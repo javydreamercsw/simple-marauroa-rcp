@@ -33,14 +33,6 @@
                     </run-dependency>
                 </dependency>
                 <dependency>
-                    <code-name-base>org.openide.modules</code-name-base>
-                    <build-prerequisite/>
-                    <compile-dependency/>
-                    <run-dependency>
-                        <specification-version>7.22.1</specification-version>
-                    </run-dependency>
-                </dependency>
-                <dependency>
                     <code-name-base>org.openide.util</code-name-base>
                     <build-prerequisite/>
                     <compile-dependency/>
@@ -74,16 +66,7 @@
                         <specification-version>0.2</specification-version>
                     </run-dependency>
                 </dependency>
-                <dependency>
-                    <code-name-base>simple.server.lib</code-name-base>
-                    <build-prerequisite/>
-                    <compile-dependency/>
-                    <run-dependency>
-                        <release-version>0</release-version>
-                        <specification-version>0.2</specification-version>
-                    </run-dependency>
-                </dependency>
-            </module-dependencies>
+                </module-dependencies>
             <public-packages>
                 <package>simple.marauroa.client.components.createaccount</package>
             </public-packages>

@@ -5,4 +5,5 @@
 <project name="simple.marauroa.event.manager.zone" default="netbeans" basedir=".">
     <description>Builds, tests, and runs the project simple.marauroa.event.manager.zone.</description>
     <import file="nbproject/build-impl.xml"/>
+    <import file="../project.common.xml"/>
 </project>
