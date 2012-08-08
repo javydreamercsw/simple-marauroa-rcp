@@ -636,7 +636,10 @@
         <echo>Fixing module dependencies...</echo>
         <property name="build.compiler.deprecation" value="false" />
         <subant target="module-fix-dependencies">
-            <fileset dir="." includes="**/build.xml" excludes="build.xml"/>
+            <fileset dir="." excludes="*netbeans*/**">
+                <include name="**/build.xml"/>
+                <exclude name="build.xml"/>
+            </fileset>
         </subant>
         <echo>Fixing module dependencies...Done!</echo>
         <delete file="versions.xml"/>
@@ -649,7 +652,7 @@
         <copy file="${lookup-lib}" tofile="../Simple Libs/org-openide-util-lookup.jar"/>
     </target>
     
-    <target name="increase-versions" description="Increase implementation versions" depends="-check-dev-environent">
+    <!--<target name="-increase-versions" description="Increase implementation versions" depends="-check-dev-environent">
         <fail unless="hg.user" message="Please define hg.user in the nbproject/private/private.properties or pass as build parameter to ant"/>
         <fail unless="hg.password" message="Please define hg.password in the nbproject/private/private.properties or pass as build parameter to ant"/>
         <for list="${modules}" delimiter=":" param="cur" trim="true">
@@ -672,6 +675,7 @@
             </sequential>
         </for>
         <property name="message" value="&quot;Update versions for dailybuilds&quot;"/>
+        TODO, not working
         <hg cmd="commit" dir="." message="${message}" user="${hg.user}">
             <dirset dir="./">
                 <include name="**/*.mf"/>
@@ -680,9 +684,31 @@
         <hg cmd="push" dir=".">
             <auth user="${hg.user}" password="${hg.password}" />
         </hg>
+    </target>-->
+    
+    <target name="-set-versions" description="Increase implementation versions" depends="-check-dev-environent">
+        <fail unless="hg.user" message="Please define hg.user in the nbproject/private/private.properties or pass as build parameter to ant"/>
+        <fail unless="hg.password" message="Please define hg.password in the nbproject/private/private.properties or pass as build parameter to ant"/>
+        <for list="${modules}" delimiter=":" param="cur" trim="true">
+            <sequential>
+                <property file="@{cur}/manifest.mf" prefix="@{cur}"/>
+                <if>
+                    <isset property="@{cur}.OpenIDE-Module-Implementation-Version"/>
+                    <then>
+                        <echo>@{cur} implementation version = ${@{cur}.OpenIDE-Module-Implementation-Version} New value: ${release.number}</echo>
+                        <manifest file="@{cur}/manifest.mf" mode="update">
+                            <attribute name="OpenIDE-Module-Implementation-Version" value="${release.number}"/>
+                        </manifest>
+                    </then>
+                    <else>
+                        <echo>Module @{cur} doesn't have an implementation version, ignoring</echo>
+                    </else>
+                </if>
+            </sequential>
+        </for>
     </target>
     
-    <target name="publish" description="This will publish the release on Source Forge" depends="increase-versions, nbms">
+    <target name="publish" description="This will publish the release on Source Forge" depends="-set-versions, nbms">
         <fail unless="sf.usr" message="Please define sf.usr in the nbproject/private/private.properties or pass as build parameter to ant"/>
         <fail unless="sf.pwd" message="Please define sf.pwd in the nbproject/private/private.properties or pass as build parameter to ant"/>
         <fail unless="sf.hst" message="Please define sf.pwd in the nbproject/private/private.properties or pass as build parameter to ant"/>

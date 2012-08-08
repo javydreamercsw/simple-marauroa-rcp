@@ -5,4 +5,5 @@
 <project name="org.h2" default="netbeans" basedir=".">
     <description>Builds, tests, and runs the project org.h2.</description>
     <import file="nbproject/build-impl.xml"/>
+    <import file="${suite.dir}/project.common.xml"/>
 </project>
