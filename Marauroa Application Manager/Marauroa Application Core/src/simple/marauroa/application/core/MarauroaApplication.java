@@ -98,7 +98,9 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
             if (defaultProperties != null) {
                 config.load(defaultProperties);
                 defaultProperties.close();
-                FileOutputStream out = new FileOutputStream(new File(getAppINIFilePath()));
+                File file = new File(getAppINIFilePath());
+                file.mkdirs();
+                FileOutputStream out = new FileOutputStream(file);
                 config.store(out, "");
             }
         } catch (IOException ex) {

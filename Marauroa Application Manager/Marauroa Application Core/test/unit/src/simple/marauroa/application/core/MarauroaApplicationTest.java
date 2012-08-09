@@ -1,9 +1,13 @@
 package simple.marauroa.application.core;
 
 import java.awt.Image;
+import java.io.File;
 import java.io.IOException;
-import static org.junit.Assert.*;
+import java.util.Properties;
 import org.junit.*;
+import static org.junit.Assert.*;
+import org.netbeans.junit.MockServices;
+import org.openide.modules.InstalledFileLocator;
 import org.openide.util.Exceptions;
 
 /**
@@ -11,24 +15,34 @@ import org.openide.util.Exceptions;
  * @author Javier A. Ortiz Bultrón <javier.ortiz.78@gmail.com>
  */
 public class MarauroaApplicationTest {
-    
+
     public MarauroaApplicationTest() {
     }
 
     @BeforeClass
     public static void setUpClass() throws Exception {
+        MockServices.setServices(IFLI.class);
     }
 
     @AfterClass
     public static void tearDownClass() throws Exception {
     }
-    
+
     @Before
     public void setUp() {
     }
-    
+
     @After
     public void tearDown() {
+    }
+
+    public static class IFLI extends InstalledFileLocator {
+
+        @Override
+        public File locate(String path, String cnb, boolean loc) {
+            File f = new File(System.getProperty("release", path));
+            return f.exists() ? f : null;
+        }
     }
 
     /**
@@ -49,6 +63,7 @@ public class MarauroaApplicationTest {
     public void testLoadINIConfiguration() {
         System.out.println("loadINIConfiguration");
         MarauroaApplication instance = new MarauroaApplicationImpl();
+        instance.setRelativeToClass(getClass());
         assertFalse(instance.loadINIConfiguration().isEmpty());
     }
 
@@ -110,6 +125,7 @@ public class MarauroaApplicationTest {
         System.out.println("saveINIFile");
         MarauroaApplication instance = new MarauroaApplicationImpl();
         instance.setName("test");
+        instance.setRelativeToClass(getClass());
         try {
             instance.updateIniFile();
         } catch (IOException ex) {
@@ -134,4 +150,4 @@ public class MarauroaApplicationTest {
 
     public class MarauroaApplicationImpl extends MarauroaApplication {
     }
-}
+    }
