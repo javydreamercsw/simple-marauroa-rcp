@@ -549,7 +549,7 @@
         <echo>Done!</echo>
     </target>
     
-    <target name="-set-versions" description="Increase implementation versions">
+    <target name="-set-versions" description="Increase implementation versions" depends="-init-hudson, -init-netbeans">
         <fail unless="hg.user" message="Please define hg.user in the nbproject/private/private.properties or pass as build parameter to ant"/>
         <fail unless="hg.password" message="Please define hg.password in the nbproject/private/private.properties or pass as build parameter to ant"/>
         <for list="${modules}" delimiter=":" param="cur" trim="true">
