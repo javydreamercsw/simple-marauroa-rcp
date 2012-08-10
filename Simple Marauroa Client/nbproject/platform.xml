@@ -76,6 +76,7 @@
         <sequential>
             <autoupdate installdir="${nbplatform.active.dir}" updatecenter="@{url}">
                 <modules includes="${module.includes}.*" clusters="${download.clusters}"/>
+				<modules includes=".*mimelookup.*" clusters="${download.clusters}"/>
                 <modules includes="org[.]netbeans[.]modules[.]apisupport[.]harness" clusters="harness"/>
             </autoupdate>
         </sequential>
