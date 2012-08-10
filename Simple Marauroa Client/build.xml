@@ -550,13 +550,14 @@
     </target>
     
     <target name="-set-versions" description="Increase implementation versions" depends="-init-hudson, -init-netbeans">
-        <fail unless="hg.user" message="Please define hg.user in the nbproject/private/private.properties or pass as build parameter to ant"/>
-        <fail unless="hg.password" message="Please define hg.password in the nbproject/private/private.properties or pass as build parameter to ant"/>
         <for list="${modules}" delimiter=":" param="cur" trim="true">
             <sequential>
                 <property file="@{cur}/manifest.mf" prefix="@{cur}"/>
                 <if>
-                    <isset property="@{cur}.OpenIDE-Module-Implementation-Version"/>
+                    <and>
+                        <isset property="@{cur}.OpenIDE-Module-Implementation-Version"/>
+                        <isset property="release.number"/> 
+                    </and>
                     <then>
                         <echo>@{cur} implementation version = ${@{cur}.OpenIDE-Module-Implementation-Version} New value: ${release.number}</echo>
                         <manifest file="@{cur}/manifest.mf" mode="update">
@@ -564,7 +565,7 @@
                         </manifest>
                     </then>
                     <else>
-                        <echo>Module @{cur} doesn't have an implementation version, ignoring</echo>
+                        <echo>Module @{cur} doesn't have an implementation version or release.number is not defined, ignoring</echo>
                     </else>
                 </if>
             </sequential>
