@@ -34,7 +34,7 @@ public enum ConfigurationElement {
     TURN_LENGTH("turn_length", ConfigElementType.INT, "100"),
     SERVER_TYPE("server_typeGame", ConfigElementType.STRING, "Simple"),
     SERVER_NAME("server_name", ConfigElementType.STRING, "Simple"),
-    SERVER_VERSION("server_version", ConfigElementType.STRING, "0.02.04"),
+    SERVER_VERSION("server_version", ConfigElementType.STRING, "0.02.05"),
     SERVER_CONTACT("server_contact", ConfigElementType.STRING, "https://sourceforge.net/tracker/?group_id=325779&atid=1367795"),
     SERVER_WELCOME("server_welcome", ConfigElementType.STRING, "This release is EXPERIMENTAL."
     + "Remember to keep your password completely secret, never tell to another friend, "
