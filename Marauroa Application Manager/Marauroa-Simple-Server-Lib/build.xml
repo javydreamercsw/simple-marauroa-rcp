@@ -10,10 +10,6 @@
 
     <target name="netbeans">
         <antcall target="MCP.netbeans"/>
-        <!--Ignore the marauroa and log4j jars, use the ones in the Marauroa library instead-->
-        <copy todir="../build/cluster/modules/ext">
-            <fileset dir="../../Simple Marauroa Java/Simple-Server/dist/lib" excludes="marauroa*.jar, log4j*.jar, mysql*.jar"/>
-        </copy>
     </target>
     
     <target name="clean">
