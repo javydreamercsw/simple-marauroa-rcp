@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.2//EN"
+                            "http://www.netbeans.org/dtds/filesystem-1_2.dtd">
+<filesystem>
+    <folder name="xml">
+        <folder name="entities">
+            <folder name="simple_marauroa_application_components_map">
+                <file name="MapComponent" url="nbres:/org/netbeans/modules/settings/resources/properties-1_0.dtd">
+                    <!--simple.marauroa.application.components.map.MapComponentTopComponent-->
+                    <attr name="hint.originalPublicID" stringvalue="-//simple.marauroa.application.components.map//MapComponent//EN"/>
+                </file>
+            </folder>
+        </folder>
+        <folder name="memory">
+            <folder name="simple">
+                <folder name="marauroa">
+                    <folder name="application">
+                        <folder name="components">
+                            <folder name="map">
+                                <file name="MapComponentTopComponent">
+                                    <!--simple.marauroa.application.components.map.MapComponentTopComponent-->
+                                    <attr name="settings.providerPath" stringvalue="xml/lookups//simple_marauroa_application_components_map/MapComponent.instance"/>
+                                </file>
+                            </folder>
+                        </folder>
+                    </folder>
+                </folder>
+            </folder>
+        </folder>
+        <folder name="lookups">
+            <folder name="simple_marauroa_application_components_map">
+                <file name="MapComponent.instance">
+                    <!--simple.marauroa.application.components.map.MapComponentTopComponent-->
+                    <attr
+                        methodvalue="org.netbeans.api.settings.Factory.create" name="instanceCreate"/>
+                    <attr
+                        methodvalue="org.netbeans.api.settings.Factory.properties" name="settings.convertor"/>
+                    <attr name="settings.instanceClass" stringvalue="simple.marauroa.application.components.map.MapComponentTopComponent"/>
+                    <attr name="settings.instanceOf" stringvalue="simple.marauroa.application.components.map.MapComponentTopComponent"/>
+                    <attr boolvalue="true" name="xmlproperties.preventStoring"/>
+                </file>
+            </folder>
+        </folder>
+    </folder>
+    <folder name="Windows2">
+        <folder name="Components">
+            <file name="MapComponentTopComponent.settings">
+                <!--simple.marauroa.application.components.map.MapComponentTopComponent--><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE settings PUBLIC "-//NetBeans//DTD Session settings 1.0//EN" "http://www.netbeans.org/dtds/sessionsettings-1_0.dtd">
+<settings version="1.0">
+  <instance class="simple.marauroa.application.components.map.MapComponentTopComponent"/>
+</settings>
+]]></file>
+        </folder>
+        <folder name="Modes">
+            <folder name="editor">
+                <file name="MapComponentTopComponent.wstcref">
+                    <!--simple.marauroa.application.components.map.MapComponentTopComponent--><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tc-ref PUBLIC "-//NetBeans//DTD Top Component in Mode Properties 2.0//EN" "http://www.netbeans.org/dtds/tc-ref2_0.dtd">
+<tc-ref version="2.0">
+  <tc-id id="MapComponentTopComponent"/>
+  <state opened="false"/>
+</tc-ref>
+]]></file>
+            </folder>
+        </folder>
+    </folder>
+    <folder name="Actions">
+        <folder name="Window">
+            <file name="simple-marauroa-application-components-map-MapComponentTopComponent.instance">
+                <!--simple.marauroa.application.components.map.MapComponentTopComponent-->
+                <attr
+                    methodvalue="org.openide.windows.TopComponent.openAction" name="instanceCreate"/>
+                <attr name="component" newvalue="simple.marauroa.application.components.map.MapComponentTopComponent"/>
+                <attr name="preferredID" stringvalue="MapComponentTopComponent"/>
+                <attr
+                    bundlevalue="simple.marauroa.application.components.map.Bundle#CTL_MapComponentAction" name="displayName"/>
+            </file>
+        </folder>
+    </folder>
+</filesystem>
