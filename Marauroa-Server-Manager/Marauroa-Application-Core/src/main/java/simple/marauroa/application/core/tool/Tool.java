@@ -15,6 +15,7 @@ import javax.swing.JDialog;
 import marauroa.common.game.IRPZone;
 import org.openide.modules.InstalledFileLocator;
 import org.openide.util.Lookup;
+import org.openide.util.Utilities;
 import simple.marauroa.application.core.MarauroaAction;
 import simple.marauroa.application.core.MarauroaActionProvider;
 
@@ -47,7 +48,7 @@ public class Tool {
             throws MalformedURLException, Exception {
         File icon = InstalledFileLocator.getDefault().locate(path,
                 "simple.marauroa.application.gui", false);
-        URL imageURL = icon.toURI().toURL();
+        URL imageURL = Utilities.toURI(icon).toURL();
 
         if (imageURL == null) {
             throw new Exception("Resource not found: " + path);
