@@ -15,7 +15,6 @@ public class Installer extends ModuleInstall {
 
     @Override
     public void restored() {
-        System.out.println("I'm here!");
         //This covers all the scenarios you can exit the JVM except Windows 
         //Manager (for some reason)
         Runtime.getRuntime().addShutdownHook(new Thread() {
