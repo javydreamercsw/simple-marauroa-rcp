@@ -25,5 +25,6 @@ Marauroa Application Manager/Marauroa-Lib/release/modules/ext/Marauroa.jar
 Marauroa Application Manager/*.exe
 Marauroa Application Manager/Marauroa Server Manager-Setup.jar
 marauroa-custom/*
+*/target/*
 syntax: regexp
 ^marauroa$
