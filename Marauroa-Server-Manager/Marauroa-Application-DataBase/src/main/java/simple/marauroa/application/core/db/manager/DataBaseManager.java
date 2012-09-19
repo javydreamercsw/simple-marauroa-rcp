@@ -89,9 +89,9 @@ public final class DataBaseManager implements LookupListener {
 
     public static DataBaseManager get(String pu) {
         if (instance == null
-                || (instance != null && !instance.getPersistenceUnitName().equals(pu))) {
+                || !instance.getPersistenceUnitName().equals(pu)) {
             instance = new DataBaseManager(pu);
-            getEntityManager();
+            
             //SCR 2417: Store the new Persistence Name
             puName = pu;
         }
@@ -100,7 +100,7 @@ public final class DataBaseManager implements LookupListener {
 
     public static DataBaseManager get() {
         if (instance == null
-                || (instance != null && !instance.getPersistenceUnitName().equals(puName))) {
+                || !instance.getPersistenceUnitName().equals(puName)) {
             instance = new DataBaseManager(puName);
             getEntityManager();
         }
@@ -359,8 +359,9 @@ public final class DataBaseManager implements LookupListener {
                                     + "<br>"
                                     + NbBundle.getMessage(
                                     MarauroaApplication.class,
-                                    "application.found.orphan.directory").replaceAll("%d",
-                                    temp.toURI().getPath()) + "<br>"
+                                    "application.found.orphan.directory")
+                                    .replaceAll("%d",
+                                    Utilities.toURI(temp).getPath()) + "<br>"
                                     + "<b><b>" + NbBundle.getMessage(
                                     MarauroaApplication.class,
                                     "application.dir.not.exists.fix") + "<br>"
@@ -433,9 +434,7 @@ public final class DataBaseManager implements LookupListener {
                 Object item = it.next();
                 if (item instanceof IMarauroaApplication) {
                     IMarauroaApplication app = (IMarauroaApplication) item;
-                    if (app != null) {
-                        DataBaseManager.addApplication(app);
-                    }
+                    DataBaseManager.addApplication(app);
                 }
             }
         }

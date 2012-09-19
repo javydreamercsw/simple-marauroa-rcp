@@ -1,2 +1,0 @@
-Manifest-Version: 1.0
-OpenIDE-Module-Localizing-Bundle: simple/server/marauroa/application/db/Bundle.properties

@@ -62,12 +62,6 @@
             <type>jar</type>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>Marauroa-Application-DB</artifactId>
-            <version>${project.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-netbeans-modules-javahelp</artifactId>
             <version>${netbeans.version}</version>
@@ -132,12 +126,6 @@
             <version>${netbeans.version}</version>
         </dependency>
         <dependency>
-            <artifactId>marauroa</artifactId>
-            <groupId>marauroa</groupId>
-            <type>jar</type>
-            <version>3.9.2</version>
-        </dependency>
-        <dependency>
             <artifactId>log4j</artifactId>
             <groupId>log4j</groupId>
             <type>jar</type>
@@ -146,7 +134,17 @@
         <dependency>
             <groupId>net.sourceforge.javydreamercsw</groupId>
             <artifactId>Marauroa-Simple-Server</artifactId>
-            <version>${marauroa.version}</version>
+            <version>${simple.server.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>Marauroa-Application-DataBase</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>Marauroa-Lib</artifactId>
+            <version>3.9.2</version>
         </dependency>
     </dependencies>
 

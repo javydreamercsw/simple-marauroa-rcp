@@ -100,11 +100,6 @@ public final class ApplicationExplorerTopComponent extends TopComponent
         return instance;
     }
 
-    @Override
-    public int getPersistenceType() {
-        return TopComponent.PERSISTENCE_ALWAYS;
-    }
-
     void writeProperties(java.util.Properties p) {
         try {
             // better to version settings since initial version as advocated at
