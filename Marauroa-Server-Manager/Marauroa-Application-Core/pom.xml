@@ -146,13 +146,15 @@
                     <manifest>src/main/nbm/manifest.mf</manifest>
                     <author>Javier A. Ortiz Bultrón</author>
                     <homepageUrl>https://sourceforge.net/projects/simple-marauroa/</homepageUrl>
-                    <nbmResource>
-                        <directory>resources</directory>
-                        <targetPath>modules/resources</targetPath>
-                        <includes>
-                            <include>*.gif</include>
-                        </includes>
-                    </nbmResource>
+                    <nbmResources>                     
+                        <nbmResource>
+                            <directory>${basedir}/resources</directory>
+                            <targetPath>resources</targetPath>
+                            <includes>
+                                <include>*.gif</include>
+                            </includes>
+                        </nbmResource>
+                    </nbmResources> 
                     <publicPackages>
                         <publicPackage>simple.marauroa.application.core</publicPackage>
                         <publicPackage>simple.marauroa.application.core.executor</publicPackage>

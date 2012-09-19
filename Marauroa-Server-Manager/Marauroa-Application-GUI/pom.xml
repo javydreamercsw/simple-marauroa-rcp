@@ -165,6 +165,15 @@
                     <manifest>src/main/nbm/manifest.mf</manifest>
                     <author>Javier A. Ortiz Bultrón</author>
                     <homepageUrl>https://sourceforge.net/projects/simple-marauroa/</homepageUrl>
+                    <nbmResources>                     
+                        <nbmResource>
+                            <directory>${basedir}/resources/images</directory>
+                            <targetPath>resources/images</targetPath>
+                            <includes>
+                                <include>*.png</include>
+                            </includes>
+                        </nbmResource>
+                    </nbmResources> 
                 </configuration>
             </plugin>
 
