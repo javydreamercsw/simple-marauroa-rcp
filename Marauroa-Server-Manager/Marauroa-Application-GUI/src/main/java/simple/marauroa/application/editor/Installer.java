@@ -32,7 +32,6 @@ public class Installer extends ModuleInstall implements ActionListener {
 
         if (!initialized) {
             WindowManager.getDefault().invokeWhenUIReady(new Runnable() {
-
                 @Override
                 public void run() {
                     //Check the SystemTray is supported
@@ -46,7 +45,8 @@ public class Installer extends ModuleInstall implements ActionListener {
                     } else {
                         try {
                             final PopupMenu popup = new PopupMenu();
-                            final TrayIcon trayIcon = new TrayIcon(Tool.createImage(
+                            final TrayIcon trayIcon = new TrayIcon(
+                                    Tool.createImage(
                                     "simple.marauroa.application.gui",
                                     "resources/images/taskbarIcon.png",
                                     "tray icon"));
@@ -64,7 +64,8 @@ public class Installer extends ModuleInstall implements ActionListener {
                             try {
                                 tray.add(trayIcon);
                             } catch (AWTException e) {
-                                throw new Exception("TrayIcon could not be added.");
+                                throw new Exception(
+                                        "TrayIcon could not be added.", e);
                             }
                             initialized = true;
                         } catch (Exception ex) {
