@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Ant-Version: Apache Ant 1.8.3
+Created-By: 1.7.0_05-b05 (Oracle Corporation)
+AutoUpdate-Show-In-Client: true
+OpenIDE-Module: simple.server.lib/0
+OpenIDE-Module-Implementation-Version: 29
+OpenIDE-Module-Localizing-Bundle: simple/server/lib/Bundle.properties
+

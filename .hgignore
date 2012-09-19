@@ -1,0 +1,29 @@
+syntax: glob
+*/dist/*
+*/build/*
+*/private/*
+*.db
+*server_stats.xml
+*/log*.txt
+**/keystore/*
+**/jWrestling/*
+**/doxygen/*
+Marauroa NB/*
+Marauroa Application Manager/D20/*
+Marauroa-Project*
+Marauroa Application Manager/netbeans*
+Marauroa Application Manager/DB
+Marauroa Application Manager/Persistence
+netbeans*
+Marauroa Application Manager/versions.xml
+Simple Libs/marauroa.jar
+Simple Libs/marauroa-client.jar
+Simple Libs/MarauroaMonitorExtension.jar
+Marauroa Application Manager/Marauroa-Lib/release/modules/ext/Marauroa.jar
+**/pmd.xml
+Marauroa Application Manager/*.exe
+Marauroa Application Manager/Marauroa Server Manager-Setup.jar
+marauroa-custom/*
+*/target/*
+syntax: regexp
+^marauroa$

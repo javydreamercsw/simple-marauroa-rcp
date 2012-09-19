@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!--
+    TODO define vocabulary identification
+    PUBLIC ID: -//vendor//vocabulary//EN
+    SYSTEM ID: http://server/path/Example config.dtd
+
+-->
+
+<!--
+    An example how to use this DTD from your XML document:
+
+    <?xml version="1.0"?>
+
+    <!DOCTYPE INI-Config SYSTEM "Example config.dtd">
+
+    <INI-Config>
+    ...
+    </INI-Config>
+-->
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT INI-Config (custom-parameters|default-parameters)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT default-parameters EMPTY>
+<!ATTLIST default-parameters
+    server_version CDATA #IMPLIED
+    server_name CDATA #IMPLIED
+    database_implementation CDATA #IMPLIED
+    factory_implementation CDATA #IMPLIED
+    gameserver_implementation CDATA #IMPLIED
+    world CDATA #IMPLIED
+    ruleprocessor CDATA #IMPLIED
+    jdbc_url CDATA #IMPLIED
+    jdbc_class CDATA #IMPLIED
+    database_adapter CDATA #IMPLIED
+    jdbc_user CDATA #IMPLIED
+    jdbc_pwd CDATA #IMPLIED
+    tcp_port CDATA #IMPLIED
+    turn_length CDATA #IMPLIED
+    server_typeGame CDATA #IMPLIED
+  >
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT custom-parameters EMPTY>
+<!ATTLIST custom-parameters
+    x CDATA #IMPLIED
+  >
