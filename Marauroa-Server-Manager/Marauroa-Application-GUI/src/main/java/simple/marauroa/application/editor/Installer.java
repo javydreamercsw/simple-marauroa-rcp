@@ -11,8 +11,9 @@ import org.openide.windows.WindowManager;
 import simple.marauroa.application.core.tool.Tool;
 
 /**
- * Manages a module's lifecycle. Remember that an installer is optional and
- * often not needed at all.
+ * Manages a module's life cycle.
+ *
+ * Remember that an installer is optional and often not needed at all.
  */
 public class Installer extends ModuleInstall implements ActionListener {
 

@@ -152,14 +152,16 @@
         <module>application</module>
         <module>Marauroa-Application-Core</module>
         <module>Marauroa-Application-API</module>
-        <module>Marauroa-Application-DB</module>
         <module>Marauroa-Application-GUI</module>
         <module>Map-Component</module>
         <module>Sound-Manager</module>
-    </modules>
+        <module>Marauroa-Application-DataBase</module>
+        <module>Marauroa-Lib</module>
+  </modules>
     <properties>
         <netbeans.version>RELEASE72</netbeans.version>
-        <marauroa.version>0.02.06-SNAPSHOT</marauroa.version>
+        <marauroa.version>3.9.2</marauroa.version>
+        <simple.server.version>0.02.06-SNAPSHOT</simple.server.version>
         <brandingToken>marauroa_server_manager</brandingToken>
     </properties>
 </project>

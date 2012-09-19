@@ -8,11 +8,11 @@
   </parent>
 
     <groupId>net.sourceforge.javydreamercsw</groupId>
-    <artifactId>Marauroa-Application-DB</artifactId>
+    <artifactId>Marauroa-Application-DataBase</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>nbm</packaging>
 
-    <name>Marauroa-Application-DB</name>
+    <name>Marauroa-Application-DataBase</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -33,14 +33,10 @@
             </snapshots>
         </repository>
         <repository>
-            <id>EclipseLink Repo</id>
-            <!-- note that ampersands in this URL are escaped because this is in an xml file -
-                   un-escape them to use in browser
-            -->
-            <url>http://www.eclipse.org/downloads/download.php?r=1&amp;nf=1&amp;file=/rt/eclipselink/maven.repo</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
+            <url>http://download.eclipse.org/rt/eclipselink/maven.repo/</url>
+            <id>eclipselink</id>
+            <layout>default</layout>
+            <name>Repository for library EclipseLink (JPA 2.0)</name>
         </repository>
     </repositories>
 
@@ -49,6 +45,16 @@
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-netbeans-api-annotations-common</artifactId>
             <version>${netbeans.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>eclipselink</artifactId>
+            <version>2.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>javax.persistence</artifactId>
+            <version>2.0.4.v201112161009</version>
         </dependency>
         <dependency>
             <groupId>org.netbeans.api</groupId>
@@ -61,16 +67,42 @@
             <artifactId>Marauroa-Application-API</artifactId>
             <version>1.0-SNAPSHOT</version>
             <type>jar</type>
+            <exclusions>
+                <exclusion>
+                    <artifactId>marauroa</artifactId>
+                    <groupId>marauroa</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
-            <groupId>org.eclipse.persistence</groupId>
-            <artifactId>eclipselink</artifactId>
-            <version>2.3.2</version>
+            <groupId>net.sourceforge.javydreamercsw</groupId>
+            <artifactId>Marauroa-Application-Core</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <type>jar</type>
+            <exclusions>
+                <exclusion>
+                    <artifactId>marauroa</artifactId>
+                    <groupId>marauroa</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
-            <groupId>org.eclipse.persistence</groupId>
-            <artifactId>javax.persistence</artifactId>
-            <version>2.0.3</version>
+            <artifactId>commonj.sdo</artifactId>
+            <groupId>commonj.sdo</groupId>
+            <type>jar</type>
+            <version>2.1.1.v201112051852</version>
+        </dependency>
+        <dependency>
+            <artifactId>org-openide-util-lookup</artifactId>
+            <groupId>org.netbeans.api</groupId>
+            <type>jar</type>
+            <version>${netbeans.version}</version>
+        </dependency>
+        <dependency>
+            <artifactId>org-openide-util</artifactId>
+            <groupId>org.netbeans.api</groupId>
+            <type>jar</type>
+            <version>${netbeans.version}</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -80,26 +112,9 @@
             <type>jar</type>
         </dependency>
         <dependency>
-            <groupId>net.sourceforge.javydreamercsw</groupId>
-            <artifactId>Marauroa-Application-Core</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <artifactId>org-openide-util</artifactId>
-            <groupId>org.netbeans.api</groupId>
-            <type>jar</type>
-            <version>${netbeans.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.netbeans.api</groupId>
-            <artifactId>org-openide-util-lookup</artifactId>
-            <version>${netbeans.version}</version>
-        </dependency>
-        <dependency>
-            <artifactId>org-openide-modules</artifactId>
-            <groupId>org.netbeans.api</groupId>
-            <type>jar</type>
-            <version>${netbeans.version}</version>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>Marauroa-Lib</artifactId>
+            <version>3.9.2</version>
         </dependency>
     </dependencies>
 
@@ -111,13 +126,19 @@
                 <extensions>true</extensions>
                 <configuration>
                     <useOSGiDependencies>true</useOSGiDependencies>
-                    <moduleType>eager</moduleType>
+                    <moduleType>normal</moduleType>
                     <codeNameBase>simple.marauroa.application.core.db/1</codeNameBase>
                     <licenseName>Apache License, Version 2.0</licenseName>
                     <licenseFile>../License.txt</licenseFile>
                     <manifest>src/main/nbm/manifest.mf</manifest>
                     <author>Javier A. Ortiz Bultrón</author>
                     <homepageUrl>https://sourceforge.net/projects/simple-marauroa/</homepageUrl>
+                    <publicPackages>
+                        <publicPackage>simple.marauroa.application.core.db</publicPackage>
+                        <publicPackage>simple.marauroa.application.core.db.controller</publicPackage>
+                        <publicPackage>simple.marauroa.application.core.db.controller.exceptions</publicPackage>
+                        <publicPackage>simple.marauroa.application.core.db.manager</publicPackage>
+                    </publicPackages>
                 </configuration>
             </plugin>
 
@@ -125,7 +146,7 @@
                 <!-- NetBeans 6.9+ requires JDK 6 -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
+                <version>2.5.1</version>
                 <configuration>
                     <source>1.6</source>
                     <target>1.6</target>
@@ -135,7 +156,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>2.3.1</version>
+                <version>2.4</version>
                 <configuration>
                     <!-- to have the jar plugin pickup the nbm generated manifest -->
                     <useDefaultManifestFile>true</useDefaultManifestFile>

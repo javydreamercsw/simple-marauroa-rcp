@@ -49,11 +49,6 @@
         -->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>Marauroa-Application-DB</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
             <artifactId>Marauroa-Application-GUI</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -76,12 +71,22 @@
             <artifactId>Marauroa-Simple-Server</artifactId>
             <groupId>net.sourceforge.javydreamercsw</groupId>
             <type>jar</type>
-            <version>${marauroa.version}</version>
+            <version>${simple.server.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>Marauroa-Application-Core</artifactId>
             <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>Marauroa-Application-DataBase</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>Marauroa-Lib</artifactId>
+            <version>3.9.2</version>
         </dependency>
     </dependencies>
 
