@@ -84,6 +84,11 @@ public final class VisualizerTopComponent extends TopComponent
     }
 
     @Override
+    public int getPersistenceType() {
+        return TopComponent.PERSISTENCE_NEVER;
+    }
+
+    @Override
     public void componentOpened() {
         result = Utilities.actionsGlobalContext().lookupResult(IMarauroaApplication.class);
         result.addLookupListener(this);

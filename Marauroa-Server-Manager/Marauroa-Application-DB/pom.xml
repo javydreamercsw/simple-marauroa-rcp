@@ -2,16 +2,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>Marauroa-Server-Manager-parent</artifactId>
-        <groupId>net.sourceforge.javydreamercsw</groupId>
-        <version>1.0-SNAPSHOT</version>
-    </parent>
+    <artifactId>Marauroa-Server-Manager-parent</artifactId>
+    <groupId>net.sourceforge.javydreamercsw</groupId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
 
-    <artifactId>Sound-Manager</artifactId>
+    <groupId>net.sourceforge.javydreamercsw</groupId>
+    <artifactId>Marauroa-Application-DB</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>nbm</packaging>
 
-    <name>Sound-Manager</name>
+    <name>Marauroa-Application-DB</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -37,13 +38,63 @@
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-netbeans-api-annotations-common</artifactId>
-            <version>RELEASE72</version>
+            <version>${netbeans.version}</version>
         </dependency>
         <dependency>
             <groupId>org.netbeans.api</groupId>
-            <artifactId>org-openide-modules</artifactId>
-            <version>RELEASE72</version>
+            <artifactId>org-openide-dialogs</artifactId>
+            <version>${netbeans.version}</version>
             <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>net.sourceforge.javydreamercsw</groupId>
+            <artifactId>Marauroa-Application-API</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.10</version>
+            <scope>test</scope>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>net.sourceforge.javydreamercsw</groupId>
+            <artifactId>Marauroa-Application-Core</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <artifactId>org-openide-util</artifactId>
+            <groupId>org.netbeans.api</groupId>
+            <type>jar</type>
+            <version>${netbeans.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-util-lookup</artifactId>
+            <version>${netbeans.version}</version>
+        </dependency>
+        <dependency>
+            <artifactId>org-openide-modules</artifactId>
+            <groupId>org.netbeans.api</groupId>
+            <type>jar</type>
+            <version>${netbeans.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>H2-Library-Wrapper</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>Eclipselink-Wrapper</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>Marauroa-Wrapper</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 
@@ -55,18 +106,15 @@
                 <extensions>true</extensions>
                 <configuration>
                     <useOSGiDependencies>false</useOSGiDependencies>
-                    <configuration>
-                    <useOSGiDependencies>false</useOSGiDependencies>
                     <moduleType>eager</moduleType>
-                    <codeNameBase>simple.marauroa.application.sound/1</codeNameBase>
+                    <codeNameBase>simple.marauroa.application.core.db/1</codeNameBase>
                     <licenseName>Apache License, Version 2.0</licenseName>
                     <licenseFile>../License.txt</licenseFile>
                     <manifest>src/main/nbm/manifest.mf</manifest>
                     <author>Javier A. Ortiz Bultrón</author>
                     <homepageUrl>https://sourceforge.net/projects/simple-marauroa/</homepageUrl>
-                </configuration>
                     <publicPackages>
-                        <publicPackage>simple.marauroa.sound</publicPackage>
+                        <publicPackage>simple.marauroa.application.core.db.*</publicPackage>
                     </publicPackages>
                 </configuration>
             </plugin>

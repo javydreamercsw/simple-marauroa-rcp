@@ -21,6 +21,7 @@ import org.openide.modules.InstalledFileLocator;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
+import org.openide.util.Utilities;
 import simple.marauroa.application.api.*;
 import simple.marauroa.application.core.executor.DefaultMarauroaProcess;
 import simple.marauroa.application.core.executor.IMarauroaProcess;
@@ -91,21 +92,38 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
                         entry.getValue() == null ? "" : entry.getValue().toString()});
             config.put(entry.getKey(), entry.getValue());
         }
+        InputStream defaultProperties = null;
+        FileOutputStream out = null;
         try {
             //Now modify specific properties from the template
-            InputStream defaultProperties =
+            defaultProperties =
                     getRelativeToClass().getResourceAsStream("default.ini");
             if (defaultProperties != null) {
                 config.load(defaultProperties);
                 defaultProperties.close();
                 File file = new File(getAppINIFilePath());
                 file.mkdirs();
-                FileOutputStream out = new FileOutputStream(file);
+                out = new FileOutputStream(file);
                 config.store(out, "");
             }
         } catch (IOException ex) {
             logger.log(Level.SEVERE, null, ex);
             return null;
+        } finally {
+            if (out != null) {
+                try {
+                    out.close();
+                } catch (IOException ex) {
+                    Exceptions.printStackTrace(ex);
+                }
+            }
+            if (defaultProperties != null) {
+                try {
+                    defaultProperties.close();
+                } catch (IOException ex) {
+                    Exceptions.printStackTrace(ex);
+                }
+            }
         }
         return config;
     }
@@ -195,7 +213,9 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
             return false;
         } finally {
             try {
-                out.close();
+                if (out != null) {
+                    out.close();
+                }
                 configuration = config;
                 return true;
             } catch (IOException ex) {
@@ -262,6 +282,7 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
         try {
             running = !available(Integer.valueOf(configuration.getProperty(ConfigurationElement.TCP_PORT.getName())));
         } catch (NumberFormatException e) {
+            logger.log(Level.WARNING, null, e);
             //Try to close it just in case.
             running = true;
         }
@@ -287,7 +308,7 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
             ds.setReuseAddress(true);
             return true;
         } catch (IOException e) {
-            //Nothing to log
+             logger.log(Level.WARNING, null, e);
         } finally {
             if (ds != null) {
                 ds.close();
@@ -331,7 +352,7 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
                         new NotifyDescriptor.Message(NbBundle.getMessage(
                         MarauroaApplication.class,
                         "application.dir.exists").replaceAll("%d",
-                        appDir.toURI().getPath()),
+                        Utilities.toURI(appDir).getPath()),
                         NotifyDescriptor.ERROR_MESSAGE));
                 return false;
             } else {
@@ -797,9 +818,10 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
 
     private void fire(String propertyName, Object old, Object nue) {
         //Passing 0 below on purpose, so you only synchronize for one atomic call:
-        PropertyChangeListener[] pcls = (PropertyChangeListener[]) listeners.toArray(new PropertyChangeListener[0]);
+        PropertyChangeListener[] pcls = (PropertyChangeListener[]) listeners.toArray(new PropertyChangeListener[listeners.size()]);
         for (int i = 0; i < pcls.length; i++) {
-            pcls[i].propertyChange(new PropertyChangeEvent(this, propertyName, old, nue));
+            pcls[i].propertyChange(new PropertyChangeEvent(this, propertyName,
+                    old, nue));
         }
     }
 

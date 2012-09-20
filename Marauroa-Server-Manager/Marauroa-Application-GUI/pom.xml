@@ -54,12 +54,33 @@
             <groupId>net.sourceforge.javydreamercsw</groupId>
             <artifactId>Marauroa-Application-Core</artifactId>
             <version>1.0-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>log4j</artifactId>
+                    <groupId>log4j</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-netbeans-modules-settings</artifactId>
             <version>${netbeans.version}</version>
             <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>Marauroa-Application-DB</artifactId>
+            <version>${project.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>eclipselink</artifactId>
+                    <groupId>org.eclipse.persistence</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>h2</artifactId>
+                    <groupId>com.h2database</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.netbeans.api</groupId>
@@ -126,25 +147,14 @@
             <version>${netbeans.version}</version>
         </dependency>
         <dependency>
-            <artifactId>log4j</artifactId>
-            <groupId>log4j</groupId>
-            <type>jar</type>
-            <version>1.2.17</version>
-        </dependency>
-        <dependency>
-            <groupId>net.sourceforge.javydreamercsw</groupId>
-            <artifactId>Marauroa-Simple-Server</artifactId>
-            <version>${simple.server.version}</version>
-        </dependency>
-        <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>Marauroa-Application-DataBase</artifactId>
+            <artifactId>Simple-Server-Library-Wrapper</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>Marauroa-Lib</artifactId>
-            <version>3.9.2</version>
+            <artifactId>Marauroa-Wrapper</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 
@@ -155,7 +165,7 @@
                 <artifactId>nbm-maven-plugin</artifactId>
                 <extensions>true</extensions>
                 <configuration>
-                    <useOSGiDependencies>true</useOSGiDependencies>
+                    <useOSGiDependencies>false</useOSGiDependencies>
                     <moduleType>eager</moduleType>
                     <codeNameBase>simple.marauroa.application.gui/1</codeNameBase>
                     <licenseName>Apache License, Version 2.0</licenseName>
