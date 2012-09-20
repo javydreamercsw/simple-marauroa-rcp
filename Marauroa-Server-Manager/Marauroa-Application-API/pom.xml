@@ -38,33 +38,28 @@
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-netbeans-api-annotations-common</artifactId>
-            <version>RELEASE72</version>
+            <version>${netbeans.version}</version>
         </dependency>
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-netbeans-api-visual</artifactId>
-            <version>RELEASE72</version>
+            <version>${netbeans.version}</version>
         </dependency>
         <dependency>
-            <groupId>net.sourceforge.javydreamercsw</groupId>
-            <artifactId>Marauroa-Simple-Server</artifactId>
-            <version>${simple.server.version}</version>
+            <artifactId>marauroa</artifactId>
+            <groupId>marauroa</groupId>
+            <type>jar</type>
+            <version>${marauroa.version}</version>
         </dependency>
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-util-lookup</artifactId>
-            <version>RELEASE72</version>
-        </dependency>
-        <dependency>
-            <artifactId>log4j</artifactId>
-            <groupId>log4j</groupId>
-            <type>jar</type>
-            <version>1.2.17</version>
+            <version>${netbeans.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>Marauroa-Lib</artifactId>
-            <version>3.9.2</version>
+            <artifactId>Simple-Server-Library-Wrapper</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 
@@ -75,7 +70,7 @@
                 <artifactId>nbm-maven-plugin</artifactId>
                 <extensions>true</extensions>
                 <configuration>
-                    <useOSGiDependencies>true</useOSGiDependencies>
+                    <useOSGiDependencies>false</useOSGiDependencies>
                     <moduleType>eager</moduleType>
                     <codeNameBase>simple.marauroa.application.api/1</codeNameBase>
                     <licenseName>Apache License, Version 2.0</licenseName>

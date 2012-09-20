@@ -8,11 +8,11 @@
   </parent>
 
     <groupId>net.sourceforge.javydreamercsw</groupId>
-    <artifactId>Marauroa-Lib</artifactId>
-    <version>${marauroa.version}</version>
+    <artifactId>Simple-Server-Library-Wrapper</artifactId>
+    <version>1.0-SNAPSHOT</version>
     <packaging>nbm</packaging>
 
-    <name>Marauroa-Lib</name>
+    <name>Simple-Server-Library-Wrapper</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -41,10 +41,27 @@
             <version>${netbeans.version}</version>
         </dependency>
         <dependency>
-            <groupId>marauroa</groupId>
-            <artifactId>marauroa</artifactId>
-            <version>${marauroa.version}</version>
-            <scope>provided</scope>
+            <groupId>net.sourceforge.javydreamercsw</groupId>
+            <artifactId>Marauroa-Simple-Server</artifactId>
+            <version>${simple.server.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>h2</artifactId>
+                    <groupId>com.h2database</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>log4j</artifactId>
+                    <groupId>log4j</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>marauroa</artifactId>
+                    <groupId>marauroa</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>org-openide-util-lookup</artifactId>
+                    <groupId>org.netbeans.api</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 
@@ -54,6 +71,20 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>nbm-maven-plugin</artifactId>
                 <extensions>true</extensions>
+                <configuration>
+                    <useOSGiDependencies>false</useOSGiDependencies>
+                    <moduleType>eager</moduleType>
+                    <codeNameBase>simple.marauroa.server.wrapper/1</codeNameBase>
+                    <licenseName>Apache License, Version 2.0</licenseName>
+                    <licenseFile>../License.txt</licenseFile>
+                    <manifest>src/main/nbm/manifest.mf</manifest>
+                    <author>Javier A. Ortiz Bultrón</author>
+                    <homepageUrl>https://sourceforge.net/projects/simple-marauroa/</homepageUrl>
+                    <publicPackages>
+                        <!--Rest of code within the module-->
+                        <publicPackage>simple.*</publicPackage>
+                    </publicPackages>
+                </configuration>
             </plugin>
 
             <plugin>
