@@ -1,14 +1,11 @@
 package simple.marauroa.application.core;
 
-import java.util.Iterator;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openide.util.Lookup;
-import simple.marauroa.application.api.IMarauroaApplication;
 
 /**
  *
@@ -42,7 +39,7 @@ public class DefaultMarauroaProviderTest {
     public void testGetTemplate() {
         System.out.println("getTemplate");
         DefaultMarauroaProvider instance = new DefaultMarauroaProvider();
-        assertTrue(instance.getTemplate() instanceof IMarauroaApplication);
+        assertTrue(instance.getTemplate() != null);
     }
 
     /**
@@ -55,22 +52,6 @@ public class DefaultMarauroaProviderTest {
         instance.setTemplate(null);
         assertTrue(instance.getTemplate() == null);
         instance.setTemplate(new DefaultMarauroaApplication());
-        assertTrue(instance.getTemplate() instanceof IMarauroaApplication);
-    }
-    
-    /**
-     * Test the presence in the Lookup
-     */
-    @Test
-    public void testLookup(){
-        boolean found = false;
-        for (Iterator<? extends IMarauroaApplication> it = Lookup.getDefault().lookupAll(IMarauroaApplication.class).iterator(); it.hasNext();) {
-            IMarauroaApplication app = it.next();
-            if (app instanceof IMarauroaApplication) {
-                found = true;
-                break;
-            }
-        }
-        assertTrue(found);
+        assertTrue(instance.getTemplate() instanceof DefaultMarauroaApplication);
     }
 }
