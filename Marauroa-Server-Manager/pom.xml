@@ -6,8 +6,47 @@
     <artifactId>Marauroa-Server-Manager-parent</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
+    
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
 
-    <name>Marauroa-Server-Manager-parent</name>
+    <name>Marauroa-Server-Manager</name>
+
+    <description>The project that closes the gap between Marauroa and an actual Game/Application</description>
+    <url>https://sourceforge.net/projects/simple-marauroa/</url>
+    <issueManagement>
+        <system>jira</system>
+        <url>https://simple-marauroa.jira.com/browse/SMSR</url>
+    </issueManagement>
+    <developers>
+        <developer>
+            <id>javydreamercsw</id>
+            <name>Javier A. Ortiz Bultron</name>
+            <roles>
+                <role>admin</role>
+            </roles>
+        </developer>
+    </developers>
+    <licenses>
+        <license>
+            <name>CDDL-1.0</name>
+            <url>http://www.opensource.org/licenses/cddl1.php</url>
+            <comments>Common Development and Distribution License</comments>
+        </license>
+    </licenses>
+    <scm>
+        <url>https://bitbucket.org/javydreamercsw/simple-marauroa-rcp/src</url>
+        <connection>scm:hg:https://bitbucket.org/javydreamercsw/simple-marauroa-rcp/src</connection>
+        <developerConnection>scm:hg:ssh://hg@bitbucket.org/javydreamercsw/simple-marauroa-rcp</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+    <ciManagement>
+        <system>Jenkins</system>
+        <url>https://xinco.ci.cloudbees.com/</url>
+    </ciManagement>
 
     <repositories>
         <repository>
@@ -143,9 +182,114 @@
                         </reportPlugins>
                     </configuration>
                 </plugin>
+                <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.3.2</version>
+                <executions>
+                    <execution>
+                        <id>default</id>
+                        <goals>
+                            <goal>perform</goal>
+                        </goals>
+                        <configuration>
+                            <pomFileName>Marauroa-Server-Manager/pom.xml</pomFileName>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             </plugins>
         </pluginManagement>
     </build>
+    
+    <profiles>
+        <profile>
+            <id>release-sign-artifacts</id>
+            <activation>
+                <property>
+                    <name>performRelease</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.4</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>netbeans-release-sign-artifacts</id>
+            <activation>
+                <property>
+                    <name>performRelease</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.7</version>
+                        <executions>
+                            <execution>
+                                <id>generate-sources</id>
+                                <phase>generate-resources</phase>
+                                <configuration>
+                                    <available file="${keystore}" property="file.exists" />
+                                    <target name="delete-keystore" if="file.exists">
+                                        <delete file="${keystore}" />
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+            
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>keytool-maven-plugin</artifactId>
+                        <version>1.2</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>generateKeyPair</goal>
+                                </goals>
+                                <phase>compile</phase>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <keystore>${keystore}</keystore>
+                            <storepass>${keystorepass}</storepass>
+                            <keypass>${keystorepass}</keypass>
+                            <alias>${keystorealias}</alias>
+                            <dname>cn=Javier A. Ortiz Bultrón, ou=None, L=Pflugerville, ST=Texas, o=ExampleOrg, c=US</dname>
+                            <sigalg>SHA1withDSA</sigalg>
+                            <validity>3650</validity>
+                            <keyalg>DSA</keyalg>
+                            <keysize>1024</keysize>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
     <modules>
         <module>branding</module>
@@ -156,11 +300,11 @@
         <module>Marauroa-Application-GUI</module>
         <module>Map-Component</module>
         <module>Sound-Manager</module>
-    <module>H2-Library-Wrapper</module>
-    <module>Simple-Server-Library-Wrapper</module>
-    <module>Eclipselink-Wrapper</module>
-    <module>Marauroa-Wrapper</module>
-  </modules>
+        <module>H2-Library-Wrapper</module>
+        <module>Simple-Server-Library-Wrapper</module>
+        <module>Eclipselink-Wrapper</module>
+        <module>Marauroa-Wrapper</module>
+    </modules>
     <properties>
         <netbeans.version>RELEASE72</netbeans.version>
         <brandingToken>marauroa_server_manager</brandingToken>
