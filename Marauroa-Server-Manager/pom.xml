@@ -158,11 +158,11 @@
         <module>Sound-Manager</module>
     <module>H2-Library-Wrapper</module>
     <module>Simple-Server-Library-Wrapper</module>
+    <module>Eclipselink-Wrapper</module>
+    <module>Marauroa-Wrapper</module>
   </modules>
     <properties>
         <netbeans.version>RELEASE72</netbeans.version>
-        <marauroa.version>3.9.2</marauroa.version>
-        <simple.server.version>0.02.06-SNAPSHOT</simple.server.version>
         <brandingToken>marauroa_server_manager</brandingToken>
     </properties>
 </project>

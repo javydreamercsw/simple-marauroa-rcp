@@ -131,12 +131,6 @@
             <version>${netbeans.version}</version>
         </dependency>
         <dependency>
-            <artifactId>marauroa</artifactId>
-            <groupId>marauroa</groupId>
-            <type>jar</type>
-            <version>${marauroa.version}</version>
-        </dependency>
-        <dependency>
             <artifactId>log4j</artifactId>
             <groupId>log4j</groupId>
             <type>jar</type>
@@ -145,6 +139,11 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>Simple-Server-Library-Wrapper</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>Marauroa-Wrapper</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
