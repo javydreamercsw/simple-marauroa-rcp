@@ -32,16 +32,6 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
-        <repository>
-            <id>EclipseLink Repo</id>
-            <!-- note that ampersands in this URL are escaped because this is in an xml file -
-                   un-escape them to use in browser
-            -->
-            <url>http://www.eclipse.org/downloads/download.php?r=1&amp;nf=1&amp;file=/rt/eclipselink/maven.repo</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
     </repositories>
 
     <dependencies>
@@ -61,16 +51,6 @@
             <artifactId>Marauroa-Application-API</artifactId>
             <version>1.0-SNAPSHOT</version>
             <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.persistence</groupId>
-            <artifactId>eclipselink</artifactId>
-            <version>2.4.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.persistence</groupId>
-            <artifactId>javax.persistence</artifactId>
-            <version>2.0.4.v201112161009</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -102,14 +82,18 @@
             <version>${netbeans.version}</version>
         </dependency>
         <dependency>
-            <artifactId>commonj.sdo</artifactId>
-            <groupId>commonj.sdo</groupId>
-            <type>jar</type>
-            <version>2.1.1.v201112051852</version>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>H2-Library-Wrapper</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>H2-Library-Wrapper</artifactId>
+            <artifactId>Eclipselink-Wrapper</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>Marauroa-Wrapper</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
@@ -130,13 +114,6 @@
                     <author>Javier A. Ortiz Bultrón</author>
                     <homepageUrl>https://sourceforge.net/projects/simple-marauroa/</homepageUrl>
                     <publicPackages>
-                        <!--Persistence API-->
-                        <publicPackage>javax.persistence</publicPackage>
-                        <publicPackage>javax.persistence.spi</publicPackage>
-                        <!--Eclipselink-->
-                        <publicPackage>commonj.sdo.impl</publicPackage>
-                        <publicPackage>org.eclipse.persistence.*</publicPackage>
-                        <!--Rest of code within the module-->
                         <publicPackage>simple.marauroa.application.core.db.*</publicPackage>
                     </publicPackages>
                 </configuration>
