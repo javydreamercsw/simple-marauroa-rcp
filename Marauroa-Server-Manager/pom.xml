@@ -43,7 +43,7 @@
                     <configuration>
                         <brandingToken>${brandingToken}</brandingToken>
                         <cluster>${brandingToken}</cluster>
-                        <useOSGiDependencies>true</useOSGiDependencies>
+                        <useOSGiDependencies>false</useOSGiDependencies>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -152,11 +152,12 @@
         <module>application</module>
         <module>Marauroa-Application-Core</module>
         <module>Marauroa-Application-API</module>
+        <module>Marauroa-Application-DB</module>
         <module>Marauroa-Application-GUI</module>
         <module>Map-Component</module>
         <module>Sound-Manager</module>
-        <module>Marauroa-Application-DataBase</module>
-        <module>Marauroa-Lib</module>
+    <module>H2-Library-Wrapper</module>
+    <module>Simple-Server-Library-Wrapper</module>
   </modules>
     <properties>
         <netbeans.version>RELEASE72</netbeans.version>

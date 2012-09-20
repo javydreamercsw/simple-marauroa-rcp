@@ -28,14 +28,15 @@
             <version>${netbeans.version}</version>
         </dependency>
         <dependency>
-            <groupId>net.sourceforge.javydreamercsw</groupId>
-            <artifactId>Marauroa-Simple-Server</artifactId>
-            <version>${simple.server.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-util</artifactId>
             <version>${netbeans.version}</version>
+        </dependency>
+        <dependency>
+            <artifactId>marauroa</artifactId>
+            <groupId>marauroa</groupId>
+            <type>jar</type>
+            <version>3.9.2</version>
         </dependency>
         <dependency>
             <groupId>net.sourceforge.javydreamercsw</groupId>
@@ -87,8 +88,8 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>Marauroa-Lib</artifactId>
-            <version>3.9.2</version>
+            <artifactId>Simple-Server-Library-Wrapper</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 
@@ -131,7 +132,7 @@
                 <artifactId>nbm-maven-plugin</artifactId>
                 <extensions>true</extensions>
                 <configuration>
-                    <useOSGiDependencies>true</useOSGiDependencies>
+                    <useOSGiDependencies>false</useOSGiDependencies>
                     <moduleType>eager</moduleType>
                     <codeNameBase>simple.marauroa.application.core/1</codeNameBase>
                     <licenseName>Apache License, Version 2.0</licenseName>

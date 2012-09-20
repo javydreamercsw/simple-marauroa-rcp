@@ -30,7 +30,7 @@ public abstract class MarauroaAction extends AbstractAction implements Comparabl
 
     @Override
     public int compareTo(Object other) {
-        if (!(other instanceof MarauroaAction)) {
+        if (other == null || !(other instanceof MarauroaAction)) {
             throw new ClassCastException(" Can only compare "
                     + getClass().getSimpleName() + "s");
         }
