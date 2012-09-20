@@ -4,6 +4,7 @@ package simple.marauroa.application.gui;
 import java.awt.BorderLayout;
 import java.beans.IntrospectionException;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
@@ -13,6 +14,8 @@ import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.explorer.ExplorerManager;
 import org.openide.explorer.ExplorerUtils;
 import org.openide.explorer.view.BeanTreeView;
+import org.openide.filesystems.FileLock;
+import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
 import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
@@ -26,13 +29,15 @@ import simple.marauroa.application.api.IMarauroaApplication;
 /**
  * Top component which displays something.
  */
-@ConvertAsProperties(dtd = "-//simple.marauroa.application.gui//ApplicationExplorer//EN",
+@ConvertAsProperties(
+        dtd = "-//simple.marauroa.application.gui//ApplicationExplorer//EN",
 autostore = false)
 @TopComponent.Description(preferredID = "ApplicationExplorerTopComponent",
 //iconBase="SET/PATH/TO/ICON/HERE", 
 persistenceType = TopComponent.PERSISTENCE_ALWAYS)
 @TopComponent.Registration(mode = "explorer", openAtStartup = true)
-@TopComponent.OpenActionRegistration(displayName = "#CTL_ApplicationExplorerAction",
+@TopComponent.OpenActionRegistration(displayName =
+"#CTL_ApplicationExplorerAction",
 preferredID = "ApplicationExplorerTopComponent")
 public final class ApplicationExplorerTopComponent extends TopComponent
         implements ExplorerManager.Provider, LookupListener {
@@ -40,23 +45,32 @@ public final class ApplicationExplorerTopComponent extends TopComponent
     private static ApplicationExplorerTopComponent instance;
     private final ExplorerManager explorerManager = new ExplorerManager();
     private Lookup.Result<IMarauroaApplication> result =
-            Utilities.actionsGlobalContext().lookupResult(IMarauroaApplication.class);
+            Utilities.actionsGlobalContext()
+            .lookupResult(IMarauroaApplication.class);
 
-    @Messages({"HINT_ApplicationExplorerTopComponent=This is a ApplicationExplorer window",
+    @Messages({"HINT_ApplicationExplorerTopComponent=This is a "
+        + "ApplicationExplorer window",
         "CTL_ApplicationExplorerTopComponent=ApplicationExplorer Window"})
     public ApplicationExplorerTopComponent() {
         initComponents();
         add(new BeanTreeView(), BorderLayout.CENTER);
         putClientProperty(TopComponent.PROP_CLOSING_DISABLED, Boolean.TRUE);
         ActionMap map = getActionMap();
-        map.put(DefaultEditorKit.copyAction, ExplorerUtils.actionCopy(getExplorerManager()));
-        map.put(DefaultEditorKit.cutAction, ExplorerUtils.actionCut(getExplorerManager()));
-        map.put(DefaultEditorKit.pasteAction, ExplorerUtils.actionPaste(getExplorerManager()));
-        map.put("delete", ExplorerUtils.actionDelete(getExplorerManager(), true));
+        map.put(DefaultEditorKit.copyAction,
+                ExplorerUtils.actionCopy(getExplorerManager()));
+        map.put(DefaultEditorKit.cutAction,
+                ExplorerUtils.actionCut(getExplorerManager()));
+        map.put(DefaultEditorKit.pasteAction,
+                ExplorerUtils.actionPaste(getExplorerManager()));
+        map.put("delete",
+                ExplorerUtils.actionDelete(getExplorerManager(), true));
 
-        associateLookup(ExplorerUtils.createLookup(getExplorerManager(), getActionMap()));
-        getExplorerManager().setRootContext(new RootNode(new MarauroaAppChildFactory()));
-        getExplorerManager().getRootContext().setDisplayName("Registered Applications");
+        associateLookup(ExplorerUtils.createLookup(getExplorerManager(),
+                getActionMap()));
+        getExplorerManager().setRootContext(
+                new RootNode(new MarauroaAppChildFactory()));
+        getExplorerManager().getRootContext()
+                .setDisplayName("Registered Applications");
         //Set up the listener stuff
         result.allItems();
         result.addLookupListener(ApplicationExplorerTopComponent.this);
@@ -106,21 +120,44 @@ public final class ApplicationExplorerTopComponent extends TopComponent
     }
 
     void writeProperties(java.util.Properties p) {
+        FileLock lock = null;
+        OutputStream out = null;
         try {
-            // better to version settings since initial version as advocated at
+            // Better to version settings since initial version as advocated at
             // http://wiki.apidesign.org/wiki/PropertyFiles
             p.setProperty("version", "1.0");
-            if (FileUtil.getConfigRoot().getFileObject(
-                    "Config/Marauroa/ApplicationExplorer.properties") == null) {
+            FileObject property =
+                    FileUtil.getConfigRoot().getFileObject(
+                    "Config/Marauroa/ApplicationExplorer.properties");
+            if (property == null) {
                 FileUtil.getConfigRoot().createFolder("Config");
-                FileUtil.getConfigRoot().getFileObject("Config").createFolder("Marauroa");
-                FileUtil.getConfigRoot().getFileObject("Config/Marauroa").createData("ApplicationExplorer.properties");
+                FileUtil.getConfigRoot().getFileObject("Config")
+                        .createFolder("Marauroa");
+                FileUtil.getConfigRoot().getFileObject("Config/Marauroa")
+                        .createData("ApplicationExplorer.properties");
+                property =
+                        FileUtil.getConfigRoot().getFileObject(
+                        "Config/Marauroa/ApplicationExplorer.properties");
             }
-            p.store(FileUtil.getConfigRoot().getFileObject(
-                    "Config/Marauroa/ApplicationExplorer.properties").getOutputStream(),
-                    new Date(System.currentTimeMillis()).toString());
+            if (property != null) {
+                lock = property.lock();
+                out = property.getOutputStream(lock);
+                p.store(out,
+                        new Date(System.currentTimeMillis()).toString());
+            }
         } catch (IOException ex) {
             Exceptions.printStackTrace(ex);
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException ex) {
+                // already closed
+            }
+            if (lock != null) {
+                lock.releaseLock();
+            }
         }
     }
 
@@ -156,7 +193,6 @@ public final class ApplicationExplorerTopComponent extends TopComponent
             while (it.hasNext()) {
                 Object item = it.next();
                 if (item instanceof IMarauroaApplication) {
-                    IMarauroaApplication application = (IMarauroaApplication) item;
                     try {
                         update();
                     } catch (IntrospectionException ex) {
