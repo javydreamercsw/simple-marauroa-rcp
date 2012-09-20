@@ -11,7 +11,8 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-import org.apache.log4j.Logger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.netbeans.api.extexecution.ExecutionDescriptor;
 import org.netbeans.api.extexecution.ExecutionService;
 import org.openide.util.Exceptions;
@@ -29,8 +30,11 @@ public class DefaultMarauroaProcess implements IMarauroaProcess {
     private Process process;
     private MarauroaProcessThread thread;
     private Timer timer;
+    private static final Logger LOG =
+            Logger.getLogger(DefaultMarauroaProcess.class.getSimpleName());
 
-    public DefaultMarauroaProcess(IMarauroaApplication app, String processName) {
+    public DefaultMarauroaProcess(IMarauroaApplication app,
+            String processName) {
         this.app = app;
         this.processName = processName;
     }
@@ -54,15 +58,17 @@ public class DefaultMarauroaProcess implements IMarauroaProcess {
                 commands.add("-c");
                 commands.add(app.getAppINIFileName());
                 commands.add("-l");
-                if (app.getCommandLine() != null && !app.getCommandLine().isEmpty()) {
-                    StringTokenizer st = new StringTokenizer(app.getCommandLine(), " ");
+                if (app.getCommandLine() != null
+                        && !app.getCommandLine().isEmpty()) {
+                    StringTokenizer st =
+                            new StringTokenizer(app.getCommandLine(), " ");
                     while (st.hasMoreTokens()) {
                         commands.add(st.nextToken());
                     }
                 }
                 for (Iterator<String> it = commands.iterator(); it.hasNext();) {
                     String cmd = it.next();
-                    Logger.getLogger(DefaultMarauroaProcess.class).info(cmd);
+                    LOG.info(cmd);
                 }
                 ProcessBuilder pb = new ProcessBuilder(commands);
                 pb.directory(new File(app.getApplicationPath()));
@@ -100,9 +106,12 @@ public class DefaultMarauroaProcess implements IMarauroaProcess {
         @Override
         public void run() {
             try {
-                ExecutionDescriptor descriptor = new ExecutionDescriptor().frontWindow(true).controllable(true);
+                ExecutionDescriptor descriptor =
+                        new ExecutionDescriptor().frontWindow(true)
+                        .controllable(true);
 
-                ExecutionService service = ExecutionService.newService(marauroaProcess,
+                ExecutionService service = ExecutionService.newService(
+                        marauroaProcess,
                         descriptor, getProcessName());
 
                 Future<Integer> task = service.run();
@@ -111,8 +120,9 @@ public class DefaultMarauroaProcess implements IMarauroaProcess {
                     @Override
                     public void run() {
                         if (getTaskResult() != 0) {
-                            Logger.getLogger(DefaultMarauroaProcess.class.getSimpleName()).debug(
-                                    "Something went wrong with the task. Changing status!");
+                            LOG.log(Level.FINE,
+                                    "Something went wrong with the task. "
+                                    + "Changing status!");
                             app.setStatus(STATUS.STOPPED);
                             //The user needs to reconnect.
                             timer.cancel();
