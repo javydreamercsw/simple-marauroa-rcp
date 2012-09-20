@@ -49,6 +49,11 @@
         -->
         <dependency>
             <groupId>${project.groupId}</groupId>
+            <artifactId>Marauroa-Application-DB</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>Marauroa-Application-GUI</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -68,25 +73,29 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <artifactId>Marauroa-Simple-Server</artifactId>
-            <groupId>net.sourceforge.javydreamercsw</groupId>
-            <type>jar</type>
-            <version>${simple.server.version}</version>
-        </dependency>
-        <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>Marauroa-Application-Core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>Marauroa-Application-DataBase</artifactId>
+            <artifactId>H2-Library-Wrapper</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>Marauroa-Lib</artifactId>
-            <version>3.9.2</version>
+            <artifactId>Simple-Server-Library-Wrapper</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>Eclipselink-Wrapper</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>Marauroa-Wrapper</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 

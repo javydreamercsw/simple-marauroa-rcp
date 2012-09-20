@@ -3,7 +3,6 @@ package simple.marauroa.application.core;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
 import org.junit.*;
 import static org.junit.Assert.*;
 import org.netbeans.junit.MockServices;

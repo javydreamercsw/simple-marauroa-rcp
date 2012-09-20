@@ -2,16 +2,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>Marauroa-Server-Manager-parent</artifactId>
-        <groupId>net.sourceforge.javydreamercsw</groupId>
-        <version>1.0-SNAPSHOT</version>
-    </parent>
+    <artifactId>Marauroa-Server-Manager-parent</artifactId>
+    <groupId>net.sourceforge.javydreamercsw</groupId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
 
-    <artifactId>Sound-Manager</artifactId>
+    <groupId>net.sourceforge.javydreamercsw</groupId>
+    <artifactId>H2-Library-Wrapper</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>nbm</packaging>
 
-    <name>Sound-Manager</name>
+    <name>H2-Library-Wrapper</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -37,13 +38,13 @@
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-netbeans-api-annotations-common</artifactId>
-            <version>RELEASE72</version>
+            <version>${netbeans.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.netbeans.api</groupId>
-            <artifactId>org-openide-modules</artifactId>
-            <version>RELEASE72</version>
+            <artifactId>h2</artifactId>
+            <groupId>com.h2database</groupId>
             <type>jar</type>
+            <version>1.3.168</version>
         </dependency>
     </dependencies>
 
@@ -55,18 +56,16 @@
                 <extensions>true</extensions>
                 <configuration>
                     <useOSGiDependencies>false</useOSGiDependencies>
-                    <configuration>
-                    <useOSGiDependencies>false</useOSGiDependencies>
-                    <moduleType>eager</moduleType>
-                    <codeNameBase>simple.marauroa.application.sound/1</codeNameBase>
+                    <moduleType>autoload</moduleType>
+                    <codeNameBase>org.h2/1</codeNameBase>
                     <licenseName>Apache License, Version 2.0</licenseName>
                     <licenseFile>../License.txt</licenseFile>
                     <manifest>src/main/nbm/manifest.mf</manifest>
                     <author>Javier A. Ortiz Bultrón</author>
                     <homepageUrl>https://sourceforge.net/projects/simple-marauroa/</homepageUrl>
-                </configuration>
                     <publicPackages>
-                        <publicPackage>simple.marauroa.sound</publicPackage>
+                        <!--Database driver-->
+                        <publicPackage>org.h2.*</publicPackage>
                     </publicPackages>
                 </configuration>
             </plugin>
@@ -75,7 +74,7 @@
                 <!-- NetBeans 6.9+ requires JDK 6 -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
+                <version>2.5.1</version>
                 <configuration>
                     <source>1.6</source>
                     <target>1.6</target>
@@ -85,7 +84,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>2.3.1</version>
+                <version>2.4</version>
                 <configuration>
                     <!-- to have the jar plugin pickup the nbm generated manifest -->
                     <useDefaultManifestFile>true</useDefaultManifestFile>
