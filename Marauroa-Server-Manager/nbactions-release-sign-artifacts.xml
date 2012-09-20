@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+    <action>
+        <actionName>CUSTOM-Publish Snapshot</actionName>
+        <displayName>Deploy Snapshot</displayName>
+        <goals>
+            <goal>clean</goal>
+            <goal>deploy</goal>
+            
+        </goals>
+        <properties>
+            <keystore>keystore</keystore>
+            <keystorepass>lyjx100pre</keystorepass>
+            <keystorealias>simple-marauroa</keystorealias>
+        </properties>
+    </action>
+    <action>
+        <actionName>CUSTOM-Stage Release</actionName>
+        <displayName>Stage Release</displayName>
+        <goals>
+            <goal>release:clean</goal>
+            <goal>release:prepare</goal>
+            <goal>release:perform</goal>
+            <goal>-Darguments=-Dgpg.passphrase=ljsyax100pre</goal>
+            
+        </goals>
+        <properties>
+            <gpg.passphrase>ljsyax100pre</gpg.passphrase>
+            <keystore>keystore</keystore>
+            <keystorepass>lyjx100pre</keystorepass>
+            <keystorealias>simple-marauroa</keystorealias>
+            <workingDirectory>C:\checkout</workingDirectory>
+        </properties>
+    </action>
+    <action>
+            <actionName>build</actionName>
+            <goals>
+                <goal>install</goal>
+            </goals>
+            <properties>
+                <keystore>keystore</keystore>
+                <keystorepass>lyjx100pre</keystorepass>
+                <keystorealias>oh</keystorealias>
+            </properties>
+        </action>
+    <action>
+            <actionName>rebuild</actionName>
+            <goals>
+                <goal>clean</goal>
+                <goal>install</goal>
+            </goals>
+            <properties>
+                <keystore>keystore</keystore>
+                <keystorepass>lyjx100pre</keystorepass>
+                <keystorealias>oh</keystorealias>
+            </properties>
+        </action>
+</actions>
