@@ -23,18 +23,6 @@ public class MarauroaApplicationTest {
         MockServices.setServices(IFLI.class);
     }
 
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
-
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
-    }
-
     public static class IFLI extends InstalledFileLocator {
 
         @Override
@@ -111,9 +99,8 @@ public class MarauroaApplicationTest {
         System.out.println("getIcon");
         int type = 0;
         MarauroaApplication instance = new MarauroaApplicationImpl();
-        Image expResult = null;
         Image result = instance.getIcon(type);
-        assertEquals(expResult, result);
+        assertEquals(null, result);
     }
 
     /**
@@ -148,7 +135,7 @@ public class MarauroaApplicationTest {
         assertEquals(expResult, result);
     }
 
-    public class MarauroaApplicationImpl extends MarauroaApplication {
+    public static class MarauroaApplicationImpl extends MarauroaApplication {
 
         @Override
         public String getIniPath() {
