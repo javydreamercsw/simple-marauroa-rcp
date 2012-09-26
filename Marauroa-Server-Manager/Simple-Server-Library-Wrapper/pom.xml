@@ -76,7 +76,7 @@
                     <moduleType>eager</moduleType>
                     <codeNameBase>simple.marauroa.server.wrapper/1</codeNameBase>
                     <licenseName>Apache License, Version 2.0</licenseName>
-                    <licenseFile>../License.txt</licenseFile>
+                    <licenseFile>../../License.txt</licenseFile>
                     <manifest>src/main/nbm/manifest.mf</manifest>
                     <author>Javier A. Ortiz Bultrón</author>
                     <homepageUrl>https://sourceforge.net/projects/simple-marauroa/</homepageUrl>
