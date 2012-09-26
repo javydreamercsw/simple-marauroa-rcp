@@ -67,7 +67,7 @@
         <repository>
             <id>project.local</id>
             <name>project</name>
-            <url>file:repo</url>
+            <url>file:../repo</url>
         </repository>
     </repositories>
 
