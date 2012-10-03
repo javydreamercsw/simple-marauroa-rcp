@@ -44,24 +44,17 @@
             <groupId>net.sourceforge.javydreamercsw</groupId>
             <artifactId>Marauroa-Simple-Server</artifactId>
             <version>0.02.06-SNAPSHOT</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>h2</artifactId>
-                    <groupId>com.h2database</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>log4j</artifactId>
-                    <groupId>log4j</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>marauroa</artifactId>
-                    <groupId>marauroa</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>org-openide-util-lookup</artifactId>
-                    <groupId>org.netbeans.api</groupId>
-                </exclusion>
-            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>Marauroa-Wrapper</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <artifactId>org-openide-util-lookup</artifactId>
+            <groupId>org.netbeans.api</groupId>
+            <type>jar</type>
+            <version>${netbeans.version}</version>
         </dependency>
     </dependencies>
 

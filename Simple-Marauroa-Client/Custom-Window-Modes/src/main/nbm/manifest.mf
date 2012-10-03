@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Layer: net/sourceforge/javydreamercsw/layer.xml
+OpenIDE-Module-Localizing-Bundle: net/sourceforge/javydreamercsw/Bundle.properties

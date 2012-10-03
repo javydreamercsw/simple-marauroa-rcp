@@ -46,6 +46,11 @@
             <type>jar</type>
             <version>3.9.2</version>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>Log4j-Wrapper</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
