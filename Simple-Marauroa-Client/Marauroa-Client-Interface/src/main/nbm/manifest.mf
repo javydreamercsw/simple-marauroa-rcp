@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Install: simple/marauroa/client/Installer.class
+OpenIDE-Module-Layer: net/sourceforge/javydreamercsw/layer.xml
+OpenIDE-Module-Localizing-Bundle: net/sourceforge/javydreamercsw/Bundle.properties

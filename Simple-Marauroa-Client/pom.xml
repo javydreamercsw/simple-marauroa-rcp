@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>net.sourceforge.javydreamercsw</groupId>
+    <artifactId>Simple-Marauroa-Client-parent</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>Simple-Marauroa-Client-parent</name>
+    
+    <description>The project that closes the gap between Marauroa and an actual Game/Application</description>
+    <url>https://sourceforge.net/projects/simple-marauroa/</url>
+    <issueManagement>
+        <system>jira</system>
+        <url>https://simple-marauroa.jira.com/browse/SMSR</url>
+    </issueManagement>
+    <developers>
+        <developer>
+            <id>javydreamercsw</id>
+            <name>Javier A. Ortiz Bultron</name>
+            <roles>
+                <role>admin</role>
+            </roles>
+        </developer>
+    </developers>
+    <licenses>
+        <license>
+            <name>CDDL-1.0</name>
+            <url>http://www.opensource.org/licenses/cddl1.php</url>
+            <comments>Common Development and Distribution License</comments>
+        </license>
+    </licenses>
+    <scm>
+        <url>https://bitbucket.org/javydreamercsw/simple-marauroa-rcp/src</url>
+        <connection>scm:hg:https://bitbucket.org/javydreamercsw/simple-marauroa-rcp/src</connection>
+        <developerConnection>scm:hg:ssh://hg@bitbucket.org/javydreamercsw/simple-marauroa-rcp</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+    <ciManagement>
+        <system>Jenkins</system>
+        <url>https://xinco.ci.cloudbees.com/</url>
+    </ciManagement>
+    
+    <repositories>
+        <repository>
+            <id>netbeans</id>
+            <name>NetBeans</name>
+            <url>http://bits.netbeans.org/maven2/</url>
+        </repository>
+        <repository>
+            <id>sonatype-repo</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>project.local</id>
+            <name>project</name>
+            <url>file:../repo</url>
+        </repository>
+    </repositories>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>nbm-maven-plugin</artifactId>
+                    <version>3.8</version>
+                    <extensions>true</extensions>
+                    <configuration>
+                        <brandingToken>${brandingToken}</brandingToken>
+                        <cluster>${brandingToken}</cluster>
+                        <useOSGiDependencies>true</useOSGiDependencies>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <!-- NetBeans 6.9+ requires JDK 6 -->
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>2.5.1</version>
+                    <configuration>
+                        <source>1.6</source>
+                        <target>1.6</target>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>2.4</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.5.1</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                    <!-- Disable annotation processors during normal compilation -->
+                    <compilerArgument>-proc:none</compilerArgument>
+                    <showDeprecation>true</showDeprecation>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.bsc.maven</groupId>
+                <artifactId>maven-processor-plugin</artifactId>
+                <version>2.0.7</version>
+                <executions>
+                    <!-- Run annotation processors on src/main/java sources -->
+                    <execution>
+                        <id>process</id>
+                        <goals>
+                            <goal>process</goal>
+                        </goals>
+                        <phase>generate-sources</phase>
+                    </execution>
+                    <!-- Run annotation processors on src/test/java sources -->
+                    <execution>
+                        <id>process-test</id>
+                        <goals>
+                            <goal>process-test</goal>
+                        </goals>
+                        <phase>generate-test-sources</phase>
+                        <configuration>
+                            <processors>
+                                <processor>org.netbeans.modules.openide.util.ServiceProviderProcessor</processor>
+                            </processors>
+                        </configuration> 
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <!-- to have the jar plugin pickup the nbm generated manifest -->
+                    <useDefaultManifestFile>true</useDefaultManifestFile>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <modules>
+        <module>branding</module>
+        <module>application</module>
+        <module>Marauroa-Client-Interface</module>
+        <module>Login-Component</module>
+        <module>Challenge-Manager</module>
+        <module>Chat-Component</module>
+        <module>Simple-Client-Wrapper</module>
+        <module>Create-Account-Component</module>
+        <module>Custom-Window-Modes</module>
+        <module>Dynamic-Image-Manager</module>
+        <module>User-List-Component</module>
+        <module>Zone-List-Manager</module>
+    </modules>
+
+    <properties>
+        <netbeans.version>RELEASE72</netbeans.version>
+        <brandingToken>simple_marauroa_client</brandingToken>
+    </properties>
+</project>

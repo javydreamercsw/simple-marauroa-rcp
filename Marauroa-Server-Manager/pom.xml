@@ -301,9 +301,9 @@
                                 <id>generate-sources</id>
                                 <phase>generate-resources</phase>
                                 <configuration>
-                                    <available file="${keystore}" property="file.exists" />
+                                    <available file="${keystore}" property="file.exists"/>
                                     <target name="delete-keystore" if="file.exists">
-                                        <delete file="${keystore}" />
+                                        <delete file="${keystore}"/>
                                     </target>
                                 </configuration>
                                 <goals>
@@ -330,7 +330,7 @@
                             <storepass>${keystorepass}</storepass>
                             <keypass>${keystorepass}</keypass>
                             <alias>${keystorealias}</alias>
-                            <dname>cn=Javier A. Ortiz Bultrón, ou=None, L=Pflugerville, ST=Texas, o=ExampleOrg, c=US</dname>
+                            <dname>cn=Javier A. Ortiz Bultr�n, ou=None, L=Pflugerville, ST=Texas, o=ExampleOrg, c=US</dname>
                             <sigalg>SHA1withDSA</sigalg>
                             <validity>3650</validity>
                             <keyalg>DSA</keyalg>
@@ -355,6 +355,7 @@
         <module>Simple-Server-Library-Wrapper</module>
         <module>Eclipselink-Wrapper</module>
         <module>Marauroa-Wrapper</module>
+        <module>Log4j-Wrapper</module>
     </modules>
     <properties>
         <netbeans.version>RELEASE72</netbeans.version>
