@@ -40,6 +40,12 @@
             <artifactId>org-netbeans-api-annotations-common</artifactId>
             <version>RELEASE72</version>
         </dependency>
+        <dependency>
+            <artifactId>log4j</artifactId>
+            <groupId>log4j</groupId>
+            <type>jar</type>
+            <version>1.2.17</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -47,8 +53,20 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>nbm-maven-plugin</artifactId>
-                <version>3.8</version>
                 <extensions>true</extensions>
+                <configuration>
+                    <useOSGiDependencies>false</useOSGiDependencies>
+                    <moduleType>eager</moduleType>
+                    <codeNameBase>org.apache.lib/1</codeNameBase>
+                    <licenseName>Apache License, Version 2.0</licenseName>
+                    <licenseFile>../../License.txt</licenseFile>
+                    <manifest>src/main/nbm/manifest.mf</manifest>
+                    <author>Javier A. Ortiz Bultrón</author>
+                    <homepageUrl>https://sourceforge.net/projects/simple-marauroa/</homepageUrl>
+                    <publicPackages>
+                        <publicPackage>org.apache.*</publicPackage>
+                    </publicPackages>
+                </configuration>
             </plugin>
 
             <plugin>
