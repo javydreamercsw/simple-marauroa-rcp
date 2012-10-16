@@ -56,7 +56,7 @@
                 <extensions>true</extensions>
                 <configuration>
                     <useOSGiDependencies>false</useOSGiDependencies>
-                    <moduleType>eager</moduleType>
+                    <moduleType>autoload</moduleType>
                     <codeNameBase>org.apache.lib/1</codeNameBase>
                     <licenseName>Apache License, Version 2.0</licenseName>
                     <licenseFile>../../License.txt</licenseFile>
