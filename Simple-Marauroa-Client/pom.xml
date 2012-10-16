@@ -7,7 +7,7 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>Simple-Marauroa-Client-parent</name>
+    <name>Simple-Marauroa-Client</name>
     
     <description>The project that closes the gap between Marauroa and an actual Game/Application</description>
     <url>https://sourceforge.net/projects/simple-marauroa/</url>
@@ -33,7 +33,7 @@
     </licenses>
     <scm>
         <url>https://bitbucket.org/javydreamercsw/simple-marauroa-rcp/src</url>
-        <connection>scm:hg:https://bitbucket.org/javydreamercsw/simple-marauroa-rcp/src</connection>
+        <connection>scm:hg:https://bitbucket.org/javydreamercsw/simple-marauroa-rcp</connection>
         <developerConnection>scm:hg:ssh://hg@bitbucket.org/javydreamercsw/simple-marauroa-rcp</developerConnection>
         <tag>HEAD</tag>
     </scm>
