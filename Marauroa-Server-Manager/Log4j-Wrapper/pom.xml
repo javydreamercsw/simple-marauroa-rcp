@@ -35,7 +35,7 @@
                 <artifactId>nbm-maven-plugin</artifactId>
                 <extensions>true</extensions>
                 <configuration>
-                    <useOSGiDependencies>true</useOSGiDependencies>
+                    <useOSGiDependencies>false</useOSGiDependencies>
                     <moduleType>autoload</moduleType>
                     <codeNameBase>org.apache.lib/1</codeNameBase>
                     <licenseName>Apache License, Version 2.0</licenseName>
