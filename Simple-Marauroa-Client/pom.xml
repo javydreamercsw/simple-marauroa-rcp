@@ -167,5 +167,6 @@
     <properties>
         <netbeans.version>RELEASE72</netbeans.version>
         <brandingToken>simple_marauroa_client</brandingToken>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 </project>
