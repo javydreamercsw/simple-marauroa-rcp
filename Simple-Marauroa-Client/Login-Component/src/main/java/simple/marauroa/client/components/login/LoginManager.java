@@ -14,6 +14,7 @@ import org.openide.DialogDisplayer;
 import org.openide.LifecycleManager;
 import org.openide.NotifyDescriptor;
 import org.openide.util.Exceptions;
+import org.openide.util.NbBundle;
 import org.openide.util.lookup.ServiceProvider;
 import simple.marauroa.client.components.api.ILoginManager;
 import simple.marauroa.client.components.common.MCITool;
@@ -24,11 +25,36 @@ import simple.marauroa.client.components.common.ProfileList;
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
 @ServiceProvider(service = ILoginManager.class)
+@NbBundle.Messages({
+    "window.title=Login to Server",
+    "LoginForm.jLabel2.text=Server name",
+    "LoginForm.savePasswordBox.text=Save password",
+    "LoginForm.saveLoginBox.text=Save login profile locally",
+    "LoginForm.passwordField.text=",
+    "LoginForm.jLabel5.text=Type your password",
+    "LoginForm.usernameField.text=",
+    "LoginForm.jLabel4.text=Type your username",
+    "LoginForm.jLabel1.text=Account profiles",
+    "LoginForm.jLabel3.text=Server port",
+    "LoginForm.loginButton.text=OK",
+    "LoginForm.cancelButton.text=Cancel",
+    "LoginForm.createButton.text=Create Account",
+    "LoginForm.serverPortField.text=",
+    "Profiles.okButton.text=OK",
+    "Profiles.cancelButton.text=Cancel",
+    "Profiles.noprofiles.text=No profiles were detected in your computer."
+    + "\\nPlease create a profile in order to continue.",
+    "Profiles.noprofiles.title=No profiles found",
+    "Profiles.creation.error.message=An error occurred while creating the profile file.",
+    "Profiles.creation.error.title=Error creating profile file",
+    "Login.loading.error.message=An error occurred while loading your login information",
+    "Login.loading.error.title=Error Loading Login Information"
+})
 public class LoginManager implements ILoginManager {
 
     private LoginForm form;
-    protected ProfileList profiles = new ProfileList();
-    boolean login = true;
+    private ProfileList profiles = new ProfileList();
+    private boolean login = true;
 
     @Override
     public void displayLoginManager() {
@@ -41,7 +67,6 @@ public class LoginManager implements ILoginManager {
                 "LoginForm.cancelButton.text"));
 
         cancel.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 exit();
@@ -53,7 +78,6 @@ public class LoginManager implements ILoginManager {
                 "LoginForm.createButton.text"));
 
         create.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 MCITool.getCAManager().setVisible(false);
@@ -64,7 +88,6 @@ public class LoginManager implements ILoginManager {
         });
 
         ok.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 //authenicate username and password
@@ -78,7 +101,6 @@ public class LoginManager implements ILoginManager {
                 "window.title"));
         nd.setOptions(new Object[]{ok, create, cancel});
         nd.addPropertyChangeListener(new PropertyChangeListener() {
-
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 if (NotifyDescriptor.CLOSED_OPTION.equals(evt.getNewValue())) {
@@ -102,7 +124,7 @@ public class LoginManager implements ILoginManager {
          * Load saved profiles
          */
         profiles = loadProfiles();
-        if (profiles.isEmpty()) {
+        if (getProfiles().isEmpty()) {
             JButton ok = new JButton();
             ok.setText(org.openide.util.NbBundle.getMessage(LoginManager.class,
                     "Profiles.okButton.text"));
@@ -111,7 +133,6 @@ public class LoginManager implements ILoginManager {
                     "Profiles.cancelButton.text"));
 
             cancel.addActionListener(new ActionListener() {
-
                 @Override
                 public void actionPerformed(ActionEvent arg0) {
                     exit();
@@ -119,7 +140,6 @@ public class LoginManager implements ILoginManager {
             });
 
             ok.addActionListener(new ActionListener() {
-
                 @Override
                 public void actionPerformed(ActionEvent arg0) {
                     MCITool.getCAManager().displayCAManager();
@@ -132,7 +152,6 @@ public class LoginManager implements ILoginManager {
                     "Profiles.noprofiles.title"));
             nd.setOptions(new Object[]{ok, cancel});
             nd.addPropertyChangeListener(new PropertyChangeListener() {
-
                 @Override
                 public void propertyChange(PropertyChangeEvent evt) {
                     if (NotifyDescriptor.CLOSED_OPTION.equals(evt.getNewValue())) {
@@ -239,11 +258,25 @@ public class LoginManager implements ILoginManager {
 
     @Override
     public void setAttemptLogin(boolean retry) {
-        this.login = retry;
+        this.setLogin(retry);
     }
 
     @Override
     public boolean attemptLogin() {
+        return isLogin();
+    }
+
+    /**
+     * @return the login
+     */
+    public boolean isLogin() {
         return login;
+    }
+
+    /**
+     * @param login the login to set
+     */
+    public void setLogin(boolean login) {
+        this.login = login;
     }
 }

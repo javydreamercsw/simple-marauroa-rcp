@@ -15,9 +15,19 @@ import org.openide.windows.WindowManager;
 import simple.marauroa.application.core.MarauroaApplicationRepository;
 import simple.marauroa.client.components.common.MCITool;
 
+@NbBundle.Messages({
+    "chat.tab.name=Chat",
+    "invalid.client.setup=The client you are using is not configured correctly."
+        + "\\nIt should call 'ClientGameConfiguration.setRelativeTo("
+        + "configRelativeTo);' on its constructor\\n with a class used as "
+        + "reference to find custom configuration.\\n Please contact your "
+        + "custom client provider.",
+    "error.startup= Something went wrong during start up."
+})
 public class Installer extends ModuleInstall {
 
     private static final Logger logger = Logger.getLogger(Installer.class.getName());
+    private static final long serialVersionUID = 1L;
     private String APPLICATION_FOLDER;
 
     @Override
