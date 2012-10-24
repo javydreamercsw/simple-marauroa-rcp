@@ -74,11 +74,6 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
-        <repository>
-            <id>project.local</id>
-            <name>project</name>
-            <url>file:../repo</url>
-        </repository>
     </repositories>
 
     <build>
@@ -229,6 +224,69 @@
                     <useDefaultManifestFile>true</useDefaultManifestFile>
                 </configuration>
             </plugin>
+            <!--Install the local dependencies-->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.2.1</version>
+                <inherited>false</inherited>
+                <executions>
+                    <execution>
+                        <id>install-marauroa</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>mvn</executable>
+                            <arguments>
+                                <argument>install:install-file</argument>
+                                <argument>-Dfile=../repo/marauroa/marauroa/3.9.2/marauroa-3.9.2.jar</argument>
+                                <argument>-DgroupId=marauroa</argument>
+                                <argument>-DartifactId=marauroa</argument>
+                                <argument>-Dversion=3.9.2</argument>
+                                <argument>-Dpackaging=jar</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>install-swingx-all</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>mvn</executable>
+                            <arguments>
+                                <argument>install:install-file</argument>
+                                <argument>-Dfile=../repo/org/jdesktop/swingx/swingx-all/1.6.3/swingx-all-1.6.3.jar</argument>
+                                <argument>-DgroupId=org.jdesktop.swingx</argument>
+                                <argument>-DartifactId=swingx-all</argument>
+                                <argument>-Dversion=1.6.3</argument>
+                                <argument>-Dpackaging=jar</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>install-swingx-ws</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>mvn</executable>
+                            <arguments>
+                                <argument>install:install-file</argument>
+                                <argument>-Dfile=../repo/org/jdesktop/swingx/swingx-ws/1/swingx-ws-1.jar</argument>
+                                <argument>-DgroupId=org.jdesktop.swingx</argument>
+                                <argument>-DartifactId=swingx-ws</argument>
+                                <argument>-Dversion=1</argument>
+                                <argument>-Dpackaging=jar</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
     
@@ -271,7 +329,6 @@
             </activation>
             <build>
                 <plugins>
-                    
                     <plugin>
                         <artifactId>maven-antrun-plugin</artifactId>
                         <version>1.7</version>
@@ -291,7 +348,6 @@
                             </execution>
                         </executions>
                     </plugin>
-            
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>keytool-maven-plugin</artifactId>
