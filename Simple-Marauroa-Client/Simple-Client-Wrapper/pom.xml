@@ -24,6 +24,20 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>Marauroa-Simple-Client</artifactId>
             <version>0.02.06-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>log4j</artifactId>
+                    <groupId>log4j</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>marauroa</artifactId>
+                    <groupId>marauroa</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>h2</artifactId>
+                    <groupId>com.h2database</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <artifactId>org-openide-util-lookup</artifactId>
@@ -63,7 +77,7 @@
                     <author>Javier A. Ortiz Bultrón</author>
                     <homepageUrl>https://sourceforge.net/projects/simple-marauroa/</homepageUrl>
                     <publicPackages>
-                        <publicPackage>simple.*</publicPackage>
+                        <publicPackage>simple.client.*</publicPackage>
                     </publicPackages>
                 </configuration>
             </plugin>
