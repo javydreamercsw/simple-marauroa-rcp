@@ -63,14 +63,9 @@
                 <artifactId>nbm-maven-plugin</artifactId>
                 <extensions>true</extensions>
                 <configuration>
-                    <useOSGiDependencies>false</useOSGiDependencies>
                     <moduleType>autoload</moduleType>
                     <codeNameBase>simple.marauroa.server.wrapper/1</codeNameBase>
                     <licenseName>Apache License, Version 2.0</licenseName>
-                    <licenseFile>../../License.txt</licenseFile>
-                    <manifest>src/main/nbm/manifest.mf</manifest>
-                    <author>Javier A. Ortiz Bultrón</author>
-                    <homepageUrl>https://sourceforge.net/projects/simple-marauroa/</homepageUrl>
                     <publicPackages>
                         <!--Rest of code within the module-->
                         <publicPackage>simple.*</publicPackage>
