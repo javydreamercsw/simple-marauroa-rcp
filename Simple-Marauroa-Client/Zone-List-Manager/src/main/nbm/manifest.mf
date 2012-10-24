@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Install: simple/marauroa/event/manager/zone/Installer.class
+OpenIDE-Module-Localizing-Bundle: net/sourceforge/javydreamercsw/Bundle.properties

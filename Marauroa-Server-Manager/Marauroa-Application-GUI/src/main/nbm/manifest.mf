@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Install: simple/marauroa/application/editor/Installer.class
+OpenIDE-Module-Localizing-Bundle: simple/server/marauroa/application/gui/Bundle.properties

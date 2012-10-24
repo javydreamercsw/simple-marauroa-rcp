@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>Simple-Marauroa-Client-parent</artifactId>
+        <groupId>net.sourceforge.javydreamercsw</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <groupId>net.sourceforge.javydreamercsw</groupId>
+    <artifactId>Simple-Client-Wrapper</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>nbm</packaging>
+
+    <name>Simple Client Wrapper</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-netbeans-api-annotations-common</artifactId>
+            <version>${netbeans.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>Marauroa-Simple-Client</artifactId>
+            <version>0.02.06-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <artifactId>org-openide-util-lookup</artifactId>
+            <groupId>org.netbeans.api</groupId>
+            <type>jar</type>
+            <version>${netbeans.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>Marauroa-Wrapper</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>Simple-Server-Library-Wrapper</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>Log4j-Wrapper</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>nbm-maven-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <useOSGiDependencies>false</useOSGiDependencies>
+                    <codeNameBase>simple.marauroa.client.wrapper/1</codeNameBase>
+                    <licenseName>Apache License, Version 2.0</licenseName>
+                    <licenseFile>../../License.txt</licenseFile>
+                    <manifest>src/main/nbm/manifest.mf</manifest>
+                    <author>Javier A. Ortiz Bultrón</author>
+                    <homepageUrl>https://sourceforge.net/projects/simple-marauroa/</homepageUrl>
+                    <publicPackages>
+                        <publicPackage>simple.*</publicPackage>
+                    </publicPackages>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
