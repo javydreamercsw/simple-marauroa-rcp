@@ -14,12 +14,12 @@ import org.openide.util.TaskListener;
  * @author Javier A. Ortiz Bultrón <javier.ortiz.78@gmail.com>
  */
 public class GameUpdateAction implements UpdateProgressListener, ActionListener {
+    private static final Logger LOG = Logger.getLogger(GameUpdateAction.class.getName());
 
     protected final RequestProcessor RP;
     protected RequestProcessor.Task theTask = null;
     protected IProgressAction runnable;
     protected ProgressHandle ph;
-    private static final Logger LOG = Logger.getLogger(GameUpdateAction.class.getName());
     protected int currentProgress = 0;
     protected boolean finished = false;
 
