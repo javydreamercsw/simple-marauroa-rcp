@@ -9,7 +9,6 @@
 
     <groupId>net.sourceforge.javydreamercsw</groupId>
     <artifactId>Log4j-Wrapper</artifactId>
-    <version>1.0-SNAPSHOT</version>
     <packaging>nbm</packaging>
 
     <name>Log4j-Wrapper</name>

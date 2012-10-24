@@ -9,7 +9,6 @@
 
     <groupId>net.sourceforge.javydreamercsw</groupId>
     <artifactId>Login-Component</artifactId>
-    <version>1.0-SNAPSHOT</version>
     <packaging>nbm</packaging>
 
     <name>Login-Component</name>
@@ -88,6 +87,24 @@
             <type>jar</type>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <artifactId>Marauroa-Simple-Client</artifactId>
+            <groupId>net.sourceforge.javydreamercsw</groupId>
+            <type>jar</type>
+            <version>0.02.06-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <artifactId>Marauroa-Simple-Server</artifactId>
+            <groupId>net.sourceforge.javydreamercsw</groupId>
+            <type>jar</type>
+            <version>0.02.06-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <artifactId>log4j</artifactId>
+            <groupId>log4j</groupId>
+            <type>jar</type>
+            <version>1.2.17</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -98,6 +115,7 @@
                 <extensions>true</extensions>
                 <configuration>
                     <moduleType>eager</moduleType>
+                    <useOSGiDependencies>false</useOSGiDependencies>
                     <codeNameBase>simple.marauroa.client.components.login/1</codeNameBase>
                     <licenseName>Apache License, Version 2.0</licenseName>
                     <licenseFile>../../License.txt</licenseFile>

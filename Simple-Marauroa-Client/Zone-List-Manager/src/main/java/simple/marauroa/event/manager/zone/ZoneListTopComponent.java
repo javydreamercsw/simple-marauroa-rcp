@@ -27,17 +27,20 @@ persistenceType = TopComponent.PERSISTENCE_NEVER)
 @NbBundle.Messages({
     "CTL_ZoneListTopComponent=ZoneList Window",
     "HINT_ZoneListTopComponent=This is a ZoneList window",
+    "join.zone=Join","create.zone=Create","edit.zone=Edit","delete.zone=Delete"
 })
-public final class ZoneListTopComponent extends TopComponent
+public class ZoneListTopComponent extends TopComponent
         implements ExplorerManager.Provider, LookupListener {
+    private static final long serialVersionUID = 1L;
 
     private final ExplorerManager mgr = new ExplorerManager();
-    final ArrayList<String> zones = new ArrayList<String>();
+    final ArrayList<String> zones;
     private ZoneDialog crd = null;
     private Lookup.Result<IRPZone> result = 
             Utilities.actionsGlobalContext().lookupResult(IRPZone.class);
 
     public ZoneListTopComponent() {
+        this.zones = new ArrayList<String>();
         initComponents();
         setName(Bundle.CTL_ZoneListTopComponent());
         setToolTipText(Bundle.HINT_ZoneListTopComponent());

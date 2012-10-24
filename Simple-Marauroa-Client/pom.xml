@@ -99,46 +99,6 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.5.1</version>
-                <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
-                    <!-- Disable annotation processors during normal compilation -->
-                    <compilerArgument>-proc:none</compilerArgument>
-                    <showDeprecation>true</showDeprecation>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.bsc.maven</groupId>
-                <artifactId>maven-processor-plugin</artifactId>
-                <version>2.0.7</version>
-                <executions>
-                    <!-- Run annotation processors on src/main/java sources -->
-                    <execution>
-                        <id>process</id>
-                        <goals>
-                            <goal>process</goal>
-                        </goals>
-                        <phase>generate-sources</phase>
-                    </execution>
-                    <!-- Run annotation processors on src/test/java sources -->
-                    <execution>
-                        <id>process-test</id>
-                        <goals>
-                            <goal>process-test</goal>
-                        </goals>
-                        <phase>generate-test-sources</phase>
-                        <configuration>
-                            <processors>
-                                <processor>org.netbeans.modules.openide.util.ServiceProviderProcessor</processor>
-                            </processors>
-                        </configuration> 
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>2.4</version>
                 <configuration>
@@ -167,5 +127,6 @@
     <properties>
         <netbeans.version>RELEASE72</netbeans.version>
         <brandingToken>simple_marauroa_client</brandingToken>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 </project>
