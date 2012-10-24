@@ -47,6 +47,21 @@
             <scope>test</scope>
         </dependency>
         -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>Deck-Manager-GUI</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>Deck-Manager-Core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>Maic-The-Gathering-Game-Library</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
