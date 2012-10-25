@@ -45,7 +45,6 @@
                 <artifactId>nbm-maven-plugin</artifactId>
                 <extensions>true</extensions>
                 <configuration>
-                    <useOSGiDependencies>false</useOSGiDependencies>
                     <moduleType>autoload</moduleType>
                     <codeNameBase>eclipselink.wrapper/1</codeNameBase>
                     <publicPackages>
