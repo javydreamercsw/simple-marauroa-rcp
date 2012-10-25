@@ -11,7 +11,7 @@
     <artifactId>Deck-Manager-app</artifactId>
     <packaging>nbm-application</packaging>
 
-    <name>Deck-Manager-app</name>
+    <name>Deck Manager App</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -59,8 +59,20 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>Maic-The-Gathering-Game-Library</artifactId>
+            <artifactId>Magic-The-Gathering-Game-Library</artifactId>
             <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <artifactId>Card-Game-Interface</artifactId>
+            <groupId>net.sourceforge.javydreamercsw</groupId>
+            <type>jar</type>
+            <version>1.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <artifactId>Card-Game-Interface-DataBase-Implementation</artifactId>
+            <groupId>net.sourceforge.javydreamercsw</groupId>
+            <type>jar</type>
+            <version>1.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

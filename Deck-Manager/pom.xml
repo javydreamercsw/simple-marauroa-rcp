@@ -114,6 +114,11 @@
                     <artifactId>maven-jar-plugin</artifactId>
                     <version>2.4</version>
                 </plugin>
+                <plugin>
+                    <groupId>org.bsc.maven</groupId>
+                    <artifactId>maven-processor-plugin</artifactId>
+                    <version>2.0.8</version>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
@@ -134,9 +139,8 @@
         <module>application</module>
         <module>Deck-Manager-Core</module>
         <module>Deck-Manager-GUI</module>
-    <module>Maic-The-Gathering-Game-Library</module>
-    <module>Magic-The-Gathering-Game</module>
-  </modules>
+        <module>Magic-The-Gathering-Game-Library</module>
+    </modules>
 
     <properties>
         <netbeans.version>RELEASE72</netbeans.version>
