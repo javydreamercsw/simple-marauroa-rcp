@@ -12,7 +12,7 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>nbm</packaging>
 
-    <name>Deck-Manager-Core</name>
+    <name>Deck Manager Core</name>
 
     <dependencies>
         <dependency>
@@ -47,7 +47,7 @@
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-modules</artifactId>
-            <version>${netbeans.version}</version>
+            <version>RELEASE72</version>
             <type>jar</type>
         </dependency>
         <dependency>
@@ -66,7 +66,7 @@
             <artifactId>org-openide-util</artifactId>
             <groupId>org.netbeans.api</groupId>
             <type>jar</type>
-            <version>${netbeans.version}</version>
+            <version>RELEASE72</version>
         </dependency>
         <dependency>
             <artifactId>org-openide-util-lookup</artifactId>
@@ -88,6 +88,8 @@
                 <artifactId>nbm-maven-plugin</artifactId>
                 <extensions>true</extensions>
                 <configuration>
+                    <moduleType>autoload</moduleType>
+                    <codeNameBase>dreamer.card.game.core/1</codeNameBase>
                     <publicPackages>
                         <publicPackage>dreamer.card.game.core</publicPackage>
                     </publicPackages>

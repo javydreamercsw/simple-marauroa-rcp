@@ -12,7 +12,7 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>nbm</packaging>
 
-    <name>Deck-Manager-GUI</name>
+    <name>Deck Manager GUI</name>
 
     <dependencies>
         <dependency>
@@ -53,49 +53,49 @@
             <artifactId>org-openide-util-lookup</artifactId>
             <groupId>org.netbeans.api</groupId>
             <type>jar</type>
-            <version>RELEASE72</version>
+            <version>${netbeans.version}</version>
         </dependency>
         <dependency>
             <artifactId>org-openide-dialogs</artifactId>
             <groupId>org.netbeans.api</groupId>
             <type>jar</type>
-            <version>RELEASE72</version>
+            <version>${netbeans.version}</version>
         </dependency>
         <dependency>
             <artifactId>org-openide-modules</artifactId>
             <groupId>org.netbeans.api</groupId>
             <type>jar</type>
-            <version>RELEASE72</version>
+            <version>${netbeans.version}</version>
         </dependency>
         <dependency>
             <artifactId>org-openide-windows</artifactId>
             <groupId>org.netbeans.api</groupId>
             <type>jar</type>
-            <version>RELEASE72</version>
+            <version>${netbeans.version}</version>
         </dependency>
         <dependency>
             <artifactId>org-openide-explorer</artifactId>
             <groupId>org.netbeans.api</groupId>
             <type>jar</type>
-            <version>RELEASE72</version>
+            <version>${netbeans.version}</version>
         </dependency>
         <dependency>
             <artifactId>org-netbeans-swing-outline</artifactId>
             <groupId>org.netbeans.api</groupId>
             <type>jar</type>
-            <version>RELEASE72</version>
+            <version>${netbeans.version}</version>
         </dependency>
         <dependency>
             <artifactId>org-openide-awt</artifactId>
             <groupId>org.netbeans.api</groupId>
             <type>jar</type>
-            <version>RELEASE72</version>
+            <version>${netbeans.version}</version>
         </dependency>
         <dependency>
             <artifactId>org-openide-nodes</artifactId>
             <groupId>org.netbeans.api</groupId>
             <type>jar</type>
-            <version>RELEASE72</version>
+            <version>${netbeans.version}</version>
         </dependency>
     </dependencies>
 
@@ -106,6 +106,7 @@
                 <artifactId>nbm-maven-plugin</artifactId>
                 <extensions>true</extensions>
                 <configuration>
+                    <moduleType>eager</moduleType>
                     <codeNameBase>dreamer.card.game.gui/1</codeNameBase>
                     <publicPackages>
                         <publicPackage>dreamer.card.game.core</publicPackage>
