@@ -51,7 +51,7 @@
                         <!--Persistence API-->
                         <publicPackage>javax.persistence.*</publicPackage>
                         <!--Eclipselink-->
-                        <publicPackage>commonj.sdo.impl</publicPackage>
+                        <publicPackage>commonj.sdo.*</publicPackage>
                         <publicPackage>org.eclipse.persistence.*</publicPackage>
                     </publicPackages>
                 </configuration>
