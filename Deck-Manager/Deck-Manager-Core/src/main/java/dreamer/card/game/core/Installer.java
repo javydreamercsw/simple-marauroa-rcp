@@ -118,6 +118,7 @@ public class Installer extends ModuleInstall implements ActionListener,
                 } catch (SecurityException ex) {
                     LOG.log(Level.SEVERE, null, ex);
                 }
+                OutputHandler.output("Output", "Core loaded!");
             }
         });
     }

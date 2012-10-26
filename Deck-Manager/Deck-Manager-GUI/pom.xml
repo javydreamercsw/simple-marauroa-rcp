@@ -21,12 +21,6 @@
             <version>${netbeans.version}</version>
         </dependency>
         <dependency>
-            <groupId>net.sourceforge.javydreamercsw</groupId>
-            <artifactId>Card-Game-Interface</artifactId>
-            <version>1.1-SNAPSHOT</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-util</artifactId>
             <version>${netbeans.version}</version>
@@ -96,6 +90,17 @@
             <groupId>org.netbeans.api</groupId>
             <type>jar</type>
             <version>${netbeans.version}</version>
+        </dependency>
+        <dependency>
+            <artifactId>Output-Handler</artifactId>
+            <groupId>net.sourceforge.javydreamercsw</groupId>
+            <type>jar</type>
+            <version>1.6-20120926.224319-1</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>Card-Game-Library</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 
