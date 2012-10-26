@@ -95,7 +95,7 @@
                         <licenseName>Apache License, Version 2.0</licenseName>
                         <licenseFile>../../License.txt</licenseFile>
                         <manifest>src/main/nbm/manifest.mf</manifest>
-                        <author>Javier A. Ortiz Bultr�n</author>
+                        <author>Javier A. Ortiz Bultr?n</author>
                         <homepageUrl>https://sourceforge.net/projects/deck-manager/</homepageUrl>
                     </configuration>
                 </plugin>
@@ -140,10 +140,11 @@
         <module>Deck-Manager-Core</module>
         <module>Deck-Manager-GUI</module>
         <module>Magic-The-Gathering-Game-Library</module>
-    </modules>
+    <module>Card-Game-Library</module>
+  </modules>
 
     <properties>
-        <netbeans.version>RELEASE72</netbeans.version>
+        <netbeans.version>RELEASE721</netbeans.version>
         <brandingToken>deck_manager</brandingToken>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>

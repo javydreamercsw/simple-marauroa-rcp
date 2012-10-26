@@ -1,5 +1,6 @@
 package dreamer.card.game.gui;
 
+import com.dreamer.outputhandler.OutputHandler;
 import com.reflexit.magiccards.core.model.storage.db.DataBaseStateListener;
 import org.openide.modules.ModuleInstall;
 import org.openide.util.lookup.ServiceProvider;
@@ -9,11 +10,13 @@ import org.openide.windows.WindowSystemEvent;
 import org.openide.windows.WindowSystemListener;
 
 @ServiceProvider(service = DataBaseStateListener.class)
+@SuppressWarnings("serial")
 public class Installer extends ModuleInstall implements WindowSystemListener, DataBaseStateListener {
 
     @Override
     public void restored() {
         WindowManager.getDefault().addWindowSystemListener(this);
+        OutputHandler.output("Output","GUI loaded!");
     }
 
     @Override
@@ -25,14 +28,17 @@ public class Installer extends ModuleInstall implements WindowSystemListener, Da
 
     @Override
     public void afterLoad(WindowSystemEvent event) {
+        //Nothing to do.
     }
 
     @Override
     public void beforeSave(WindowSystemEvent event) {
+        //Nothing to do.
     }
 
     @Override
     public void afterSave(WindowSystemEvent event) {
+        //Nothing to do.
     }
 
     @Override
