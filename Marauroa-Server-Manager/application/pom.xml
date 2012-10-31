@@ -11,7 +11,7 @@
     <artifactId>Marauroa-Server-Manager-app</artifactId>
     <packaging>nbm-application</packaging>
 
-    <name>Marauroa-Server-Manager-app</name>
+    <name>Marauroa Server Manager</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -95,6 +95,11 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>Marauroa-Wrapper</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>jWrestling-Wrapper</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

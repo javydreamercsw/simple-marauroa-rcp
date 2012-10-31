@@ -396,9 +396,10 @@
         <module>Eclipselink-Wrapper</module>
         <module>Marauroa-Wrapper</module>
         <module>Log4j-Wrapper</module>
+        <module>jWrestling-Wrapper</module>
     </modules>
     <properties>
-        <netbeans.version>RELEASE721</netbeans.version>
+        <netbeans.version>RELEASE73-BETA</netbeans.version>
         <brandingToken>marauroa_server_manager</brandingToken>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
