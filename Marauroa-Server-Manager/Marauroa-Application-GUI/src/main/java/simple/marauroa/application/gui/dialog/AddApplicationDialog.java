@@ -27,7 +27,8 @@ public class AddApplicationDialog extends javax.swing.JDialog {
 
     private final ArrayList<IMarauroaApplication> applications =
             new ArrayList<IMarauroaApplication>();
-    private final static RequestProcessor RP = new RequestProcessor("Adding application", 1, true);
+    private final static RequestProcessor RP = 
+            new RequestProcessor("Adding application", 1, true);
 
     /**
      * Creates new form AddApplicationDialog
@@ -215,7 +216,8 @@ public class AddApplicationDialog extends javax.swing.JDialog {
         if (visible) {
             final ArrayList<IMarauroaApplicationProvider> applicationTypes =
                     new ArrayList<IMarauroaApplicationProvider>();
-            for (IMarauroaApplicationProvider app : Lookup.getDefault().lookupAll(IMarauroaApplicationProvider.class)) {
+            for (IMarauroaApplicationProvider app : 
+                    Lookup.getDefault().lookupAll(IMarauroaApplicationProvider.class)) {
                 //Add them to the options
                 if (!applicationTypes.contains(app)) {
                     applicationTypes.add(app);
