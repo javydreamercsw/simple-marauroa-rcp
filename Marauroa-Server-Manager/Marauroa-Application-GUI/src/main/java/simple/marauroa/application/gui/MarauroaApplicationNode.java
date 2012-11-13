@@ -35,16 +35,21 @@ import simple.marauroa.application.gui.dialog.PluginConfigurationDialog;
  *
  * @author Javier A. Ortiz Bultrón <javier.ortiz.78@gmail.com>
  */
-public class MarauroaApplicationNode extends BeanNode implements ApplicationStatusChangeListener {
+public class MarauroaApplicationNode extends BeanNode
+        implements ApplicationStatusChangeListener {
 
     private AddRPZoneDialog dialog = null;
     private PluginConfigurationDialog configDialog = null;
     private final PropertyChangeSupport supp = new PropertyChangeSupport(this);
     private IMarauroaApplication application;
     private Action[] actions;
+    private static final Logger LOG =
+            Logger.getLogger(MarauroaApplicationNode.class.getSimpleName());
 
-    public MarauroaApplicationNode(IMarauroaApplication application) throws IntrospectionException {
-        super(application, Children.create(new RPZoneChildFactory(application), true),
+    public MarauroaApplicationNode(IMarauroaApplication application)
+            throws IntrospectionException {
+        super(application,
+                Children.create(new RPZoneChildFactory(application), true),
                 Lookups.singleton(application));
         setDisplayName(application.toStringForDisplay());
         this.application = application;
@@ -116,24 +121,30 @@ public class MarauroaApplicationNode extends BeanNode implements ApplicationStat
     private void updateActionsState(Action[] actions) {
         for (int i = 0; i < actions.length; i++) {
             if (actions[i] != null && actions[i] instanceof AddRPZoneAction) {
-                actions[i].setEnabled(application.getStatus().contains(STATUS.CONNECTED));
+                actions[i].setEnabled(
+                        application.getStatus().contains(STATUS.CONNECTED));
             }
             if (actions[i] != null && actions[i] instanceof StartServerAction) {
-                actions[i].setEnabled(application.getStatus().contains(STATUS.STOPPED));
+                actions[i].setEnabled(
+                        application.getStatus().contains(STATUS.STOPPED));
             }
             if (actions[i] != null && actions[i] instanceof StopServerAction) {
-                actions[i].setEnabled(application.getStatus().contains(STATUS.STARTED));
+                actions[i].setEnabled(
+                        application.getStatus().contains(STATUS.STARTED));
             }
             if (actions[i] != null && actions[i] instanceof ConnectAction) {
-                actions[i].setEnabled(application.getStatus().contains(STATUS.DISCONNECTED)
+                actions[i].setEnabled(
+                        application.getStatus().contains(STATUS.DISCONNECTED)
                         && application.getStatus().contains(STATUS.STARTED));
             }
             if (actions[i] != null && actions[i] instanceof DisconnectAction) {
-                actions[i].setEnabled(application.getStatus().contains(STATUS.CONNECTED)
+                actions[i].setEnabled(
+                        application.getStatus().contains(STATUS.CONNECTED)
                         && application.getStatus().contains(STATUS.STARTED));
             }
             if (actions[i] != null && actions[i] instanceof DeleteServerAction) {
-                actions[i].setEnabled(!application.getStatus().contains(STATUS.STARTED));
+                actions[i].setEnabled(
+                        !application.getStatus().contains(STATUS.STARTED));
             }
             if (actions[i] != null && actions[i] instanceof ConfigureAction) {
                 actions[i].setEnabled(true);
@@ -144,20 +155,24 @@ public class MarauroaApplicationNode extends BeanNode implements ApplicationStat
     @Override
     public void statusChanged() {
         //Update the actions in case something external changed the app status
-        Logger.getLogger(MarauroaApplicationNode.class.getSimpleName()).fine(
+        LOG.fine(
                 "Updating node actions due to status change...");
         actions = getActions(true);
-        MonitorService service = Lookup.getDefault().lookup(MonitorService.class);
-        if (service != null && application.getStatus().contains(STATUS.DISCONNECTED)) {
-            Logger.getLogger(MarauroaApplicationNode.class.getSimpleName()).fine(
+        MonitorService service =
+                Lookup.getDefault().lookup(MonitorService.class);
+        if (service != null
+                && application.getStatus().contains(STATUS.DISCONNECTED)) {
+            LOG.fine(
                     "Removing monitor...");
             //Stop any monitors we have on this application
             service.removeMonitor(application.getName());
         }
         if (application.getStatus().contains(STATUS.UPDATED)) {
-            //The contents of the application changed, time to update the visual component
-            Logger.getLogger(MarauroaApplicationNode.class.getSimpleName()).info("Need to update!");
-            Lookup.getDefault().lookup(IDiagramManager.class).update(application);
+            //The contents of the application changed, time to update the 
+            //visual component
+            LOG.info("Need to update!");
+            Lookup.getDefault().lookup(IDiagramManager.class)
+                    .update(application);
             application.getStatus().remove(STATUS.UPDATED);
         }
     }
@@ -165,7 +180,8 @@ public class MarauroaApplicationNode extends BeanNode implements ApplicationStat
     private class AddRPZoneAction extends AbstractAction {
 
         public AddRPZoneAction() {
-            putValue(NAME, NbBundle.getMessage(MarauroaApplicationNode.class, "add.zone"));
+            putValue(NAME, NbBundle.getMessage(MarauroaApplicationNode.class,
+                    "add.zone"));
         }
 
         @Override
@@ -182,7 +198,8 @@ public class MarauroaApplicationNode extends BeanNode implements ApplicationStat
     private class ConfigureAction extends AbstractAction {
 
         public ConfigureAction() {
-            putValue(NAME, NbBundle.getMessage(MarauroaApplicationNode.class, "configure"));
+            putValue(NAME, NbBundle.getMessage(MarauroaApplicationNode.class,
+                    "configure"));
         }
 
         @Override
@@ -199,13 +216,16 @@ public class MarauroaApplicationNode extends BeanNode implements ApplicationStat
     private class ConnectAction extends AbstractAction {
 
         public ConnectAction() {
-            putValue(NAME, NbBundle.getMessage(MarauroaApplicationNode.class, "connect"));
+            putValue(NAME, NbBundle.getMessage(MarauroaApplicationNode.class,
+                    "connect"));
         }
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            MonitorService service = Lookup.getDefault().lookup(MonitorService.class);
-            if (service != null && service.getMonitor(application.getName()) == null) {
+            MonitorService service =
+                    Lookup.getDefault().lookup(MonitorService.class);
+            if (service != null
+                    && service.getMonitor(application.getName()) == null) {
                 try {
                     service.addMonitor(application.getName());
                     if (service.getMonitor(application.getName()).isRunning()) {
@@ -221,13 +241,16 @@ public class MarauroaApplicationNode extends BeanNode implements ApplicationStat
     private class DisconnectAction extends AbstractAction {
 
         public DisconnectAction() {
-            putValue(NAME, NbBundle.getMessage(MarauroaApplicationNode.class, "disconnect"));
+            putValue(NAME, NbBundle.getMessage(MarauroaApplicationNode.class,
+                    "disconnect"));
         }
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            MonitorService service = Lookup.getDefault().lookup(MonitorService.class);
-            if (service != null && service.getMonitor(application.getName()) != null) {
+            MonitorService service =
+                    Lookup.getDefault().lookup(MonitorService.class);
+            if (service != null
+                    && service.getMonitor(application.getName()) != null) {
                 try {
                     service.removeMonitor(application.getName());
                     application.setStatus(STATUS.DISCONNECTED);
@@ -241,12 +264,14 @@ public class MarauroaApplicationNode extends BeanNode implements ApplicationStat
     private class StartServerAction extends AbstractAction {
 
         public StartServerAction() {
-            putValue(NAME, NbBundle.getMessage(MarauroaApplicationNode.class, "start.server"));
+            putValue(NAME, NbBundle.getMessage(MarauroaApplicationNode.class,
+                    "start.server"));
         }
 
         @Override
         public void actionPerformed(ActionEvent ae) {
-            IMarauroaApplication app = getLookup().lookup(IMarauroaApplication.class);
+            IMarauroaApplication app =
+                    getLookup().lookup(IMarauroaApplication.class);
             try {
                 app.start();
                 application.setStatus(STATUS.STARTED);
@@ -259,12 +284,14 @@ public class MarauroaApplicationNode extends BeanNode implements ApplicationStat
     private class StopServerAction extends AbstractAction {
 
         public StopServerAction() {
-            putValue(NAME, NbBundle.getMessage(MarauroaApplicationNode.class, "stop.server"));
+            putValue(NAME, NbBundle.getMessage(MarauroaApplicationNode.class,
+                    "stop.server"));
         }
 
         @Override
         public void actionPerformed(ActionEvent ae) {
-            IMarauroaApplication app = getLookup().lookup(IMarauroaApplication.class);
+            IMarauroaApplication app =
+                    getLookup().lookup(IMarauroaApplication.class);
             try {
                 app.shutdown();
                 application.setStatus(STATUS.STOPPED);
@@ -277,7 +304,8 @@ public class MarauroaApplicationNode extends BeanNode implements ApplicationStat
     private class DeleteServerAction extends AbstractAction {
 
         public DeleteServerAction() {
-            putValue(NAME, NbBundle.getMessage(MarauroaApplicationNode.class, "delete.server"));
+            putValue(NAME, NbBundle.getMessage(MarauroaApplicationNode.class,
+                    "delete.server"));
         }
 
         @Override

@@ -81,6 +81,16 @@
             <plugins>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>1.2.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.bsc.maven</groupId>
+                    <artifactId>maven-processor-plugin</artifactId>
+                    <version>2.1.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
                     <artifactId>nbm-maven-plugin</artifactId>
                     <version>3.8</version>
                     <extensions>true</extensions>
@@ -233,7 +243,6 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
-                <version>1.2.1</version>
                 <inherited>false</inherited>
                 <executions>
                     <execution>
@@ -396,10 +405,10 @@
         <module>Eclipselink-Wrapper</module>
         <module>Marauroa-Wrapper</module>
         <module>Log4j-Wrapper</module>
-        <module>jWrestling-Wrapper</module>
+        <module>jWrestling-Plugin</module>
     </modules>
     <properties>
-        <netbeans.version>RELEASE73-BETA</netbeans.version>
+        <netbeans.version>RELEASE73-BETA2</netbeans.version>
         <brandingToken>marauroa_server_manager</brandingToken>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>

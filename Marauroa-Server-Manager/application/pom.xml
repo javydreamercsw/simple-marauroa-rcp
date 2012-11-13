@@ -99,7 +99,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>jWrestling-Wrapper</artifactId>
+            <artifactId>jWrestling-Plugin</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
