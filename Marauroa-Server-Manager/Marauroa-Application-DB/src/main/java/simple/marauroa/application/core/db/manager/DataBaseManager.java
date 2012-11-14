@@ -53,7 +53,7 @@ public final class DataBaseManager implements LookupListener {
             + "Applications" + System.getProperty("file.separator");
     private static HashMap<String, IMarauroaApplicationProvider> providers =
             new HashMap<String, IMarauroaApplicationProvider>();
-    private static boolean loaded = false;
+    private static boolean loaded = false, loading = false;
     private Lookup.Result<IMarauroaApplication> result =
             Utilities.actionsGlobalContext().lookupResult(IMarauroaApplication.class);
     private final static ArrayList<IMarauroaApplication> apps = new ArrayList<IMarauroaApplication>();
@@ -200,6 +200,12 @@ public final class DataBaseManager implements LookupListener {
         return puName;
     }
 
+    /**
+     * Gets application from database.
+     *
+     * @param app App looking for.
+     * @return list of applications
+     */
     public static List<Application> findApplication(IMarauroaApplication app) {
         Logger.getLogger(DataBaseManager.class.getSimpleName()).log(Level.FINE,
                 "Looking for application: {0}", app.getName());
@@ -208,6 +214,12 @@ public final class DataBaseManager implements LookupListener {
         return (List<Application>) DataBaseManager.namedQuery("Application.findByName", parameters);
     }
 
+    /**
+     * Checks if application exists in database.
+     *
+     * @param name Application name
+     * @return true if it exists, false otherwise.
+     */
     public static boolean applicationExists(String name) {
         parameters.clear();
         parameters.put("name", name);
@@ -288,11 +300,13 @@ public final class DataBaseManager implements LookupListener {
      * Load applications already on file system
      */
     private static void loadApplications() {
-        if (!loaded) {
+        if (!loaded && !loading) {
+            loading = true;
             File path;
-            //Load from database 
-            for (Application app : DataBaseManager.getApplications()) {
-                //Check if the application path exists
+            //Load from database
+            List<Application> applications = DataBaseManager.getApplications();
+            for (Iterator<Application> it = applications.iterator(); it.hasNext();) {
+                Application app = it.next();
                 path = new File(app.getApplicationPath());
                 Logger.getLogger(DataBaseManager.class.getSimpleName()).log(Level.FINE,
                         "Looking for application path at: {0}", app.getApplicationPath());
@@ -306,8 +320,9 @@ public final class DataBaseManager implements LookupListener {
                             + "<br>"
                             + NbBundle.getMessage(
                             MarauroaApplication.class,
-                            "application.dir.not.exists").replaceAll("%a", app.getName())
-                            + "<b><b>" + NbBundle.getMessage(
+                            "application.dir.not.exists").replaceAll("%a",
+                            app.getName())
+                            + " <b><b>" + NbBundle.getMessage(
                             MarauroaApplication.class,
                             "application.dir.not.exists.fix") + "<br>"
                             + "&nbsp;&nbsp;<b>" + NbBundle.getMessage(
@@ -360,7 +375,7 @@ public final class DataBaseManager implements LookupListener {
                                     + NbBundle.getMessage(
                                     MarauroaApplication.class,
                                     "application.found.orphan.directory").replaceAll("%d",
-                                    temp.toURI().getPath()) + "<br>"
+                                    Utilities.toURI(temp).getPath()) + "<br>"
                                     + "<b><b>" + NbBundle.getMessage(
                                     MarauroaApplication.class,
                                     "application.dir.not.exists.fix") + "<br>"
@@ -393,6 +408,7 @@ public final class DataBaseManager implements LookupListener {
                 }
             }
             loaded = true;
+            loading = false;
         }
     }
 

@@ -5,6 +5,7 @@
  */
 package simple.marauroa.application.gui.dialog;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -148,13 +149,12 @@ public class AddApplicationDialog extends javax.swing.JDialog {
                             }
                             IMarauroaApplication newInstance = applications.get(options.getSelectedIndex()).getClass().newInstance();
                             newInstance.setName(appName.getText());
-                            if (!Lookup.getDefault().lookup(IAddApplicationDialogProvider.class).isFolderCreationIgnored()) {
-                                newInstance.createAppDirectory();
-                            } else {
-                                newInstance.setApplicationPath(
+                            newInstance.setApplicationPath(
                                         newInstance.getApplicationPath()
                                         + System.getProperty("file.separator")
                                         + newInstance.getName());
+                            if (!new File(newInstance.getApplicationPath()).exists()) {
+                                newInstance.createAppDirectory();
                             }
                             //Add to database
                             Lookup.getDefault().lookup(IDataBase.class).addApplication(newInstance);
