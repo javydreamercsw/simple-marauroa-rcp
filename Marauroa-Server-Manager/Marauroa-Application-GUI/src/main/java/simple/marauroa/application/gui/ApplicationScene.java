@@ -33,6 +33,7 @@ import simple.marauroa.application.api.IDiagramManager;
 import simple.marauroa.application.api.IMarauroaApplication;
 import simple.marauroa.application.core.MarauroaApplicationRepository;
 import simple.marauroa.application.core.tool.Tool;
+import simple.marauroa.application.gui.action.Hide;
 
 /**
  *
