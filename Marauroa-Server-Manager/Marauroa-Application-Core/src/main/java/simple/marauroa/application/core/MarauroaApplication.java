@@ -308,7 +308,7 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
             ds.setReuseAddress(true);
             return true;
         } catch (IOException e) {
-             logger.log(Level.WARNING, null, e);
+            logger.log(Level.WARNING, null, e);
         } finally {
             if (ds != null) {
                 ds.close();
@@ -672,13 +672,18 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
             //Populate the file
             FileWriter fstream = new FileWriter(marauroad);
             BufferedWriter out = new BufferedWriter(fstream);
-            if (OSValidator.isUnix()) {
-                out.write("#!/bin/sh");
-                out.newLine();
+            try {
+                if (OSValidator.isUnix()) {
+                    out.write("#!/bin/sh");
+                    out.newLine();
+                }
+                out.write("java -cp ");
+                out.write("\"" + getLibraries() + "\" "
+                        + "marauroa.server.marauroad -c server.ini -l");
+            } finally {
+                out.close();
+                fstream.close();
             }
-            out.write("java -cp ");
-            out.write("\"" + getLibraries() + "\" "
-                    + "marauroa.server.marauroad -c server.ini -l");
         }
         OutputHandler.setStatus(NbBundle.getMessage(
                 MarauroaApplication.class,
@@ -689,13 +694,13 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
         return new File(getAppDirPath()).exists();
     }
 
-    public static void copyCoreJarsToDir(String path) {
+    protected static void copyCoreJarsToDir(String path) {
         copyCoreJarsToDir(path, true);
     }
 
-    public static void copyCoreJarsToDir(String path, boolean recursive) {
+    protected static void copyCoreJarsToDir(String path, boolean recursive) {
         File folder = InstalledFileLocator.getDefault().locate("modules/ext",
-                "marauroa.lib", false);
+                "marauroa.lib", true);
         if (folder != null) {
             try {
                 copyContentsOfFolder(folder, path, recursive);
@@ -745,12 +750,8 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
             destination = new FileOutputStream(destFile).getChannel();
             destination.transferFrom(source, 0, source.size());
         } finally {
-            if (source != null) {
-                source.close();
-            }
-            if (destination != null) {
-                destination.close();
-            }
+            source.close();
+            destination.close();
         }
     }
 
@@ -921,6 +922,9 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
 
     @Override
     public String getLibraries() {
+        /**TODO: Change approach to have a list of folders to be copied. 
+         * The following approach doesn't work for Maven projects
+         **/
         //Create from application directory
         StringBuilder libs = new StringBuilder();
         File libDir = new File(getAppDirPath()
