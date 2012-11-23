@@ -144,7 +144,7 @@
   </modules>
 
     <properties>
-        <netbeans.version>RELEASE721</netbeans.version>
+        <netbeans.version>RELEASE73-BETA2</netbeans.version>
         <brandingToken>deck_manager</brandingToken>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
