@@ -342,9 +342,6 @@ public final class DataBaseManager implements LookupListener {
                         dialogProvider.setIgnoreFolderCreation(true);
                         dialog.setLocationRelativeTo(null);
                         dialog.setVisible(true);
-                        if (app instanceof IMarauroaApplication) {
-                            ((IMarauroaApplication) app).update();
-                        }
                     } else if (result == NotifyDescriptor.NO_OPTION) {
                         try {
                             //Delete!
@@ -355,6 +352,9 @@ public final class DataBaseManager implements LookupListener {
                             Exceptions.printStackTrace(ex);
                         }
                     }
+                }
+                if (app instanceof IMarauroaApplication) {
+                    ((IMarauroaApplication) app).update();
                 }
             }
             //Now look in the file system

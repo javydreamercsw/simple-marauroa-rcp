@@ -2,7 +2,7 @@ package mtg.card.sync;
 
 import com.reflexit.magiccards.core.model.Editions;
 import com.reflexit.magiccards.core.model.Editions.Edition;
-import com.sun.istack.NotNull;
+import com.sun.istack.internal.NotNull;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
