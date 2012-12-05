@@ -54,7 +54,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.10</version>
+            <version>4.11</version>
             <scope>test</scope>
             <type>jar</type>
         </dependency>
@@ -87,7 +87,6 @@
             <plugin>
                 <groupId>org.bsc.maven</groupId>
                 <artifactId>maven-processor-plugin</artifactId>
-                <version>2.0.6</version>
                 <executions>
                     <!-- Run annotation processors on src/main/java sources -->
                     <execution>
