@@ -92,7 +92,7 @@
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>nbm-maven-plugin</artifactId>
-                    <version>3.8</version>
+                    <version>3.8.1</version>
                     <extensions>true</extensions>
                     <configuration>
                         <brandingToken>${brandingToken}</brandingToken>
@@ -408,7 +408,7 @@
         <module>jWrestling-Plugin</module>
     </modules>
     <properties>
-        <netbeans.version>RELEASE73-BETA2</netbeans.version>
+        <netbeans.version>RELEASE73-BETA</netbeans.version>
         <brandingToken>marauroa_server_manager</brandingToken>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
