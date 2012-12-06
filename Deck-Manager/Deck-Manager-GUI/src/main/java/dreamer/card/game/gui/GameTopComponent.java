@@ -5,7 +5,10 @@ import com.reflexit.magiccards.core.model.ICardGame;
 import dreamer.card.game.core.Tool;
 import dreamer.card.game.gui.node.ICardNode;
 import dreamer.card.game.gui.node.factory.IGameChildFactory;
-import java.util.*;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.event.TreeModelListener;
@@ -28,28 +31,30 @@ import org.openide.nodes.Children;
 import org.openide.nodes.Node;
 import org.openide.util.Lookup;
 import org.openide.util.NbBundle;
-import org.openide.util.NbBundle.Messages;
 import org.openide.windows.TopComponent;
+import org.openide.util.NbBundle.Messages;
 
 /**
  * Top component which displays something.
  */
-@ConvertAsProperties(dtd = "-//dreamer.card.game.gui//Game//EN",
+@ConvertAsProperties(
+    dtd = "-//dreamer.card.game.gui//Game//EN",
 autostore = false)
-@TopComponent.Description(preferredID = "GameTopComponent",
+@TopComponent.Description(
+    preferredID = "GameTopComponent",
 //iconBase="SET/PATH/TO/ICON/HERE", 
 persistenceType = TopComponent.PERSISTENCE_NEVER)
 @TopComponent.Registration(mode = "editor", openAtStartup = false, roles = "game_view")
 @ActionID(category = "Window", id = "dreamer.card.game.gui.GameTopComponent")
-@ActionReference(path = "Menu/Window" /*
- * , position = 333
- */)
-@TopComponent.OpenActionRegistration(displayName = "#CTL_GameAction",
+@ActionReference(path = "Menu/Window" /*, position = 333 */)
+@TopComponent.OpenActionRegistration(
+    displayName = "#CTL_GameAction",
 preferredID = "GameTopComponent")
 @Messages({
     "CTL_GameAction=Game",
     "CTL_GameTopComponent=Game Window",
-    "HINT_GameTopComponent=This is a Game window"
+    "HINT_GameTopComponent=This is a Game window",
+    "general.set=Set"
 })
 public final class GameTopComponent extends TopComponent implements ExplorerManager.Provider {
 
@@ -140,10 +145,10 @@ public final class GameTopComponent extends TopComponent implements ExplorerMana
         gridBagConstraints.insets = new java.awt.Insets(11, 10, 11, 10);
         add(gamePane, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane gamePane;
     // End of variables declaration//GEN-END:variables
-
     void writeProperties(java.util.Properties p) {
         // better to version settings since initial version as advocated at
         // http://wiki.apidesign.org/wiki/PropertyFiles
