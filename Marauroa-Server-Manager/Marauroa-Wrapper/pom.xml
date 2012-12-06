@@ -22,7 +22,7 @@
         </dependency>
         <dependency>
             <artifactId>marauroa</artifactId>
-            <groupId>marauroa</groupId>
+            <groupId>net.sourceforge.javydreamercsw</groupId>
             <type>jar</type>
             <version>3.9.2</version>
         </dependency>
