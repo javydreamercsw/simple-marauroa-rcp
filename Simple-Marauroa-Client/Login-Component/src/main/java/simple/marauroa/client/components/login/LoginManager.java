@@ -43,7 +43,7 @@ import simple.marauroa.client.components.common.ProfileList;
     "Profiles.okButton.text=OK",
     "Profiles.cancelButton.text=Cancel",
     "Profiles.noprofiles.text=No profiles were detected in your computer."
-    + "\\nPlease create a profile in order to continue.",
+    + "\nPlease create a profile in order to continue.",
     "Profiles.noprofiles.title=No profiles found",
     "Profiles.creation.error.message=An error occurred while creating the profile file.",
     "Profiles.creation.error.title=Error creating profile file",
