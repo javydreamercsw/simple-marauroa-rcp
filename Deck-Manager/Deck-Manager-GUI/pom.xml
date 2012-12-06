@@ -95,7 +95,7 @@
             <artifactId>Output-Handler</artifactId>
             <groupId>net.sourceforge.javydreamercsw</groupId>
             <type>jar</type>
-            <version>1.6-20120926.224319-1</version>
+            <version>1.6-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
