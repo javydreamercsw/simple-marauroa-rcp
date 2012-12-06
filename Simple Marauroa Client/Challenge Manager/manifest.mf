@@ -1,6 +1,0 @@
-Manifest-Version: 1.0
-OpenIDE-Module: simple.client.extension.challenge/0
-OpenIDE-Module-Implementation-Version: 1
-OpenIDE-Module-Install: simple/client/extension/challenge/Installer.class
-OpenIDE-Module-Localizing-Bundle: simple/client/extension/challenge/Bundle.properties
-
