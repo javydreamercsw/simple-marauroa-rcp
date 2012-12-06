@@ -124,7 +124,7 @@
     </modules>
 
     <properties>
-        <netbeans.version>RELEASE73-BETA</netbeans.version>
+        <netbeans.version>RELEASE73-BETA2</netbeans.version>
         <brandingToken>simple_marauroa_client</brandingToken>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
