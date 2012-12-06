@@ -18,7 +18,7 @@
     <description>The project that closes the gap between Marauroa and an actual Game/Application</description>
     <url>https://sourceforge.net/projects/simple-marauroa/</url>
     <issueManagement>
-        <system>jira</system>
+        <system>JIRA</system>
         <url>https://simple-marauroa.jira.com/browse/SMSR</url>
     </issueManagement>
     <developers>
