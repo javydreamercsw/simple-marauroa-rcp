@@ -9,6 +9,7 @@ import java.awt.Image;
 import java.beans.IntrospectionException;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.logging.Logger;
 import javax.swing.Action;
 import javax.swing.JFrame;
 import org.openide.nodes.BeanNode;
@@ -28,8 +29,11 @@ public class ICardNode extends BeanNode {
     private Action[] actions;
     private final String gameName;
     private HashMap<String, String> attributes = new HashMap<String, String>();
+    private static final Logger LOG =
+            Logger.getLogger(ICardNode.class.getSimpleName());
 
-    public ICardNode(ICard card, Object bean,String gameName) throws IntrospectionException {
+    public ICardNode(ICard card, Object bean, String gameName)
+            throws IntrospectionException {
         super(bean, null, Lookups.singleton(card));
         setDisplayName(card.getName());
         this.gameName = gameName;
@@ -38,10 +42,13 @@ public class ICardNode extends BeanNode {
 
     @Override
     public Image getIcon(int type) {
-        for (Iterator<? extends ICardGame> it = Lookup.getDefault().lookupAll(ICardGame.class).iterator(); it.hasNext();) {
+        for (Iterator<? extends ICardGame> it =
+                Lookup.getDefault().lookupAll(ICardGame.class).iterator();
+                it.hasNext();) {
             ICardGame game = it.next();
             if (game.getName().equals(gameName)) {
-                return Tool.loadImage(new JFrame(), game.getBackCardIcon()).getImage();
+                return Tool.loadImage(new JFrame(), 
+                        game.getBackCardIcon()).getImage();
             }
         }
         return null;
@@ -64,7 +71,6 @@ public class ICardNode extends BeanNode {
         if (clazz.isInstance(ch)) {
             return (Node.Cookie) ch;
         }
-
         return super.getCookie(clazz);
     }
 

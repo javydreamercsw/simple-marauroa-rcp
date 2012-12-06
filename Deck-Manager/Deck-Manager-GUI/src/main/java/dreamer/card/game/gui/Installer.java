@@ -1,6 +1,5 @@
 package dreamer.card.game.gui;
 
-import com.dreamer.outputhandler.OutputHandler;
 import com.reflexit.magiccards.core.model.storage.db.DataBaseStateListener;
 import org.openide.modules.ModuleInstall;
 import org.openide.util.lookup.ServiceProvider;
@@ -16,7 +15,6 @@ public class Installer extends ModuleInstall implements WindowSystemListener, Da
     @Override
     public void restored() {
         WindowManager.getDefault().addWindowSystemListener(this);
-        OutputHandler.output("Output","GUI loaded!");
     }
 
     @Override
