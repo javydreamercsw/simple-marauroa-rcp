@@ -11,7 +11,7 @@
     <artifactId>Deck-Manager-app</artifactId>
     <packaging>nbm-application</packaging>
 
-    <name>Deck Manager App</name>
+    <name>Deck Manager</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
