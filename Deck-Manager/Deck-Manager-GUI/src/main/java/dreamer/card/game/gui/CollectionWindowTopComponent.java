@@ -9,32 +9,38 @@ import org.openide.awt.ActionReference;
 import org.openide.util.Lookup;
 import org.openide.util.LookupEvent;
 import org.openide.util.LookupListener;
+import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
 import org.openide.util.Utilities;
-import org.openide.windows.TopComponent;
 
 /**
  * Top component which displays something.
  */
-@ConvertAsProperties(dtd = "-//dreamer.card.game.gui//CollectionWindow//EN",
+@ConvertAsProperties(
+    dtd = "-//dreamer.card.game.gui//CollectionWindow//EN",
 autostore = false)
-@TopComponent.Description(preferredID = "CollectionWindowTopComponent",
+@TopComponent.Description(
+    preferredID = "CollectionWindowTopComponent",
 //iconBase="SET/PATH/TO/ICON/HERE", 
 persistenceType = TopComponent.PERSISTENCE_ALWAYS)
-@TopComponent.Registration(mode = "rightSlidingSide", openAtStartup = true, roles = "game_view")
-@ActionID(category = "Window", id = "dreamer.card.game.gui.CollectionWindowTopComponent")
+@TopComponent.Registration(mode = "rightSlidingSide", openAtStartup = true, 
+        roles = "game_view")
+@ActionID(category = "Window", 
+        id = "dreamer.card.game.gui.CollectionWindowTopComponent")
 @ActionReference(path = "Menu/Window" /*, position = 333 */)
-@TopComponent.OpenActionRegistration(displayName = "#CTL_CollectionWindowAction",
+@TopComponent.OpenActionRegistration(
+    displayName = "#CTL_CollectionWindowAction",
 preferredID = "CollectionWindowTopComponent")
 @Messages({
-    "CTL_CollectionWindowAction=Collection Window",
-    "CTL_CollectionWindowTopComponent=Collection Window",
+    "CTL_CollectionWindowAction=CollectionWindow",
+    "CTL_CollectionWindowTopComponent=CollectionWindow Window",
     "HINT_CollectionWindowTopComponent=This is a CollectionWindow window"
 })
 public final class CollectionWindowTopComponent extends TopComponent
         implements LookupListener {
 
-    private Lookup.Result<ICardGame> result = Utilities.actionsGlobalContext().lookupResult(ICardGame.class);
+    private Lookup.Result<ICardGame> result = 
+            Utilities.actionsGlobalContext().lookupResult(ICardGame.class);
 
     public CollectionWindowTopComponent() {
         initComponents();
