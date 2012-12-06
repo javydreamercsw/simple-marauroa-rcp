@@ -24,6 +24,12 @@
             <groupId>net.sourceforge.javydreamercsw</groupId>
             <artifactId>Card-Game-Extension</artifactId>
             <version>1.1-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>h2</artifactId>
+                    <groupId>com.h2database</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>net.sourceforge.javydreamercsw</groupId>
@@ -39,6 +45,10 @@
                     <artifactId>eclipselink</artifactId>
                     <groupId>org.eclipse.persistence</groupId>
                 </exclusion>
+                <exclusion>
+                    <artifactId>h2</artifactId>
+                    <groupId>com.h2database</groupId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
@@ -50,11 +60,6 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>Eclipselink-Wrapper</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>H2-Library-Wrapper</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
