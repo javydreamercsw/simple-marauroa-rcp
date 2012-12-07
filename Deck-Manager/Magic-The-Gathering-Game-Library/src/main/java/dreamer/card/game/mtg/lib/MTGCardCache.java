@@ -259,7 +259,7 @@ public class MTGCardCache extends AbstractCardCache {
                                         return;
                                     } catch (Exception e) {
                                         LOG.log(Level.SEVERE, null, e);
-                                        return;
+                                        continue;
                                     } finally {
                                         notifyAll();
                                     }
