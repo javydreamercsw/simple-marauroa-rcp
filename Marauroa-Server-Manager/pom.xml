@@ -273,24 +273,6 @@
                 <inherited>false</inherited>
                 <executions>
                     <execution>
-                        <id>install-marauroa</id>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>mvn</executable>
-                            <arguments>
-                                <argument>install:install-file</argument>
-                                <argument>-Dfile=../repo/marauroa/marauroa/3.9.2/marauroa-3.9.2.jar</argument>
-                                <argument>-DgroupId=marauroa</argument>
-                                <argument>-DartifactId=marauroa</argument>
-                                <argument>-Dversion=3.9.2</argument>
-                                <argument>-Dpackaging=jar</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                    <execution>
                         <id>install-swingx-all</id>
                         <phase>validate</phase>
                         <goals>
