@@ -71,7 +71,7 @@
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>nbm-maven-plugin</artifactId>
-                    <version>3.8.1</version>
+                    <version>3.9</version>
                     <extensions>true</extensions>
                     <configuration>
                         <brandingToken>${brandingToken}</brandingToken>
@@ -124,7 +124,7 @@
     </modules>
 
     <properties>
-        <netbeans.version>RELEASE73-BETA2</netbeans.version>
+        <netbeans.version>RELEASE73</netbeans.version>
         <brandingToken>simple_marauroa_client</brandingToken>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
