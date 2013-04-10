@@ -37,6 +37,12 @@
             <artifactId>Log4j-Wrapper</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <artifactId>jython</artifactId>
+            <groupId>org.python</groupId>
+            <type>jar</type>
+            <version>2.5.3</version>
+        </dependency>
     </dependencies>
 
     <build>
