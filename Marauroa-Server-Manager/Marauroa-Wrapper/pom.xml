@@ -50,6 +50,11 @@
                     <codeNameBase>marauroa.lib/1</codeNameBase>
                     <publicPackages>
                         <publicPackage>marauroa.*</publicPackage>
+                        <publicPackage>com.*</publicPackage>
+                        <publicPackage>jline*</publicPackage>
+                        <publicPackage>jni.*</publicPackage>
+                        <publicPackage>jnr.*</publicPackage>
+                        <publicPackage>org.*</publicPackage>
                     </publicPackages>
                 </configuration>
             </plugin>
