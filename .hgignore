@@ -27,3 +27,8 @@ marauroa-custom/*
 */target/*
 syntax: regexp
 ^marauroa$
+\.orig\..*$
+\.orig$
+\.chg\..*$
+\.rej$
+\.conflict\~$
