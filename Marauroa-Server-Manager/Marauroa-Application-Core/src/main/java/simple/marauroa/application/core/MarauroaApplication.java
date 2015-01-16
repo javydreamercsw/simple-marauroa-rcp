@@ -49,16 +49,16 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
     private IMarauroaProcess process;
     private String host = "localhost";
     private boolean exists;
-    EnumMap<ConfigurationElement, Properties> properties =
-            new EnumMap<ConfigurationElement, Properties>(ConfigurationElement.class);
+    EnumMap<ConfigurationElement, Properties> properties
+            = new EnumMap<ConfigurationElement, Properties>(ConfigurationElement.class);
     //Populate the ini file
     private Properties props = new Properties(), custom = new Properties();
     private static final Logger logger = Logger.getLogger(MarauroaApplication.class.getSimpleName());
     /*
      * A map of zones and its contents
      */
-    private HashMap<String, ArrayList<RPObject>> contents =
-            new HashMap<String, ArrayList<RPObject>>();
+    private HashMap<String, ArrayList<RPObject>> contents
+            = new HashMap<String, ArrayList<RPObject>>();
     private Class relativeToClass = getClass();
 
     public MarauroaApplication(String name) {
@@ -89,15 +89,15 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
         Properties config = new Properties();
         for (Entry entry : configuration.entrySet()) {
             logger.log(Level.FINE, "{0}: {1}", new Object[]{entry.getKey(),
-                        entry.getValue() == null ? "" : entry.getValue().toString()});
+                entry.getValue() == null ? "" : entry.getValue().toString()});
             config.put(entry.getKey(), entry.getValue());
         }
         InputStream defaultProperties = null;
         FileOutputStream out = null;
         try {
             //Now modify specific properties from the template
-            defaultProperties =
-                    getRelativeToClass().getResourceAsStream("default.ini");
+            defaultProperties
+                    = getRelativeToClass().getResourceAsStream("default.ini");
             if (defaultProperties != null) {
                 config.load(defaultProperties);
                 defaultProperties.close();
@@ -196,6 +196,7 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
     @Override
     public boolean saveINIFile(Properties config) {
         FileOutputStream out = null;
+        boolean result = false;
         try {
             //Create the application directory
             File appDir = new File(getAppDirPath());
@@ -206,62 +207,58 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
         } catch (FileNotFoundException ex) {
             logger.log(Level.SEVERE, null, ex);
             Exceptions.printStackTrace(ex);
-            return false;
         } catch (IOException ex) {
             logger.log(Level.SEVERE, null, ex);
             Exceptions.printStackTrace(ex);
-            return false;
         } finally {
             try {
                 if (out != null) {
                     out.close();
                 }
                 configuration = config;
-                return true;
+                result = true;
             } catch (IOException ex) {
                 logger.log(Level.SEVERE, null, ex);
                 Exceptions.printStackTrace(ex);
-                return false;
             }
         }
+        return result;
     }
 
     @Override
     public boolean loadINIFile() {
         FileInputStream in = null;
+        boolean result = false;
         try {
             File iniFile = new File(getAppINIFilePath());
-            if (!hasINIFile()) {
-                return false;
+            if (hasINIFile()) {
+                in = new FileInputStream(iniFile);
+                configuration.load(in);
             }
-            in = new FileInputStream(iniFile);
-            configuration.load(in);
         } catch (FileNotFoundException ex) {
             logger.log(Level.SEVERE, null, ex);
             Exceptions.printStackTrace(ex);
-            return false;
         } catch (IOException ex) {
             logger.log(Level.SEVERE, null, ex);
             Exceptions.printStackTrace(ex);
-            return false;
         } finally {
             try {
                 if (in != null) {
                     in.close();
                 }
-                return true;
+                result= true;
             } catch (IOException ex) {
                 logger.log(Level.SEVERE, null, ex);
                 Exceptions.printStackTrace(ex);
-                return false;
             }
         }
+        return result;
     }
 
     @Override
     public boolean hasINIFile() {
         File ini = new File(getAppINIFilePath());
-        return ini != null && ini.exists();
+        return ini.exists();
     }
 
     @Override
@@ -350,20 +347,20 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
                     && appDirExists()) {
                 DialogDisplayer.getDefault().notifyLater(
                         new NotifyDescriptor.Message(NbBundle.getMessage(
-                        MarauroaApplication.class,
-                        "application.dir.exists").replaceAll("%d",
-                        Utilities.toURI(appDir).getPath()),
-                        NotifyDescriptor.ERROR_MESSAGE));
+                                        MarauroaApplication.class,
+                                        "application.dir.exists").replaceAll("%d",
+                                        Utilities.toURI(appDir).getPath()),
+                                NotifyDescriptor.ERROR_MESSAGE));
                 return false;
             } else {
                 boolean success = appDir.mkdirs();
                 if (!success) {
                     DialogDisplayer.getDefault().notifyLater(
                             new NotifyDescriptor.Message(NbBundle.getMessage(
-                            MarauroaApplication.class,
-                            "add.application.unable.create.dir").replaceAll("%d",
-                            getAppDirPath()),
-                            NotifyDescriptor.ERROR_MESSAGE));
+                                            MarauroaApplication.class,
+                                            "add.application.unable.create.dir").replaceAll("%d",
+                                            getAppDirPath()),
+                                    NotifyDescriptor.ERROR_MESSAGE));
                 } else {
                     //Set to true when something goes wrong so we can cleanup
                     boolean rollback = false;
@@ -447,15 +444,16 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
                 MarauroaApplication.class,
                 "application.update.lib.start"));
         //Delete the library contents in case something got removed.
-        File dir = new File(getAppDirPath() + System.getProperty("file.separator") + "lib");
+        File dir = new File(getAppDirPath()
+                + System.getProperty("file.separator") + "lib");
         MarauroaApplicationRepository.deleteFolder(dir);
         //Copy the required jars
         copyCoreJarsToDir(dir.getAbsolutePath(), false);
-        for (Iterator<File> it = getApplicationJars().iterator(); it.hasNext();) {
-            File customLib = it.next();
+        for (File customLib : getApplicationJars()) {
             if (customLib.isFile()) {
                 copyFile(customLib, new File(dir.getAbsolutePath()
-                        + System.getProperty("file.separator") + customLib.getName()));
+                        + System.getProperty("file.separator")
+                        + customLib.getName()));
             }
         }
         OutputHandler.setStatus(NbBundle.getMessage(
@@ -750,8 +748,12 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
             destination = new FileOutputStream(destFile).getChannel();
             destination.transferFrom(source, 0, source.size());
         } finally {
-            source.close();
-            destination.close();
+            if (source != null) {
+                source.close();
+            }
+            if (destination != null) {
+                destination.close();
+            }
         }
     }
 
@@ -765,7 +767,7 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
         if (marauroa != null && marauroa.exists()) {
             File folder = new File(marauroa.getAbsolutePath()
                     + System.getProperty("file.separator") + getName());
-            if (folder != null && folder.exists()) {
+            if (folder.exists()) {
                 assert folder.isDirectory();
                 for (File file : folder.listFiles()) {
                     if (file.isFile()) {
@@ -819,9 +821,11 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
 
     private void fire(String propertyName, Object old, Object nue) {
         //Passing 0 below on purpose, so you only synchronize for one atomic call:
-        PropertyChangeListener[] pcls = (PropertyChangeListener[]) listeners.toArray(new PropertyChangeListener[listeners.size()]);
-        for (int i = 0; i < pcls.length; i++) {
-            pcls[i].propertyChange(new PropertyChangeEvent(this, propertyName,
+        PropertyChangeListener[] pcls
+                = (PropertyChangeListener[]) listeners.toArray(
+                        new PropertyChangeListener[listeners.size()]);
+        for (PropertyChangeListener pcl : pcls) {
+            pcl.propertyChange(new PropertyChangeEvent(this, propertyName,
                     old, nue));
         }
     }
@@ -884,9 +888,9 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
             logger.log(Level.SEVERE, null, ex);
             DialogDisplayer.getDefault().notifyLater(
                     new NotifyDescriptor.Message(NbBundle.getMessage(
-                    MarauroaApplication.class,
-                    "application.update.lib.error"),
-                    NotifyDescriptor.ERROR_MESSAGE));
+                                    MarauroaApplication.class,
+                                    "application.update.lib.error"),
+                            NotifyDescriptor.ERROR_MESSAGE));
         }
     }
 
@@ -922,9 +926,11 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
 
     @Override
     public String getLibraries() {
-        /**TODO: Change approach to have a list of folders to be copied. 
-         * The following approach doesn't work for Maven projects
-         **/
+        /**
+         * TODO: Change approach to have a list of folders to be copied. The
+         * following approach doesn't work for Maven projects
+         *
+         */
         //Create from application directory
         StringBuilder libs = new StringBuilder();
         File libDir = new File(getAppDirPath()

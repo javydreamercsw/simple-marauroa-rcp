@@ -10,16 +10,18 @@ public interface IMarauroaProcess {
 
     /**
      * Executes the Marauroa Application
+     *
      * @return integer
      */
     public Integer execute() throws ExecutionException, InterruptedException;
-    
+
     /**
      * Get the process name
-     * @return 
+     *
+     * @return
      */
     public String getProcessName();
-    
+
     /*
      * Stops the Marauroa Application
      */

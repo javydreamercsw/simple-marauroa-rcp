@@ -41,7 +41,9 @@ public class ScriptExecuter implements IMarauroaProcess {
             }
         };
 
-        ExecutionDescriptor descriptor = new ExecutionDescriptor().frontWindow(true).controllable(true).inputOutput(null);
+        ExecutionDescriptor descriptor = 
+                new ExecutionDescriptor().frontWindow(true)
+                        .controllable(true).inputOutput(null);
 
         ExecutionService service = ExecutionService.newService(marauroaProcess,
                 descriptor, getProcessName());

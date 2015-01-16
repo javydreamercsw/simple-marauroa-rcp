@@ -30,16 +30,19 @@ public class MarauroaApplicationRepository {
         return instance;
     }
 
-    public static void deleteApplication(IMarauroaApplication app) throws Exception {
+    public static void deleteApplication(IMarauroaApplication app)
+            throws Exception {
         if (app != null) {
             app.shutdown();
             app.deleteAppDirectory();
             //Delete from database as well
-            Lookup.getDefault().lookup(IDataBase.class).deleteApplication(app.getName());
+            Lookup.getDefault().lookup(IDataBase.class)
+                    .deleteApplication(app.getName());
         }
     }
 
-    public static Collection<? extends IRPZone> getZonesForApplication(IMarauroaApplication app) {
+    public static Collection<? extends IRPZone>
+            getZonesForApplication(IMarauroaApplication app) {
         ArrayList<IRPZone> zones = new ArrayList<IRPZone>();
         for (final String key : app.getContents().keySet()) {
             Zone zone = new Zone(key);
@@ -52,7 +55,8 @@ public class MarauroaApplicationRepository {
         return zones;
     }
 
-    public static Collection<? extends RPObject> getRPObjectsForZone(String appName, ID zone) {
+    public static Collection<? extends RPObject>
+            getRPObjectsForZone(String appName, ID zone) {
         ArrayList<RPObject> objects = new ArrayList<RPObject>();
         RPObject object = new RPObject();
         object.put("id", 1);

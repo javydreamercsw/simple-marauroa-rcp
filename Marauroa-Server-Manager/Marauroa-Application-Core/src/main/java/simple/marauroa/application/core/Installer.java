@@ -12,6 +12,7 @@ import simple.marauroa.application.api.IMarauroaApplication;
  * often not needed at all.
  */
 public class Installer extends ModuleInstall {
+    private static final long serialVersionUID = -6590654010564558201L;
 
     @Override
     public void restored() {
@@ -26,9 +27,9 @@ public class Installer extends ModuleInstall {
                         try {
                             Logger.getLogger(Installer.class.getName())
                                     .log(Level.WARNING,
-                                    "Shutting down {0} in emergency mode "
-                                    + "since the JVM is closing!",
-                                    app.getName());
+                                            "Shutting down {0} in emergency mode "
+                                            + "since the JVM is closing!",
+                                            app.getName());
                             app.shutdown();
                         } catch (Exception ex) {
                             Exceptions.printStackTrace(ex);

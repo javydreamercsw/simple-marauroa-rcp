@@ -10,7 +10,10 @@ import simple.common.game.ClientObjectInterface;
  *
  * @author Javier A. Ortiz <javier.ortiz.78@gmail.com>
  */
-public abstract class MarauroaAction extends AbstractAction implements Comparable {
+public abstract class MarauroaAction extends AbstractAction
+        implements Comparable {
+
+    private static final long serialVersionUID = 7519686126783346796L;
 
     public String POSITION = "Position";
 
@@ -41,6 +44,7 @@ public abstract class MarauroaAction extends AbstractAction implements Comparabl
     }
 
     protected boolean isMe(ClientObjectInterface object) {
-        return Utilities.actionsGlobalContext().lookup(RPObject.class).get("name").equals(object.getName());
+        return Utilities.actionsGlobalContext().lookup(RPObject.class)
+                .get("name").equals(object.getName());
     }
 }
