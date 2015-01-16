@@ -3,7 +3,6 @@ package simple.marauroa.application.core.executor;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -66,8 +65,7 @@ public class DefaultMarauroaProcess implements IMarauroaProcess {
                         commands.add(st.nextToken());
                     }
                 }
-                for (Iterator<String> it = commands.iterator(); it.hasNext();) {
-                    String cmd = it.next();
+                for (String cmd : commands) {
                     LOG.info(cmd);
                 }
                 ProcessBuilder pb = new ProcessBuilder(commands);

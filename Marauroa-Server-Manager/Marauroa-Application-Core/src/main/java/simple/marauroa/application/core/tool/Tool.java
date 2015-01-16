@@ -8,7 +8,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
@@ -44,7 +43,8 @@ public class Tool {
     }
 
     //Obtain the image URL
-    public static Image createImage(String module_id, String path, String description)
+    public static Image createImage(String module_id, String path, 
+            String description)
             throws MalformedURLException, Exception {
         File icon = InstalledFileLocator.getDefault().locate(path,
                 "simple.marauroa.application.gui", false);
@@ -57,10 +57,11 @@ public class Tool {
         }
     }
 
-    public static <T> Action[] getActions(Class<? extends MarauroaActionProvider> provider) {
+    public static <T> Action[] 
+        getActions(Class<? extends MarauroaActionProvider> provider) {
         ArrayList<MarauroaAction> actionList = new ArrayList<MarauroaAction>();
-        for (Iterator<? extends MarauroaActionProvider> it = Lookup.getDefault().lookupAll(provider).iterator(); it.hasNext();) {
-            MarauroaActionProvider providerImpl = it.next();
+        for (MarauroaActionProvider providerImpl : 
+                Lookup.getDefault().lookupAll(provider)) {
             actionList.addAll(providerImpl.getActions());
         }
         //Sort them in position order
@@ -76,6 +77,7 @@ public class Tool {
 
     public static String getZoneName(IRPZone.ID id) {
         String stringId = id.toString();
-        return stringId.substring(stringId.indexOf('=') + 1, stringId.indexOf(']'));
+        return stringId.substring(stringId.indexOf('=') + 1, 
+                stringId.indexOf(']'));
     }
 }

@@ -13,6 +13,6 @@ public interface MonitorService {
     IApplicationMonitor getMonitor(String name);
 
     void removeMonitor(String name);
-    
+
     void shutdown();
 }
