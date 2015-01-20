@@ -51,11 +51,11 @@ public final class DataBaseManager implements LookupListener {
     private static EntityManagerFactory emf = null;
     private static String applicationPath = MarauroaApplication.workingDir
             + "Applications" + System.getProperty("file.separator");
-    private static HashMap<String, IMarauroaApplicationProvider> providers =
-            new HashMap<String, IMarauroaApplicationProvider>();
+    private static HashMap<String, IMarauroaApplicationProvider> providers
+            = new HashMap<String, IMarauroaApplicationProvider>();
     private static boolean loaded = false, loading = false;
-    private Lookup.Result<IMarauroaApplication> result =
-            Utilities.actionsGlobalContext().lookupResult(IMarauroaApplication.class);
+    private Lookup.Result<IMarauroaApplication> result
+            = Utilities.actionsGlobalContext().lookupResult(IMarauroaApplication.class);
     private final static ArrayList<IMarauroaApplication> apps = new ArrayList<IMarauroaApplication>();
 
     /**
@@ -113,8 +113,7 @@ public final class DataBaseManager implements LookupListener {
         }
         synchronized (apps) {
             apps.clear();
-            for (Iterator<Application> it = getApplications().iterator(); it.hasNext();) {
-                Application app = it.next();
+            for (Application app : getApplications()) {
                 apps.add(getMarauroaApplication(app));
             }
         }
@@ -305,8 +304,7 @@ public final class DataBaseManager implements LookupListener {
             File path;
             //Load from database
             List<Application> applications = DataBaseManager.getApplications();
-            for (Iterator<Application> it = applications.iterator(); it.hasNext();) {
-                Application app = it.next();
+            for (Application app : applications) {
                 path = new File(app.getApplicationPath());
                 Logger.getLogger(DataBaseManager.class.getSimpleName()).log(Level.FINE,
                         "Looking for application path at: {0}", app.getApplicationPath());
@@ -314,28 +312,28 @@ public final class DataBaseManager implements LookupListener {
                     NotifyDescriptor nd = new NotifyDescriptor.Confirmation(
                             "<html><font size=+1 color=red>"
                             + NbBundle.getMessage(
-                            MarauroaApplication.class,
-                            "acknowledge")
+                                    MarauroaApplication.class,
+                                    "acknowledge")
                             + "</font><br>"
                             + "<br>"
                             + NbBundle.getMessage(
-                            MarauroaApplication.class,
-                            "application.dir.not.exists").replaceAll("%a",
-                            app.getName())
+                                    MarauroaApplication.class,
+                                    "application.dir.not.exists").replaceAll("%a",
+                                    app.getName())
                             + " <b><b>" + NbBundle.getMessage(
-                            MarauroaApplication.class,
-                            "application.dir.not.exists.fix") + "<br>"
+                                    MarauroaApplication.class,
+                                    "application.dir.not.exists.fix") + "<br>"
                             + "&nbsp;&nbsp;<b>" + NbBundle.getMessage(
-                            MarauroaApplication.class,
-                            "yes") + "</b> - to Correct<br>"
+                                    MarauroaApplication.class,
+                                    "yes") + "</b> - to Correct<br>"
                             + "&nbsp;&nbsp;<b>" + NbBundle.getMessage(
-                            MarauroaApplication.class,
-                            "no") + "</b> - to Delete<br>",
+                                    MarauroaApplication.class,
+                                    "no") + "</b> - to Delete<br>",
                             NotifyDescriptor.YES_NO_OPTION);
                     Object result = DialogDisplayer.getDefault().notify(nd);
                     if (result == NotifyDescriptor.YES_OPTION) {
-                        IAddApplicationDialogProvider dialogProvider =
-                                Lookup.getDefault().lookup(IAddApplicationDialogProvider.class);
+                        IAddApplicationDialogProvider dialogProvider
+                                = Lookup.getDefault().lookup(IAddApplicationDialogProvider.class);
                         JDialog dialog = dialogProvider.getDialog();
                         dialogProvider.setApplicationName(app.getName());
                         dialogProvider.setEditableApplicationName(false);
@@ -368,28 +366,28 @@ public final class DataBaseManager implements LookupListener {
                             NotifyDescriptor nd = new NotifyDescriptor.Confirmation(
                                     "<html><font size=+1 color=red>"
                                     + NbBundle.getMessage(
-                                    MarauroaApplication.class,
-                                    "acknowledge")
+                                            MarauroaApplication.class,
+                                            "acknowledge")
                                     + "</font><br>"
                                     + "<br>"
                                     + NbBundle.getMessage(
-                                    MarauroaApplication.class,
-                                    "application.found.orphan.directory").replaceAll("%d",
-                                    Utilities.toURI(temp).getPath()) + "<br>"
+                                            MarauroaApplication.class,
+                                            "application.found.orphan.directory").replaceAll("%d",
+                                            Utilities.toURI(temp).getPath()) + "<br>"
                                     + "<b><b>" + NbBundle.getMessage(
-                                    MarauroaApplication.class,
-                                    "application.dir.not.exists.fix") + "<br>"
+                                            MarauroaApplication.class,
+                                            "application.dir.not.exists.fix") + "<br>"
                                     + "&nbsp;&nbsp;<b>" + NbBundle.getMessage(
-                                    MarauroaApplication.class,
-                                    "yes") + "</b> - to Correct<br>"
+                                            MarauroaApplication.class,
+                                            "yes") + "</b> - to Correct<br>"
                                     + "&nbsp;&nbsp;<b>" + NbBundle.getMessage(
-                                    MarauroaApplication.class,
-                                    "no") + "</b> - to Delete<br>",
+                                            MarauroaApplication.class,
+                                            "no") + "</b> - to Delete<br>",
                                     NotifyDescriptor.YES_NO_OPTION);
                             Object result = DialogDisplayer.getDefault().notify(nd);
                             if (result == NotifyDescriptor.YES_OPTION) {
-                                IAddApplicationDialogProvider dialogProvider =
-                                        Lookup.getDefault().lookup(IAddApplicationDialogProvider.class);
+                                IAddApplicationDialogProvider dialogProvider
+                                        = Lookup.getDefault().lookup(IAddApplicationDialogProvider.class);
                                 JDialog dialog = dialogProvider.getDialog();
                                 dialogProvider.setApplicationName(temp.getName());
                                 dialogProvider.setEditableApplicationName(false);
@@ -449,9 +447,7 @@ public final class DataBaseManager implements LookupListener {
                 Object item = it.next();
                 if (item instanceof IMarauroaApplication) {
                     IMarauroaApplication app = (IMarauroaApplication) item;
-                    if (app != null) {
-                        DataBaseManager.addApplication(app);
-                    }
+                    DataBaseManager.addApplication(app);
                 }
             }
         }
