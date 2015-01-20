@@ -12,7 +12,7 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>nbm</packaging>
 
-    <name>Marauroa-Wrapper</name>
+    <name>Marauroa Wrapper</name>
 
     <dependencies>
         <dependency>
@@ -21,16 +21,9 @@
             <version>${netbeans.version}</version>
         </dependency>
         <dependency>
-            <artifactId>marauroa</artifactId>
-            <groupId>net.sourceforge.javydreamercsw</groupId>
-            <type>jar</type>
-            <version>3.9.2</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>jnlp</artifactId>
-                    <groupId>javax.jnlp</groupId>
-                </exclusion>
-            </exclusions>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>Marauroa</artifactId>
+            <version>3.9.3-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -57,7 +50,6 @@
                     <publicPackages>
                         <publicPackage>marauroa.*</publicPackage>
                         <publicPackage>com.*</publicPackage>
-                        <publicPackage>jline*</publicPackage>
                         <publicPackage>jni.*</publicPackage>
                         <publicPackage>jnr.*</publicPackage>
                         <publicPackage>org.*</publicPackage>
