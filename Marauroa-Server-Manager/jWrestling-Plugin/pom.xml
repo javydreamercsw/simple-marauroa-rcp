@@ -21,37 +21,6 @@
             <version>${netbeans.version}</version>
         </dependency>
         <dependency>
-            <groupId>net.sourceforge.javydreamercsw</groupId>
-            <artifactId>jWrestling</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>marauroa</artifactId>
-                    <groupId>marauroa</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>log4j</artifactId>
-                    <groupId>log4j</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>h2</artifactId>
-                    <groupId>com.h2database</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>Marauroa-Simple-Server</artifactId>
-                    <groupId>net.sourceforge.javydreamercsw</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>jacksum</artifactId>
-                    <groupId>de-jonelo</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>janag</artifactId>
-                    <groupId>de-beimax-janag</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
             <artifactId>org-openide-util-lookup</artifactId>
             <groupId>org.netbeans.api</groupId>
             <type>jar</type>
@@ -60,7 +29,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.10</version>
+            <version>4.12</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -108,6 +77,21 @@
             <groupId>net.sourceforge.javydreamercsw</groupId>
             <type>jar</type>
             <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>jWrestling</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-util</artifactId>
+            <version>RELEASE80</version>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-modules</artifactId>
+            <version>RELEASE80</version>
         </dependency>
     </dependencies>
 

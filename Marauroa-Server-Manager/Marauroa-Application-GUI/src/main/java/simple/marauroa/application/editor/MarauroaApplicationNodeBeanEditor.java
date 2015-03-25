@@ -13,8 +13,11 @@ import simple.marauroa.application.gui.MarauroaApplicationNode;
  *
  * @author Javier A. Ortiz Bultrón <javier.ortiz.78@gmail.com>
  */
-public class MarauroaApplicationNodeBeanEditor implements PropertyEditor, ExPropertyEditor {
+public class MarauroaApplicationNodeBeanEditor implements PropertyEditor, 
+        ExPropertyEditor {
+
     private MarauroaApplicationNode value;
+
     @Override
     public void setValue(Object value) {
         this.value = (MarauroaApplicationNode) value;

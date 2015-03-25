@@ -11,7 +11,7 @@
   <artifactId>Marauroa-Server-Manager-branding</artifactId>
   <packaging>nbm</packaging>
 
-  <name>Marauroa-Server-Manager-branding</name>
+  <name>Marauroa Server Manager Branding</name>
 
   <dependencies>
     <dependency>

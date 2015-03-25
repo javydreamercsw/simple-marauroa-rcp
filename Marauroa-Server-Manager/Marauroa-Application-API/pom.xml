@@ -11,7 +11,7 @@
     <artifactId>Marauroa-Application-API</artifactId>
     <packaging>nbm</packaging>
 
-    <name>Marauroa-Application-API</name>
+    <name>Marauroa Application API</name>
 
     <dependencies>
         <dependency>

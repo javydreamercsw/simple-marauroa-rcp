@@ -10,7 +10,7 @@ import org.openide.util.NbBundle.Messages;
 import org.openide.windows.WindowManager;
 
 @ActionID(category = "File",
-id = "simple.marauroa.application.editor.Hide")
+        id = "simple.marauroa.application.editor.Hide")
 @ActionRegistration(displayName = "#CTL_Hide")
 @ActionReferences({
     @ActionReference(path = "Menu/File", position = 2550, separatorAfter = 2575),

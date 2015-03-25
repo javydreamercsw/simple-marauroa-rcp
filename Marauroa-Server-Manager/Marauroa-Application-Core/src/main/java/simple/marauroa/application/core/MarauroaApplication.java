@@ -53,7 +53,8 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
             = new EnumMap<ConfigurationElement, Properties>(ConfigurationElement.class);
     //Populate the ini file
     private Properties props = new Properties(), custom = new Properties();
-    private static final Logger logger = Logger.getLogger(MarauroaApplication.class.getSimpleName());
+    private static final Logger logger
+            = Logger.getLogger(MarauroaApplication.class.getSimpleName());
     /*
      * A map of zones and its contents
      */
@@ -64,10 +65,7 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
     public MarauroaApplication(String name) {
         setName(name);
         app_name = name;
-        if (OSValidator.isMac()) {
-            setScriptName(replaceExtension(getScriptName(), "sh"));
-        }
-        if (OSValidator.isUnix()) {
+        if (OSValidator.isMac() || OSValidator.isUnix()) {
             setScriptName(replaceExtension(getScriptName(), "sh"));
         }
     }
@@ -246,7 +244,7 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
                 if (in != null) {
                     in.close();
                 }
-                result= true;
+                result = true;
             } catch (IOException ex) {
                 logger.log(Level.SEVERE, null, ex);
                 Exceptions.printStackTrace(ex);

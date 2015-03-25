@@ -30,7 +30,8 @@ public class DefaultMarauroaProvider implements IMarauroaApplicationProvider {
         //Recreate the IMarauroaApplication
         IMarauroaApplication application = null;
         try {
-            application = (IMarauroaApplication) getTemplate().getClass().newInstance();
+            application
+                    = (IMarauroaApplication) getTemplate().getClass().newInstance();
             application.setName(name);
             application.setVersion(version);
             application.setApplicationPath(path);

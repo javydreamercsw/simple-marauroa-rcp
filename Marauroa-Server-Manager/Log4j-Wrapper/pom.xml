@@ -11,7 +11,7 @@
     <artifactId>Log4j-Wrapper</artifactId>
     <packaging>nbm</packaging>
 
-    <name>Log4j-Wrapper</name>
+    <name>Log4j Wrapper</name>
 
     <dependencies>
         <dependency>

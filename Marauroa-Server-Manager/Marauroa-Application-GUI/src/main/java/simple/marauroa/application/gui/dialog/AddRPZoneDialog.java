@@ -1,9 +1,4 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
  * AddRPZoneDialog.java
  *
  * Created on Feb 17, 2011, 3:13:09 PM
@@ -19,6 +14,8 @@ import simple.marauroa.application.api.IMarauroaApplication;
  * @author Javier A. Ortiz Bultrón <javier.ortiz.78@gmail.com>
  */
 public class AddRPZoneDialog extends javax.swing.JDialog {
+
+    private static final long serialVersionUID = 8638234523299619988L;
 
     private final IMarauroaApplication app;
 
@@ -107,8 +104,8 @@ public class AddRPZoneDialog extends javax.swing.JDialog {
         //TODO
         DialogDisplayer.getDefault().notifyLater(
                 new NotifyDescriptor.Message("This is meant to add a "
-                + "new Zone to the server but is not implemented yet",
-                NotifyDescriptor.WARNING_MESSAGE));
+                        + "new Zone to the server but is not implemented yet",
+                        NotifyDescriptor.WARNING_MESSAGE));
         setVisible(false);
     }//GEN-LAST:event_createActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables

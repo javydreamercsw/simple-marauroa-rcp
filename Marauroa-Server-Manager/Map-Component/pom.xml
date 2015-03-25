@@ -10,7 +10,7 @@
     <artifactId>Map-Component</artifactId>
     <packaging>nbm</packaging>
 
-    <name>Map-Component</name>
+    <name>Map Component</name>
 
     <dependencies>
         <dependency>

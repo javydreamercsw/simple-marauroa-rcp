@@ -10,7 +10,7 @@
     <artifactId>Marauroa-Application-Core</artifactId>
     <packaging>nbm</packaging>
 
-    <name>Marauroa-Application-Core</name>
+    <name>Marauroa Application Core</name>
 
     <dependencies>
         <dependency>

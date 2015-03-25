@@ -10,7 +10,7 @@
     <artifactId>Simple-Server-Library-Wrapper</artifactId>
     <packaging>nbm</packaging>
 
-    <name>Simple-Server-Library-Wrapper</name>
+    <name>Simple Server Library Wrapper</name>
 
     <dependencies>
         <dependency>

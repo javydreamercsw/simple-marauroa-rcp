@@ -14,7 +14,9 @@ import simple.marauroa.application.gui.RPZoneNode;
  * @author Javier A. Ortiz Bultrón <javier.ortiz.78@gmail.com>
  */
 public class RPZoneNodeBeanEditor implements PropertyEditor, ExPropertyEditor {
+
     private RPZoneNode value;
+
     @Override
     public void setValue(Object value) {
         this.value = (RPZoneNode) value;

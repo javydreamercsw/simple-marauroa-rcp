@@ -33,7 +33,6 @@ import simple.marauroa.application.api.IDiagramManager;
 import simple.marauroa.application.api.IMarauroaApplication;
 import simple.marauroa.application.core.MarauroaApplicationRepository;
 import simple.marauroa.application.core.tool.Tool;
-import simple.marauroa.application.gui.action.Hide;
 
 /**
  *
@@ -60,16 +59,16 @@ public class ApplicationScene extends GraphScene implements IDiagramManager {
         try {
             serverImg = ImageUtilities.icon2Image(
                     new ImageIcon(Tool.createImage(
-                    "simple.marauroa.application.gui",
-                    "resources/images/arianne.png", "Arianne icon")));
+                                    "simple.marauroa.application.gui",
+                                    "resources/images/arianne.png", "Arianne icon")));
             zoneImg = ImageUtilities.icon2Image(
                     new ImageIcon(Tool.createImage(
-                    "simple.marauroa.application.gui",
-                    "resources/images/zone.png", "Zone icon")));
+                                    "simple.marauroa.application.gui",
+                                    "resources/images/zone.png", "Zone icon")));
             objectImg = ImageUtilities.icon2Image(
                     new ImageIcon(Tool.createImage(
-                    "simple.marauroa.application.gui",
-                    "resources/images/entity.png", "Entity icon")));
+                                    "simple.marauroa.application.gui",
+                                    "resources/images/entity.png", "Entity icon")));
             mapping.put(SERVER, serverImg);
             mapping.put(ZONE, zoneImg);
             mapping.put(OBJECT, objectImg);
@@ -110,8 +109,8 @@ public class ApplicationScene extends GraphScene implements IDiagramManager {
     public void addMarauroaApplication(IMarauroaApplication application) {
         Logger.getLogger(ApplicationScene.class.getSimpleName()).fine(
                 NbBundle.getMessage(ApplicationScene.class,
-                "Adding _0_ to the scene.",
-                new Object[]{String.valueOf(application.getName())}));
+                        "Adding _0_ to the scene.",
+                        new Object[]{String.valueOf(application.getName())}));
         widgets.put(application.getName(), attachNodeWidget(application));
     }
 
@@ -238,7 +237,7 @@ public class ApplicationScene extends GraphScene implements IDiagramManager {
             objectW.setImage(mapping.get(OBJECT));
             objectW.setPreferredLocation(new Point(widget.getPreferredLocation().x,
                     widget.getPreferredLocation().y + 100 * counter));
-            objectW.setLabel(object.get("name").toString());
+            objectW.setLabel(object.get("name"));
             objectW.getActions().addAction(ActionFactory.createMoveAction());
             addChildWidget(widget, objectW);
             counter++;
@@ -304,8 +303,7 @@ public class ApplicationScene extends GraphScene implements IDiagramManager {
 
     public static void addWidgetActions(LayerWidget mainLayer, LayerWidget connectionLayer) {
         List<Widget> children = mainLayer.getChildren();
-        for (Iterator<Widget> it = children.iterator(); it.hasNext();) {
-            Widget widget = it.next();
+        for (Widget widget : children) {
             // the order is important to not consume events
             widget.getActions().addAction(ActionFactory.createSelectAction(
                     new SelProvider()));
