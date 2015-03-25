@@ -12,7 +12,7 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>nbm</packaging>
 
-    <name>H2-Library-Wrapper</name>
+    <name>H2 Library Wrapper</name>
 
     <dependencies>
         <dependency>
@@ -24,7 +24,7 @@
             <artifactId>h2</artifactId>
             <groupId>com.h2database</groupId>
             <type>jar</type>
-            <version>1.3.170</version>
+            <version>1.4.184</version>
         </dependency>
     </dependencies>
 

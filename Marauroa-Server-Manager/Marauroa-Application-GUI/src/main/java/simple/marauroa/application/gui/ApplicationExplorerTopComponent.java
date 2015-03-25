@@ -31,22 +31,23 @@ import simple.marauroa.application.api.IMarauroaApplication;
  */
 @ConvertAsProperties(
         dtd = "-//simple.marauroa.application.gui//ApplicationExplorer//EN",
-autostore = false)
+        autostore = false)
 @TopComponent.Description(preferredID = "ApplicationExplorerTopComponent",
-//iconBase="SET/PATH/TO/ICON/HERE", 
-persistenceType = TopComponent.PERSISTENCE_ALWAYS)
+        //iconBase="SET/PATH/TO/ICON/HERE", 
+        persistenceType = TopComponent.PERSISTENCE_ALWAYS)
 @TopComponent.Registration(mode = "explorer", openAtStartup = true)
-@TopComponent.OpenActionRegistration(displayName =
-"#CTL_ApplicationExplorerAction",
-preferredID = "ApplicationExplorerTopComponent")
+@TopComponent.OpenActionRegistration(displayName
+        = "#CTL_ApplicationExplorerAction",
+        preferredID = "ApplicationExplorerTopComponent")
 public final class ApplicationExplorerTopComponent extends TopComponent
         implements ExplorerManager.Provider, LookupListener {
 
     private static ApplicationExplorerTopComponent instance;
     private final ExplorerManager explorerManager = new ExplorerManager();
-    private Lookup.Result<IMarauroaApplication> result =
-            Utilities.actionsGlobalContext()
+    private Lookup.Result<IMarauroaApplication> result
+            = Utilities.actionsGlobalContext()
             .lookupResult(IMarauroaApplication.class);
+    private static final long serialVersionUID = -7576610927103998577L;
 
     @Messages({"HINT_ApplicationExplorerTopComponent=This is a "
         + "ApplicationExplorer window",
@@ -126,18 +127,18 @@ public final class ApplicationExplorerTopComponent extends TopComponent
             // Better to version settings since initial version as advocated at
             // http://wiki.apidesign.org/wiki/PropertyFiles
             p.setProperty("version", "1.0");
-            FileObject property =
-                    FileUtil.getConfigRoot().getFileObject(
-                    "Config/Marauroa/ApplicationExplorer.properties");
+            FileObject property
+                    = FileUtil.getConfigRoot().getFileObject(
+                            "Config/Marauroa/ApplicationExplorer.properties");
             if (property == null) {
                 FileUtil.getConfigRoot().createFolder("Config");
                 FileUtil.getConfigRoot().getFileObject("Config")
                         .createFolder("Marauroa");
                 FileUtil.getConfigRoot().getFileObject("Config/Marauroa")
                         .createData("ApplicationExplorer.properties");
-                property =
-                        FileUtil.getConfigRoot().getFileObject(
-                        "Config/Marauroa/ApplicationExplorer.properties");
+                property
+                        = FileUtil.getConfigRoot().getFileObject(
+                                "Config/Marauroa/ApplicationExplorer.properties");
             }
             if (property != null) {
                 lock = property.lock();

@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package jwrestling.plugin;
 
 import java.awt.Image;
@@ -11,7 +7,8 @@ import simple.marauroa.application.core.MarauroaApplication;
  *
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
-public class JWrestlingApplication extends MarauroaApplication{
+public class JWrestlingApplication extends MarauroaApplication {
+
     public JWrestlingApplication() {
         super("jWrestling Application");
         //TODO: Read from POM?

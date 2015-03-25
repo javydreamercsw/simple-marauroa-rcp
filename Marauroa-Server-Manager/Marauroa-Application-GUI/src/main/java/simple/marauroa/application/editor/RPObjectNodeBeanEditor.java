@@ -14,7 +14,9 @@ import simple.marauroa.application.gui.RPObjectNode;
  * @author Javier A. Ortiz Bultrón <javier.ortiz.78@gmail.com>
  */
 public class RPObjectNodeBeanEditor implements PropertyEditor, ExPropertyEditor {
+
     private RPObjectNode value;
+
     @Override
     public void setValue(Object value) {
         this.value = (RPObjectNode) value;

@@ -15,6 +15,7 @@ import simple.marauroa.application.core.tool.Tool;
  * often not needed at all.
  */
 public class Installer extends ModuleInstall implements ActionListener {
+    private static final long serialVersionUID = 562307054128573715L;
 
     private MenuItem showItem = new MenuItem("Show");
     private MenuItem hideItem = new MenuItem("Hide");
@@ -24,10 +25,10 @@ public class Installer extends ModuleInstall implements ActionListener {
     public void restored() {
         //Get editors ready
         String[] editorSearchPath = PropertyEditorManager.getEditorSearchPath();
-        String[] editorSearchPathList =
-                Arrays.copyOf(editorSearchPath, editorSearchPath.length + 1);
-        editorSearchPathList[editorSearchPath.length] =
-                "simple.marauroa.application.editor";
+        String[] editorSearchPathList
+                = Arrays.copyOf(editorSearchPath, editorSearchPath.length + 1);
+        editorSearchPathList[editorSearchPath.length]
+                = "simple.marauroa.application.editor";
         PropertyEditorManager.setEditorSearchPath(editorSearchPathList);
 
         if (!initialized) {
@@ -47,9 +48,9 @@ public class Installer extends ModuleInstall implements ActionListener {
                             final PopupMenu popup = new PopupMenu();
                             final TrayIcon trayIcon = new TrayIcon(
                                     Tool.createImage(
-                                    "simple.marauroa.application.gui",
-                                    "resources/images/taskbarIcon.png",
-                                    "tray icon"));
+                                            "simple.marauroa.application.gui",
+                                            "resources/images/taskbarIcon.png",
+                                            "tray icon"));
                             final SystemTray tray = SystemTray.getSystemTray();
 
                             showItem.addActionListener(Installer.this);

@@ -10,7 +10,7 @@
     <artifactId>Marauroa-Application-GUI</artifactId>
     <packaging>nbm</packaging>
 
-    <name>Marauroa-Application-GUI</name>
+    <name>Marauroa Application GUI</name>
 
     <dependencies>
         <dependency>

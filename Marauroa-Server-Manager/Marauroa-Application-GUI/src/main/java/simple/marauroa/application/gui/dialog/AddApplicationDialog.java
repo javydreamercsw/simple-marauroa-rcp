@@ -26,10 +26,12 @@ import simple.marauroa.application.core.MarauroaApplication;
  */
 public class AddApplicationDialog extends javax.swing.JDialog {
 
-    private final ArrayList<IMarauroaApplication> applications =
-            new ArrayList<IMarauroaApplication>();
-    private final static RequestProcessor RP = 
-            new RequestProcessor("Adding application", 1, true);
+    private static final long serialVersionUID = 6634212625412190208L;
+
+    private final ArrayList<IMarauroaApplication> applications
+            = new ArrayList<IMarauroaApplication>();
+    private final static RequestProcessor RP
+            = new RequestProcessor("Adding application", 1, true);
 
     /**
      * Creates new form AddApplicationDialog
@@ -142,17 +144,17 @@ public class AddApplicationDialog extends javax.swing.JDialog {
                                     && Lookup.getDefault().lookup(IDataBase.class).applicationExists(appName.getText())) {
                                 DialogDisplayer.getDefault().notifyLater(
                                         new NotifyDescriptor.Message(NbBundle.getMessage(
-                                        AddApplicationDialog.class,
-                                        "add.application.already.exists").replaceAll("%a", appName.getText()),
-                                        NotifyDescriptor.ERROR_MESSAGE));
+                                                        AddApplicationDialog.class,
+                                                        "add.application.already.exists").replaceAll("%a", appName.getText()),
+                                                NotifyDescriptor.ERROR_MESSAGE));
                                 return;
                             }
                             IMarauroaApplication newInstance = applications.get(options.getSelectedIndex()).getClass().newInstance();
                             newInstance.setName(appName.getText());
                             newInstance.setApplicationPath(
-                                        newInstance.getApplicationPath()
-                                        + System.getProperty("file.separator")
-                                        + newInstance.getName());
+                                    newInstance.getApplicationPath()
+                                    + System.getProperty("file.separator")
+                                    + newInstance.getName());
                             if (!new File(newInstance.getApplicationPath()).exists()) {
                                 newInstance.createAppDirectory();
                             }
@@ -188,16 +190,16 @@ public class AddApplicationDialog extends javax.swing.JDialog {
             } else {
                 DialogDisplayer.getDefault().notifyLater(
                         new NotifyDescriptor.Message(NbBundle.getMessage(
-                        AddApplicationDialog.class,
-                        "add.application.invalid.name"),
-                        NotifyDescriptor.ERROR_MESSAGE));
+                                        AddApplicationDialog.class,
+                                        "add.application.invalid.name"),
+                                NotifyDescriptor.ERROR_MESSAGE));
             }
         } else {
             DialogDisplayer.getDefault().notifyLater(
                     new NotifyDescriptor.Message(NbBundle.getMessage(
-                    AddApplicationDialog.class,
-                    "add.application.invalid.app.type"),
-                    NotifyDescriptor.ERROR_MESSAGE));
+                                    AddApplicationDialog.class,
+                                    "add.application.invalid.app.type"),
+                            NotifyDescriptor.ERROR_MESSAGE));
         }
     }//GEN-LAST:event_createActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -214,21 +216,26 @@ public class AddApplicationDialog extends javax.swing.JDialog {
     public void setVisible(boolean visible) {
         //Refresh each time we are shown
         if (visible) {
-            final ArrayList<IMarauroaApplicationProvider> applicationTypes =
-                    new ArrayList<IMarauroaApplicationProvider>();
-            for (IMarauroaApplicationProvider app : 
-                    Lookup.getDefault().lookupAll(IMarauroaApplicationProvider.class)) {
+            final ArrayList<IMarauroaApplicationProvider> applicationTypes
+                    = new ArrayList<IMarauroaApplicationProvider>();
+            for (IMarauroaApplicationProvider app
+                    : Lookup.getDefault().lookupAll(IMarauroaApplicationProvider.class)) {
                 //Add them to the options
                 if (!applicationTypes.contains(app)) {
                     applicationTypes.add(app);
                     applications.add(app.getTemplate());
-                    Logger.getLogger(AddApplicationDialog.class.getSimpleName()).log(Level.FINE,
-                            "Adding: {0} to the list of available "
-                            + "applications", app.getTemplate().toStringForDisplay());
+                    Logger.getLogger(AddApplicationDialog.class.getSimpleName())
+                            .log(Level.FINE,
+                                    "Adding: {0} to the list of available "
+                                    + "applications",
+                                    app.getTemplate().toStringForDisplay());
                 }
             }
             options.setModel(new javax.swing.AbstractListModel() {
-                final Object[] objects = Lookup.getDefault().lookup(IDataBase.class).getIMarauroaApplications().toArray();
+                private static final long serialVersionUID = -3230428263912472192L;
+                final Object[] objects
+                        = Lookup.getDefault().lookup(IDataBase.class)
+                        .getIMarauroaApplications().toArray();
 
                 @Override
                 public int getSize() {

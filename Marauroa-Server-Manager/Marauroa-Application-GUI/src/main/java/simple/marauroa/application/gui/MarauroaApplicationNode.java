@@ -43,8 +43,8 @@ public class MarauroaApplicationNode extends BeanNode
     private final PropertyChangeSupport supp = new PropertyChangeSupport(this);
     private IMarauroaApplication application;
     private Action[] actions;
-    private static final Logger LOG =
-            Logger.getLogger(MarauroaApplicationNode.class.getSimpleName());
+    private static final Logger LOG
+            = Logger.getLogger(MarauroaApplicationNode.class.getSimpleName());
 
     public MarauroaApplicationNode(IMarauroaApplication application)
             throws IntrospectionException {
@@ -119,35 +119,29 @@ public class MarauroaApplicationNode extends BeanNode
     }
 
     private void updateActionsState(Action[] actions) {
-        for (int i = 0; i < actions.length; i++) {
-            if (actions[i] != null && actions[i] instanceof AddRPZoneAction) {
-                actions[i].setEnabled(
-                        application.getStatus().contains(STATUS.CONNECTED));
+        for (Action action : actions) {
+            if (action != null && action instanceof AddRPZoneAction) {
+                action.setEnabled(application.getStatus().contains(STATUS.CONNECTED));
             }
-            if (actions[i] != null && actions[i] instanceof StartServerAction) {
-                actions[i].setEnabled(
-                        application.getStatus().contains(STATUS.STOPPED));
+            if (action != null && action instanceof StartServerAction) {
+                action.setEnabled(application.getStatus().contains(STATUS.STOPPED));
             }
-            if (actions[i] != null && actions[i] instanceof StopServerAction) {
-                actions[i].setEnabled(
-                        application.getStatus().contains(STATUS.STARTED));
+            if (action != null && action instanceof StopServerAction) {
+                action.setEnabled(application.getStatus().contains(STATUS.STARTED));
             }
-            if (actions[i] != null && actions[i] instanceof ConnectAction) {
-                actions[i].setEnabled(
-                        application.getStatus().contains(STATUS.DISCONNECTED)
+            if (action != null && action instanceof ConnectAction) {
+                action.setEnabled(application.getStatus().contains(STATUS.DISCONNECTED)
                         && application.getStatus().contains(STATUS.STARTED));
             }
-            if (actions[i] != null && actions[i] instanceof DisconnectAction) {
-                actions[i].setEnabled(
-                        application.getStatus().contains(STATUS.CONNECTED)
+            if (action != null && action instanceof DisconnectAction) {
+                action.setEnabled(application.getStatus().contains(STATUS.CONNECTED)
                         && application.getStatus().contains(STATUS.STARTED));
             }
-            if (actions[i] != null && actions[i] instanceof DeleteServerAction) {
-                actions[i].setEnabled(
-                        !application.getStatus().contains(STATUS.STARTED));
+            if (action != null && action instanceof DeleteServerAction) {
+                action.setEnabled(!application.getStatus().contains(STATUS.STARTED));
             }
-            if (actions[i] != null && actions[i] instanceof ConfigureAction) {
-                actions[i].setEnabled(true);
+            if (action != null && action instanceof ConfigureAction) {
+                action.setEnabled(true);
             }
         }
     }
@@ -158,8 +152,8 @@ public class MarauroaApplicationNode extends BeanNode
         LOG.fine(
                 "Updating node actions due to status change...");
         actions = getActions(true);
-        MonitorService service =
-                Lookup.getDefault().lookup(MonitorService.class);
+        MonitorService service
+                = Lookup.getDefault().lookup(MonitorService.class);
         if (service != null
                 && application.getStatus().contains(STATUS.DISCONNECTED)) {
             LOG.fine(
@@ -179,6 +173,8 @@ public class MarauroaApplicationNode extends BeanNode
 
     private class AddRPZoneAction extends AbstractAction {
 
+        private static final long serialVersionUID = 134982449824934884L;
+
         public AddRPZoneAction() {
             putValue(NAME, NbBundle.getMessage(MarauroaApplicationNode.class,
                     "add.zone"));
@@ -196,6 +192,8 @@ public class MarauroaApplicationNode extends BeanNode
     }
 
     private class ConfigureAction extends AbstractAction {
+
+        private static final long serialVersionUID = 7855170160882347996L;
 
         public ConfigureAction() {
             putValue(NAME, NbBundle.getMessage(MarauroaApplicationNode.class,
@@ -215,6 +213,8 @@ public class MarauroaApplicationNode extends BeanNode
 
     private class ConnectAction extends AbstractAction {
 
+        private static final long serialVersionUID = 2597983100407135705L;
+
         public ConnectAction() {
             putValue(NAME, NbBundle.getMessage(MarauroaApplicationNode.class,
                     "connect"));
@@ -222,8 +222,8 @@ public class MarauroaApplicationNode extends BeanNode
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            MonitorService service =
-                    Lookup.getDefault().lookup(MonitorService.class);
+            MonitorService service
+                    = Lookup.getDefault().lookup(MonitorService.class);
             if (service != null
                     && service.getMonitor(application.getName()) == null) {
                 try {
@@ -240,6 +240,8 @@ public class MarauroaApplicationNode extends BeanNode
 
     private class DisconnectAction extends AbstractAction {
 
+        private static final long serialVersionUID = 5022199390057555127L;
+
         public DisconnectAction() {
             putValue(NAME, NbBundle.getMessage(MarauroaApplicationNode.class,
                     "disconnect"));
@@ -247,8 +249,8 @@ public class MarauroaApplicationNode extends BeanNode
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            MonitorService service =
-                    Lookup.getDefault().lookup(MonitorService.class);
+            MonitorService service
+                    = Lookup.getDefault().lookup(MonitorService.class);
             if (service != null
                     && service.getMonitor(application.getName()) != null) {
                 try {
@@ -263,6 +265,8 @@ public class MarauroaApplicationNode extends BeanNode
 
     private class StartServerAction extends AbstractAction {
 
+        private static final long serialVersionUID = 829685652449267332L;
+
         public StartServerAction() {
             putValue(NAME, NbBundle.getMessage(MarauroaApplicationNode.class,
                     "start.server"));
@@ -270,8 +274,8 @@ public class MarauroaApplicationNode extends BeanNode
 
         @Override
         public void actionPerformed(ActionEvent ae) {
-            IMarauroaApplication app =
-                    getLookup().lookup(IMarauroaApplication.class);
+            IMarauroaApplication app
+                    = getLookup().lookup(IMarauroaApplication.class);
             try {
                 app.start();
                 application.setStatus(STATUS.STARTED);
@@ -283,6 +287,8 @@ public class MarauroaApplicationNode extends BeanNode
 
     private class StopServerAction extends AbstractAction {
 
+        private static final long serialVersionUID = -1393726358934983469L;
+
         public StopServerAction() {
             putValue(NAME, NbBundle.getMessage(MarauroaApplicationNode.class,
                     "stop.server"));
@@ -290,8 +296,8 @@ public class MarauroaApplicationNode extends BeanNode
 
         @Override
         public void actionPerformed(ActionEvent ae) {
-            IMarauroaApplication app =
-                    getLookup().lookup(IMarauroaApplication.class);
+            IMarauroaApplication app
+                    = getLookup().lookup(IMarauroaApplication.class);
             try {
                 app.shutdown();
                 application.setStatus(STATUS.STOPPED);
@@ -303,6 +309,8 @@ public class MarauroaApplicationNode extends BeanNode
 
     private class DeleteServerAction extends AbstractAction {
 
+        private static final long serialVersionUID = -14168899025915506L;
+
         public DeleteServerAction() {
             putValue(NAME, NbBundle.getMessage(MarauroaApplicationNode.class,
                     "delete.server"));
@@ -313,20 +321,20 @@ public class MarauroaApplicationNode extends BeanNode
             NotifyDescriptor nd = new NotifyDescriptor.Confirmation(
                     "<html><font size=+1 color=red>"
                     + NbBundle.getMessage(
-                    MarauroaApplication.class,
-                    "acknowledge")
+                            MarauroaApplication.class,
+                            "acknowledge")
                     + "</font><br>"
                     + "<br>"
                     + NbBundle.getMessage(
-                    MarauroaApplicationNode.class,
-                    "delete.server.confirmation").replaceAll("%a",
-                    getMarauroaApplication().getName())
+                            MarauroaApplicationNode.class,
+                            "delete.server.confirmation").replaceAll("%a",
+                            getMarauroaApplication().getName())
                     + "<b><b> " + NbBundle.getMessage(
-                    MarauroaApplication.class,
-                    "yes") + "</b> - to Delete<br>"
+                            MarauroaApplication.class,
+                            "yes") + "</b> - to Delete<br>"
                     + "&nbsp;&nbsp;<b>" + NbBundle.getMessage(
-                    MarauroaApplication.class,
-                    "no") + "</b> - to Cancel<br>",
+                            MarauroaApplication.class,
+                            "no") + "</b> - to Cancel<br>",
                     NotifyDescriptor.YES_NO_OPTION);
             Object result = DialogDisplayer.getDefault().notify(nd);
             if (result == NotifyDescriptor.YES_OPTION) {

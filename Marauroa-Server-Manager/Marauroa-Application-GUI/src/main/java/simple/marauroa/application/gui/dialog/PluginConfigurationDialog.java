@@ -1,10 +1,5 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package simple.marauroa.application.gui.dialog;
 
-import java.util.Iterator;
 import javax.swing.table.DefaultTableModel;
 import org.openide.util.Lookup;
 import simple.marauroa.application.api.IMarauroaApplication;
@@ -18,6 +13,8 @@ import simple.server.extension.MarauroaServerExtension;
  * @author Javier A. Ortiz Bultrón <javier.ortiz.78@gmail.com>
  */
 public class PluginConfigurationDialog extends javax.swing.JDialog {
+
+    private static final long serialVersionUID = 4900954470128194838L;
 
     private final IMarauroaApplication app;
 
@@ -34,8 +31,8 @@ public class PluginConfigurationDialog extends javax.swing.JDialog {
         }
         //Repopulate
         Application application = DataBaseManager.findApplication(app).get(0);
-        for (Iterator<? extends MarauroaServerExtension> it = Lookup.getDefault().lookupAll(MarauroaServerExtension.class).iterator(); it.hasNext();) {
-            MarauroaServerExtension extension = it.next();
+        for (MarauroaServerExtension extension
+                : Lookup.getDefault().lookupAll(MarauroaServerExtension.class)) {
             boolean found = false;
             for (ServerPlugin plugin : application.getServerPluginList()) {
                 if (plugin.getName().equals(extension.getName())) {
@@ -43,7 +40,8 @@ public class PluginConfigurationDialog extends javax.swing.JDialog {
                     break;
                 }
             }
-            ((DefaultTableModel) pluginTable.getModel()).addRow(new Object[]{found, extension.getName()});
+            ((DefaultTableModel) pluginTable.getModel())
+                    .addRow(new Object[]{found, extension.getName()});
         }
     }
 
