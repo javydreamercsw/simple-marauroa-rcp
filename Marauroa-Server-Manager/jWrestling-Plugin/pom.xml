@@ -9,7 +9,6 @@
 
     <groupId>net.sourceforge.javydreamercsw</groupId>
     <artifactId>jWrestling-Plugin</artifactId>
-    <version>1.0-SNAPSHOT</version>
     <packaging>nbm</packaging>
 
     <name>jWrestling Plugin</name>
@@ -33,15 +32,15 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>net.sourceforge.javydreamercsw</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>Marauroa-Application-API</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${project.version}</version>
             <type>jar</type>
         </dependency>
         <dependency>
-            <groupId>net.sourceforge.javydreamercsw</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>Marauroa-Application-Core</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${project.version}</version>
             <type>jar</type>
         </dependency>
         <dependency>
@@ -51,9 +50,9 @@
         </dependency>
         <dependency>
             <artifactId>Log4j-Wrapper</artifactId>
-            <groupId>net.sourceforge.javydreamercsw</groupId>
+            <groupId>${project.groupId}</groupId>
             <type>jar</type>
-            <version>1.0-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -62,36 +61,37 @@
         </dependency>
         <dependency>
             <artifactId>Simple-Server-Library-Wrapper</artifactId>
-            <groupId>net.sourceforge.javydreamercsw</groupId>
+            <groupId>${project.groupId}</groupId>
             <type>jar</type>
-            <version>1.0-SNAPSHOT</version>
+            <version>${project.version}</version>
             <exclusions>
                 <exclusion>
                     <artifactId>Marauroa-Simple-Server</artifactId>
-                    <groupId>net.sourceforge.javydreamercsw</groupId>
+                    <groupId>${project.groupId}</groupId>
                 </exclusion>
             </exclusions>
         </dependency>
         <dependency>
             <artifactId>H2-Library-Wrapper</artifactId>
-            <groupId>net.sourceforge.javydreamercsw</groupId>
+            <groupId>${project.groupId}</groupId>
             <type>jar</type>
-            <version>1.0-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
             <artifactId>jWrestling</artifactId>
+            <groupId>${project.groupId}</groupId>
+            <type>jar</type>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-util</artifactId>
-            <version>RELEASE80</version>
+            <version>${netbeans.version}</version>
         </dependency>
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-modules</artifactId>
-            <version>RELEASE80</version>
+            <version>${netbeans.version}</version>
         </dependency>
     </dependencies>
 
