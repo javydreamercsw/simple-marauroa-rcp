@@ -1,0 +1,25 @@
+language: java
+
+git:
+  submodules: false
+
+# Use sed to replace the SSH URL with the public URL, then init and update submodules
+before_install:
+  - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
+  - git submodule update --init --recursive
+  
+script:
+  - cd Marauroa-Server-Manager
+  - mvn install
+  - cd ..
+  - cd Deck-Manager
+  - mvn install
+  - cd ..
+  - cd Simple-Marauroa-Client
+  - mvn install
+
+jdk:
+  - oraclejdk8
+  - oraclejdk7
+  - openjdk7
+  - openjdk6
