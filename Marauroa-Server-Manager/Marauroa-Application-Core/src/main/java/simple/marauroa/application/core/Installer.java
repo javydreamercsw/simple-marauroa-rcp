@@ -12,7 +12,7 @@ import simple.marauroa.application.api.IMarauroaApplication;
  * often not needed at all.
  */
 public class Installer extends ModuleInstall {
-    private static final long serialVersionUID = -6590654010564558201L;
+    private static final long serialVersionUID = -6_590_654_010_564_558_201L;
 
     @Override
     public void restored() {

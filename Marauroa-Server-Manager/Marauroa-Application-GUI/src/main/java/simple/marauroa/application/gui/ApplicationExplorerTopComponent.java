@@ -47,7 +47,7 @@ public final class ApplicationExplorerTopComponent extends TopComponent
     private Lookup.Result<IMarauroaApplication> result
             = Utilities.actionsGlobalContext()
             .lookupResult(IMarauroaApplication.class);
-    private static final long serialVersionUID = -7576610927103998577L;
+    private static final long serialVersionUID = -7_576_610_927_103_998_577L;
 
     @Messages({"HINT_ApplicationExplorerTopComponent=This is a "
         + "ApplicationExplorer window",

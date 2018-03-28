@@ -43,7 +43,7 @@ public class MarauroaApplicationRepository {
 
     public static Collection<? extends IRPZone>
             getZonesForApplication(IMarauroaApplication app) {
-        ArrayList<IRPZone> zones = new ArrayList<IRPZone>();
+        ArrayList<IRPZone> zones = new ArrayList<>();
         for (final String key : app.getContents().keySet()) {
             Zone zone = new Zone(key);
             //Now add the objects to it
@@ -57,7 +57,7 @@ public class MarauroaApplicationRepository {
 
     public static Collection<? extends RPObject>
             getRPObjectsForZone(String appName, ID zone) {
-        ArrayList<RPObject> objects = new ArrayList<RPObject>();
+        ArrayList<RPObject> objects = new ArrayList<>();
         RPObject object = new RPObject();
         object.put("id", 1);
         object.put("name", "Object 1");

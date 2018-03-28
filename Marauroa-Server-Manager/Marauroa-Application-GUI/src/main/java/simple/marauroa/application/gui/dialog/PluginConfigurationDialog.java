@@ -14,7 +14,7 @@ import simple.server.extension.MarauroaServerExtension;
  */
 public class PluginConfigurationDialog extends javax.swing.JDialog {
 
-    private static final long serialVersionUID = 4900954470128194838L;
+    private static final long serialVersionUID = 4_900_954_470_128_194_838L;
 
     private final IMarauroaApplication app;
 

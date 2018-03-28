@@ -204,7 +204,7 @@ public class MarauroaApplicationNode extends BeanNode
   private class AddRPZoneAction extends AbstractAction
   {
 
-    private static final long serialVersionUID = 134982449824934884L;
+    private static final long serialVersionUID = 134_982_449_824_934_884L;
 
     public AddRPZoneAction()
     {
@@ -228,7 +228,7 @@ public class MarauroaApplicationNode extends BeanNode
   private class ConfigureAction extends AbstractAction
   {
 
-    private static final long serialVersionUID = 7855170160882347996L;
+    private static final long serialVersionUID = 7_855_170_160_882_347_996L;
 
     public ConfigureAction()
     {
@@ -252,7 +252,7 @@ public class MarauroaApplicationNode extends BeanNode
   private class ConnectAction extends AbstractAction
   {
 
-    private static final long serialVersionUID = 2597983100407135705L;
+    private static final long serialVersionUID = 2_597_983_100_407_135_705L;
 
     public ConnectAction()
     {
@@ -287,7 +287,7 @@ public class MarauroaApplicationNode extends BeanNode
   private class DisconnectAction extends AbstractAction
   {
 
-    private static final long serialVersionUID = 5022199390057555127L;
+    private static final long serialVersionUID = 5_022_199_390_057_555_127L;
 
     public DisconnectAction()
     {
@@ -319,7 +319,7 @@ public class MarauroaApplicationNode extends BeanNode
   private class StartServerAction extends AbstractAction
   {
 
-    private static final long serialVersionUID = 829685652449267332L;
+    private static final long serialVersionUID = 829_685_652_449_267_332L;
 
     public StartServerAction()
     {
@@ -347,7 +347,7 @@ public class MarauroaApplicationNode extends BeanNode
   private class StopServerAction extends AbstractAction
   {
 
-    private static final long serialVersionUID = -1393726358934983469L;
+    private static final long serialVersionUID = -1_393_726_358_934_983_469L;
 
     public StopServerAction()
     {
@@ -375,7 +375,7 @@ public class MarauroaApplicationNode extends BeanNode
   private class DeleteServerAction extends AbstractAction
   {
 
-    private static final long serialVersionUID = -14168899025915506L;
+    private static final long serialVersionUID = -14_168_899_025_915_506L;
 
     public DeleteServerAction()
     {

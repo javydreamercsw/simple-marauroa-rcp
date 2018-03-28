@@ -15,7 +15,7 @@ import simple.marauroa.application.api.IMarauroaApplication;
  */
 public class AddRPZoneDialog extends javax.swing.JDialog {
 
-    private static final long serialVersionUID = 8638234523299619988L;
+    private static final long serialVersionUID = 8_638_234_523_299_619_988L;
 
     private final IMarauroaApplication app;
 

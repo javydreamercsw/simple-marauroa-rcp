@@ -35,13 +35,13 @@ public class ApplicationTypeJpaController implements Serializable {
 
     public void create(ApplicationType applicationType) {
         if (applicationType.getApplicationList() == null) {
-            applicationType.setApplicationList(new ArrayList<Application>());
+            applicationType.setApplicationList(new ArrayList<>());
         }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            List<Application> attachedApplicationList = new ArrayList<Application>();
+            List<Application> attachedApplicationList = new ArrayList<>();
             for (Application applicationListApplicationToAttach : applicationType.getApplicationList()) {
                 applicationListApplicationToAttach = em.getReference(applicationListApplicationToAttach.getClass(), applicationListApplicationToAttach.getApplicationPK());
                 attachedApplicationList.add(applicationListApplicationToAttach);
@@ -77,7 +77,7 @@ public class ApplicationTypeJpaController implements Serializable {
             for (Application applicationListOldApplication : applicationListOld) {
                 if (!applicationListNew.contains(applicationListOldApplication)) {
                     if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
+                        illegalOrphanMessages = new ArrayList<>();
                     }
                     illegalOrphanMessages.add("You must retain Application " + applicationListOldApplication + " since its applicationType field is not nullable.");
                 }
@@ -85,7 +85,7 @@ public class ApplicationTypeJpaController implements Serializable {
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            List<Application> attachedApplicationListNew = new ArrayList<Application>();
+            List<Application> attachedApplicationListNew = new ArrayList<>();
             for (Application applicationListNewApplicationToAttach : applicationListNew) {
                 applicationListNewApplicationToAttach = em.getReference(applicationListNewApplicationToAttach.getClass(), applicationListNewApplicationToAttach.getApplicationPK());
                 attachedApplicationListNew.add(applicationListNewApplicationToAttach);
@@ -105,7 +105,7 @@ public class ApplicationTypeJpaController implements Serializable {
                 }
             }
             em.getTransaction().commit();
-        } catch (Exception ex) {
+        } catch (IllegalOrphanException ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
                 Integer id = applicationType.getId();
@@ -137,7 +137,7 @@ public class ApplicationTypeJpaController implements Serializable {
             List<Application> applicationListOrphanCheck = applicationType.getApplicationList();
             for (Application applicationListOrphanCheckApplication : applicationListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
+                    illegalOrphanMessages = new ArrayList<>();
                 }
                 illegalOrphanMessages.add("This ApplicationType (" + applicationType + ") cannot be destroyed since the Application " + applicationListOrphanCheckApplication + " in its applicationList field has a non-nullable applicationType field.");
             }

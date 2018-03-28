@@ -59,7 +59,7 @@ public class Tool {
 
     public static <T> Action[] 
         getActions(Class<? extends MarauroaActionProvider> provider) {
-        ArrayList<MarauroaAction> actionList = new ArrayList<MarauroaAction>();
+        ArrayList<MarauroaAction> actionList = new ArrayList<>();
         for (MarauroaActionProvider providerImpl : 
                 Lookup.getDefault().lookupAll(provider)) {
             actionList.addAll(providerImpl.getActions());

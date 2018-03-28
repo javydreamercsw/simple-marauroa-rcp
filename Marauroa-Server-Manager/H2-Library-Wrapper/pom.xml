@@ -24,7 +24,7 @@
             <artifactId>h2</artifactId>
             <groupId>com.h2database</groupId>
             <type>jar</type>
-            <version>1.4.184</version>
+            <version>1.4.196</version>
         </dependency>
     </dependencies>
 

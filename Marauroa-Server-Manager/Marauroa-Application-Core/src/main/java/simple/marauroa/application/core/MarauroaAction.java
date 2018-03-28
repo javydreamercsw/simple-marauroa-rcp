@@ -13,7 +13,7 @@ import simple.common.game.ClientObjectInterface;
 public abstract class MarauroaAction extends AbstractAction
         implements Comparable {
 
-    private static final long serialVersionUID = 7519686126783346796L;
+    private static final long serialVersionUID = 7_519_686_126_783_346_796L;
 
     public String POSITION = "Position";
 

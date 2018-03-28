@@ -49,7 +49,7 @@ public class DefaultMarauroaProcess implements IMarauroaProcess {
         marauroaProcess = new Callable<Process>() {
             @Override
             public Process call() throws IOException {
-                ArrayList<String> commands = new ArrayList<String>();
+                ArrayList<String> commands = new ArrayList<>();
                 commands.add("java");
                 commands.add("-cp");
                 commands.add(app.getLibraries());
@@ -126,11 +126,9 @@ public class DefaultMarauroaProcess implements IMarauroaProcess {
                             timer.cancel();
                         }
                     }
-                }, 5000, 5000);
+                }, 5_000, 5_000);
                 taskResult = task.get();
-            } catch (InterruptedException ex) {
-                Exceptions.printStackTrace(ex);
-            } catch (ExecutionException ex) {
+            } catch (InterruptedException | ExecutionException ex) {
                 Exceptions.printStackTrace(ex);
             } catch (CancellationException ex) {
                 //Do nothing. The user just cancelled it.

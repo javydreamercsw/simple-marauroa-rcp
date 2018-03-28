@@ -13,7 +13,7 @@ import org.openide.windows.WindowManager;
         id = "simple.marauroa.application.editor.Hide")
 @ActionRegistration(displayName = "#CTL_Hide")
 @ActionReferences({
-    @ActionReference(path = "Menu/File", position = 2550, separatorAfter = 2575),
+    @ActionReference(path = "Menu/File", position = 2_550, separatorAfter = 2_575),
     @ActionReference(path = "Shortcuts", name = "D-H")
 })
 @Messages("CTL_Hide=Minimize to Tray")

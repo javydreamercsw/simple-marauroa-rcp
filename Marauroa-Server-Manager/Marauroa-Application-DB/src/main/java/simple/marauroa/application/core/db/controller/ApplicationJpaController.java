@@ -40,7 +40,7 @@ public class ApplicationJpaController implements Serializable {
             application.setApplicationPK(new ApplicationPK());
         }
         if (application.getServerPluginList() == null) {
-            application.setServerPluginList(new ArrayList<ServerPlugin>());
+            application.setServerPluginList(new ArrayList<>());
         }
         application.getApplicationPK().setApplicationType(application.getApplicationType().getId());
         EntityManager em = null;
@@ -52,7 +52,7 @@ public class ApplicationJpaController implements Serializable {
                 applicationType = em.getReference(applicationType.getClass(), applicationType.getId());
                 application.setApplicationType(applicationType);
             }
-            List<ServerPlugin> attachedServerPluginList = new ArrayList<ServerPlugin>();
+            List<ServerPlugin> attachedServerPluginList = new ArrayList<>();
             for (ServerPlugin serverPluginListServerPluginToAttach : application.getServerPluginList()) {
                 serverPluginListServerPluginToAttach = em.getReference(serverPluginListServerPluginToAttach.getClass(), serverPluginListServerPluginToAttach.getId());
                 attachedServerPluginList.add(serverPluginListServerPluginToAttach);
@@ -95,7 +95,7 @@ public class ApplicationJpaController implements Serializable {
                 applicationTypeNew = em.getReference(applicationTypeNew.getClass(), applicationTypeNew.getId());
                 application.setApplicationType(applicationTypeNew);
             }
-            List<ServerPlugin> attachedServerPluginListNew = new ArrayList<ServerPlugin>();
+            List<ServerPlugin> attachedServerPluginListNew = new ArrayList<>();
             for (ServerPlugin serverPluginListNewServerPluginToAttach : serverPluginListNew) {
                 serverPluginListNewServerPluginToAttach = em.getReference(serverPluginListNewServerPluginToAttach.getClass(), serverPluginListNewServerPluginToAttach.getId());
                 attachedServerPluginListNew.add(serverPluginListNewServerPluginToAttach);

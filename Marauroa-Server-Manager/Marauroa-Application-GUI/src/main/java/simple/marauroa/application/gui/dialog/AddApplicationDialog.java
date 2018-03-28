@@ -26,10 +26,10 @@ import simple.marauroa.application.core.MarauroaApplication;
  */
 public class AddApplicationDialog extends javax.swing.JDialog {
 
-    private static final long serialVersionUID = 6634212625412190208L;
+    private static final long serialVersionUID = 6_634_212_625_412_190_208L;
 
     private final ArrayList<IMarauroaApplication> applications
-            = new ArrayList<IMarauroaApplication>();
+            = new ArrayList<>();
     private final static RequestProcessor RP
             = new RequestProcessor("Adding application", 1, true);
 
@@ -160,10 +160,7 @@ public class AddApplicationDialog extends javax.swing.JDialog {
                             }
                             //Add to database
                             Lookup.getDefault().lookup(IDataBase.class).addApplication(newInstance);
-                        } catch (InstantiationException ex) {
-                            Exceptions.printStackTrace(ex);
-                            setVisible(false);
-                        } catch (IllegalAccessException ex) {
+                        } catch (InstantiationException | IllegalAccessException ex) {
                             Exceptions.printStackTrace(ex);
                             setVisible(false);
                         }
@@ -217,7 +214,7 @@ public class AddApplicationDialog extends javax.swing.JDialog {
         //Refresh each time we are shown
         if (visible) {
             final ArrayList<IMarauroaApplicationProvider> applicationTypes
-                    = new ArrayList<IMarauroaApplicationProvider>();
+                    = new ArrayList<>();
             for (IMarauroaApplicationProvider app
                     : Lookup.getDefault().lookupAll(IMarauroaApplicationProvider.class)) {
                 //Add them to the options
@@ -232,7 +229,7 @@ public class AddApplicationDialog extends javax.swing.JDialog {
                 }
             }
             options.setModel(new javax.swing.AbstractListModel() {
-                private static final long serialVersionUID = -3230428263912472192L;
+                private static final long serialVersionUID = -3_230_428_263_912_472_192L;
                 final Object[] objects
                         = Lookup.getDefault().lookup(IDataBase.class)
                         .getIMarauroaApplications().toArray();

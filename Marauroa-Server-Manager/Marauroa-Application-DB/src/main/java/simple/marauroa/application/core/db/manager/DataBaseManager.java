@@ -288,9 +288,7 @@ public final class DataBaseManager implements LookupListener {
     public static void deleteApplicationType(ApplicationType appType) {
         try {
             new ApplicationTypeJpaController(getEntityManagerFactory()).destroy(appType.getId());
-        } catch (IllegalOrphanException ex) {
-            Exceptions.printStackTrace(ex);
-        } catch (NonexistentEntityException ex) {
+        } catch (IllegalOrphanException | NonexistentEntityException ex) {
             Exceptions.printStackTrace(ex);
         }
     }

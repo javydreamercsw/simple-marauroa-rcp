@@ -34,7 +34,7 @@ import simple.marauroa.application.core.executor.ScriptExecuter;
 public abstract class MarauroaApplication implements IMarauroaApplication {
 
     private static int MIN_PORT_NUMBER = 1;
-    private static int MAX_PORT_NUMBER = 65535;
+    private static int MAX_PORT_NUMBER = 65_535;
     protected boolean running = false;
     private String app_name = "", version = "";
     private Properties configuration = new Properties();
@@ -50,7 +50,7 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
     private String host = "localhost";
     private boolean exists;
     EnumMap<ConfigurationElement, Properties> properties
-            = new EnumMap<ConfigurationElement, Properties>(ConfigurationElement.class);
+            = new EnumMap<>(ConfigurationElement.class);
     //Populate the ini file
     private Properties props = new Properties(), custom = new Properties();
     private static final Logger logger
@@ -59,7 +59,7 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
      * A map of zones and its contents
      */
     private HashMap<String, ArrayList<RPObject>> contents
-            = new HashMap<String, ArrayList<RPObject>>();
+            = new HashMap<>();
     private Class relativeToClass = getClass();
 
     public MarauroaApplication(String name) {
@@ -164,11 +164,7 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
         boolean result = true;
         try {
             process.execute();
-        } catch (ExecutionException ex) {
-            logger.log(Level.SEVERE, null, ex);
-            Exceptions.printStackTrace(ex);
-            result = false;
-        } catch (InterruptedException ex) {
+        } catch (ExecutionException | InterruptedException ex) {
             logger.log(Level.SEVERE, null, ex);
             Exceptions.printStackTrace(ex);
             result = false;
@@ -650,7 +646,7 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
         if (marauroad.exists()) {
             //TODO: FIX
             if (OSValidator.isUnix()) {
-                ArrayList<String> commands = new ArrayList<String>();
+                ArrayList<String> commands = new ArrayList<>();
                 commands.add("bin/chmod");
                 commands.add("u+x");
                 commands.add(marauroad.getName());
@@ -659,16 +655,13 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
                         commands, marauroad.getParentFile().getAbsolutePath());
                 try {
                     se.execute();
-                } catch (InterruptedException ex) {
-                    Exceptions.printStackTrace(ex);
-                } catch (ExecutionException ex) {
+                } catch (InterruptedException | ExecutionException ex) {
                     Exceptions.printStackTrace(ex);
                 }
             }
             //Populate the file
             FileWriter fstream = new FileWriter(marauroad);
-            BufferedWriter out = new BufferedWriter(fstream);
-            try {
+            try (BufferedWriter out = new BufferedWriter(fstream)) {
                 if (OSValidator.isUnix()) {
                     out.write("#!/bin/sh");
                     out.newLine();
@@ -677,7 +670,6 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
                 out.write("\"" + getLibraries() + "\" "
                         + "marauroa.server.marauroad -c server.ini -l");
             } finally {
-                out.close();
                 fstream.close();
             }
         }
@@ -759,7 +751,7 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
     public Collection<File> getApplicationJars() {
         //Place application specific jars in a folder named <application name>
         //as defined in the class extending MarauroaApplication
-        ArrayList<File> jars = new ArrayList<File>();
+        ArrayList<File> jars = new ArrayList<>();
         File marauroa = InstalledFileLocator.getDefault().locate("modules/ext",
                 "marauroa.lib", false);
         if (marauroa != null && marauroa.exists()) {
@@ -882,7 +874,7 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
                     + System.getProperty("file.separator")
                     + "log");
             log.mkdirs();
-        } catch (Exception ex) {
+        } catch (IOException ex) {
             logger.log(Level.SEVERE, null, ex);
             DialogDisplayer.getDefault().notifyLater(
                     new NotifyDescriptor.Message(NbBundle.getMessage(
@@ -1003,7 +995,7 @@ public abstract class MarauroaApplication implements IMarauroaApplication {
     public void addObject(RPObject object) {
         if (!contents.containsKey(object.get("zoneid"))) {
             //New zone, add it to the list
-            getContents().put(object.get("zoneid"), new ArrayList<RPObject>());
+            getContents().put(object.get("zoneid"), new ArrayList<>());
         }
         boolean add = getContents().get(object.get("zoneid")).add(object);
         Logger.getLogger(DefaultMarauroaApplication.class.getSimpleName()).log(Level.INFO,

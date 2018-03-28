@@ -45,8 +45,8 @@ public class ApplicationScene extends GraphScene implements IDiagramManager {
     private LayerWidget mainLayer;
     private LayerWidget connectionLayer;
     private LayerWidget interactionLayer;
-    private ArrayList<LayerWidget> layersToClear = new ArrayList<LayerWidget>();
-    private HashMap<String, Widget> widgets = new HashMap<String, Widget>();
+    private ArrayList<LayerWidget> layersToClear = new ArrayList<>();
+    private HashMap<String, Widget> widgets = new HashMap<>();
     public final String SERVER = "Server", ZONE = "Zone", OBJECT = "Object";
     private Image serverImg;
     private Image zoneImg;
@@ -55,7 +55,7 @@ public class ApplicationScene extends GraphScene implements IDiagramManager {
     private final HashMap<String, Image> mapping;
 
     {
-        mapping = new HashMap<String, Image>();
+        mapping = new HashMap<>();
         try {
             serverImg = ImageUtilities.icon2Image(
                     new ImageIcon(Tool.createImage(

@@ -35,9 +35,7 @@ public class DefaultMarauroaProvider implements IMarauroaApplicationProvider {
             application.setName(name);
             application.setVersion(version);
             application.setApplicationPath(path);
-        } catch (InstantiationException ex) {
-            Exceptions.printStackTrace(ex);
-        } catch (IllegalAccessException ex) {
+        } catch (InstantiationException | IllegalAccessException ex) {
             Exceptions.printStackTrace(ex);
         }
         return application;

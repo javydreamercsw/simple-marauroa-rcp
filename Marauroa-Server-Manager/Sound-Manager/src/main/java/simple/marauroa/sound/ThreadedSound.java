@@ -12,7 +12,7 @@ import javax.sound.sampled.*;
  */
 public class ThreadedSound implements Runnable {
 
-    private final int BUFFER_SIZE = 128000;
+    private final int BUFFER_SIZE = 128_000;
     private AudioInputStream audioStream;
     private AudioFormat audioFormat;
     private SourceDataLine sourceLine;
@@ -59,9 +59,7 @@ public class ThreadedSound implements Runnable {
             sourceLine.drain();
             sourceLine.close();
 
-        } catch (UnsupportedAudioFileException ex) {
-            Logger.getLogger(ThreadedSound.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
+        } catch (UnsupportedAudioFileException | IOException ex) {
             Logger.getLogger(ThreadedSound.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

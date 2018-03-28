@@ -15,7 +15,7 @@ import simple.marauroa.application.core.tool.Tool;
  * often not needed at all.
  */
 public class Installer extends ModuleInstall implements ActionListener {
-    private static final long serialVersionUID = 562307054128573715L;
+    private static final long serialVersionUID = 562_307_054_128_573_715L;
 
     private MenuItem showItem = new MenuItem("Show");
     private MenuItem hideItem = new MenuItem("Hide");

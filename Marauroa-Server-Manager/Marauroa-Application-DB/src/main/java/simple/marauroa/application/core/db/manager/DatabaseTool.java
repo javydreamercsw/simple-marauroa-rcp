@@ -17,7 +17,7 @@ import simple.marauroa.application.core.db.controller.exceptions.NonexistentEnti
 @ServiceProvider(service = IDataBase.class)
 public class DatabaseTool implements IDataBase {
 
-    private HashMap<String, String> parameters = new HashMap<String, String>();
+    private HashMap<String, String> parameters = new HashMap<>();
 
     @Override
     public boolean applicationExists(String name) {

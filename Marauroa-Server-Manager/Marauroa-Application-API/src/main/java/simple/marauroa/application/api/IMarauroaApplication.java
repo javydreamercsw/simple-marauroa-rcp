@@ -19,12 +19,12 @@ public interface IMarauroaApplication {
      * List of lisntenrs 
      */
     ArrayList<ApplicationStatusChangeListener> statusListeners =
-            new ArrayList<ApplicationStatusChangeListener>();
+            new ArrayList<>();
     
     /*
      * Contains the application statuses
      */
-    ArrayList<STATUS> status = new ArrayList<STATUS>();
+    ArrayList<STATUS> status = new ArrayList<>();
 
     /*
      * Get the application's stauts

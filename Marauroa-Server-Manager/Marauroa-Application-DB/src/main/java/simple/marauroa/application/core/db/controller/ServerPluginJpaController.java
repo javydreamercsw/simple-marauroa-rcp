@@ -35,13 +35,13 @@ public class ServerPluginJpaController implements Serializable {
 
     public void create(ServerPlugin serverPlugin) throws PreexistingEntityException, Exception {
         if (serverPlugin.getApplicationList() == null) {
-            serverPlugin.setApplicationList(new ArrayList<Application>());
+            serverPlugin.setApplicationList(new ArrayList<>());
         }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            List<Application> attachedApplicationList = new ArrayList<Application>();
+            List<Application> attachedApplicationList = new ArrayList<>();
             for (Application applicationListApplicationToAttach : serverPlugin.getApplicationList()) {
                 applicationListApplicationToAttach = em.getReference(applicationListApplicationToAttach.getClass(), applicationListApplicationToAttach.getApplicationPK());
                 attachedApplicationList.add(applicationListApplicationToAttach);
@@ -73,7 +73,7 @@ public class ServerPluginJpaController implements Serializable {
             ServerPlugin persistentServerPlugin = em.find(ServerPlugin.class, serverPlugin.getId());
             List<Application> applicationListOld = persistentServerPlugin.getApplicationList();
             List<Application> applicationListNew = serverPlugin.getApplicationList();
-            List<Application> attachedApplicationListNew = new ArrayList<Application>();
+            List<Application> attachedApplicationListNew = new ArrayList<>();
             for (Application applicationListNewApplicationToAttach : applicationListNew) {
                 applicationListNewApplicationToAttach = em.getReference(applicationListNewApplicationToAttach.getClass(), applicationListNewApplicationToAttach.getApplicationPK());
                 attachedApplicationListNew.add(applicationListNewApplicationToAttach);
